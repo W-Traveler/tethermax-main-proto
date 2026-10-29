@@ -15,7 +15,8 @@
 | PRD FE 요구사항 | https://claude.ai/artifact/PD1zS8rHyaaENJDBAB8Kqb |
 | PRD BE 요구사항 | https://claude.ai/artifact/BZsYT4dv7mKNPmmsWeyjhD |
 
-- 프로토타입 동작이 바뀌면 PRD(FE · BE)도 같이 고쳐야 합니다. PRD와 Figma 수정은 claude.ai 프로젝트 "테더맥스_메인 페이지 개선" 대화에서 합니다. 이 레포에서 바꾼 내용 중 문서에 반영할 것이 있으면 끝에 따로 정리해 알려 주세요.
+- 수정은 기본적으로 claude.ai 프로젝트 "테더맥스_메인 페이지 개선" 대화에서 합니다. 그 대화가 이 레포를 직접 고쳐 push하고, PRD · Figma도 함께 맞춥니다.
+- Claude Code 등 다른 곳에서 고칠 때는 커밋 메시지 본문에 "문서 반영: …" 줄로 PRD · Figma에 반영할 내용을 적습니다(없으면 "문서 반영: 없음"). 프로젝트 대화가 커밋 기록을 읽고 문서를 맞춥니다.
 - **Figma는 바꾸기 전에 반드시 요청자에게 먼저 물어봅니다.**
 
 ## 구조
@@ -27,7 +28,7 @@
 | `src/cases.js` | `GROUPS`(화면 묶음) · `CASES`(케이스) 정의 |
 | `src/cases.en.js` | 셸 EN 전환용 문구 (`CASES_EN`, 키 = 국문 원문). cases.js 문구를 바꾸거나 추가하면 여기도 같이 고칩니다. 빠지면 점검 스크립트가 실패로 잡습니다 |
 | `public/` | 그대로 복사 (글꼴 Wanted Sans Variable, OFL-1.1) |
-| `assets/` | 거래소 로고 · 잔액 카드 이미지 (아직 없음 → 로고는 이니셜 원) |
+| `assets/` | 거래소 로고 · 브랜드 · SNS 아이콘 (출처: `assets/LOGO-SOURCES.md`). 잔액 카드 이미지는 `assets/brand/balance-card.png` 자리 (없으면 자리표시) |
 | `scripts/build.mjs` | `dist/` 생성 |
 | `tests/run.mjs` | 전 케이스 자동 점검 |
 
@@ -86,4 +87,4 @@
 
 ## 남은 일
 
-- `assets/` (로고 · 잔액 카드 이미지) 넣고 재배포. 원본: 요청자 PC `C:\Users\sungun\Desktop\tethermax\main_renewal\assets`
+- 잔액 카드 신규 이미지(헤일리 요청) 받으면 `assets/brand/balance-card.png`로 넣기 (64×64, @2x 128px 투명 PNG)
