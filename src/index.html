@@ -53,6 +53,7 @@ button{cursor:pointer}
 .set::-webkit-scrollbar{display:none}
 .set > *{flex:none}
 .lbl{font-size:11.5px;font-weight:700;color:var(--set-mute);white-space:nowrap}
+.stnote{font-weight:600;color:#FCD34D;cursor:help}
 .sel{height:32px;max-width:300px;border:1px solid var(--bar-line);border-radius:8px;background:rgba(255,255,255,.06);color:var(--set-ink);padding:0 8px;font-size:13px;font-weight:600}
 .sel option,.sel optgroup{color:#111827;background:#fff}
 .ib{width:32px;height:32px;border:1px solid var(--bar-line);border-radius:8px;background:transparent;color:var(--set-ink);display:grid;place-items:center}
@@ -139,6 +140,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     <span class="div" id="stDiv"></span>
     <span class="lbl" id="stLbl" data-t="state">회원 상태</span>
     <div class="tg" id="stSeg" role="group" aria-label="회원 상태값"></div>
+    <span class="lbl stnote" id="stNote" data-t="stNote" data-tt="stNoteTip">모바일 개인화 카드에만 영향</span>
     <span class="div"></span>
     <span class="lbl" data-t="width">사용자 폭</span>
     <div class="tg" id="wSeg" role="group" aria-label="사용자 폭">
@@ -176,6 +178,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
   // ── 셸 문구 (KO / EN). 케이스 · 변경 사항 문구는 cases.en.js(CASES_EN) ──
   const UI = {
     ko: { title: '메인 페이지 개선 · 프로토타입', doc: '메인 개선 프로토타입', lang: '화면 언어', mk: '변경 사항 번호', mkTip: '화면 위 번호 표시 (M)', panel: '변경 사항', panelTip: '변경 사항 패널 (D)',
+      stNote: 'ⓘ 모바일 개인화 카드에만 영향', stNoteTip: '회원 상태값(4 · 3 · 2)은 실서비스에서 모바일 개인화 카드(메시지 · 버튼)에만 영향을 줍니다. 잔액 · 연동 거래소 수가 달라 보이는 것은 예시 데이터 차이입니다.',
       screen: '화면', prev: '이전 케이스 (↑)', next: '다음 케이스 (↓)', state: '회원 상태', width: '사용자 폭', fluid: '창 폭', fluidTip: '브라우저 창 폭 그대로. 창을 늘이고 줄이면 구간별 화면이 바뀜',
       rerun: '↻ 처음부터', rerunTip: '이 케이스를 처음 상태로 (R)', drawer: '화면 변경 사항', legend: '번호 = 화면 위 번호', close: '패널 닫기', frame: '프로토타입 화면',
       web: '웹', mobile: '모바일', td: '테스트 데이터', tdTip: '실제 데이터에 없는 경우를 보려고 바꾼 값', loading: '불러오는 중…', fail: '화면을 불러오지 못했어요. [처음부터]를 눌러 다시 열어 보세요.', err: '오류',
@@ -184,6 +187,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
       resNone: '결과: 아직 없음', res: '결과: ', toast: '토스트: ', introH: '인터랙션', introHelp: '개인화 카드 진입 효과 (자리가 위에서 열리며 페이드인)', intro: '진입 효과 다시 보기', noteH: '범위 밖 · 미정', gone: '지금 화면(폭 · 상태)에는 없는 요소',
       help: '번호를 누르면 화면에서 그 위치로 이동해요. 사용자 폭 [창 폭]에서 브라우저 창(F12 기기 모드 포함)을 늘이고 줄이면 구간별 화면이 바뀌어요 (왼쪽 아래에 지금 폭 표시).', keys: '<kbd>↑</kbd> <kbd>↓</kbd> 케이스 이동 · <kbd>R</kbd> 처음부터 · <kbd>M</kbd> 번호 표시 · <kbd>D</kbd> 패널' },
     en: { title: 'Main page improvement · Prototype', doc: 'Main page prototype', lang: 'Screen language', mk: 'Change markers', mkTip: 'Show markers on screen (M)', panel: 'Changes', panelTip: 'Changes panel (D)',
+      stNote: 'ⓘ Affects the mobile personalized card only', stNoteTip: 'Member states (4 · 3 · 2) only change the mobile personalized card (message · button) in the live service. Differences in balance or number of linked exchanges are sample data.',
       screen: 'Screen', prev: 'Previous case (↑)', next: 'Next case (↓)', state: 'Member state', width: 'Width', fluid: 'Window', fluidTip: 'Follows the browser window width. Resize the window to see each breakpoint',
       rerun: '↻ Restart', rerunTip: 'Reset this case (R)', drawer: 'Screen changes', legend: 'Number = marker on screen', close: 'Close panel', frame: 'Prototype screen',
       web: 'Web', mobile: 'Mobile', td: 'Test data', tdTip: 'Values changed to show a case not in the real data', loading: 'Loading…', fail: "Couldn't load the screen. Press [Restart] to open it again.", err: 'error',
@@ -220,7 +224,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     $('#grpSel').value = cur.g;
     $('#chips').innerHTML = CASES.filter((c) => c.g === cur.g).map((c) => `<button type="button" class="chip" data-case="${c.id}" ${c.id === cur.id ? 'aria-current="true"' : ''}><span class="cid">${esc(c.id)}</span>${esc(tr(c.t))}${c.f ? `<span class="td">${T('td')}</span>` : ''}</button>`).join('');
     const has = !!cur.states;
-    ['#stSeg', '#stLbl', '#stDiv'].forEach((s) => ($(s).hidden = !has));
+    ['#stSeg', '#stLbl', '#stDiv', '#stNote'].forEach((s) => ($(s).hidden = !has));
     if (has) $('#stSeg').innerHTML = cur.states.map(([v, l]) => `<button type="button" data-st="${v}" aria-pressed="${stOf(cur) === v}">${esc(tr(l))}</button>`).join('');
     document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.lang === lang));
     document.querySelectorAll('[data-w]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.w === wPick[platOf(cur)]));
@@ -289,6 +293,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     $('#spec').innerHTML = `
       <section class="sec">
         <div class="meta"><span>${esc(figIdOf(c))}</span><span>·</span><span>Figma ${esc(g.fig)}</span><span>·</span><span>${T(g.plat)}</span>${c.f ? `<span class="td" title="${T('tdTip')}">${T('td')}</span>` : ''}</div>
+        ${c.states ? `<p class="note" style="margin:4px 0 8px">${T('stNoteTip')}</p>` : ''}
         <ol class="look">${L.map(([t, sel], i) => `<li ${sel ? `data-go="${i + 1}"` : 'class="nomk"'}><i>${i + 1}</i><span>${esc(tr(t))}</span></li>`).join('')}</ol>
       </section>
       ${c.env ? `<section class="sec"><h4>${T('envH')}</h4><div class="env">
