@@ -2973,7 +2973,7 @@
 
   // 미연동 모바일 첫 화면 시안 조합
   const heroCard = 'guide';   // 미연동 모바일 연동 카드: 안내형 고정 (2026-10-19 확정)
-  let heroBoost = 'base';     // base | strip
+  let heroBoost = 'strip';    // 미연동 모바일 부스트 배너: 축소형 한 줄 띠 고정 (base = 큰 배너, 주소 hboost=base로만)
   const heroSticky = true;    // 하단 고정 버튼: 켬 고정 (2026-10-19 확정)
 
   // 메인 챌린지 영역 → 이벤트 상세 페이지 (시안에선 안내만)
@@ -3652,7 +3652,7 @@
   // [2H] UID 상세를 보고 있으면 맨 뒤에 ud(필터) · ux(거래소) · uu(UID) · uo(펼친 거래소)를 덧붙인다. 없으면 메인
   function writeHash() {
     const hash = '#state=' + state + (uidMany ? '&many=1' : '') + (many15 ? '&many15=1' : '') + (isMid() ? '&mid=1' : '')
-      + (heroBoost !== 'base' ? '&hboost=' + heroBoost : '')
+      + (heroBoost !== 'strip' ? '&hboost=' + heroBoost : '')
       + (exEdit ? '&eo=' + exEdit.order.map(nameId).join('.') : '&edit=0')   // [2H] 편집 저장됨은 기본 켜짐. 끈 상태만 표시
       + (sheet ? '&sheet=' + sheet : '')
       + (uidPageOpen && udCur ? '&ud=' + udFilter + '&ux=' + nameId(udCur.g.ex) + '&uu=' + udCur.u.uid
@@ -4312,7 +4312,7 @@
     + `<button data-state="4" data-mid="1" class="h-8 px-2.5 rounded text-[12px] font-semibold">${STATE_MID}</button>`;
   document.getElementById('sheetSwitch').innerHTML = Object.entries(SHEETS)
     .map(([k, v]) => `<button data-sheet="${k}" class="h-8 px-2.5 rounded text-[12px] font-semibold">${v}</button>`).join('');
-  heroBoost = (location.hash.match(/hboost=(\w+)/) || [])[1] || 'base';
+  heroBoost = (location.hash.match(/hboost=(\w+)/) || [])[1] || 'strip';
   const initial = (location.hash.match(/state=(\w+)/) || [])[1];
   state = STATES[initial] ? initial : '1';
   // 옵션 · 페이백 챌린지 설정
@@ -4428,8 +4428,11 @@
       d.addEventListener('click', (e) => onClick(e, () => { d.remove(); document.documentElement.style.overflow = ''; }));
       return d;
     };
-    const done = (why) => devLog('result', `알림 신청 완료 — ${why} (신청 완료 후 개인화 카드 변화는 미정 · FE 11.1 #9)`);
-    const notDone = (why) => devLog('result', `알림 신청 안 됨 — ${why} (입금 알림 On · 기기 알림 Off 유지)`);
+    // 셸 "결과" 줄은 셸 언어(?lang=en)를 따른다
+    const WHY_EN = { 'OS 창 [허용]': 'OS prompt [Allow]', 'OS 창 [허용 안 함]': "OS prompt [Don't allow]", '복귀 시 기기 알림 켜져 있음': 'device notifications on at return', '복귀 시 기기 알림 꺼져 있음': 'device notifications off at return', '기기 알림 켜져 있음': 'device notifications on', '바깥 영역 선택': 'tapped outside', '[다음에 할게요]': '[Not now]' };
+    const enLog = () => document.documentElement.lang === 'en';
+    const done = (why) => devLog('result', enLog() ? `Alert request complete — ${WHY_EN[why] || why} (personalized card change after request TBD · FE 11.1 #9)` : `알림 신청 완료 — ${why} (신청 완료 후 개인화 카드 변화는 미정 · FE 11.1 #9)`);
+    const notDone = (why) => devLog('result', enLog() ? `Alert not requested — ${WHY_EN[why] || why} (payback alerts On · device notifications Off kept)` : `알림 신청 안 됨 — ${why} (입금 알림 On · 기기 알림 Off 유지)`);
     const checkDevice = (from) => {
       devLog('ui', `기기 알림 상태 확인 (${from}): ${env.device === 'on' ? '켜져 있음' : '꺼져 있음'}`);
       return env.device === 'on';
@@ -4576,9 +4579,15 @@
       for (let i = 0; el && i < (+up || 0); i += 1) el = el.parentElement;
       return el;
     };
+    // [10.29] 팝업 · 시트가 열려 있으면: 그 팝업 밖(뒤 화면)을 가리키는 번호는 숨기고, 셸에 알려 변경 사항 패널을 잠시 접는다
+    const openLayer = () => [...document.querySelectorAll('[aria-modal="true"], .dev-ov')].reverse()
+      .find((el) => el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden') || null;
+    let layerWas = null;
     function drawMarks() {
       const want = marks;
       layer.style.display = showMarks ? '' : 'none';
+      const top = openLayer();
+      if (!!top !== layerWas) { layerWas = !!top; post({ type: 'tm:layer', open: layerWas }); }
       while (layer.children.length < want.length) {
         const d = document.createElement('div'); d.className = 'dev-mk'; d.innerHTML = '<b></b>';
         d.firstChild.addEventListener('click', () => post({ type: 'tm:markClick', n: +d.dataset.n }));
@@ -4588,7 +4597,7 @@
       const placed = [];
       [...layer.children].forEach((d, i) => {
         const m = want[i]; const el = m && resolve(m.sel);
-        const r = el && el.getBoundingClientRect();
+        const r = el && (!top || top.contains(el)) && el.getBoundingClientRect();
         if (!r || (!r.width && !r.height)) { d.style.display = 'none'; return; }
         d.style.display = '';
         d.dataset.n = m.n; d.firstChild.textContent = m.n;
@@ -5065,7 +5074,7 @@
       ? [['boost', 'Boost banner', [['base', 'Default'], ['strip', 'Compact']]]]
       : [['boost', '부스트 배너', [['base', '기본'], ['strip', '축소']]]];
     const heroCur = () => ({
-      boost: (location.hash.match(/hboost=(\w+)/) || [])[1] || 'base',
+      boost: (location.hash.match(/hboost=(\w+)/) || [])[1] || 'strip',
     });
     const isState1 = () => /state=1(&|$)/.test(location.hash);
     // 휴대폰 왼쪽에 세로로 쌓는다. 라벨이 길어도 휴대폰을 가리지 않는다 (좁은 창에선 휴대폰 위로)

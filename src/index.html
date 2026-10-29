@@ -74,7 +74,8 @@ button{cursor:pointer}
 .stage{position:relative;flex:1;min-width:0;overflow:auto;display:flex;justify-content:center;align-items:flex-start}
 .dev{position:relative;flex:none;width:100%;height:100%;background:#fff}
 .dev.fixed{box-shadow:0 0 0 1px rgba(0,0,0,.08)}
-.dev.phone{margin:16px auto;border-radius:36px;outline:9px solid #0C0A09;overflow:hidden;height:844px;max-height:calc(100% - 32px)}
+/* 390 폭: 실제 기기 크기(390×844) 그대로. 화면 높이가 모자라면 바깥(회색 영역)이 세로로 스크롤된다 */
+.dev.phone{margin:16px auto;border-radius:36px;outline:9px solid #0C0A09;overflow:hidden;height:844px;min-height:844px}
 .dev iframe{display:block;border:0;width:100%;height:100%;background:#fff;visibility:hidden}
 .dev[data-ready] iframe{visibility:visible}
 .loading{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;font-size:12.5px;color:var(--mute);pointer-events:none;line-height:1.6}
@@ -121,41 +122,41 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
 <body>
 <div class="app">
   <header class="top">
-    <b>메인 페이지 개선 · 프로토타입</b>
+    <b data-t="title">메인 페이지 개선 · 프로토타입</b>
     <span class="ver">PRD v1 · 2026-10-29</span>
     <span class="sp"></span>
-    <div class="tg" role="group" aria-label="화면 언어"><button type="button" data-lang="ko">KO</button><button type="button" data-lang="en">EN</button></div>
-    <label class="chk" title="화면 위 번호 표시 (M)"><input type="checkbox" id="mkTog" checked>변경 사항 번호</label>
-    <button type="button" class="pbtn" id="panelBtn" aria-pressed="true" title="변경 사항 패널 (D)">변경 사항 <span class="n" id="panelN"></span></button>
+    <div class="tg" role="group" aria-label="화면 언어" data-ta="lang"><button type="button" data-lang="ko">KO</button><button type="button" data-lang="en">EN</button></div>
+    <label class="chk" title="화면 위 번호 표시 (M)" data-tt="mkTip"><input type="checkbox" id="mkTog" checked><span data-t="mk">변경 사항 번호</span></label>
+    <button type="button" class="pbtn" id="panelBtn" aria-pressed="true" title="변경 사항 패널 (D)" data-tt="panelTip"><span data-t="panel">변경 사항</span> <span class="n" id="panelN"></span></button>
   </header>
 
   <div class="set" role="group" aria-label="화면 · 시나리오 설정">
-    <span class="lbl">화면</span>
-    <button type="button" class="ib" id="prev" title="이전 케이스 (↑)" aria-label="이전 케이스"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg></button>
+    <span class="lbl" data-t="screen">화면</span>
+    <button type="button" class="ib" id="prev" title="이전 케이스 (↑)" aria-label="이전 케이스" data-tt="prev" data-ta="prev"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg></button>
     <select class="sel" id="grpSel" aria-label="화면 묶음"></select>
-    <button type="button" class="ib" id="next" title="다음 케이스 (↓)" aria-label="다음 케이스"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button>
+    <button type="button" class="ib" id="next" title="다음 케이스 (↓)" aria-label="다음 케이스" data-tt="next" data-ta="next"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button>
     <div class="chips" id="chips"></div>
     <span class="div" id="stDiv"></span>
-    <span class="lbl" id="stLbl">회원 상태</span>
+    <span class="lbl" id="stLbl" data-t="state">회원 상태</span>
     <div class="tg" id="stSeg" role="group" aria-label="회원 상태값"></div>
     <span class="div"></span>
-    <span class="lbl">사용자 폭</span>
+    <span class="lbl" data-t="width">사용자 폭</span>
     <div class="tg" id="wSeg" role="group" aria-label="사용자 폭">
-      <button type="button" data-w="fluid" title="브라우저 창 폭 그대로. 창을 늘이고 줄이면 구간별 화면이 바뀜">창 폭</button>
+      <button type="button" data-w="fluid" title="브라우저 창 폭 그대로. 창을 늘이고 줄이면 구간별 화면이 바뀜" data-tt="fluidTip" data-t="fluid">창 폭</button>
       <button type="button" data-w="1440">1440</button>
       <button type="button" data-w="390">390</button>
     </div>
-    <button type="button" class="rb" id="rerun" title="이 케이스를 처음 상태로 (R)">↻ 처음부터</button>
+    <button type="button" class="rb" id="rerun" title="이 케이스를 처음 상태로 (R)" data-tt="rerunTip" data-t="rerun">↻ 처음부터</button>
   </div>
 
   <div class="main">
     <div class="stage" id="stage">
-      <div class="dev" id="dev"><iframe id="frame" title="프로토타입 화면"></iframe></div>
+      <div class="dev" id="dev"><iframe id="frame" title="프로토타입 화면" data-tt="frame"></iframe></div>
       <div class="loading" id="loading">불러오는 중…</div>
     </div>
     <span class="wbadge" id="wbadge"></span>
     <aside class="drawer" id="drawer" aria-label="화면 변경 사항">
-      <div class="dhead"><h2>화면 변경 사항</h2><span class="legend"><i></i>번호 = 화면 위 번호</span><button type="button" class="x" id="drawerX" aria-label="패널 닫기"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+      <div class="dhead"><h2 data-t="drawer">화면 변경 사항</h2><span class="legend"><i></i><span data-t="legend">번호 = 화면 위 번호</span></span><button type="button" class="x" id="drawerX" aria-label="패널 닫기" data-ta="close"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
       <div class="dbody" id="spec"></div>
     </aside>
   </div>
@@ -172,31 +173,62 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
   const platOf = (c) => grpOf[c.g].plat;
   const store = { get: (k, d) => { try { return localStorage.getItem(k) ?? d; } catch (e) { return d; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* 무시 */ } } };
   const stSel = {};
+  // ── 셸 문구 (KO / EN). 케이스 · 변경 사항 문구는 cases.en.js(CASES_EN) ──
+  const UI = {
+    ko: { title: '메인 페이지 개선 · 프로토타입', doc: '메인 개선 프로토타입', lang: '화면 언어', mk: '변경 사항 번호', mkTip: '화면 위 번호 표시 (M)', panel: '변경 사항', panelTip: '변경 사항 패널 (D)',
+      screen: '화면', prev: '이전 케이스 (↑)', next: '다음 케이스 (↓)', state: '회원 상태', width: '사용자 폭', fluid: '창 폭', fluidTip: '브라우저 창 폭 그대로. 창을 늘이고 줄이면 구간별 화면이 바뀜',
+      rerun: '↻ 처음부터', rerunTip: '이 케이스를 처음 상태로 (R)', drawer: '화면 변경 사항', legend: '번호 = 화면 위 번호', close: '패널 닫기', frame: '프로토타입 화면',
+      web: '웹', mobile: '모바일', td: '테스트 데이터', tdTip: '실제 데이터에 없는 경우를 보려고 바꾼 값', loading: '불러오는 중…', fail: '화면을 불러오지 못했어요. [처음부터]를 눌러 다시 열어 보세요.', err: '오류',
+      wFluid: '창 폭', wFixed: '고정 폭', zWeb: '웹 구성 (1024px 이상)', zMid: '768~1023px · Figma 화면 없음 (프로토타입 현재 동작)', zMob: '모바일 구성 (767px 이하)',
+      envH: '기기 상태 바꿔 보기', dev: '기기 알림', on: '켜짐', off: '꺼짐', os: 'OS 알림 허용 창', osYes: '띄울 수 있음', osNo: '띄울 수 없음', envHelp: '바꾸면 바로 적용돼요', startNotify: '입금 알림 켜기 누르기', resume: '앱 복귀',
+      resNone: '결과: 아직 없음', res: '결과: ', toast: '토스트: ', introH: '인터랙션', introHelp: '개인화 카드 진입 효과 (자리가 위에서 열리며 페이드인)', intro: '진입 효과 다시 보기', noteH: '범위 밖 · 미정', gone: '지금 화면(폭 · 상태)에는 없는 요소',
+      help: '번호를 누르면 화면에서 그 위치로 이동해요. 사용자 폭 [창 폭]에서 브라우저 창(F12 기기 모드 포함)을 늘이고 줄이면 구간별 화면이 바뀌어요 (왼쪽 아래에 지금 폭 표시).', keys: '<kbd>↑</kbd> <kbd>↓</kbd> 케이스 이동 · <kbd>R</kbd> 처음부터 · <kbd>M</kbd> 번호 표시 · <kbd>D</kbd> 패널' },
+    en: { title: 'Main page improvement · Prototype', doc: 'Main page prototype', lang: 'Screen language', mk: 'Change markers', mkTip: 'Show markers on screen (M)', panel: 'Changes', panelTip: 'Changes panel (D)',
+      screen: 'Screen', prev: 'Previous case (↑)', next: 'Next case (↓)', state: 'Member state', width: 'Width', fluid: 'Window', fluidTip: 'Follows the browser window width. Resize the window to see each breakpoint',
+      rerun: '↻ Restart', rerunTip: 'Reset this case (R)', drawer: 'Screen changes', legend: 'Number = marker on screen', close: 'Close panel', frame: 'Prototype screen',
+      web: 'Web', mobile: 'Mobile', td: 'Test data', tdTip: 'Values changed to show a case not in the real data', loading: 'Loading…', fail: "Couldn't load the screen. Press [Restart] to open it again.", err: 'error',
+      wFluid: 'Window', wFixed: 'Fixed', zWeb: 'Web layout (1024px and up)', zMid: '768–1023px · no Figma screen (current prototype behavior)', zMob: 'Mobile layout (767px and below)',
+      envH: 'Try device states', dev: 'Device notifications', on: 'On', off: 'Off', os: 'OS permission prompt', osYes: 'Available', osNo: 'Unavailable', envHelp: 'Changes apply immediately', startNotify: 'Tap Turn on payback alerts', resume: 'Return to app',
+      resNone: 'Result: none yet', res: 'Result: ', toast: 'Toast: ', introH: 'Interaction', introHelp: 'Personalized card entry effect (opens from the top with fade-in)', intro: 'Replay entry effect', noteH: 'Out of scope · TBD', gone: 'Not on the current screen (width · state)',
+      help: 'Tap a number to jump to that spot on the screen. With width [Window], resize the browser window (including F12 device mode) to see each breakpoint (current width shown bottom left).', keys: '<kbd>↑</kbd> <kbd>↓</kbd> move case · <kbd>R</kbd> restart · <kbd>M</kbd> markers · <kbd>D</kbd> panel' },
+  };
+  let lang;
+  const T = (k) => UI[lang][k];
+  const tr = (t) => (lang === 'en' && typeof CASES_EN !== 'undefined' && CASES_EN[t]) || t;
+  function paintStatic() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-t]').forEach((el) => (el.textContent = T(el.dataset.t)));
+    document.querySelectorAll('[data-tt]').forEach((el) => (el.title = T(el.dataset.tt)));
+    document.querySelectorAll('[data-ta]').forEach((el) => el.setAttribute('aria-label', T(el.dataset.ta)));
+    $('#grpSel').innerHTML = ['web', 'mobile'].map((p) => `<optgroup label="${T(p)}">${GROUPS.filter((g) => g.plat === p).map((g) => `<option value="${g.id}">${T(p)} · ${esc(tr(g.name))}</option>`).join('')}</optgroup>`).join('');
+  }
   let cur = null, run = 0, readyRun = 0, shownRun = 0, lastErr = '', env = { device: 'off', osPrompt: 'yes' };
   let showMk = store.get('tm:mk', 'on') !== 'off';
-  let lang = store.get('tm:lang', 'ko') === 'en' ? 'en' : 'ko';
+  lang = store.get('tm:lang', 'ko') === 'en' ? 'en' : 'ko';
   // 사용자 폭: 웹 케이스는 창 폭, 모바일 케이스는 390이 기본. 고른 값은 플랫폼별로 기억
   const wPick = { web: store.get('tm:w:web', 'fluid'), mobile: store.get('tm:w:mobile', '390') };
   let panelOn = store.get('tm:panel', window.innerWidth >= 1280 ? 'on' : 'off') === 'on';
   $('#mkTog').checked = showMk;
 
   // ── 설정 바 ──
-  $('#grpSel').innerHTML = ['web', 'mobile'].map((p) => `<optgroup label="${p === 'web' ? '웹' : '모바일'}">${GROUPS.filter((g) => g.plat === p).map((g) => `<option value="${g.id}">${p === 'web' ? '웹' : '모바일'} · ${esc(g.name)}</option>`).join('')}</optgroup>`).join('');
+  paintStatic();
   const stOf = (c) => (c.states ? (stSel[c.id] || c.states[0][0]) : null);
   const hashOf = (c) => (c.states ? c.h.replace(/state=\w+/, 'state=' + stOf(c)) : c.h);
   const looks = (c) => (c.look || []).filter((l) => !l[2] || l[2].includes(stOf(c)));
   const figIdOf = (c) => (c.states ? c.states.find((x) => x[0] === stOf(c))[2] : c.id);
   function paintBar() {
     $('#grpSel').value = cur.g;
-    $('#chips').innerHTML = CASES.filter((c) => c.g === cur.g).map((c) => `<button type="button" class="chip" data-case="${c.id}" ${c.id === cur.id ? 'aria-current="true"' : ''}><span class="cid">${esc(c.id)}</span>${esc(c.t)}${c.f ? '<span class="td">테스트 데이터</span>' : ''}</button>`).join('');
+    $('#chips').innerHTML = CASES.filter((c) => c.g === cur.g).map((c) => `<button type="button" class="chip" data-case="${c.id}" ${c.id === cur.id ? 'aria-current="true"' : ''}><span class="cid">${esc(c.id)}</span>${esc(tr(c.t))}${c.f ? `<span class="td">${T('td')}</span>` : ''}</button>`).join('');
     const has = !!cur.states;
     ['#stSeg', '#stLbl', '#stDiv'].forEach((s) => ($(s).hidden = !has));
-    if (has) $('#stSeg').innerHTML = cur.states.map(([v, l]) => `<button type="button" data-st="${v}" aria-pressed="${stOf(cur) === v}">${esc(l)}</button>`).join('');
+    if (has) $('#stSeg').innerHTML = cur.states.map(([v, l]) => `<button type="button" data-st="${v}" aria-pressed="${stOf(cur) === v}">${esc(tr(l))}</button>`).join('');
     document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.lang === lang));
     document.querySelectorAll('[data-w]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.w === wPick[platOf(cur)]));
     const on = $('#chips [aria-current="true"]'); if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
-  const paintPanel = () => { $('#drawer').hidden = !panelOn; $('#panelBtn').setAttribute('aria-pressed', String(panelOn)); };
+  // [10.29] 팝업 · 시트가 열리면 변경 사항 패널을 잠시 접는다 (닫히면 다시 열림). 그동안 [변경 사항]을 누르면 바로 다시 보인다
+  let layerHide = false;
+  const paintPanel = () => { const on = panelOn && !layerHide; $('#drawer').hidden = !on; $('#panelBtn').setAttribute('aria-pressed', String(on)); };
 
   // ── 화면 크기: 늘 100% (축소하지 않는다) ──
   function fit() {
@@ -208,8 +240,8 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     dev.style.width = w === 'fluid' ? '100%' : w + 'px';
     dev.style.height = w === '390' ? '' : '100%';
     const px = w === 'fluid' ? Math.round(st.clientWidth) : +w;
-    const zone = px >= 1024 ? '웹 구성 (1024px 이상)' : px >= 768 ? '768~1023px · Figma 화면 없음 (프로토타입 현재 동작)' : '모바일 구성 (767px 이하)';
-    $('#wbadge').textContent = `${w === 'fluid' ? '창 폭' : '고정 폭'} ${px}px · ${zone}`;
+    const zone = px >= 1024 ? T('zWeb') : px >= 768 ? T('zMid') : T('zMob');
+    $('#wbadge').textContent = `${w === 'fluid' ? T('wFluid') : T('wFixed')} ${px}px · ${zone}`;
     st.style.justifyContent = w === '1440' && st.clientWidth < 1440 ? 'flex-start' : 'center';
   }
   new ResizeObserver(fit).observe($('#stage'));
@@ -217,6 +249,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
   // ── 열기 ──
   function load(c) {
     run += 1;
+    if (layerHide) { layerHide = false; paintPanel(); }
     const myRun = run;
     env = { device: c.nd || 'off', osPrompt: c.os || 'yes' };
     const q = ['frame=1', 'r=' + run];
@@ -224,14 +257,14 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     if (c.env) q.push('nd=' + env.device, 'os=' + env.osPrompt);
     if (lang === 'en') q.push('lang=en');
     $('#dev').removeAttribute('data-ready');
-    const ld = $('#loading'); ld.hidden = false; ld.classList.remove('err'); ld.textContent = '불러오는 중…';
+    const ld = $('#loading'); ld.hidden = false; ld.classList.remove('err'); ld.textContent = T('loading');
     lastErr = '';
     $('#frame').src = 'proto.html?' + q.join('&') + '#' + hashOf(c);
     resultClear(); paintEnv();
     setTimeout(() => {
       if (myRun !== run || readyRun === myRun || shownRun === myRun) return;
       ld.classList.add('err');
-      ld.textContent = '화면을 불러오지 못했어요. [처음부터]를 눌러 다시 열어 보세요.' + (lastErr ? ' (오류: ' + lastErr + ')' : '');
+      ld.textContent = T('fail') + (lastErr ? ' (' + T('err') + ': ' + lastErr + ')' : '');
     }, 9000);
   }
   function open(id) {
@@ -240,7 +273,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     store.set('tm:last', c.id); store.set('tm:last:' + c.g, c.id);
     const hid = c.states ? c.id + '@' + stOf(c) : c.id;
     try { if (location.hash.slice(1) !== hid) history.replaceState(null, '', '#' + hid); } catch (e) { /* 주소를 못 바꿔도 진행 */ }
-    document.title = c.t + ' · 메인 개선 프로토타입';
+    document.title = tr(c.t) + ' · ' + T('doc');
     paintBar(); paintSpec(); paintPanel(); fit(); load(c);
   }
   function step(d) {
@@ -255,32 +288,32 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     $('#panelN').textContent = L.length;
     $('#spec').innerHTML = `
       <section class="sec">
-        <div class="meta"><span>${esc(figIdOf(c))}</span><span>·</span><span>Figma ${esc(g.fig)}</span><span>·</span><span>${g.plat === 'web' ? '웹' : '모바일'}</span>${c.f ? '<span class="td" title="실제 데이터에 없는 경우를 보려고 바꾼 값">테스트 데이터</span>' : ''}</div>
-        <ol class="look">${L.map(([t, sel], i) => `<li ${sel ? `data-go="${i + 1}"` : 'class="nomk"'}><i>${i + 1}</i><span>${esc(t)}</span></li>`).join('')}</ol>
+        <div class="meta"><span>${esc(figIdOf(c))}</span><span>·</span><span>Figma ${esc(g.fig)}</span><span>·</span><span>${T(g.plat)}</span>${c.f ? `<span class="td" title="${T('tdTip')}">${T('td')}</span>` : ''}</div>
+        <ol class="look">${L.map(([t, sel], i) => `<li ${sel ? `data-go="${i + 1}"` : 'class="nomk"'}><i>${i + 1}</i><span>${esc(tr(t))}</span></li>`).join('')}</ol>
       </section>
-      ${c.env ? `<section class="sec"><h4>기기 상태 바꿔 보기</h4><div class="env">
-        <div class="row"><span>기기 알림</span><div class="seg" data-env="device"><button type="button" data-v="on">켜짐</button><button type="button" data-v="off">꺼짐</button></div></div>
-        <div class="row"><span>OS 알림 허용 창</span><div class="seg" data-env="osPrompt"><button type="button" data-v="yes">띄울 수 있음</button><button type="button" data-v="no">띄울 수 없음</button></div></div>
-        <div class="row"><span class="help">바꾸면 바로 적용돼요</span><span class="acts"><button type="button" class="btn" data-start-notify>입금 알림 켜기 누르기</button><button type="button" class="btn" data-resume>앱 복귀</button></span></div>
-        <p class="note" id="envResult">결과: 아직 없음</p>
+      ${c.env ? `<section class="sec"><h4>${T('envH')}</h4><div class="env">
+        <div class="row"><span>${T('dev')}</span><div class="seg" data-env="device"><button type="button" data-v="on">${T('on')}</button><button type="button" data-v="off">${T('off')}</button></div></div>
+        <div class="row"><span>${T('os')}</span><div class="seg" data-env="osPrompt"><button type="button" data-v="yes">${T('osYes')}</button><button type="button" data-v="no">${T('osNo')}</button></div></div>
+        <div class="row"><span class="help">${T('envHelp')}</span><span class="acts"><button type="button" class="btn" data-start-notify>${T('startNotify')}</button><button type="button" class="btn" data-resume>${T('resume')}</button></span></div>
+        <p class="note" id="envResult">${T('resNone')}</p>
       </div></section>` : ''}
-      ${c.intro ? `<section class="sec"><h4>인터랙션</h4><div class="row"><span class="help">개인화 카드 진입 효과 (자리가 위에서 열리며 페이드인)</span><button type="button" class="btn" data-intro>진입 효과 다시 보기</button></div></section>` : ''}
-      ${c.note && c.note.length ? `<section class="sec"><h4>범위 밖 · 미정</h4>${c.note.map((n) => `<p class="note">${esc(n)}</p>`).join('')}</section>` : ''}
-      <section class="sec help">번호를 누르면 화면에서 그 위치로 이동해요. 사용자 폭 [창 폭]에서 브라우저 창(F12 기기 모드 포함)을 늘이고 줄이면 구간별 화면이 바뀌어요 (왼쪽 아래에 지금 폭 표시).<br><kbd>↑</kbd> <kbd>↓</kbd> 케이스 이동 · <kbd>R</kbd> 처음부터 · <kbd>M</kbd> 번호 표시 · <kbd>D</kbd> 패널</section>`;
+      ${c.intro ? `<section class="sec"><h4>${T('introH')}</h4><div class="row"><span class="help">${T('introHelp')}</span><button type="button" class="btn" data-intro>${T('intro')}</button></div></section>` : ''}
+      ${c.note && c.note.length ? `<section class="sec"><h4>${T('noteH')}</h4>${c.note.map((n) => `<p class="note">${esc(tr(n))}</p>`).join('')}</section>` : ''}
+      <section class="sec help">${T('help')}<br>${T('keys')}</section>`;
     paintEnv();
   }
   function paintEnv() { document.querySelectorAll('[data-env]').forEach((seg) => seg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', env[seg.dataset.env] === b.dataset.v))); }
   function focusItem(n) {
-    if (!panelOn) { panelOn = true; store.set('tm:panel', 'on'); paintPanel(); }
+    if (!panelOn || layerHide) { layerHide = false; panelOn = true; store.set('tm:panel', 'on'); paintPanel(); }
     document.querySelectorAll('ol.look li').forEach((li) => li.classList.toggle('on', li.dataset.go === String(n)));
     const li = document.querySelector(`ol.look li[data-go="${n}"]`); if (li) li.scrollIntoView({ block: 'nearest' });
     setTimeout(() => { if (li) li.classList.remove('on'); }, 2400);
   }
-  function resultClear() { const r = $('#envResult'); if (r) r.textContent = '결과: 아직 없음'; }
+  function resultClear() { const r = $('#envResult'); if (r) r.textContent = T('resNone'); }
   function resultAdd(kind, msg) {
     const r = $('#envResult'); if (!r) return;
-    if (kind === 'result') r.textContent = '결과: ' + msg;
-    if (kind === 'toast' && /기기 알림이 꺼져/.test(msg)) r.textContent = '토스트: ' + msg;
+    if (kind === 'result') r.textContent = T('res') + msg;
+    if (kind === 'toast' && /기기 알림이 꺼져|Device notifications are off/.test(msg)) r.textContent = T('toast') + msg;
   }
 
   // ── 프레임 ──
@@ -299,26 +332,28 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     if (d.type === 'tm:log') resultAdd(d.kind, d.msg);
     if (d.type === 'tm:env') { if (d.device) env.device = d.device; paintEnv(); }
     if (d.type === 'tm:markClick') focusItem(d.n);
+    // 입금 알림 플로우 케이스(env)는 패널의 "기기 상태 바꿔 보기"로 팝업을 조작하므로 접지 않는다
+    if (d.type === 'tm:layer') { layerHide = !!d.open && !cur.env; paintPanel(); }
     if (d.type === 'tm:markVis') {
       document.querySelectorAll('ol.look li[data-go]').forEach((li) => {
         const off = !d.vis.includes(+li.dataset.go);
         li.classList.toggle('gone', off);
-        li.title = off ? '지금 화면(폭 · 상태)에는 없는 요소' : '';
+        li.title = off ? T('gone') : '';
       });
     }
   });
 
   // ── 조작 ──
   const setMk = (on) => { showMk = on; $('#mkTog').checked = on; store.set('tm:mk', on ? 'on' : 'off'); fw().postMessage({ type: 'tm:markShow', show: on }, '*'); };
-  const setPanel = (on) => { panelOn = on; store.set('tm:panel', on ? 'on' : 'off'); paintPanel(); };
+  const setPanel = (on) => { layerHide = false; panelOn = on; store.set('tm:panel', on ? 'on' : 'off'); paintPanel(); };
   $('#mkTog').addEventListener('change', (e) => setMk(e.target.checked));
   $('#grpSel').addEventListener('change', (e) => { const gid = e.target.value; const id = store.get('tm:last:' + gid, ''); open(byId[id] && byId[id].g === gid ? id : CASES.find((c) => c.g === gid).id); });
   document.addEventListener('click', (e) => {
     const cb = e.target.closest('[data-case]'); if (cb) { open(cb.dataset.case); return; }
     const sb = e.target.closest('[data-st]'); if (sb) { stSel[cur.id] = sb.dataset.st; open(cur.id); return; }
-    const lb = e.target.closest('[data-lang]'); if (lb) { if (lb.dataset.lang !== lang) { lang = lb.dataset.lang; store.set('tm:lang', lang); paintBar(); load(cur); } return; }
+    const lb = e.target.closest('[data-lang]'); if (lb) { if (lb.dataset.lang !== lang) { lang = lb.dataset.lang; store.set('tm:lang', lang); paintStatic(); paintBar(); paintSpec(); fit(); document.title = tr(cur.t) + ' · ' + T('doc'); load(cur); } return; }
     const wb = e.target.closest('[data-w]'); if (wb) { const p = platOf(cur); if (wPick[p] !== wb.dataset.w) { wPick[p] = wb.dataset.w; store.set('tm:w:' + p, wb.dataset.w); paintBar(); fit(); } return; }
-    if (e.target.closest('#panelBtn')) { setPanel(!panelOn); return; }
+    if (e.target.closest('#panelBtn')) { setPanel(!(panelOn && !layerHide)); return; }
     if (e.target.closest('#drawerX')) { setPanel(false); return; }
     if (e.target.closest('[data-intro]')) { load(cur); return; }
     if (e.target.closest('#prev')) { step(-1); return; }
@@ -335,7 +370,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     if (e.target.matches('input:not([type="checkbox"]), select, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === 'r' || e.key === 'R') { load(cur); return; }
     if (e.key === 'm' || e.key === 'M') { setMk(!showMk); return; }
-    if (e.key === 'd' || e.key === 'D') { setPanel(!panelOn); return; }
+    if (e.key === 'd' || e.key === 'D') { setPanel(!(panelOn && !layerHide)); return; }
     if (e.key === 'ArrowDown') { e.preventDefault(); step(1); }
     if (e.key === 'ArrowUp') { e.preventDefault(); step(-1); }
   });

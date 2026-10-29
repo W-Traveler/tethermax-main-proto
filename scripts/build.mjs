@@ -1,6 +1,6 @@
 // 빌드: src → dist
 //  1) Tailwind(3.4.17) CSS를 만들어 proto.html 안에 넣는다
-//  2) index.html에 cases.js(케이스 · 변경 사항 정의)를 넣는다
+//  2) index.html에 cases.js(케이스 · 변경 사항 정의)와 cases.en.js(EN 문구)를 넣는다
 //  3) public/(글꼴 등)과 lucide 아이콘 스크립트를 복사한다
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync, cpSync, rmSync, existsSync } from 'node:fs';
@@ -31,7 +31,7 @@ writeFileSync(p('dist/proto.html'), proto.replace('/*__TW__*/', () => css));
 // 2) 셸
 const shell = readFileSync(p('src/index.html'), 'utf8');
 if (!shell.includes('/*__CASES__*/')) throw new Error('src/index.html 에 /*__CASES__*/ 자리가 없습니다');
-writeFileSync(p('dist/index.html'), shell.replace('/*__CASES__*/', () => readFileSync(p('src/cases.js'), 'utf8')));
+writeFileSync(p('dist/index.html'), shell.replace('/*__CASES__*/', () => readFileSync(p('src/cases.js'), 'utf8') + '\n' + readFileSync(p('src/cases.en.js'), 'utf8')));
 
 // 3) 정적 파일
 cpSync(p('public'), p('dist'), { recursive: true });

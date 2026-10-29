@@ -28,6 +28,12 @@ page.on('pageerror', (e) => errs.push(e.message));
 await page.goto(base + '/index.html');
 const ids = await page.evaluate(() => CASES.flatMap((c) => (c.states ? c.states.map(([s]) => c.id + '@' + s) : [c.id])));
 let fail = 0;
+// EN 문구 빠짐 점검: 케이스 · 묶음 · 상태값 · 변경 사항 · 범위 밖 문구가 cases.en.js에 모두 있어야 한다
+const noEn = await page.evaluate(() => {
+  const all = [...GROUPS.map((g) => g.name), ...CASES.flatMap((c) => [c.t, ...(c.states || []).map((x) => x[1]), ...(c.look || []).map((l) => l[0]), ...(c.note || [])])];
+  return [...new Set(all)].filter((t) => !CASES_EN[t]);
+});
+if (noEn.length) { fail += 1; console.log('✗ EN 문구 없음:', noEn.join(' | ')); }
 for (const id of ids) {
   errs.length = 0;
   await page.evaluate((i) => { location.hash = i; }, id);
