@@ -382,7 +382,7 @@
     html[data-hcard="guide"] #notifyCard [data-notify-title] { font-size: 18px; line-height: 1.35; }
     html[data-hcard="guide"] #notifyCard [data-notify-sub] { font-size: 12.5px; margin-top: 4px; }
     html[data-hcard="guide"] #notifyCard [data-link-guide] { display: block; }
-    html[data-hcard="guide"] #notifyCard [data-notify-cta-m] { height: 48px; margin-top: 14px; border-radius: 12px; }
+    html[data-hcard="guide"] #notifyCard [data-notify-cta-m] { height: 48px; margin-top: 12px; border-radius: 12px; }
 
     /* boost=strip: 아이콘 + 제목 + 화살표 한 줄 띠 */
     html[data-hboost="strip"] #boostBanner {
@@ -396,6 +396,13 @@
     html[data-hboost="strip"] #notifyWrap + section { padding-top: 0; }
     html[data-hboost="strip"] #notifyWrap + section + div { padding-top: 0; }   /* 부스트부터 본문을 감싸는 묶음의 위 여백(8px) */
     html[data-hboost="strip"] div:has(> #boostBanner) { padding-top: 10px; row-gap: 16px; }
+    /* [10.29] 첫 화면(390×844, 탭바 제외 780px)에 계산기 버튼까지 다 보이게 간격을 줄인다. 카드 높이는 고정하지 않고 문구 길이에 따라 늘어난다 */
+    html[data-hboost="strip"] #notifyWrap { padding-top: 12px; }
+    html[data-hboost="strip"] #boostBanner { padding-top: 10px; padding-bottom: 10px; }
+    html[data-hboost="strip"] div:has(> #boostBanner) { row-gap: 12px; }
+    html[data-hboost="strip"] div:has(> #boostBanner) > section.panel { padding-top: 16px; padding-bottom: 16px; }
+    html[data-hboost="strip"] [data-calc-inline] .panel { padding-top: 14px; }
+    html[data-hboost="strip"] [data-calc-inline] .panel > a { margin-top: 10px; }
 
     /* sticky=1: 계산기 배너 숨김 + 본문 끝이 버튼에 가리지 않게 여백 */
     html[data-hsticky="1"] #calcBanner { display: none !important; }
@@ -1060,7 +1067,7 @@
         <span class="mb-tag">이미지</span>
       </span>
       <span class="mb-text">
-        <span class="mb-title">첫 연동이면 페이백을 더 얹어드려요</span>
+        <span class="mb-title" data-en="First time here? Your cashback comes boosted">첫 연동이면 페이백을 더 얹어드려요</span>
         <span class="mb-sub">UID를 처음 연동할 때 한 번 드리는 혜택이에요.</span>
       </span>
     </a>
@@ -4793,8 +4800,8 @@
       '최대 페이백 보장': 'Best Cashback Guarantee', '세계 최고 페이백을 보장해요': 'We guarantee the best cashback',
       '검증된 공식 거래소와 제휴해서 세계 최고 페이백을 보장해요': 'Partnered with verified official exchanges to guarantee the world’s best cashback',
       '테더맥스보다 높은 페이백률을 발견하시면,': 'Find cashback rate higher than TetherMax and', '차액을 보상해드려요': 'we’ll refund the difference',
-      '세계 최고 페이백 보장': "World's highest cashback, guaranteed",
-      '더 높은 페이백을 찾으면 차액을 보상해드려요': 'Find a higher cashback and we pay the difference',
+      '세계 최고 페이백 보장': 'Highest cashback, guaranteed',
+      '더 높은 페이백을 찾으면 차액을 보상해드려요': 'Find higher and we pay the difference',
       '검증된 공식 거래소 제휴': 'Partnered with verified official exchanges',
       '지금까지 회원들에게 돌려드린 페이백': 'Cashback paid to members so far',
       '함께하는 회원': 'Members with us', '고객센터 운영': 'Support available', '131,636명': '131,636',
@@ -4802,7 +4809,7 @@
       '오늘의 페이백': "Today's cashback", '함께하는 회원 (명)': 'Members',
       '함께하는 중': 'members with us', '고객센터': 'Support',
       '누적 USDT': 'USDT cashback paid', 'USDT 누적 지급': 'USDT cashback paid', '3.2억': '327M',
-      '첫 연동이면 페이백을 더 얹어드려요': 'First time here? Your cashback comes boosted',
+      '첫 연동이면 페이백을 더 얹어드려요': 'Extra cashback on your first link',
       'UID를 처음 연동할 때 한 번 드리는 혜택이에요.': 'A one-time bonus when you link a UID for the first time.',
       '부스트 혜택 알아보기': 'Discover the Benefits',
       '테더맥스 혜택': 'Exclusive Benefits',
@@ -4817,7 +4824,7 @@
       'WSOT 월드 챔피언십': 'WSOT World Championship',
       '신규 가입 미스터리 박스': 'Sign-up mystery box',
       '신규 상장 에어드랍': 'New listing airdrop',
-      '연동 한 번이면 페이백이 계속 쌓여요': 'Link once and the cashback keeps coming',
+      '연동 한 번이면 페이백이 계속 쌓여요': 'Link once to keep earning cashback',
       '3분 만에 연동하고 페이백 받아보세요.': 'Link in three minutes and start getting cashback.',
       '거래소를 연동하면 끝나요. 3분이면 충분해요.': 'Linking an exchange is all it takes. About three minutes.',
       '페이백이 들어오면 바로 알려드려요.': 'We will let you know the moment cashback lands.', '켜기': 'Turn on',
@@ -4902,8 +4909,8 @@
       '테더맥스와 함께하면 얼마나 더 돌려받을까요?': 'How much more comes back with TetherMax?',
       '같은 거래량이어도 테더맥스를 거치면 더 많이 돌아와요.': 'Same trading volume — more comes back when it goes through TetherMax.',
       '더 받을 수 있는 금액 확인하기': 'See what more you could get',
-      '매달 내는 수수료, 돌려받을 수 있어요': 'Get back the fees you pay every month',
-      '거래량만 넣으면 한 달 페이백을 바로 알려드려요.': 'Enter your volume and see a month of cashback instantly.',
+      '매달 내는 수수료, 돌려받을 수 있어요': 'Get back your monthly fees',
+      '거래량만 넣으면 한 달 페이백을 바로 알려드려요.': 'Enter your volume to see monthly cashback.',
       '내 페이백 계산하기': 'Calculate my cashback',
       '계산하기': 'Calculate', '혜택 보기': 'View rewards',
       'UID 연동하고 100 USDT 상당 혜택 받기': 'Link your UID and unlock rewards worth 100 USDT',
@@ -4937,7 +4944,7 @@
       '지갑주소가 확인되지 않았어요. 선택한 거래소(': 'We could not verify this wallet address. Check that the exchange you picked (',
       '이미 이 거래소 계정이 있었다면': 'Already had an account on this exchange?',
       '상담으로 도움받기': 'Get help from support',
-      '거래소 고르기': 'Pick an exchange', 'UID 붙여넣기': 'Paste your UID', '페이백 받기': 'Get cashback',
+      '거래소 고르기': 'Pick exchange', 'UID 붙여넣기': 'Paste UID', '페이백 받기': 'Get cashback',
       '거래소 계정의 UID만 있으면 돼요': 'All you need is your exchange account UID', '거래소 연동하기': 'Link exchange',
       '연동하기': 'Link', '연동하면 바로 3 USDT 지급': '3 USDT the moment you link',
       '공지 · 신규 상장': 'Notices · New listings', '계산기': 'Calculators', '청산가': 'Liq. price', '손익분기': 'Break-even', '포지션 크기': 'Position size',
@@ -5053,7 +5060,9 @@
     function translate(node) {
       if (node.nodeType === 3) {
         if (skip(node.parentElement)) return;
-        const r = trText(node.nodeValue);
+        // data-en이 있으면 그 문구를 쓴다 (같은 국문이 자리마다 다른 영문일 때. 예: 웹 메인 배너 제목)
+        const own = node.parentElement && node.parentElement.dataset.en;
+        const r = own || trText(node.nodeValue);
         // 같은 값을 다시 쓰면 감시가 또 깨어나 끝없이 돈다("DEX" → "DEX" 등). 바뀔 때만 쓴다
         const nv = r === null ? null : (/^\s/.test(node.nodeValue) ? ' ' : '') + r + (/\s$/.test(node.nodeValue) ? ' ' : '');
         if (nv !== null && nv !== node.nodeValue) node.nodeValue = nv;
