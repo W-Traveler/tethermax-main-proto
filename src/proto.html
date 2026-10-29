@@ -440,6 +440,14 @@
 
   /* 실시간 페이백 현황이 신뢰지표 안(좁은 칸)에 들어가면 시각은 뺀다 */
   [data-roll-host="trust"] [data-roll-at] { display: none !important; }
+  /* [10.29] 실시간 페이백 현황 줄은 화면 폭이 아니라 표시 영역 폭 기준으로 줄인다 (웹 미연동 보장 카드처럼 좁은 칸에서 잘리지 않게).
+     420px 미만: UID 라벨 · [지급 완료] 칩 숨김, 별표 3개 (모바일과 같은 규칙) / 340px 미만: 거래소명도 숨기고 로고만 */
+  [data-roll-host] { container-type: inline-size; }
+  @container (max-width: 419px) {
+    [data-roll-uidlabel], [data-roll-paid], [data-roll-mfull] { display: none !important; }
+    [data-roll-mshort] { display: inline !important; }
+  }
+  @container (max-width: 339px) { [data-roll-name] { display: none !important; } }
 
   /* 웹(데스크톱) 미연동: 모바일 기본(하단 고정 켬)에 맞춰 계산기는 떠 있는 배너 대신 본문 카드로 둔다 */
   @media (min-width: 768px) {
@@ -3200,18 +3208,18 @@
       <li class="flex items-center gap-2 min-[420px]:gap-2.5">
         ${logo(ex, 'w-6 h-6 text-[11px]')}
         <!-- 모바일은 로고만 보인다 (이름은 화면 읽기용으로 남긴다). DEX 뱃지는 모든 폭에서 보인다 -->
-        <span class="max-md:sr-only text-[13px] font-semibold text-ink whitespace-nowrap" translate="no">${ex}</span>${dex ? DEX_BADGE : ''}
+        <span data-roll-name class="max-md:sr-only text-[13px] font-semibold text-ink whitespace-nowrap" translate="no">${ex}</span>${dex ? DEX_BADGE : ''}
         ${dex
           ? `<span translate="no" class="min-w-0 h-6 px-2 rounded bg-white/70 inline-flex items-center text-[12px] font-medium text-mute tnum whitespace-nowrap overflow-hidden">${shortAddr(uid)}</span>`
           : `<span translate="no" class="min-w-0 h-6 px-2 rounded bg-white/70 inline-flex items-center gap-1 text-[12px] font-medium text-mute whitespace-nowrap overflow-hidden">
-          <span class="max-[419px]:hidden text-[11px] font-bold text-faint">UID</span>
+          <span data-roll-uidlabel class="max-[419px]:hidden text-[11px] font-bold text-faint">UID</span>
           <!-- 좁은 화면(420px 미만)은 별표를 줄여 가린 UID가 잘리지 않게 한다 (앞 2 · 뒤 2자리는 같다) -->
-          <span class="max-[419px]:hidden tracking-[0.02em]">${maskUid(uid)}</span><span class="min-[420px]:hidden tracking-[0.02em]">${maskUid(uid, 3)}</span>
+          <span data-roll-mfull class="max-[419px]:hidden tracking-[0.02em]">${maskUid(uid)}</span><span data-roll-mshort class="min-[420px]:hidden tracking-[0.02em]">${maskUid(uid, 3)}</span>
         </span>`}
         <span data-roll-at class="hidden md:inline tnum text-[12px] text-faint whitespace-nowrap" translate="no">${at}</span>
         <span class="ml-auto flex items-center gap-3 shrink-0 whitespace-nowrap">
           <span class="text-[15px] font-bold text-gain" translate="no">+${amount}<span class="ml-1 text-[11px] font-semibold text-mute">USDT</span></span>
-          <span class="max-[419px]:hidden h-[20px] px-1.5 rounded bg-gain/10 text-[11px] font-bold leading-[20px] text-gain">지급 완료</span>
+          <span data-roll-paid class="max-[419px]:hidden h-[20px] px-1.5 rounded bg-gain/10 text-[11px] font-bold leading-[20px] text-gain">지급 완료</span>
         </span>
       </li>`;
     }).join('');
