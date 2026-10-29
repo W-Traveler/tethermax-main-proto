@@ -714,8 +714,7 @@
        (파랑 바탕 + 테두리). 연동하면 생기는 것 3가지를 보여 "왜 연동하나"에 답한다 -->
   <div>
     <div class="link-card rounded-2xl p-4">
-      <p class="text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">연동하면 가장 높은 페이백을 받아요</p>
-      <p class="mt-1 text-[12px] leading-relaxed text-body break-keep">더 높은 곳을 찾으면 차액을 보상해 드려요.</p>
+      <p class="text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">연동 한 번이면 페이백이 계속 쌓여요</p>
       <!-- 안내형: 모바일 연동 카드와 같은 3단계. 사이드바 폭이 좁아 세로로 쌓는다 -->
       <ol class="mt-3 rounded-xl bg-white px-3 py-2.5 flex flex-col gap-2">
         <li class="flex items-center gap-2"><span class="w-[22px] h-[22px] rounded-full bg-brand-soft text-brand grid place-items-center text-[11.5px] font-bold shrink-0">1</span><span class="text-[12.5px] font-semibold text-ink tracking-[-0.02em]">거래소 고르기</span></li>
@@ -1162,7 +1161,7 @@
       <!-- [2I] 설명 줄 없이 제목 · 혜택 전체 보기 한 줄 (거래소 이벤트 머리와 같은 간격) -->
       <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
         <h2 class="min-w-0 text-[19px] md:text-[22px] font-bold tracking-[-0.03em] text-ink">테더맥스 혜택</h2>
-        <a href="#" class="shrink-0 -m-2 p-2 rounded text-[13px] font-semibold text-brand inline-flex items-center gap-0.5 whitespace-nowrap hover:text-brand-dark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">혜택 전체 보기<i data-lucide="chevron-right" class="w-4 h-4"></i></a>
+        <a href="#" class="shrink-0 -m-2 p-2 rounded text-[13px] font-semibold text-brand inline-flex items-center gap-0.5 whitespace-nowrap hover:text-brand-dark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">전체 보기<i data-lucide="chevron-right" class="w-4 h-4"></i></a>
       </div>
       <!-- [3A] 1024px 이상: 오른쪽 끝 둥근 › (첫 장이 아니면 왼쪽 ‹ 도). 마우스로 끌어도 넘어간다 -->
       <div class="relative" data-cards="tmGrid">
@@ -1181,7 +1180,7 @@
       <!-- [2I] 설명 줄 없이 제목 · 이벤트 전체 보기 한 줄 (인기 거래소 머리와 같은 간격) -->
       <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
         <h2 class="min-w-0 text-[19px] md:text-[22px] font-bold tracking-[-0.03em] text-ink">거래소 이벤트</h2>
-        <a href="#" class="shrink-0 -m-2 p-2 rounded text-[13px] font-semibold text-brand inline-flex items-center gap-0.5 whitespace-nowrap hover:text-brand-dark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">이벤트 전체 보기<i data-lucide="chevron-right" class="w-4 h-4"></i></a>
+        <a href="#" class="shrink-0 -m-2 p-2 rounded text-[13px] font-semibold text-brand inline-flex items-center gap-0.5 whitespace-nowrap hover:text-brand-dark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">전체 보기<i data-lucide="chevron-right" class="w-4 h-4"></i></a>
       </div>
       <!-- [3A] 1024px 이상: 오른쪽 끝 둥근 › (첫 장이 아니면 왼쪽 ‹ 도). 마우스로 끌어도 넘어간다 -->
       <div class="relative" data-cards="evGrid">
@@ -1284,7 +1283,7 @@
            전체 내역 보기는 실서비스에서 이 거래소·UID로 걸러진 페이백 요약으로 간다. 시안은 토스트만 -->
       <div class="flex items-center justify-between gap-3">
         <p class="min-w-0 text-[14px] font-bold text-ink">주간 페이백 내역</p>
-        <button type="button" data-pb-summary class="-m-2 p-2 shrink-0 rounded text-[13px] font-semibold text-brand inline-flex items-center gap-0.5 whitespace-nowrap hover:text-brand-dark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">전체 내역 보기<i data-lucide="chevron-right" class="w-4 h-4" aria-hidden="true"></i></button>
+        <button type="button" data-pb-summary class="-m-2 p-2 shrink-0 rounded text-[13px] font-semibold text-brand inline-flex items-center gap-0.5 whitespace-nowrap hover:text-brand-dark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">전체 보기<i data-lucide="chevron-right" class="w-4 h-4" aria-hidden="true"></i></button>
       </div>
       <div class="mt-0.5 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
         <p class="text-[12px] text-mute whitespace-nowrap tnum" data-ud-week-range></p>
@@ -2000,8 +1999,9 @@
     const e = byId(linkedEx);
     return ({
       // 데스크톱 사이드바 연동 카드와 같은 문구. 숫자는 아래 신뢰지표(함께하는 회원)만 맡는다
-      '1': { title: '연동하면 가장 높은 페이백을 받아요',
-             sub: '더 높은 곳을 찾으면 차액을 보상해 드려요.', cta: '거래소 연동' },
+      // [10.29] 보조 문구 없음 (아래 세계 최고 페이백 보장 카드와 문구가 겹쳐서)
+      '1': { title: '연동 한 번이면 페이백이 계속 쌓여요',
+             sub: '', cta: '거래소 연동' },
       '2': { title: '이제 거래만 하면 페이백이 쌓여요', sub: e.name + '에서 거래하면 수수료의 ' + e.rate + '%를 돌려받아요.', cta: '거래하러 가기' },
       '3': { title: '첫 페이백 7.40 USDT가 들어왔어요', sub: '페이백이 들어오면 바로 알려드려요.', cta: '입금 알림 켜기' },
       '4': { title: '이번 달 벌써 ' + monthPb() + ' USDT 받았어요', sub: '친구를 초대하면 리워드를 더 받아요.', cta: '친구 초대하기' },
@@ -2695,7 +2695,7 @@
         ${wdG2Open ? `<ul class="mt-1">${no.map((c) => wdRow(c, `<span class="shrink-0 max-w-[46%] text-right text-[12px] leading-snug text-mute break-keep">${need(c)}</span>`)).join('')}</ul>` : ''}
       </section>` : '');
     foot.innerHTML = ok.length
-      ? `<button type="button" data-wd-ask class="${btnPrimary}">${usd(total)} USDT 한 번에 출금하기</button>`
+      ? `<button type="button" data-wd-ask class="${btnPrimary}">${usd(total)} USDT 출금하기</button>`
       : '<p class="h-12 rounded bg-hair text-[14px] font-semibold text-mute grid place-items-center">출금 가능한 페이백이 없어요</p>';
     refreshIcons();
     fitWdTip();
@@ -4942,7 +4942,7 @@
       [/^(.+) 네트워크로 연동한 지갑에 보내드려요$/, 'Sent to your linked wallet on $1'],
       [/^이번에 출금 ([0-9,]+\.[0-9]{2})$/, 'Withdrawing now $1'],
       [/^다음으로 ([0-9,]+\.[0-9]{2}) · 보유 ([0-9,]+\.[0-9]{2})$/, 'Next time $1 · Held $2'],
-      [/^([0-9,]+\.[0-9]{2}) USDT 한 번에 출금하기$/, 'Withdraw $1 USDT together'],
+      [/^([0-9,]+\.[0-9]{2}) USDT 출금하기$/, 'Withdraw $1 USDT'],
       [/^출금할 수 있는 ([0-9]+)건이 모두 함께 출금돼요$/, 'All $1 eligible items will be withdrawn together'],
       [/^거래소 페이백 ([0-9,]+\.[0-9]{2}) USDT 더 필요$/, 'Needs $1 USDT more exchange cashback'],
       [/^연동한 (.+) 지갑$/, 'Linked $1 wallet'],

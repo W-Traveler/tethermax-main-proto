@@ -93,7 +93,6 @@ const CASES_EN = {
  "보고 있는 줄은 연회색 바탕, 다른 정상 UID 선택 → 오른쪽 상세 전환": "Row being viewed has a light gray background; tap another normal UID → detail on the right switches",
  "머리: 거래소 · UID(복사) · 연동 상태 칩 / 페이백 요약 4항목": "Header: exchange · UID (copy) · link status chip / cashback summary, 4 items",
  "주간 페이백 내역: 받은 날 초록 · 없는 날 0.00 회색 · 오지 않은 날 날짜만 · 오늘 요일 앞 빨간 점": "Weekly cashback history: paid days green · no-cashback days 0.00 gray · future days date only · red dot before today's weekday",
- "[전체 내역 보기] → 페이백 요약 페이지 / 페이백 타임라인 3단계 / [메인으로]": "[View all history] → cashback summary page / cashback timeline 3 steps / [Back to main]",
  "레일 · 여러 UID 펼침": "Rail · multiple UIDs expanded",
  "상세에 들어오면 보고 있는 UID의 거래소가 펼쳐진 상태": "On entering detail, the exchange of the UID being viewed is expanded",
  "UID 줄: 정상 금액 높은 순 → 확인 필요 아래, 보고 있는 줄 연회색": "UID rows: normal by highest amount → to resolve below, row being viewed in light gray",
@@ -206,5 +205,6 @@ const CASES_EN = {
  "받는 곳(주소 + 복사) · 보내는 네트워크": "Destination (address + copy) · sending network",
  "줄마다 더 필요한 금액 · 보유 페이백": "Each row: amount still needed · cashback held",
  "버튼 대신 \"출금 가능한 페이백이 없어요\"": "\"No cashback available to withdraw\" instead of the button",
- "[저장]: 늘 누를 수 있음. 순서가 그대로면 창만 닫힘, 바뀌었으면 저장 후 레일 · 본문 카드 · 전체 보기에 같은 순서": "[Save]: always tappable. If the order is unchanged it just closes; if changed, it saves and applies the same order to the rail · main card · View all"
+ "[저장]: 늘 누를 수 있음. 순서가 그대로면 창만 닫힘, 바뀌었으면 저장 후 레일 · 본문 카드 · 전체 보기에 같은 순서": "[Save]: always tappable. If the order is unchanged it just closes; if changed, it saves and applies the same order to the rail · main card · View all",
+ "[전체 보기] → 페이백 요약 페이지 / 페이백 타임라인 3단계 / [메인으로]": "[View all] → cashback summary page / cashback timeline 3 steps / [Back to main]"
 };

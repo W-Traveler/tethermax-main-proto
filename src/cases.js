@@ -130,7 +130,7 @@ const CASES = [
       ['보고 있는 줄은 연회색 바탕, 다른 정상 UID 선택 → 오른쪽 상세 전환', '#railListSide [data-rail-cur]'],
       ['머리: 거래소 · UID(복사) · 연동 상태 칩 / 페이백 요약 4항목', '[data-ud-head]'],
       ['주간 페이백 내역: 받은 날 초록 · 없는 날 0.00 회색 · 오지 않은 날 날짜만 · 오늘 요일 앞 빨간 점', '[data-ud-weekly]'],
-      ['[전체 내역 보기] → 페이백 요약 페이지 / 페이백 타임라인 3단계 / [메인으로]', '#uidPage .order-3'],
+      ['[전체 보기] → 페이백 요약 페이지 / 페이백 타임라인 3단계 / [메인으로]', '#uidPage .order-3'],
     ],
     req: ['REQ-601', 'REQ-602', 'REQ-603', 'REQ-604'], be: ['BE-601'] },
   { id: 'MP-W04-b', g: 'w-ud', t: '레일 · 여러 UID 펼침', vp: 'web', h: 'state=4&ud=all&ux=bitget&uu=2049183376&uo=bitget',
@@ -172,7 +172,7 @@ const CASES = [
   { id: 'MP-W05-f', g: 'w-wd', t: 'DEX만 연동 · 탭 없음', vp: 'web', h: 'state=4&edit=0', f: ['dexOnly'], s: [{ wd: 'dex' }],
     data: [['플래그', 'dexOnly (Lighter · Aster)'], ['총 페이백 보유', '126.80']], look: [['탭 줄 없이 DEX 목록만', '[data-wd-top]']], req: ['REQ-701'] },
   { id: 'MP-W05-g', g: 'w-wd', t: '출금 확인 · 신청 완료', vp: 'web', h: 'state=4', s: [{ wd: 'cex' }, { click: '[data-wd-ask]' }],
-    data: [['조작', '[{합계} USDT 한 번에 출금하기]']],
+    data: [['조작', '[{합계} USDT 출금하기]']],
     look: [['현행 출금 확인 창 → 확인하면 보고 있는 유형의 출금 가능 UID 전체를 한 번에 신청', '#wdConfirm [data-wd-confirm-total] ^2'], ['요청 중 버튼 비활성 (중복 신청 방지)'], ['신청 완료 후 닫으면 메인 · 잔액 갱신 (갱신 시점 미정 · 11.1 #10)']],
     req: ['REQ-703'], be: ['BE-702'], note: ['확인 창 · 신청 완료는 현행(as-is) 컴포넌트. 프로토타입 화면은 흐름 확인용 대체 목업'] },
 
