@@ -83,6 +83,7 @@
 ## 문구 톤
 
 - 화면 · 패널 문구는 기획 문서 톤: 짧은 명사구, 사실만. 은유 · 비유 · 슬로건식 표현 금지.
+- 영문에서는 "페이백"을 항상 **Cashback**으로 씁니다 (Payback · paid back 금지). 고유명사도 같음: Cashback Boost · Cashback Challenge · Cashback Hub.
 - Figma나 PRD에 없는 규칙(폭 구간, 수치 등)을 설명 문구로만 추가하지 않습니다. 필요하면 먼저 요청자에게 묻고, 넣는다면 Figma 화면 케이스와 PRD를 함께 맞춥니다.
 
 ## 남은 일
