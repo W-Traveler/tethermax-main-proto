@@ -17,7 +17,7 @@ const GROUPS = [
   { id: 'm-ud', name: 'UID 상세', plat: 'mobile', fig: 'MP-M04' },
   { id: 'm-wd', name: '출금하기', plat: 'mobile', fig: 'MP-M05' },
 ];
-const D4 = [['회원 상태', '4 일반 회원'], ['연동 거래소', '9곳 (CEX 7 · DEX 2), UID 27개'], ['확인 필요 UID', '4개 (WOO X Pro)'], ['총 페이백 보유', '6,560.32 USDT · 오늘 +4.20']];
+const D4 = [['회원 상태', '4 일반 회원'], ['연동 거래소', '7곳 (CEX 5 · DEX 2), UID 25개'], ['확인 필요 UID', '4개 (WOO X Pro)'], ['총 페이백 보유', '6,560.32 USDT · 오늘 +4.20']];
 const WOO_BAD = 'WOO X Pro: 7720431986 이용 제한 · 5918048595 인증 실패 · 1258924123 연동 해제 · 1603392174 연동 실패';
 const ASIS_ISSUE = '확인 필요 UID의 사유별 처리 안내는 현행(as-is). 프로토타입은 토스트로 대체';
 const CASES = [
@@ -25,17 +25,19 @@ const CASES = [
   { id: 'MP-W01', g: 'w-main', t: '메인 · 연동', vp: 'web', h: 'state=4',
     states: [['4', '4 일반 회원', 'MP-W01-a'], ['3', '3 첫 페이백', 'MP-W01-b'], ['2', '2 페이백 없음', 'MP-W01-c']],
     look: [
-      ['레일: 잔액 카드 고정 · 목록만 스크롤 · [+ 계정 추가 연동] 하단 고정. 목록을 스크롤하면 머리 줄이 위에 붙고 그림자가 생김', '[data-rail-scroll]'],
-      ['잔액 카드: 총 페이백 보유 금액 = CEX · DEX 페이백 + 이벤트 리워드, 오늘 +N은 이벤트 리워드 제외 (0이면 회색). [출금하기] → 출금 팝업 (MP-W05)', 'section[aria-label="총 페이백 보유 금액"]'],
+      ['잔액 카드 이미지: 신규 이미지로 교체', 'section[aria-label="총 페이백 보유 금액"] .pay-coin'],
+      ['잔액 카드 "오늘 +N USDT": 오늘 반영된 페이백(이벤트 리워드 제외)이 있을 때만 노출, 없으면 미노출', 'section[aria-label="총 페이백 보유 금액"] [data-pb-delta]', ['4', '3']],
       ['상태 3 첫 페이백: 보유 금액과 오늘 +N USDT 노출 (10.40 · 오늘 +7.40)', 'section[aria-label="총 페이백 보유 금액"]', ['3']],
-      ['상태 2 페이백 없음: 오늘 +0.00 USDT 회색. [출금하기] → 출금 가능 없음 (MP-W05-d)', 'section[aria-label="총 페이백 보유 금액"]', ['2']],
-      ['연동한 거래소 머리 줄 2단: 1줄 제목 · [N곳 전체 보기] / 2줄 [확인 필요 N] 칩 · [편집] (둘 다 없으면 2줄 없음)', '[data-rail-head]'],
+      ['상태 2 페이백 없음: 오늘 줄 미노출. [출금하기] → 출금 가능 없음 (MP-W05-d)', 'section[aria-label="총 페이백 보유 금액"]', ['2']],
+      ['연동한 거래소 머리 줄 (신규): 1줄 제목 · [N곳 전체 보기] / 2줄 [확인 필요 N] 칩 · [편집] (둘 다 없으면 2줄 없음)', '[data-rail-head]'],
+      ['거래소 줄 · UID 줄 모듈 (신규): UID 수 · 확인 필요 · DEX별 표시 규칙은 "웹 · 줄 모듈" 묶음 ① ~ ⑧', '#railListSide > li:nth-child(2)'],
       ['순서: 편집한 순서. 편집 전이면 잔액 높은 순 → 같으면 최근 연동 먼저', '#railListSide', ['4']],
       ['배너 영역: DEX 배너, 닫기(X) 없음, 선택 시 DEX 거래소 목록', '[data-web-banner]'],
       ['참여 목록: BTC 가격 맞히기 · 오늘의 투표 · 페이백 챌린지. 참여하면 버튼 대신 참여 완료 · 투표 완료', '[data-top-row] [data-mission-list] ^1'],
       ['실시간 페이백 현황: 한 줄 띠 오토 롤링 (한 건씩 위로, 마우스 올리면 정지). 마스킹: CEX "UID" + 앞 2 · 뒤 2자리, DEX 지갑주소 앞 6 … 뒤 4', '[data-roll-host="mine"]'],
       ['인기 거래소 4곳: 최종 페이백률 · 진행 중 이벤트 수. 화면 폭이 좁아 넘치면 좌우 스와이프. [전체 보기] → Cashback Hub', '#exchanges'],
-    ] },
+    ],
+    note: ['레일 동작(스크롤 시 따라오는 방식)은 AS-IS 준용, 변경 없음'] },
 
   // ───────── 웹 · 줄 모듈 ─────────
   { id: 'ROW-1', g: 'w-row', t: '① UID 1개 · 정상', vp: 'web', h: 'state=4', s: [{ hl: RAIL + '[data-ud-group="Bybit"]' }],
@@ -66,9 +68,9 @@ const CASES = [
     data: [['예시', 'Lighter 지갑 2개: 0x7a3f…5d6e 120.00 · 0x3c9e…b21a 48.20'], ['플래그', 'dexMulti (Figma 화면 예시 없음 · 규칙만)']],
     look: [['아랫줄 "지갑주소 N개", 펼치면 줄인 지갑주소 + 금액', RAIL + '[data-rail-fold="Lighter"]'], ['펼침 · 접힘 규칙은 ③ · ④와 같음', '#railListSide [data-rail-fold="Lighter"] ~ ul']],
     req: ['REQ-502'] },
-  { id: 'ROW-8', g: 'w-row', t: '⑧ 잔액 0', vp: 'web', h: 'state=4', s: [{ hl: RAIL + '[data-ud-group="LBank"]' }],
-    data: [['예시', 'LBank · UID 77401582 · 0.00']],
-    look: [['금액 "0.00 USDT" 회색. 나머지 규칙은 그대로', RAIL + '[data-ud-group="LBank"]'], ['Gate · WOO X Pro(접힘 줄)의 0.00도 회색', '#railListSide [data-rail-fold="Gate"]']],
+  { id: 'ROW-8', g: 'w-row', t: '⑧ 잔액 0', vp: 'web', h: 'state=4', s: [{ hl: RAIL + '[data-ud-group="Bybit"]' }],
+    data: [['예시', 'Bybit · UID 881204773 · 0.00']],
+    look: [['금액 "0.00 USDT" 회색. 나머지 규칙은 그대로', RAIL + '[data-ud-group="Bybit"]'], ['Gate · WOO X Pro(접힘 줄)의 0.00도 회색', '#railListSide [data-rail-fold="Gate"]']],
     req: ['REQ-501', 'REQ-502'] },
   { id: 'HEAD-0', g: 'w-row', t: '머리 줄 · 확인 필요 0', vp: 'web', h: 'state=4', f: ['noBad'],
     data: [['조건', '확인 필요 UID 0개 (WOO X Pro는 정상 UID 9개)'], ['플래그', 'noBad']],
@@ -79,7 +81,7 @@ const CASES = [
   { id: 'MP-W01N', g: 'w-un', t: '미연동 (상태 1)', vp: 'web', h: 'state=1',
     data: [['회원 상태', '1 미연동 (연동한 계정 없음)']],
     look: [
-      ['레일: 연동 유도 카드 (3단계 · "연동하면 바로 3 USDT 지급"), 레일 안에서만 스크롤', '.link-card'],
+      ['레일: 연동 유도 카드 (3단계 · "연동하면 바로 3 USDT 지급")', '.link-card'],
       ['[거래소 연동] → 거래소 연동 창 (MP-W02-a). 버튼 광택 7초마다 한 번 (움직임 줄이기면 없음)', '.link-card [data-open-sheet="input"]'],
       ['페이백 부스트 배너(확대형) + 세계 최고 페이백 보장 카드 (실시간 페이백 현황이 카드 안, 지급 시각 없음)', '#boostBanner'],
       ['계산기 카드 → 인기 거래소 → 참여 바로가기 (한 줄 세 칸, 높이 72px)', '[data-calc-inline]'],
@@ -110,7 +112,7 @@ const CASES = [
     look: [['줄을 끌어서 순서 변경 (순서만)', '[data-exe-list]'], ['[잔액 순 정렬] · [저장] 폭 5:5, 문구가 길면 버튼 안 두 줄, 높이 같게', '[data-exe-reset] ^1'], ['[저장]: 순서가 안 바뀌었으면 비활성. 저장하면 레일 · 본문 카드 · 전체 보기에 같은 순서', '[data-exe-save]']],
     req: ['REQ-503'], be: ['BE-402'] },
   { id: 'MP-W03-c', g: 'w-ex', t: '전체 보기 팝업', vp: 'web', h: 'state=4', s: [{ click: '[data-ud-pop]' }],
-    data: [['진입', '머리 줄 [9곳 전체 보기]'], ['필터칩', '[전체 27] · [확인 필요 4] (N = UID 수)']],
+    data: [['진입', '머리 줄 [7곳 전체 보기]'], ['필터칩', '[전체 25] · [확인 필요 4] (N = UID 수)']],
     look: [['타이틀 "연동한 거래소", 처음엔 첫 거래소만 펼침', '[data-sheet="uidPick"]'], ['UID 1개 거래소는 접지 않음, UID 2개 이상은 ⌄로 펼침', '[data-sheet="uidPick"] [data-ud-pick="881204773"]'], ['정상 UID 선택 → UID 상세, 확인 필요 UID 선택 → 사유별 처리 안내', '[data-sheet="uidPick"] [data-ud-pick="2087615520"]']],
     req: ['REQ-504'], note: [ASIS_ISSUE] },
   { id: 'MP-W03-d', g: 'w-ex', t: '전체 보기 · [확인 필요] 필터', vp: 'web', h: 'state=4', s: [{ click: '[data-rail-head] [data-ex-warn]' }],
@@ -166,7 +168,7 @@ const CASES = [
     look: [['버튼 자리에 "출금 가능한 페이백이 없어요" (누를 수 없음) (E01)', '[data-wd-foot]'], ['출금 불가 목록은 그대로', '[data-wd-g2]']],
     req: ['REQ-701'] },
   { id: 'MP-W05-e', g: 'w-wd', t: 'CEX만 연동 · 탭 없음', vp: 'web', h: 'state=4&edit=0', f: ['cexOnly'], s: [{ wd: 'cex' }],
-    data: [['플래그', 'cexOnly (CEX 6곳 + LBank)']], look: [['탭 줄 없이 CEX 목록만', '[data-wd-top]']], req: ['REQ-701'] },
+    data: [['플래그', 'cexOnly (CEX 5곳)']], look: [['탭 줄 없이 CEX 목록만', '[data-wd-top]']], req: ['REQ-701'] },
   { id: 'MP-W05-f', g: 'w-wd', t: 'DEX만 연동 · 탭 없음', vp: 'web', h: 'state=4&edit=0', f: ['dexOnly'], s: [{ wd: 'dex' }],
     data: [['플래그', 'dexOnly (Lighter · Aster)'], ['총 페이백 보유', '126.80']], look: [['탭 줄 없이 DEX 목록만', '[data-wd-top]']], req: ['REQ-701'] },
   { id: 'MP-W05-g', g: 'w-wd', t: '출금 확인 · 신청 완료', vp: 'web', h: 'state=4', s: [{ wd: 'cex' }, { click: '[data-wd-ask]' }],
@@ -183,7 +185,7 @@ const CASES = [
       ['상태 3: "첫 페이백 N USDT가 들어왔어요" · [입금 알림 켜기] → 입금 알림 켜기 플로우 (11-3 탭)', '[data-notify-cta-m]', ['3']],
       ['상태 2: "이제 거래만 하면 페이백이 쌓여요" · [거래하러 가기] (목적지 미정 · 11.1 #3)', '[data-notify-cta-m]', ['2']],
       ['진입 효과: 세션 첫 노출 · 회원 상태 변경 때만, 위에서 열리며 페이드인 (아래 [진입 효과 다시 보기])'],
-      ['잔액 카드: 오늘 +0.00 USDT 회색', 'section[aria-label="총 페이백 보유 금액"]', ['2']],
+      ['잔액 카드: 신규 이미지로 교체. "오늘 +N USDT"는 오늘 반영된 페이백이 있을 때만 노출 (상태 2는 미노출)', 'section[aria-label="총 페이백 보유 금액"]'],
       ['DEX 띠 (닫기 없음) → DEX 거래소 목록', '[data-dex-strip]'],
       ['연동한 거래소: 앞 3곳만, 머리 줄 2단 (1줄 제목 · [N곳 전체 보기] / 2줄 [확인 필요 N] · [편집])', '#railList2, #railList'],
       ['모바일 메인은 펼침 없음. 줄 선택 → UID 상세 (UID 2개 이상이면 첫 정상 UID), 정상 UID가 없으면 첫 확인 필요 UID의 처리 안내', '#railList2 [data-ud-group="Bitget"], #railList [data-ud-group="Bitget"]', ['4']],
@@ -198,7 +200,7 @@ const CASES = [
     data: [['조건', '연동 1곳 · UID 14개 (확인 필요 2)']],
     look: [['거래소 줄 아래 UID 줄 바로 펼침, 최대 6개 — 넘으면 5개 + "전체 14개 보기" → UID 상세', '#railList2, #railList']],
     req: ['REQ-501'] },
-  { id: 'MP-M01-f', g: 'm-main', t: '② UID 1개 · 확인 필요 (모바일)', vp: 'mobile', h: 'state=4&eo=bybit.bitget.okx.lighter.gate.woo.deepcoin.aster.lbank', f: ['singleBad'], s: [{ hl: '#railList2 [data-ud-group="Bybit"], #railList [data-ud-group="Bybit"]' }],
+  { id: 'MP-M01-f', g: 'm-main', t: '② UID 1개 · 확인 필요 (모바일)', vp: 'mobile', h: 'state=4&eo=bybit.bitget.okx.lighter.gate.woo.aster', f: ['singleBad'], s: [{ hl: '#railList2 [data-ud-group="Bybit"], #railList [data-ud-group="Bybit"]' }],
     data: [['예시', 'Bybit · UID 881204773 · 이용 제한 (편집 순서 맨 앞)'], ['플래그', 'singleBad']],
     look: [['금액 자리에 사유 칩, 줄 선택 → 사유별 처리 안내', '#railList2 [data-ud-group="Bybit"], #railList [data-ud-group="Bybit"]']], req: ['REQ-501'], note: [ASIS_ISSUE] },
 
@@ -246,7 +248,7 @@ const CASES = [
   { id: 'MP-M03-a', g: 'm-ex', t: '편집 시트', vp: 'mobile', h: 'state=4&sheet=exEdit',
     data: [['진입', '머리 줄 [편집]']], look: [['줄을 끌어 순서 변경, 메인에는 앞 3곳만 보임', '[data-exe-list]'], ['[잔액 순 정렬] · [저장] 5:5', '[data-exe-reset] ^1']], req: ['REQ-503'], be: ['BE-402'] },
   { id: 'MP-M03-b', g: 'm-ex', t: '전체 보기 시트', vp: 'mobile', h: 'state=4', s: [{ click: '[data-ud-entry="all"]' }],
-    data: [['진입', '머리 줄 [9곳 전체 보기] (메인 위 바텀시트)']],
+    data: [['진입', '머리 줄 [7곳 전체 보기] (메인 위 바텀시트)']],
     look: [['[전체 N] · [확인 필요 N] 필터칩, 처음엔 첫 거래소만 펼침', '[data-sheet="uidPick"] [data-ud-filter="all"] ^1'], ['UID 1개 거래소: 접지 않고 UID 번호, 선택 → UID 상세', '[data-sheet="uidPick"] [data-ud-pick="881204773"]'], ['UID 2개 이상: ⌄로 펼쳐 UID별 금액 (정상 높은 순 → 확인 필요 아래)', '[data-sheet="uidPick"] [data-ud-fold="Bitget"]']],
     req: ['REQ-504'], note: [ASIS_ISSUE] },
   { id: 'MP-M03-c', g: 'm-ex', t: '전체 보기 · [확인 필요] 필터', vp: 'mobile', h: 'state=4', s: [{ click: '[data-ex-warn]' }],
