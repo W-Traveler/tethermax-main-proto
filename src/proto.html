@@ -190,7 +190,7 @@
     [data-picking] > #exPick ~ *,
     [data-picking] > [data-sheet-head],
     [data-picking] #exTrigger,
-    [data-picking] #exTrigger ~ i { display: none !important; }   /* 트리거와 그 옆 chevron 아이콘 */
+    [data-picking] .ex-caret { display: none !important; }   /* 트리거와 그 옆 chevron 아이콘 (lucide가 i를 svg로 바꾸므로 클래스로 찾는다) */
     [data-picking] > #exPick { margin-top: 0 !important; }
     [data-picking] #exPanel { padding-bottom: 24px; }   /* 하단 버튼이 숨겨진 동안 바닥 여백 */
     /* 검색창은 스크롤해도 위에 붙어 있게 */
@@ -1442,7 +1442,7 @@
         <button type="button" id="exTrigger" aria-label="거래소 선택" aria-haspopup="listbox" aria-expanded="false" class="w-full h-[52px] pl-3.5 pr-10 rounded bg-white border border-line flex items-center gap-2.5 text-left focus:outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(29,78,216,0.18)] transition-[border-color,box-shadow]">
           <span id="exTriggerBody" class="min-w-0 flex-1 flex items-center gap-2.5"></span>
         </button>
-        <i data-lucide="chevron-down" class="pointer-events-none absolute right-3.5 top-[18px] w-4 h-4 text-mute"></i>
+        <i data-lucide="chevron-down" class="ex-caret pointer-events-none absolute right-3.5 top-[18px] w-4 h-4 text-mute"></i>
 
         <!-- 모바일은 시트 안에 끼워 넣는다(시트가 위로 커진다). 웹 팝업은 입력창 아래 떠 있는 창 -->
         <div id="exPanel" hidden class="md:mt-0 md:absolute md:z-20 md:left-0 md:right-0 md:top-[58px] md:rounded-xl md:bg-white md:border md:border-line md:p-3 md:shadow-[0_18px_44px_-16px_rgba(12,10,9,0.3)] md:max-h-[400px] md:overflow-y-auto rail-scroll">
@@ -1542,8 +1542,8 @@
       <p class="mt-1 text-[13px] text-mute break-keep">끌어서 순서를 바꿔요.</p>
       <ul data-exe-list class="mt-4 flex flex-col gap-1.5"></ul>
       <div class="mt-5 flex gap-2">
-        <button type="button" data-exe-reset class="btn-ghost shrink-0 h-12 px-4 rounded text-[14px] font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">잔액 순 정렬</button>
-        <button type="button" data-exe-save class="btn-primary flex-1 h-12 rounded text-[15px] font-semibold disabled:bg-line disabled:text-mute focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">저장</button>
+        <button type="button" data-exe-reset class="btn-ghost flex-1 basis-0 min-w-0 h-12 px-3 rounded text-[14px] leading-tight font-semibold text-center break-keep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">잔액 순 정렬</button>
+        <button type="button" data-exe-save class="btn-primary flex-1 basis-0 min-w-0 h-12 px-3 rounded text-[15px] leading-tight font-semibold text-center break-keep disabled:bg-line disabled:text-mute focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">저장</button>
       </div>
     </div>
 
@@ -3809,9 +3809,11 @@
       paintExEdit(true);
       return;
     }
+    // [10.29] [저장]은 늘 누를 수 있다. 순서가 그대로면 창만 닫는다
     if (e.target.closest('[data-exe-save]')) {
       const rows = [...document.querySelectorAll('[data-exe-row]')];
       const order = rows.map((r) => r.dataset.exeRow);
+      if (!exeDraftAuto && order.join('|') === linkedOrder().map((g) => g.ex).join('|')) { closeSheet(); return; }
       exEdit = exeDraftAuto ? null : { order };
       const tg = document.getElementById('editToggle');
       if (tg) tg.checked = !!exEdit;
@@ -4452,7 +4454,6 @@
               <span class="block text-[12px] text-body">25 USDT가 적립됐어요</span>
             </span>
           </div>
-          <p class="mt-1.5 text-[11px] text-faint text-center">미리보기 발송 문구는 확정 전 (FE 11.1 #8)</p>
           <button type="button" data-dev-nf-on class="mt-4 w-full h-12 rounded-lg bg-brand text-white text-[15px] font-semibold hover:bg-brand-dark transition-colors">알림 켜기</button>
           <button type="button" data-dev-nf-later class="mt-1 w-full h-11 rounded-lg text-[14px] font-semibold text-mute hover:text-ink transition-colors">다음에 할게요</button>
         </div>`, (e, close) => {

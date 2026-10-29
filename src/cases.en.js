@@ -79,7 +79,6 @@ const CASES_EN = {
  "편집 창": "Edit window",
  "줄을 끌어서 순서 변경 (순서만)": "Drag rows to reorder (order only)",
  "[잔액 순 정렬] · [저장] 폭 5:5, 문구가 길면 버튼 안 두 줄, 높이 같게": "[Sort by balance] · [Save] width 5:5; long labels wrap to two lines inside the button, equal height",
- "[저장]: 순서가 안 바뀌었으면 비활성. 저장하면 레일 · 본문 카드 · 전체 보기에 같은 순서": "[Save]: disabled if the order is unchanged. Saving applies the same order to the rail · main card · View all",
  "전체 보기 팝업": "View all popup",
  "타이틀 \"연동한 거래소\", 처음엔 첫 거래소만 펼침": "Title \"Linked exchanges\", only the first exchange expanded at first",
  "UID 1개 거래소는 접지 않음, UID 2개 이상은 ⌄로 펼침": "Exchanges with 1 UID are not collapsible; 2+ UIDs expand with ⌄",
@@ -206,5 +205,6 @@ const CASES_EN = {
  "DEX": "DEX",
  "받는 곳(주소 + 복사) · 보내는 네트워크": "Destination (address + copy) · sending network",
  "줄마다 더 필요한 금액 · 보유 페이백": "Each row: amount still needed · cashback held",
- "버튼 대신 \"출금 가능한 페이백이 없어요\"": "\"No cashback available to withdraw\" instead of the button"
+ "버튼 대신 \"출금 가능한 페이백이 없어요\"": "\"No cashback available to withdraw\" instead of the button",
+ "[저장]: 늘 누를 수 있음. 순서가 그대로면 창만 닫힘, 바뀌었으면 저장 후 레일 · 본문 카드 · 전체 보기에 같은 순서": "[Save]: always tappable. If the order is unchanged it just closes; if changed, it saves and applies the same order to the rail · main card · View all"
 };
