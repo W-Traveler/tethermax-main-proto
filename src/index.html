@@ -74,8 +74,12 @@ button{cursor:pointer}
 .stage{position:relative;flex:1;min-width:0;overflow:auto;display:flex;justify-content:center;align-items:flex-start}
 .dev{position:relative;flex:none;width:100%;height:100%;background:#fff}
 .dev.fixed{box-shadow:0 0 0 1px rgba(0,0,0,.08)}
-/* 390 폭: 실제 기기 크기(390×844) 그대로. 화면 높이가 모자라면 바깥(회색 영역)이 세로로 스크롤된다 */
+/* 390 폭: 안쪽은 늘 실제 기기 크기(390×844)로 그린다. [맞춤](기본)은 창 높이에 맞춰 폰 전체를 비율 축소해 보여 주고, [실제 크기]는 100% 그대로(높이가 모자라면 바깥이 세로 스크롤) */
 .dev.phone{margin:16px auto;border-radius:36px;outline:9px solid #0C0A09;overflow:hidden;height:844px;min-height:844px}
+.zseg{position:absolute;left:12px;bottom:42px;z-index:3;display:flex;gap:2px;padding:3px;border-radius:9px;background:rgba(17,24,39,.82)}
+.zseg[hidden]{display:none}
+.zseg button{height:24px;padding:0 10px;border:0;border-radius:6px;background:transparent;color:#E5E7EB;font:600 11.5px var(--sans);cursor:pointer}
+.zseg button[aria-pressed="true"]{background:#fff;color:#111827}
 .dev iframe{display:block;border:0;width:100%;height:100%;background:#fff;visibility:hidden}
 .dev[data-ready] iframe{visibility:visible}
 .loading{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;font-size:12.5px;color:var(--mute);pointer-events:none;line-height:1.6}
@@ -155,6 +159,10 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
       <div class="loading" id="loading">불러오는 중…</div>
     </div>
     <span class="wbadge" id="wbadge"></span>
+    <div class="zseg" id="zSeg" role="group" aria-label="390 보기 크기" data-ta="zoomGrp" hidden>
+      <button type="button" data-z="fit" title="창 높이에 맞춰 폰 화면 전체가 보이게 축소 (안쪽은 390×844 그대로)" data-tt="zFitTip" data-t="zFit">맞춤</button>
+      <button type="button" data-z="real" title="실제 크기 100%" data-tt="zRealTip" data-t="zReal">실제 크기</button>
+    </div>
     <aside class="drawer" id="drawer" aria-label="화면 변경 사항">
       <div class="dhead"><h2 data-t="drawer">화면 변경 사항</h2><span class="legend"><i></i><span data-t="legend">번호 = 화면 위 번호</span></span><button type="button" class="x" id="drawerX" aria-label="패널 닫기" data-ta="close"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
       <div class="dbody" id="spec"></div>
@@ -179,7 +187,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
       screen: '화면', prev: '이전 케이스 (↑)', next: '다음 케이스 (↓)', state: '개인화 메시지 영역 (회원 상태별)', width: '사용자 폭', fluid: '창 폭', fluidTip: '브라우저 창 폭 그대로. 창을 늘이고 줄이면 구간별 화면이 바뀜',
       rerun: '↻ 처음부터', rerunTip: '이 케이스를 처음 상태로 (R)', drawer: '화면 변경 사항', legend: '번호 = 화면 위 번호', close: '패널 닫기', frame: '프로토타입 화면',
       web: '웹', mobile: '모바일', td: '테스트 데이터', tdTip: '실제 데이터에 없는 경우를 보려고 바꾼 값', loading: '불러오는 중…', fail: '화면을 불러오지 못했어요. [처음부터]를 눌러 다시 열어 보세요.', err: '오류',
-      wFluid: '창 폭', wFixed: '고정 폭', zWeb: '웹 구성 (1024px 이상)', zMid: '768~1023px · Figma 화면 없음 (프로토타입 현재 동작)', zMob: '모바일 구성 (767px 이하)',
+      wFluid: '창 폭', wFixed: '고정 폭', zFit: '맞춤', zReal: '실제 크기', zFitTip: '창 높이에 맞춰 폰 화면 전체가 보이게 축소 (안쪽은 390×844 그대로)', zRealTip: '실제 크기 100%', zoomGrp: '390 보기 크기', zFitNow: '맞춤', zWeb: '웹 구성 (1024px 이상)', zMid: '768~1023px · Figma 화면 없음 (프로토타입 현재 동작)', zMob: '모바일 구성 (767px 이하)',
       envH: '기기 상태 바꿔 보기', dev: '기기 알림', on: '켜짐', off: '꺼짐', os: 'OS 알림 허용 창', osYes: '띄울 수 있음', osNo: '띄울 수 없음', envHelp: '바꾸면 바로 적용돼요', startNotify: '입금 알림 켜기 누르기', resume: '앱 복귀',
       resNone: '결과: 아직 없음', res: '결과: ', toast: '토스트: ', introH: '인터랙션', introHelp: '개인화 카드 진입 효과 (자리가 위에서 열리며 페이드인)', intro: '진입 효과 다시 보기', noteH: '범위 밖 · 미정', gone: '지금 화면(폭 · 상태)에는 없는 요소',
       help: '번호를 누르면 화면에서 그 위치로 이동해요. 사용자 폭 [창 폭]에서 브라우저 창(F12 기기 모드 포함)을 늘이고 줄이면 구간별 화면이 바뀌어요 (왼쪽 아래에 지금 폭 표시).', keys: '<kbd>↑</kbd> <kbd>↓</kbd> 케이스 이동 · <kbd>R</kbd> 처음부터 · <kbd>M</kbd> 번호 표시 · <kbd>D</kbd> 패널' },
@@ -187,7 +195,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
       screen: 'Screen', prev: 'Previous case (↑)', next: 'Next case (↓)', state: 'Personalized message (by member state)', width: 'Width', fluid: 'Window', fluidTip: 'Follows the browser window width. Resize the window to see each breakpoint',
       rerun: '↻ Restart', rerunTip: 'Reset this case (R)', drawer: 'Screen changes', legend: 'Number = marker on screen', close: 'Close panel', frame: 'Prototype screen',
       web: 'Web', mobile: 'Mobile', td: 'Test data', tdTip: 'Values changed to show a case not in the real data', loading: 'Loading…', fail: "Couldn't load the screen. Press [Restart] to open it again.", err: 'error',
-      wFluid: 'Window', wFixed: 'Fixed', zWeb: 'Web layout (1024px and up)', zMid: '768–1023px · no Figma screen (current prototype behavior)', zMob: 'Mobile layout (767px and below)',
+      wFluid: 'Window', wFixed: 'Fixed', zFit: 'Fit', zReal: 'Actual size', zFitTip: 'Scale the whole phone screen to fit the window height (still rendered at 390×844 inside)', zRealTip: 'Actual size 100%', zoomGrp: '390 view size', zFitNow: 'Fit', zWeb: 'Web layout (1024px and up)', zMid: '768–1023px · no Figma screen (current prototype behavior)', zMob: 'Mobile layout (767px and below)',
       envH: 'Try device states', dev: 'Device notifications', on: 'On', off: 'Off', os: 'OS permission prompt', osYes: 'Available', osNo: 'Unavailable', envHelp: 'Changes apply immediately', startNotify: 'Tap Turn on cashback alerts', resume: 'Return to app',
       resNone: 'Result: none yet', res: 'Result: ', toast: 'Toast: ', introH: 'Interaction', introHelp: 'Personalized card entry effect (opens from the top with fade-in)', intro: 'Replay entry effect', noteH: 'Out of scope · TBD', gone: 'Not on the current screen (width · state)',
       help: 'Tap a number to jump to that spot on the screen. With width [Window], resize the browser window (including F12 device mode) to see each breakpoint (current width shown bottom left).', keys: '<kbd>↑</kbd> <kbd>↓</kbd> move case · <kbd>R</kbd> restart · <kbd>M</kbd> markers · <kbd>D</kbd> panel' },
@@ -207,6 +215,8 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
   lang = store.get('tm:lang', 'ko') === 'en' ? 'en' : 'ko';
   // 사용자 폭: 웹 케이스는 창 폭, 모바일 케이스는 390이 기본. 고른 값은 플랫폼별로 기억
   const wPick = { web: store.get('tm:w:web', 'fluid'), mobile: store.get('tm:w:mobile', '390') };
+  // [10.29] 390 보기 크기: fit(기본, 창 높이에 맞춰 축소) | real(100%)
+  let zPick = store.get('tm:z', 'fit');
   let panelOn = store.get('tm:panel', window.innerWidth >= 1280 ? 'on' : 'off') === 'on';
   $('#mkTog').checked = showMk;
 
@@ -224,13 +234,15 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     if (has) $('#stSeg').innerHTML = cur.states.map(([v, l]) => `<button type="button" data-st="${v}" aria-pressed="${stOf(cur) === v}">${esc(tr(l))}</button>`).join('');
     document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.lang === lang));
     document.querySelectorAll('[data-w]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.w === wPick[platOf(cur)]));
+    $('#zSeg').hidden = wPick[platOf(cur)] !== '390';
+    document.querySelectorAll('[data-z]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.z === zPick));
     const on = $('#chips [aria-current="true"]'); if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
   // [10.29] 팝업 · 시트가 열리면 변경 사항 패널을 잠시 접는다 (닫히면 다시 열림). 그동안 [변경 사항]을 누르면 바로 다시 보인다
   let layerHide = false;
   const paintPanel = () => { const on = panelOn && !layerHide; $('#drawer').hidden = !on; $('#panelBtn').setAttribute('aria-pressed', String(on)); };
 
-  // ── 화면 크기: 늘 100% (축소하지 않는다) ──
+  // ── 화면 크기: 웹은 늘 100%. 390은 [맞춤]이면 창 높이에 맞춰 폰 전체를 비율 축소 (안쪽 레이아웃은 390×844 그대로) ──
   function fit() {
     if (!cur) return;
     const w = wPick[platOf(cur)];
@@ -239,9 +251,14 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     dev.classList.toggle('fixed', w === '1440');
     dev.style.width = w === 'fluid' ? '100%' : w + 'px';
     dev.style.height = w === '390' ? '' : '100%';
+    // 폰 높이 844 + 테두리 위아래 9px씩, 바깥 여백 위아래 16px씩
+    const sc = w === '390' && zPick === 'fit' ? Math.min(1, (st.clientHeight - 32) / (844 + 18)) : 1;
+    dev.style.transform = sc < 1 ? `scale(${sc})` : '';
+    dev.style.transformOrigin = 'top center';
+    dev.style.marginBottom = sc < 1 ? `${16 - 844 * (1 - sc)}px` : '';
     const px = w === 'fluid' ? Math.round(st.clientWidth) : +w;
     const zone = px >= 1024 ? T('zWeb') : px >= 768 ? T('zMid') : T('zMob');
-    $('#wbadge').textContent = `${w === 'fluid' ? T('wFluid') : T('wFixed')} ${px}px · ${zone}`;
+    $('#wbadge').textContent = `${w === 'fluid' ? T('wFluid') : T('wFixed')} ${px}px · ${zone}` + (sc < 1 ? ` · ${T('zFitNow')} ${Math.round(sc * 100)}%` : '');
     st.style.justifyContent = w === '1440' && st.clientWidth < 1440 ? 'flex-start' : 'center';
   }
   new ResizeObserver(fit).observe($('#stage'));
@@ -352,6 +369,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     const cb = e.target.closest('[data-case]'); if (cb) { open(cb.dataset.case); return; }
     const sb = e.target.closest('[data-st]'); if (sb) { stSel[cur.id] = sb.dataset.st; open(cur.id); return; }
     const lb = e.target.closest('[data-lang]'); if (lb) { if (lb.dataset.lang !== lang) { lang = lb.dataset.lang; store.set('tm:lang', lang); paintStatic(); paintBar(); paintSpec(); fit(); document.title = tr(cur.t) + ' · ' + T('doc'); load(cur); } return; }
+    const zb = e.target.closest('[data-z]'); if (zb) { zPick = zb.dataset.z; store.set('tm:z', zPick); paintBar(); fit(); return; }
     const wb = e.target.closest('[data-w]'); if (wb) { const p = platOf(cur); if (wPick[p] !== wb.dataset.w) { wPick[p] = wb.dataset.w; store.set('tm:w:' + p, wb.dataset.w); paintBar(); fit(); } return; }
     if (e.target.closest('#panelBtn')) { setPanel(!(panelOn && !layerHide)); return; }
     if (e.target.closest('#drawerX')) { setPanel(false); return; }
