@@ -449,6 +449,22 @@
   }
   @container (max-width: 339px) { [data-roll-name] { display: none !important; } }
 
+  /* [10.29] 웹 메인 배너 (REQ-204): 이미지가 칸을 꽉 채우고, 제목 · 부제목은 이미지 위 왼쪽 아래 텍스트. 버튼 · 닫기 없음.
+     .mb-img 안의 그림은 어드민 등록 이미지 자리표시다. 마우스를 올리면 이미지가 살짝 커진다(움직임 줄이기면 없음) */
+  .mb-banner { position: relative; display: flex; align-items: flex-end; min-width: 0; min-height: 220px; border-radius: 12px; overflow: hidden; isolation: isolate; color: #fff; }
+  .mb-banner:focus-visible { outline: 2px solid #1D4ED8; outline-offset: 2px; }
+  .mb-img { position: absolute; inset: 0; z-index: -1; transition: transform .35s ease; }
+  .mb-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.45) 100%); }
+  .mb-banner:hover .mb-img { transform: scale(1.03); }
+  @media (prefers-reduced-motion: reduce) { .mb-img { transition: none; } .mb-banner:hover .mb-img { transform: none; } }
+  .mb-img-dex { background: linear-gradient(135deg, #0B1B3A 0%, #12386B 55%, #0F5E57 100%); }
+  .mb-img-boost { background: linear-gradient(135deg, #F25C05 0%, #FF8A00 55%, #FFB347 100%); }
+  .mb-art { position: absolute; top: 28px; right: 28px; }
+  .mb-tag { position: absolute; top: 10px; left: 12px; padding: 1px 8px; border-radius: 999px; background: rgba(255,255,255,.2); font-size: 11px; font-weight: 600; }
+  .mb-text { display: flex; flex-direction: column; gap: 6px; padding: 24px 28px; max-width: 560px; }
+  .mb-title { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.3; word-break: keep-all; }
+  .mb-sub { font-size: 14px; line-height: 1.45; color: rgba(255,255,255,.88); word-break: keep-all; }
+
   /* 웹(데스크톱) 미연동: 모바일 기본(하단 고정 켬)에 맞춰 계산기는 떠 있는 배너 대신 본문 카드로 둔다 */
   @media (min-width: 768px) {
     [data-calc-inline]:not([hidden]) { display: block !important; }   /* 미연동(data-show="1")일 때만 */
@@ -1001,16 +1017,20 @@
        위 끝 = 레일 잔액 카드 위 끝. 아래는 섹션 간격(48px) 후 실시간 페이백 현황 -->
   <div class="hidden lg:block" data-show="2 3 4" data-top-row>
     <section class="wrap sec-top">
-      <div class="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-stretch">
-        <!-- 웹 전용 운영 관리 배너 슬롯: 이미지 · 제목 · 설명 · 버튼 문구 · 링크 · 노출 기간을 어드민에서 관리 예정. 현재는 DEX 배너. 모바일은 이 슬롯을 쓰지 않고 별도 고정 띠(5번)
-             [5A] 왼쪽 글(제목 → 설명 → 주 버튼, 세로 가운데) · 오른쪽 DEX 로고 2 × 2 (48px · 겹침 없음). 닫기 없음. 배너 전체 · 버튼 모두 DEX 거래소 목록 -->
-        <a href="#" data-ex-list="dex" data-web-banner class="min-w-0 flex items-center gap-6 rounded-xl bg-[#FFF3E6] px-7 py-6 hover:bg-[#FFEAD5] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
-          <span class="min-w-0 flex-1">
-            <span class="block text-[20px] font-bold tracking-[-0.03em] leading-snug text-ink break-keep">이제 DEX도 페이백 받아보세요</span>
-            <span class="block mt-1.5 text-[14px] leading-snug text-body break-keep">KYC 없이 지갑 주소만 입력하면 돼요</span>
-            <span class="btn-primary mt-5 h-11 px-5 rounded text-[15px] font-semibold inline-flex items-center justify-center whitespace-nowrap">DEX 거래소 알아보기</span>
+      <!-- [10.29] 참여 목록 칸 최소 300px. 폭이 모자라면 배너 칸이 줄어든다 (REQ-205) -->
+      <div class="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(300px,1fr)] items-stretch">
+        <!-- [10.29] 웹 메인 배너 · 연동용 (REQ-204). 어드민 '이벤트 메인 배너 관리' 차용: 이미지 + 제목 + 부제목(국문 · 영문) + 링크.
+             버튼 · 닫기 없음, 배너 전체 선택. 이미지는 칸을 꽉 채우고(넘치면 잘림) 제목 · 부제목은 이미지 위 왼쪽 아래 텍스트.
+             아래 그림은 어드민 등록 이미지 자리표시. 첫 등록 콘텐츠: DEX 배너 → DEX 거래소 목록. 모바일은 이 배너를 쓰지 않음(DEX 띠) -->
+        <a href="#" data-ex-list="dex" data-web-banner data-main-banner="linked" class="mb-banner">
+          <span class="mb-img mb-img-dex" aria-hidden="true">
+            <span class="mb-art grid grid-cols-2 gap-2"><span data-logo="Apex" data-logo-size="w-14 h-14 text-[15px]"></span><span data-logo="Aster" data-logo-size="w-14 h-14 text-[15px]"></span><span data-logo="EdgeX" data-logo-size="w-14 h-14 text-[15px]"></span><span data-logo="Lighter" data-logo-size="w-14 h-14 text-[15px]"></span></span>
+            <span class="mb-tag">이미지</span>
           </span>
-          <span class="shrink-0 grid grid-cols-2 gap-2" role="img" aria-label="ApeX, Aster, EdgeX, Lighter"><span data-logo="Apex" data-logo-size="w-12 h-12 text-[14px]"></span><span data-logo="Aster" data-logo-size="w-12 h-12 text-[14px]"></span><span data-logo="EdgeX" data-logo-size="w-12 h-12 text-[14px]"></span><span data-logo="Lighter" data-logo-size="w-12 h-12 text-[14px]"></span></span>
+          <span class="mb-text">
+            <span class="mb-title">이제 DEX도 페이백 받아보세요</span>
+            <span class="mb-sub">KYC 없이 지갑 주소만 입력하면 돼요</span>
+          </span>
         </a>
         <!-- [5A] 세로 참여 목록: 모바일 참여 목록([data-mission-list])과 같은 줄 모양 · 같은 내용 (BTC 가격 맞히기 → 오늘의 투표 → 페이백 챌린지). 제목 줄 없음 -->
         <section class="panel min-w-0 px-5 py-1 flex flex-col justify-center">
@@ -1032,7 +1052,19 @@
   <!-- 미연동: 부스트가 왼쪽, 오늘 할 일이 오른쪽.
        오른쪽 칸 폭은 연동 회원 화면의 미션 칸과 같다 -->
   <div data-show="1" class="wrap pt-1 lg:pt-2 pb-2 grid grid-cols-[minmax(0,1fr)] gap-3 md:gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] items-stretch">
-    <a href="#" id="boostBanner" class="group flex flex-col md:flex-row md:items-center gap-4 md:gap-7 rounded-2xl p-5 md:px-7 md:py-6 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+    <!-- [10.29] 웹 메인 배너 · 미연동용 (REQ-204, 1024px 이상). 기존 확대형 부스트 배너 자리. 구성 · 동작은 연동용과 같음.
+         첫 등록 콘텐츠: 부스트 배너 → 부스트 안내. 1023px 이하는 아래 #boostBanner(축소형 띠)가 그대로 나온다 -->
+    <a href="#" data-main-banner="unlinked" class="mb-banner hidden lg:flex">
+      <span class="mb-img mb-img-boost" aria-hidden="true">
+        <span class="mb-art"><i data-lucide="flame" class="w-24 h-24 text-white/85"></i></span>
+        <span class="mb-tag">이미지</span>
+      </span>
+      <span class="mb-text">
+        <span class="mb-title">첫 연동이면 페이백을 더 얹어드려요</span>
+        <span class="mb-sub">UID를 처음 연동할 때 한 번 드리는 혜택이에요.</span>
+      </span>
+    </a>
+    <a href="#" id="boostBanner" class="lg:hidden group flex flex-col md:flex-row md:items-center gap-4 md:gap-7 rounded-2xl p-5 md:px-7 md:py-6 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
       <!-- boost=strip 전용: 모바일에서 배너를 한 줄 띠로 접을 때만 보인다 -->
       <span data-boost-strip class="hidden items-center gap-2.5 w-full">
         <span class="w-8 h-8 rounded-lg bg-[#FF8A00] text-white grid place-items-center shrink-0"><i data-lucide="flame" class="w-4 h-4" aria-hidden="true"></i></span>
@@ -2854,6 +2886,12 @@
     if (!a) return;
     e.preventDefault();
     showMockToast(a.dataset.exList === 'dex' ? 'DEX 거래소 목록으로 이동해요' : 'CEX 거래소 목록으로 이동해요');
+  });
+  // [10.29] 웹 메인 배너 · 미연동용 첫 등록 콘텐츠 → 부스트 안내 (범위 밖이라 토스트만)
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-main-banner="unlinked"]')) return;
+    e.preventDefault();
+    showMockToast('부스트 안내로 이동해요');
   });
 
   function renderUidBoard() {
@@ -4847,6 +4885,7 @@
       '출금할까요?': 'Withdraw now?', '합계 금액': 'Total', '취소': 'Cancel',
       '초대 보상을 받을 거래소나 UID를 바꾸려면 고객센터로 문의해 주세요': 'To change the exchange or UID for referral rewards, contact support',
       '출금 신청을 보냈어요': 'Your withdrawal request was sent', '출금이 끝나면 알려드릴게요': "We'll let you know when it's done", 'CEX 거래소 목록으로 이동해요': 'Going to CEX list', 'DEX 거래소 목록으로 이동해요': 'Going to DEX list',
+      '부스트 안내로 이동해요': 'Going to the boost guide',
       // 진행 중인 이벤트
       '진행 중인 이벤트': 'Live events', '이벤트 전체 보기': 'View all events',
       '거래소가 여는 이벤트와 테더맥스 혜택이에요.': 'Events run by exchanges, plus TetherMax rewards.',
