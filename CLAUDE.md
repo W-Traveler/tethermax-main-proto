@@ -24,7 +24,7 @@
 | `src/index.html` | 셸: 상단 막대(버전 · KO/EN · 번호 표시 · 변경 사항 패널) + 화면 · 시나리오 설정 + 실제 크기 화면 + 변경 사항 패널 |
 | `src/cases.js` | `GROUPS`(화면 묶음) · `CASES`(케이스) 정의 |
 | `public/` | 그대로 복사 (글꼴 Wanted Sans Variable, OFL-1.1) |
-| `assets/` | 거래소 로고 · 잔액 카드 이미지 (아직 없음 → 로고는 이니셜 원) |
+| `assets/` | 원본 프로토타입 에셋: 거래소 로고(`exchange/icon`) · SNS 아이콘(`sns`) · `brand` · `symbol`. 임시 로고 출처는 `LOGO-SOURCES.md`. 잔액 카드 이미지(`brand/balance-card.png`)는 아직 없음 → 자리표시. 로고 파일이 없는 거래소는 이니셜 원 |
 | `scripts/build.mjs` | `dist/` 생성 |
 | `tests/run.mjs` | 전 케이스 자동 점검 |
 
@@ -75,5 +75,6 @@
 
 ## 남은 일
 
-- `assets/` (로고 · 잔액 카드 이미지) 받으면 넣고 재배포
+- 잔액 카드 이미지 `assets/brand/balance-card.png` 받으면 넣고 재배포
+- `assets/LOGO-SOURCES.md`의 임시 로고 · 아이콘은 출시 전 공식 브랜드 파일로 교체
 - Figma "OLD · Description" 프레임 2개의 중간 폭 문구 삭제 여부 (요청자 확인 필요)
