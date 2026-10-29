@@ -47,6 +47,15 @@ for (const id of ids) {
   if (bad) fail += 1;
   console.log(bad ? '✗' : '✓', id, !ok ? '화면 안 뜸' : '', errs.join(' | '), miss.length ? '번호 없음: ' + miss.join(',') : '');
 }
+// 웹 전용 요소(웹 메인 배너)는 1023px 이하에서 보이면 안 된다
+for (const [st, w] of [['1', 390], ['4', 390], ['1', 800], ['4', 800]]) {
+  const p = await browser.newPage({ viewport: { width: w, height: 900 } });
+  await p.goto(base + '/proto.html?frame=1#state=' + st);
+  await p.waitForTimeout(600);
+  const shown = await p.evaluate(() => [...document.querySelectorAll('[data-main-banner]')].filter((e) => e.getClientRects().length).map((e) => e.dataset.mainBanner));
+  if (shown.length) { fail += 1; console.log('✗ 웹 전용 배너가 좁은 폭에 보임', 'state=' + st, w + 'px', shown.join(',')); }
+  await p.close();
+}
 await browser.close();
 server.close();
 console.log(fail ? `실패 ${fail}건` : `전체 ${ids.length}건 통과`);

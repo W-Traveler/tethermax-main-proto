@@ -449,9 +449,9 @@
   }
   @container (max-width: 339px) { [data-roll-name] { display: none !important; } }
 
-  /* [10.29] 웹 메인 배너 (REQ-204): 이미지가 칸을 꽉 채우고, 제목 · 부제목은 이미지 위 왼쪽 아래 텍스트. 버튼 · 닫기 없음.
+  /* [10.29] 웹 메인 배너 (REQ-204, 1024px 이상만 · display는 클래스(flex / hidden lg:flex)로 준다): 이미지가 칸을 꽉 채우고, 제목 · 부제목은 이미지 위 왼쪽 아래 텍스트. 버튼 · 닫기 없음.
      .mb-img 안의 그림은 어드민 등록 이미지 자리표시다. 마우스를 올리면 이미지가 살짝 커진다(움직임 줄이기면 없음) */
-  .mb-banner { position: relative; display: flex; align-items: flex-end; min-width: 0; min-height: 220px; border-radius: 12px; overflow: hidden; isolation: isolate; color: #fff; }
+  .mb-banner { position: relative; align-items: flex-end; min-width: 0; min-height: 220px; border-radius: 12px; overflow: hidden; isolation: isolate; color: #fff; }
   .mb-banner:focus-visible { outline: 2px solid #1D4ED8; outline-offset: 2px; }
   .mb-img { position: absolute; inset: 0; z-index: -1; transition: transform .35s ease; }
   .mb-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.45) 100%); }
@@ -1022,7 +1022,7 @@
         <!-- [10.29] 웹 메인 배너 · 연동용 (REQ-204). 어드민 '이벤트 메인 배너 관리' 차용: 이미지 + 제목 + 부제목(국문 · 영문) + 링크.
              버튼 · 닫기 없음, 배너 전체 선택. 이미지는 칸을 꽉 채우고(넘치면 잘림) 제목 · 부제목은 이미지 위 왼쪽 아래 텍스트.
              아래 그림은 어드민 등록 이미지 자리표시. 첫 등록 콘텐츠: DEX 배너 → DEX 거래소 목록. 모바일은 이 배너를 쓰지 않음(DEX 띠) -->
-        <a href="#" data-ex-list="dex" data-web-banner data-main-banner="linked" class="mb-banner">
+        <a href="#" data-ex-list="dex" data-web-banner data-main-banner="linked" class="mb-banner flex">
           <span class="mb-img mb-img-dex" aria-hidden="true">
             <span class="mb-art grid grid-cols-2 gap-2"><span data-logo="Apex" data-logo-size="w-14 h-14 text-[15px]"></span><span data-logo="Aster" data-logo-size="w-14 h-14 text-[15px]"></span><span data-logo="EdgeX" data-logo-size="w-14 h-14 text-[15px]"></span><span data-logo="Lighter" data-logo-size="w-14 h-14 text-[15px]"></span></span>
             <span class="mb-tag">이미지</span>
