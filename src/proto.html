@@ -3091,6 +3091,7 @@
         </a>
       </li>`;
 
+  const votePending = () => /[#&]acts=2(&|$)/.test(location.hash);
   function paintBtc() {
     // 잔액 옆(데스크톱)·아래 띠(모바일)·부스트 화면 모두 같은 줄 모양(라인 + 버튼)
     const boxes = document.querySelectorAll('[data-mission-list], [data-today-list]');
@@ -3109,8 +3110,17 @@
             sub: 'BTC 방향 예측하고 적립금 모으기', cta: '투표하기', href: VOTE_HREF },
       GOAL_MISSION,
     ];
-    boxes.forEach((box) => { box.innerHTML = rows.map(missionRow).join(''); });
-    document.querySelectorAll('[data-quick-list]').forEach((box) => { box.innerHTML = QUICK.map(quickTile).join(''); });
+    // [10.30] 오늘의 투표 출시 전(주소 acts=2): 참여 이벤트 2개 (BTC 가격 맞히기 · 페이백 챌린지). 같은 순서에서 오늘의 투표만 빠진다
+    const two = votePending();
+    const shown = two ? rows.filter((r) => r.title !== '오늘의 투표') : rows;
+    const quick = two ? QUICK.filter((q) => q.title !== '오늘의 투표') : QUICK;
+    boxes.forEach((box) => { box.innerHTML = shown.map(missionRow).join(''); });
+    document.querySelectorAll('[data-quick-list]').forEach((box) => {
+      box.innerHTML = quick.map(quickTile).join('');
+      // 웹 참여 바로가기: 개수만큼 같은 폭으로 나눈다 (3개 = 3칸, 2개 = 2칸)
+      box.classList.toggle('grid-cols-3', !two);
+      box.classList.toggle('grid-cols-2', two);
+    });
     refreshIcons();
   }
   const renderPoll = paintBtc;   // 투표도 같은 목록을 다시 그린다

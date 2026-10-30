@@ -36,6 +36,10 @@ const CASES = [
       ['인기 거래소 4곳: 최종 페이백률 · 진행 중 이벤트 수. 화면 폭이 좁아 넘치면 좌우 스와이프. [전체 보기] → Cashback Hub', '#exchanges'],
     ],
     note: ['레일 동작(스크롤 시 따라오는 방식)은 AS-IS 준용, 변경 없음'] },
+  { id: 'MP-W01-d', g: 'w-main', t: '참여 목록 2개 (오늘의 투표 출시 전)', vp: 'web', h: 'state=4&acts=2',
+    data: [['조건', '오늘의 투표 출시 전']],
+    look: [['참여 목록 2개: BTC 가격 맞히기 · 페이백 챌린지 (순서 같음, 오늘의 투표만 빠짐). 목록은 칸 안 세로 가운데, 웹 메인 배너와 위 · 아래 끝을 맞춤', '[data-top-row] [data-mission-list] ^1']],
+    req: ['REQ-205'], note: ['오늘의 투표 출시 여부에 따라 3개 / 2개. 출시 전환 방식은 개발 확인 (11.1 #16)'] },
 
   // ───────── 웹 · 줄 모듈 ─────────
   { id: 'ROW-1', g: 'w-row', t: '① UID 1개 · 정상', vp: 'web', h: 'state=4', s: [{ hl: RAIL + '[data-ud-group="Bybit"]' }],
@@ -86,6 +90,10 @@ const CASES = [
       ['계산기 카드 → 인기 거래소 → 참여 바로가기 (한 줄 세 칸, 높이 72px)', '[data-calc-inline]'],
     ],
     req: ['REQ-204', 'REQ-301', 'REQ-302', 'REQ-304', 'REQ-305', 'REQ-306'] },
+  { id: 'MP-W01N-b', g: 'w-un', t: '참여 바로가기 2개 (오늘의 투표 출시 전)', vp: 'web', h: 'state=1&acts=2', s: [{ hl: '[data-quick-list]' }],
+    data: [['조건', '오늘의 투표 출시 전']],
+    look: [['참여 바로가기 2개: BTC 가격 맞히기 · 페이백 챌린지. 한 줄 두 칸, 같은 폭으로 나눔 (높이 72px 그대로)', '[data-quick-list]']],
+    req: ['REQ-306'], note: ['오늘의 투표 출시 여부에 따라 3개 / 2개. 출시 전환 방식은 개발 확인 (11.1 #16)'] },
 
   // ───────── 웹 · 거래소 연동 ─────────
   { id: 'MP-W02-a', g: 'w-link', t: '거래소 연동 창 · 기본', vp: 'web', h: 'state=1&sheet=input',
@@ -202,6 +210,10 @@ const CASES = [
   { id: 'MP-M01-f', g: 'm-main', t: '② UID 1개 · 확인 필요 (모바일)', vp: 'mobile', h: 'state=4&eo=bybit.bitget.okx.lighter.gate.woo.aster', f: ['singleBad'], s: [{ hl: '#railList2 [data-ud-group="Bybit"], #railList [data-ud-group="Bybit"]' }],
     data: [['예시', 'Bybit · UID 881204773 · 이용 제한 (편집 순서 맨 앞)'], ['플래그', 'singleBad']],
     look: [['금액 자리에 사유 칩, 줄 선택 → 사유별 처리 안내', '#railList2 [data-ud-group="Bybit"], #railList [data-ud-group="Bybit"]']], req: ['REQ-501'], note: [ASIS_ISSUE] },
+  { id: 'MP-M01-g', g: 'm-main', t: '참여 목록 2개 (오늘의 투표 출시 전)', vp: 'mobile', h: 'state=4&acts=2', s: [{ hl: '[data-show="2 3 4"].md\\:hidden [data-mission-list]' }],
+    data: [['조건', '오늘의 투표 출시 전']],
+    look: [['참여 목록 2개: BTC 가격 맞히기 · 페이백 챌린지 (순서 같음, 오늘의 투표만 빠짐). 카드 높이는 줄 수만큼 줄어듦', '[data-show="2 3 4"].md\\:hidden [data-mission-list] ^1']],
+    req: ['REQ-205'], note: ['오늘의 투표 출시 여부에 따라 3개 / 2개. 출시 전환 방식은 개발 확인 (11.1 #16)'] },
 
   // ───────── 모바일 · 입금 알림 플로우 ─────────
   { id: 'NOTI-1', g: 'm-noti', t: '기기 알림 켜짐 → 바로 완료', vp: 'mobile', h: 'state=3', nd: 'on', os: 'yes', env: true,
@@ -234,6 +246,10 @@ const CASES = [
     data: [['조작', '연동 유도 카드가 화면 밖으로 나갈 때까지 스크롤']],
     look: [['카드가 사라지면 하단 스티키 배너가 아래에서 위로, 다시 보이면 내려감', '#linkSticky'], ['선택 → 연동 시트. 올라와 있는 동안 토스트는 배너 위'], ['본문 끝이 가리지 않게 탭바 + 배너 높이만큼 아래 여백']],
     req: ['REQ-307'] },
+  { id: 'MP-M01N-c', g: 'm-un', t: '참여 목록 2개 (오늘의 투표 출시 전)', vp: 'mobile', h: 'state=1&acts=2', s: [{ hl: '[data-mission-cols]' }],
+    data: [['조건', '오늘의 투표 출시 전']],
+    look: [['참여 목록 2개: BTC 가격 맞히기 · 페이백 챌린지. 카드 높이는 줄 수만큼 줄어듦', '[data-mission-cols] ^1']],
+    req: ['REQ-205'], note: ['오늘의 투표 출시 여부에 따라 3개 / 2개. 출시 전환 방식은 개발 확인 (11.1 #16)'] },
 
   // ───────── 모바일 · 거래소 연동 ─────────
   { id: 'MP-M02-a', g: 'm-link', t: '거래소 연동 시트 · 기본', vp: 'mobile', h: 'state=1&sheet=input',

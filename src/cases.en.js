@@ -207,5 +207,12 @@ const CASES_EN = {
  "줄마다 더 필요한 금액 · 보유 페이백": "Each row: amount still needed · cashback held",
  "버튼 대신 \"출금 가능한 페이백이 없어요\"": "\"No cashback available to withdraw\" instead of the button",
  "[저장]: 늘 누를 수 있음. 순서가 그대로면 창만 닫힘, 바뀌었으면 저장 후 레일 · 본문 카드 · 전체 보기에 같은 순서": "[Save]: always tappable. If the order is unchanged it just closes; if changed, it saves and applies the same order to the rail · main card · View all",
- "[전체 보기] → 페이백 요약 페이지 / 페이백 타임라인 3단계 / [메인으로]": "[View all] → cashback summary page / cashback timeline 3 steps / [Back to main]"
+ "[전체 보기] → 페이백 요약 페이지 / 페이백 타임라인 3단계 / [메인으로]": "[View all] → cashback summary page / cashback timeline 3 steps / [Back to main]",
+  "참여 목록 2개 (오늘의 투표 출시 전)": "Activities list with 2 items (before Today's vote launches)",
+  "참여 바로가기 2개 (오늘의 투표 출시 전)": "Activity shortcuts with 2 items (before Today's vote launches)",
+  "참여 목록 2개: BTC 가격 맞히기 · 페이백 챌린지 (순서 같음, 오늘의 투표만 빠짐). 목록은 칸 안 세로 가운데, 웹 메인 배너와 위 · 아래 끝을 맞춤": "Activities list with 2 items: Guess the BTC price · Cashback Challenge (same order, only Today's vote removed). List vertically centered in its column; top and bottom edges align with the web main banner",
+  "참여 바로가기 2개: BTC 가격 맞히기 · 페이백 챌린지. 한 줄 두 칸, 같은 폭으로 나눔 (높이 72px 그대로)": "Activity shortcuts with 2 items: Guess the BTC price · Cashback Challenge. One row, two equal-width cells (height stays 72px)",
+  "참여 목록 2개: BTC 가격 맞히기 · 페이백 챌린지 (순서 같음, 오늘의 투표만 빠짐). 카드 높이는 줄 수만큼 줄어듦": "Activities list with 2 items: Guess the BTC price · Cashback Challenge (same order, only Today's vote removed). Card height shrinks with the number of rows",
+  "참여 목록 2개: BTC 가격 맞히기 · 페이백 챌린지. 카드 높이는 줄 수만큼 줄어듦": "Activities list with 2 items: Guess the BTC price · Cashback Challenge. Card height shrinks with the number of rows",
+  "오늘의 투표 출시 여부에 따라 3개 / 2개. 출시 전환 방식은 개발 확인 (11.1 #16)": "3 or 2 items depending on whether Today's vote has launched. How the switch is made: to be confirmed with dev (11.1 #16)",
 };
