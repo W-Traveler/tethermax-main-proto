@@ -1626,7 +1626,7 @@
 </div>
 
 <!-- ========== [2I] 출금하기 (상태 2·3·4) ==========
-     메인 총 페이백 잔액은 CEX + DEX 합산. 출금은 [CEX] [DEX] 탭마다 따로, 그 탭의 출금 가능한 UID가 한 번에 모두 나간다(골라서 출금할 수 없다).
+     메인 총 페이백 잔액은 CEX + DEX 합산. [11.02] 탭 없이 한 화면에 CEX 모듈 · DEX 모듈(연동한 유형만). 출금 가능한 UID · 지갑이 한 번에 모두 나간다(골라서 출금할 수 없다).
      768px 이상은 가운데 팝업, 767px 이하는 화면 전체 페이지. 위 총액 카드와 아래 버튼은 고정, 가운데 목록만 스크롤 -->
 <div id="wdPop" hidden class="fixed inset-0 z-[58]">
   <div class="sheet-dim hidden md:block absolute inset-0 bg-ink/40" data-wd-close></div>
@@ -1637,20 +1637,19 @@
       <button type="button" data-wd-close aria-label="닫기" class="hidden md:grid -mr-2 w-9 h-9 shrink-0 rounded grid place-items-center text-ink hover:bg-hair transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand"><i data-lucide="x" class="w-5 h-5" aria-hidden="true"></i></button>
       <span class="md:hidden w-10 shrink-0" aria-hidden="true"></span>
     </div>
-    <div class="shrink-0 px-5 md:px-6 grid grid-cols-2 border-b border-line" role="tablist" data-wd-tabs></div>
     <div class="shrink-0 px-5 md:px-6 pt-4" data-wd-top></div>
     <div class="flex-1 min-h-0 overflow-y-auto overscroll-contain px-5 md:px-6 pt-4 pb-4" data-wd-body></div>
     <div class="shrink-0 px-5 md:px-6 pt-3 pb-[max(16px,env(safe-area-inset-bottom))] md:pb-6 border-t border-line" data-wd-foot></div>
   </div>
 </div>
-<!-- 출금 확인 창: 팝업 · 페이지 위에 작은 창 (그 탭 기준) -->
+<!-- 출금 확인 창: 팝업 · 페이지 위에 작은 창 (CEX · DEX 출금 가능 전체) -->
 <div id="wdConfirm" hidden class="fixed inset-0 z-[59]">
   <div class="sheet-dim absolute inset-0 bg-ink/40" data-wd-cancel></div>
   <div role="alertdialog" aria-modal="true" aria-labelledby="wdConfirmTitle" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] max-w-[calc(100vw-32px)] max-h-[85vh] overflow-y-auto bg-white rounded-xl shadow-[0_24px_60px_-20px_rgba(12,10,9,0.45)] p-5">
     <h3 id="wdConfirmTitle" class="text-[17px] font-bold tracking-[-0.03em] text-ink">출금할까요?</h3>
     <p class="mt-1 text-[12px] text-mute break-keep" data-wd-confirm-sub></p>
     <ul class="mt-4 space-y-3" data-wd-confirm-list></ul>
-    <!-- 합계 금액. DEX 탭이면 같은 상자 안 아래에 보내는 네트워크 -->
+    <!-- 합계 금액. DEX 지갑이 포함되면 같은 상자 안 아래에 보내는 네트워크 -->
     <div class="mt-4 px-4 py-3 rounded-[10px] bg-[#F7F7F6]">
       <p class="flex items-baseline justify-between gap-3">
         <span class="text-[13px] text-mute">합계 금액</span>
@@ -1795,7 +1794,7 @@
   const WEEK_TODAY = 4;                      // 월=0 … 금=4
   // [2I] 거래소별 UID (id로 연동 목록과 짝짓는다). amt = UID별 페이백 잔액 = 거래소 페이백(srcExchange) + 이벤트 리워드(srcEvent).
   //   메인 총 페이백 잔액 · 연동한 거래소 금액 · UID 상세 · 출금 팝업이 모두 이 값을 쓴다. cumulative는 지금까지 받은 누적
-  //   상태 4 출금 팝업 CEX: 출금할 OKX 31.68 · Bitget 10.00(이벤트 2.00 남음) / 출금 불가 Bitget 3건 (거래소 페이백 없음)
+  //   상태 4 출금 팝업 CEX 모듈: 출금할 OKX 31.68 · Bitget 10.00(이벤트 2.00 남음) / 출금 불가 Bitget 3건 (거래소 페이백 없음)
   const UID_LINKS = [
     { id: 'woo', ex: 'WOO X Pro', total: '0.00', uids: [
       { uid: '7720431986', state: 'issue' },
@@ -2611,18 +2610,17 @@
     g.addEventListener('dragstart', (e) => e.preventDefault());
   });
 
-  // ===== [2I] 출금하기: [CEX] [DEX] 탭 → 확인 창 → 완료 (상태 2·3·4) =====
+  // ===== [2I] 출금하기: 한 화면(CEX 모듈 · DEX 모듈) → 확인 창 → 완료 (상태 2·3·4). [11.02] 탭 삭제 =====
   //   CEX: UID별 출금 금액 = 거래소 페이백 + 이벤트 리워드(그 UID의 거래소 페이백만큼까지). 10 USDT 이상이면 출금, 남는 이벤트 리워드는 다음 출금 때로
   //   [3A] DEX도 같다: 지갑별 출금 금액 = 거래소 페이백 + 이벤트 리워드(같은 지갑의 거래소 페이백만큼까지). 10 USDT 이상이면 출금
   //   묶음 1 "한 번에 출금돼요"(펼침) · 묶음 2 "아직 출금할 수 없어요"(접힘). 각 묶음은 UID별 보유 페이백 높은 순, 같으면 최근에 연동한 것 먼저
   //   줄마다 세부 금액이 늘 보인다: 묶음 1은 이번 출금분, 묶음 2는 지금 보유한 금액
-  //   [2I] 출금 정책은 "출금 가능 UID N개" 오른쪽 ⓘ 말풍선 하나로 (탭마다)
+  //   [2I] 출금 정책은 "출금 가능 UID N개" 오른쪽 ⓘ 말풍선 하나로 (모듈마다)
   const WD_MIN = 10;
   const DEX_NETWORK = 'Arbitrum One';   // DEX 페이백을 보내는 네트워크. 출금 팝업 · 확인 창 · 완료가 모두 이 값을 쓴다
-  let wdTab = 'cex';
   let wdView = 'list';   // list | done
   let wdAt = null;
-  let wdG2Open = false;
+  const wdG2Open = { cex: false, dex: false };   // 모듈마다 출금 불가 묶음 펼침
   function wdItems() {
     const out = [];
     linkedOrder().forEach((g) => g.uids.forEach((u) => {
@@ -2639,7 +2637,6 @@
     return out.sort((a, b) => (b.bal - a.bal) || (recencyOf(a.g) - recencyOf(b.g)));
   }
   const wdHas = () => ({ cex: linkedOrder().some((g) => !g.dex), dex: linkedOrder().some((g) => g.dex) });
-  const wdOfTab = (all) => all.filter((c) => (wdTab === 'dex') === !!c.g.dex);
   const wdSum = (list) => Math.round(list.reduce((a, c) => a + c.amt, 0) * 100) / 100;
   const wdAmt = (v) => amountHTML(usd(v));
   const wdId = (c) => (c.g.dex ? shortAddr(c.u.uid) : 'UID ' + c.u.uid);
@@ -2687,21 +2684,12 @@
     const body = document.querySelector('[data-wd-body]');
     const top = document.querySelector('[data-wd-top]');
     const foot = document.querySelector('[data-wd-foot]');
-    const tabs = document.querySelector('[data-wd-tabs]');
     const has = wdHas();
-    if (!has.dex) wdTab = 'cex';
-    if (!has.cex) wdTab = 'dex';
-    const items = wdOfTab(wdItems());
-    const ok = items.filter((c) => c.ok), no = items.filter((c) => !c.ok);
-    const total = wdSum(ok);
+    const all = wdItems();
+    const okAll = all.filter((c) => c.ok);
+    const total = wdSum(okAll);
+    const hasDexOk = okAll.some((c) => c.g.dex);
     const btnPrimary = 'btn-primary w-full h-12 rounded text-[15px] font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand';
-    // 탭: CEX · DEX를 둘 다 연동했을 때만
-    tabs.hidden = !(has.cex && has.dex) || wdView === 'done';
-    tabs.innerHTML = ['cex', 'dex'].map((k) => {
-      const on = wdTab === k;
-      // [2I] 탭을 반씩 나눠 크게: 고른 탭은 검은 글자 + 굵은 밑줄, 다른 탭은 회색
-      return `<button type="button" role="tab" aria-selected="${on}" data-wd-tab="${k}" class="relative h-12 text-[17px] font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand ${on ? 'text-ink' : 'text-faint hover:text-body'}" translate="no">${k.toUpperCase()}${on ? '<span class="absolute inset-x-0 -bottom-px h-[3px] rounded-full bg-ink" aria-hidden="true"></span>' : ''}</button>`;
-    }).join('');
     if (wdView === 'done') {
       top.hidden = true;
       const p2 = (n) => String(n).padStart(2, '0');
@@ -2716,43 +2704,54 @@
           <p class="mt-1.5 text-[14px] text-mute break-keep">출금이 끝나면 알려드릴게요</p>
         </div>
         <dl class="mt-6 rounded-[10px] bg-[#F7F7F6] p-4 space-y-2.5 text-[13px]">
-          ${row('건수', en ? String(ok.length) : ok.length + '건')}
+          ${row('건수', en ? String(okAll.length) : okAll.length + '건')}
           ${row('합계 금액', wdAmt(total))}
           ${row('신청 시각', at)}
-          ${wdTab === 'dex' ? row('네트워크', DEX_NETWORK) : ''}
+          ${hasDexOk ? row('네트워크', DEX_NETWORK) : ''}
         </dl>`;
       foot.innerHTML = `<button type="button" data-wd-close class="btn-ghost w-full h-12 rounded text-[15px] font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">닫기</button>`;
       refreshIcons();
       return;
     }
-    // 위 총액 카드: 그 탭에서 이번에 출금되는 합계
+    // 위 총액 카드: CEX + DEX 이번에 출금되는 합계
     top.hidden = false;
     top.innerHTML = `
       <div class="rounded-[10px] bg-[#F7F7F6] p-4">
         <p class="text-[13px] text-mute">출금 가능한 페이백</p>
         <p class="mt-1 text-[26px] leading-tight text-ink whitespace-nowrap">${wdAmt(total)}</p>
       </div>`;
-    // [2I] 출금 정책 말풍선 (탭마다 하나, "출금 가능 UID" 오른쪽 ⓘ)
-    const policy = wdTab === 'dex'
-      ? ['지갑별 출금 금액이 10 USDT 이상이면 출금돼요', '이벤트 리워드는 같은 지갑의 거래소 페이백만큼까지 함께 출금돼요', '출금 가능한 지갑은 한 번에 모두 출금돼요']
-      : ['UID별 출금 금액이 10 USDT 이상이면 출금돼요', '이벤트 리워드는 같은 UID의 거래소 페이백만큼까지 함께 출금돼요', '출금 가능한 UID는 한 번에 모두 출금돼요'];
-    const tip = `<span class="tip tip-start align-middle ml-0.5"><button type="button" data-tip aria-expanded="false" aria-label="출금 정책" class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"><i data-lucide="info" class="w-[15px] h-[15px]" aria-hidden="true"></i></button><span role="tooltip"><span class="block font-bold">출금 정책</span><span class="mt-1 block space-y-0.5">${policy.map((t) => `<span class="flex gap-1.5"><span aria-hidden="true">·</span><span>${t}</span></span>`).join('')}</span></span></span>`;
     const need = (c) => `거래소 페이백 ${usd(c.need)} USDT 더 필요`;
-    const wdKey = wdTab === 'dex' ? '지갑' : 'UID';   // [3A] 묶음 이름: DEX 탭은 "지갑", CEX 탭은 "UID"   // [3A] CEX · DEX 같은 계산
-    body.innerHTML = (ok.length ? `
-      <section>
-        <p class="flex items-center text-[13px] font-semibold text-body"><span>출금 가능 ${wdKey} ${ok.length}개</span>${tip}</p>
-        <ul class="mt-1">${ok.map((c) => wdRow(c, `<span class="shrink-0 text-[15px] text-ink whitespace-nowrap">${wdAmt(c.amt)}</span>`)).join('')}</ul>
-      </section>` : '')
-      + (no.length ? `
-      <section class="${ok.length ? 'mt-4 pt-3 border-t border-line' : ''}">
-        <button type="button" data-wd-g2 aria-expanded="${wdG2Open}" class="w-full py-1.5 flex items-center justify-between gap-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">
-          <span class="text-[13px] font-semibold text-body">출금 불가 ${wdKey} ${no.length}개</span>
-          <i data-lucide="chevron-down" class="w-4 h-4 shrink-0 text-faint transition-transform ${wdG2Open ? 'rotate-180' : ''}" aria-hidden="true"></i>
-        </button>
-        ${wdG2Open ? `<ul class="mt-1">${no.map((c) => wdRow(c, `<span class="shrink-0 max-w-[46%] text-right text-[12px] leading-snug text-mute break-keep">${need(c)}</span>`)).join('')}</ul>` : ''}
-      </section>` : '');
-    foot.innerHTML = ok.length
+    // [11.02] 모듈: CEX → DEX 순서, 연동한 유형만. 모듈 안 구성은 이전 탭 화면과 같음
+    const mod = (k) => {
+      const items = all.filter((c) => (k === 'dex') === !!c.g.dex);
+      const ok = items.filter((c) => c.ok), no = items.filter((c) => !c.ok);
+      const wdKey = k === 'dex' ? '지갑' : 'UID';
+      // [2I] 출금 정책 말풍선 (모듈마다 하나, "출금 가능 UID · 지갑" 오른쪽 ⓘ)
+      const policy = k === 'dex'
+        ? ['지갑별 출금 금액이 10 USDT 이상이면 출금돼요', '이벤트 리워드는 같은 지갑의 거래소 페이백만큼까지 함께 출금돼요', '출금 가능한 지갑은 한 번에 모두 출금돼요']
+        : ['UID별 출금 금액이 10 USDT 이상이면 출금돼요', '이벤트 리워드는 같은 UID의 거래소 페이백만큼까지 함께 출금돼요', '출금 가능한 UID는 한 번에 모두 출금돼요'];
+      const tip = `<span class="tip tip-start align-middle ml-0.5"><button type="button" data-tip aria-expanded="false" aria-label="출금 정책" class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"><i data-lucide="info" class="w-[15px] h-[15px]" aria-hidden="true"></i></button><span role="tooltip"><span class="block font-bold">출금 정책</span><span class="mt-1 block space-y-0.5">${policy.map((t) => `<span class="flex gap-1.5"><span aria-hidden="true">·</span><span>${t}</span></span>`).join('')}</span></span></span>`;
+      const open = wdG2Open[k];
+      return `
+      <section data-wd-mod="${k}" class="${k === 'dex' && has.cex ? 'mt-5 pt-5 border-t border-line' : ''}">
+        <h3 class="text-[15px] font-bold text-ink" translate="no">${k.toUpperCase()}</h3>
+        ${ok.length ? `
+        <div class="mt-2">
+          <p class="flex items-center text-[13px] font-semibold text-body"><span>출금 가능 ${wdKey} ${ok.length}개</span>${tip}</p>
+          <ul class="mt-1">${ok.map((c) => wdRow(c, `<span class="shrink-0 text-[15px] text-ink whitespace-nowrap">${wdAmt(c.amt)}</span>`)).join('')}</ul>
+        </div>` : ''}
+        ${no.length ? `
+        <div class="${ok.length ? 'mt-3 pt-3 border-t border-line' : 'mt-2'}">
+          <button type="button" data-wd-g2="${k}" aria-expanded="${open}" class="w-full py-1.5 flex items-center justify-between gap-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">
+            <span class="text-[13px] font-semibold text-body">출금 불가 ${wdKey} ${no.length}개</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 shrink-0 text-faint transition-transform ${open ? 'rotate-180' : ''}" aria-hidden="true"></i>
+          </button>
+          ${open ? `<ul class="mt-1">${no.map((c) => wdRow(c, `<span class="shrink-0 max-w-[46%] text-right text-[12px] leading-snug text-mute break-keep">${need(c)}</span>`)).join('')}</ul>` : ''}
+        </div>` : ''}
+      </section>`;
+    };
+    body.innerHTML = (has.cex ? mod('cex') : '') + (has.dex ? mod('dex') : '');
+    foot.innerHTML = okAll.length
       ? `<button type="button" data-wd-ask class="${btnPrimary}">${usd(total)} USDT 출금하기</button>`
       : '<p class="h-12 rounded bg-hair text-[14px] font-semibold text-mute grid place-items-center">출금 가능한 페이백이 없어요</p>';
     refreshIcons();
@@ -2760,13 +2759,14 @@
   }
   // [2I] 정책 말풍선이 목록 칸 오른쪽 밖으로 나가면 왼쪽으로 당기고, 꼬리는 ⓘ를 계속 가리키게 한다 (영어 · 좁은 화면)
   function fitWdTip() {
-    const tip = document.querySelector('#wdPop .tip-start');
     const body = document.querySelector('[data-wd-body]');
-    if (!tip || !body || document.getElementById('wdPop').hidden) return;
-    const bub = tip.lastElementChild;
-    bub.style.left = ''; bub.style.removeProperty('--tip-arrow');
-    const over = bub.getBoundingClientRect().right - (body.getBoundingClientRect().right - 8);
-    if (over > 0) { bub.style.left = (-12 - over) + 'px'; bub.style.setProperty('--tip-arrow', (15 + over) + 'px'); }
+    if (!body || document.getElementById('wdPop').hidden) return;
+    document.querySelectorAll('#wdPop .tip-start').forEach((tip) => {
+      const bub = tip.lastElementChild;
+      bub.style.left = ''; bub.style.removeProperty('--tip-arrow');
+      const over = bub.getBoundingClientRect().right - (body.getBoundingClientRect().right - 8);
+      if (over > 0) { bub.style.left = (-12 - over) + 'px'; bub.style.setProperty('--tip-arrow', (15 + over) + 'px'); }
+    });
   }
   window.addEventListener('resize', fitWdTip);
   // 영어 보기는 글씨가 그린 뒤에 바뀌므로, 말풍선을 여는 순간에 한 번 더 맞춘다
@@ -2774,12 +2774,7 @@
   let wdPrevOverflow = '';
   function openWd() {
     wdView = 'list';
-    wdG2Open = false;
-    // 처음 탭: 출금 가능 합계가 있는 탭 중 CEX 우선
-    const all = wdItems();
-    const sumOf = (dex) => wdSum(all.filter((c) => c.ok && !!c.g.dex === dex));
-    const has = wdHas();
-    wdTab = has.cex ? 'cex' : 'dex';   // [Figma MP-W05] 둘 다 연동이면 기본 선택 CEX
+    wdG2Open.cex = wdG2Open.dex = false;
     paintWd();
     wdPrevOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
@@ -2802,7 +2797,7 @@
     document.documentElement.style.overflow = wdPrevOverflow;
   }
   function askWd() {
-    const ok = wdOfTab(wdItems()).filter((c) => c.ok);
+    const ok = wdItems().filter((c) => c.ok).sort((a, b) => !!a.g.dex - !!b.g.dex);   // CEX 먼저, 그다음 DEX
     document.querySelector('[data-wd-confirm-sub]').textContent = `출금할 수 있는 ${ok.length}건이 모두 함께 출금돼요`;
     document.querySelector('[data-wd-confirm-list]').innerHTML = ok.map((c) => `
       <li class="flex items-start gap-2.5">
@@ -2817,16 +2812,15 @@
       </li>`).join('');
     document.querySelector('[data-wd-confirm-total]').innerHTML = wdAmt(wdSum(ok));
     const net = document.querySelector('[data-wd-confirm-net]');
-    net.hidden = wdTab !== 'dex';
+    net.hidden = !ok.some((c) => c.g.dex);
     document.querySelector('[data-wd-confirm-net-name]').textContent = DEX_NETWORK;
     document.getElementById('wdConfirm').hidden = false;
   }
   document.addEventListener('click', (e) => {
     if (e.target.closest('[data-withdraw]')) { e.preventDefault(); openWd(); return; }
     if (e.target.closest('[data-wd-close]')) { closeWd(); return; }
-    const tab = e.target.closest('[data-wd-tab]');
-    if (tab) { wdTab = tab.dataset.wdTab; paintWd(); document.querySelector('[data-wd-body]').scrollTop = 0; return; }
-    if (e.target.closest('[data-wd-g2]')) { wdG2Open = !wdG2Open; paintWd(); return; }
+    const g2 = e.target.closest('[data-wd-g2]');
+    if (g2) { const k = g2.dataset.wdG2; wdG2Open[k] = !wdG2Open[k]; paintWd(); return; }
     if (e.target.closest('[data-wd-ask]')) { askWd(); return; }
     if (e.target.closest('[data-wd-cancel]')) { document.getElementById('wdConfirm').hidden = true; return; }
     if (e.target.closest('[data-wd-go]')) {
@@ -4687,8 +4681,10 @@
         }
         if (sp.wd) {
           openWd();
-          wdTab = sp.wd; if (sp.g2) wdG2Open = true; paintWd(); refreshIcons();
+          if (sp.g2) { wdG2Open[sp.wd] = true; paintWd(); refreshIcons(); }
           await wait(80);
+          // [11.02] 탭 대신 한 화면: wd: 'dex'면 DEX 모듈이 보이게 목록을 내림
+          if (sp.wd === 'dex') { const m = document.querySelector('[data-wd-mod="dex"]'); const b = document.querySelector('[data-wd-body]'); if (m && b && document.querySelector('[data-wd-mod="cex"]')) b.scrollTop = m.offsetTop - b.offsetTop - 8; }
         }
         if (sp.scroll !== undefined) { window.scrollTo(0, sp.scroll); await wait(200); }
         if (sp.scrollEl) { const el = visible(sp.scrollEl.sel); if (el) el.scrollTop = sp.scrollEl.top; }
