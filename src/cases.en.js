@@ -219,5 +219,5 @@ const CASES_EN = {
   "어드민 연동용 목록에 배너 2개 등록": "Two banners registered in the admin linked list",
   "어드민 미연동용 목록에 배너 2개 등록": "Two banners registered in the admin unlinked list",
   "웹 메인 배너 2개: 한 칸 안에서 좌우로 넘김. 오른쪽 아래 위치 표시(현재 = 긴 막대, 나머지 = 점), 점 선택 시 그 배너로 이동": "Two web main banners: slide left/right within one slot. Indicator at bottom right (current = long bar, others = dots); clicking a dot goes to that banner",
-  "넘김 방식은 가안 (PRD FE 11.1 #13 미결): 5초마다 자동 넘김, 마우스를 올리거나 키보드 초점이면 멈춤, 움직임 줄이기면 자동 넘김 없음. 두 번째 배너 내용은 예시": "Slide behavior is a draft (PRD FE 11.1 #13 open): auto-advance every 5 seconds, pauses on hover or keyboard focus, no auto-advance with reduced motion. The second banner's content is an example",
+  "넘김 방식 확정 (11.02): 5초마다 자동 넘김, 마우스를 올리거나 키보드 초점이면 멈춤, 움직임 줄이기면 자동 넘김 없음. 좌우 화살표 · 끌어서 넘기기 없음. 두 번째 배너 내용은 예시": "Slide behavior confirmed (11.02): auto-advance every 5 seconds, pauses on hover or keyboard focus, no auto-advance with reduced motion. No arrows or drag. The second banner's content is an example",
 };
