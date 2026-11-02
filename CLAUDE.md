@@ -88,8 +88,11 @@
 
 - 화면 · 패널 문구는 기획 문서 톤: 짧은 명사구, 사실만. 은유 · 비유 · 슬로건식 표현 금지.
 - 영문에서는 "페이백"을 항상 **Cashback**으로 씁니다 (Payback · paid back 금지). 고유명사도 같음: Cashback Boost · Cashback Challenge · Cashback Hub.
+- 영문 출금 버튼 · 출금 창 제목은 **Claim** ("Claim" · "Claim N USDT" · 확인 창 "Claim now?"). 국문은 "출금하기" 그대로. 설명 문구(Withdrawable cashback 등)는 바꾸지 않음 (11.02 헤일리 요청).
 - Figma나 PRD에 없는 규칙(폭 구간, 수치 등)을 설명 문구로만 추가하지 않습니다. 필요하면 먼저 요청자에게 묻고, 넣는다면 Figma 화면 케이스와 PRD를 함께 맞춥니다.
 
 ## 남은 일
+
+- 출금 창 CEX | DEX 탭을 하나로 합치는 변경 (헤일리 전달, 11.02). 출금 방식 미정이라 보류
 
 - 잔액 카드 신규 이미지(헤일리 요청) 받으면 `assets/brand/balance-card.png`로 넣기 (64×64, @2x 128px 투명 PNG)
