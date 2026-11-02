@@ -235,4 +235,10 @@ const CASES_EN = {
   "필터 칩 [전체 N] [확인 필요 N] [검토 중 N]. 검토 중 UID가 있는 거래소만, 그 줄만": "Filter chips [All N] [To resolve N] [Under review N]. Only exchanges with under-review items, only those rows",
   "줄: 지갑주소 + [검토 중] 칩, 금액 없음. 선택 → 안내 토스트": "Row: wallet address + [Under review] chip, no amount. Tap → info toast",
   "검토 중 UID가 있는 거래소만, 지갑주소 + [검토 중] 칩": "Only exchanges with under-review items, wallet address + [Under review] chip",
+  "줄 선택 → 안내 팝업 (ROW-9b). 상세는 인증이 끝난 뒤": "Row tap → info popup (ROW-9b). Details after verification",
+  "⑨ 검토 중 · 선택 시 안내 팝업": "⑨ Under review · info popup on tap",
+  "안내 팝업: 제목 \"검토 중인 지갑\", 거래소 · 지갑주소 + [검토 중] 칩": "Info popup: title \"Wallet under review\", exchange · wallet address + [Under review] chip",
+  "안내 바: ⓘ \"소유권 인증 진행 중 · {시간}\"": "Info bar: ⓘ \"Ownership verification in progress · {time}\"",
+  "\"첫 지갑 연동은 최대 24시간이 걸릴 수 있어요\" / [확인] · 바깥 영역 · Esc → 닫힘": "\"Linking your first wallet can take up to 24 hours\" / [Got it] · outside · Esc → close",
+  "줄: 지갑주소 + [검토 중] 칩, 금액 없음. 선택 → 안내 팝업 (ROW-9b)": "Row: wallet address + [Under review] chip, no amount. Tap → info popup (ROW-9b)",
 };
