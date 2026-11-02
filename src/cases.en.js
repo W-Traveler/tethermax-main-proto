@@ -215,4 +215,9 @@ const CASES_EN = {
   "참여 목록 2개: BTC 가격 맞히기 · 페이백 챌린지 (순서 같음, 오늘의 투표만 빠짐). 카드 높이는 줄 수만큼 줄어듦": "Activities list with 2 items: Guess the BTC price · Cashback Challenge (same order, only Today's vote removed). Card height shrinks with the number of rows",
   "참여 목록 2개: BTC 가격 맞히기 · 페이백 챌린지. 카드 높이는 줄 수만큼 줄어듦": "Activities list with 2 items: Guess the BTC price · Cashback Challenge. Card height shrinks with the number of rows",
   "오늘의 투표 출시 여부에 따라 3개 / 2개. 출시 전환 방식은 개발 확인 (11.1 #16)": "3 or 2 items depending on whether Today's vote has launched. How the switch is made: to be confirmed with dev (11.1 #16)",
+  "웹 메인 배너 2개 (넘김 · 위치 표시)": "Two web main banners (slide · indicator)",
+  "어드민 연동용 목록에 배너 2개 등록": "Two banners registered in the admin linked list",
+  "어드민 미연동용 목록에 배너 2개 등록": "Two banners registered in the admin unlinked list",
+  "웹 메인 배너 2개: 한 칸 안에서 좌우로 넘김. 오른쪽 아래 위치 표시(현재 = 긴 막대, 나머지 = 점), 점 선택 시 그 배너로 이동": "Two web main banners: slide left/right within one slot. Indicator at bottom right (current = long bar, others = dots); clicking a dot goes to that banner",
+  "넘김 방식은 가안 (PRD FE 11.1 #13 미결): 5초마다 자동 넘김, 마우스를 올리거나 키보드 초점이면 멈춤, 움직임 줄이기면 자동 넘김 없음. 두 번째 배너 내용은 예시": "Slide behavior is a draft (PRD FE 11.1 #13 open): auto-advance every 5 seconds, pauses on hover or keyboard focus, no auto-advance with reduced motion. The second banner's content is an example",
 };

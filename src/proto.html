@@ -471,6 +471,17 @@
   .mb-text { display: flex; flex-direction: column; gap: 6px; padding: 24px 28px; max-width: 560px; }
   .mb-title { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.3; word-break: keep-all; }
   .mb-sub { font-size: 14px; line-height: 1.45; color: rgba(255,255,255,.88); word-break: keep-all; }
+  /* [11.02] 웹 메인 배너 2개 이상(주소 banners=2): 한 칸 안에서 좌우로 넘김 + 오른쪽 아래 위치 표시. 가안: 5초마다 자동 넘김, 마우스를 올리거나 키보드 초점이면 멈춤, 움직임 줄이기면 자동 넘김 없음 */
+  .mb-slider { position: relative; min-width: 0; border-radius: 12px; overflow: hidden; }
+  .mb-track { display: flex; height: 100%; transition: transform .45s ease; }
+  @media (prefers-reduced-motion: reduce) { .mb-track { transition: none; } }
+  .mb-track > .mb-banner { flex: 0 0 100%; border-radius: 0; }
+  .mb-dots { position: absolute; right: 20px; bottom: 20px; z-index: 2; display: flex; align-items: center; gap: 6px; }
+  .mb-dots button { width: 6px; height: 6px; padding: 0; border: 0; border-radius: 999px; background: rgba(255,255,255,.5); cursor: pointer; transition: width .2s ease, background-color .2s ease; }
+  .mb-dots button[aria-current="true"] { width: 18px; background: #fff; }
+  .mb-dots button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .mb-img-gold { background: linear-gradient(135deg, #7C4A03 0%, #C98A06 55%, #F2C14E 100%); }
+  .mb-img-calc { background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 55%, #60A5FA 100%); }
 
   /* 웹(데스크톱) 미연동: 모바일 기본(하단 고정 켬)에 맞춰 계산기는 떠 있는 배너 대신 본문 카드로 둔다 */
   @media (min-width: 768px) {
@@ -2900,6 +2911,75 @@
     e.preventDefault();
     showMockToast('부스트 안내로 이동해요');
   });
+  // [11.02] 웹 메인 배너 2개 케이스 (주소 banners=2). 어드민에 두 번째 항목을 등록한 상태를 흉내 낸다. 두 번째 배너 내용은 예시
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-main-banner="extra"]')) return;
+    e.preventDefault();
+    showMockToast('등록한 링크로 이동해요');
+  });
+  const MB_EXTRA = {
+    linked: { cls: 'mb-img-gold', icon: 'gem', title: '친구 초대하고 골드 바 받아가세요', sub: '친구를 초대하면 리워드를 더 받아요.' },
+    unlinked: { cls: 'mb-img-calc', icon: 'calculator', title: '매달 내는 수수료, 돌려받을 수 있어요', sub: '거래량만 넣으면 한 달 페이백을 바로 알려드려요.' },
+  };
+  const mbTimers = {};
+  function setupMainBanners() {
+    const want = /[#&]banners=2(&|$)/.test(location.hash);
+    ['linked', 'unlinked'].forEach((aud) => {
+      const first = document.querySelector('[data-main-banner="' + aud + '"]');
+      if (!first) return;
+      const slider = first.closest('[data-mb-slider]');
+      clearInterval(mbTimers[aud]);
+      if (!want) {
+        // 1개로 되돌리기: 슬라이더를 걷어내고 첫 배너를 원래 자리로
+        if (slider) { slider.replaceWith(first); first.className = slider.dataset.cls; }
+        return;
+      }
+      if (slider) return;
+      const wrap = document.createElement('div');
+      wrap.dataset.mbSlider = aud;
+      wrap.dataset.cls = first.className;
+      // 연동용은 늘 보임, 미연동용은 1024px 이상만 (첫 배너와 같은 노출 조건)
+      wrap.className = 'mb-slider ' + (aud === 'unlinked' ? 'hidden lg:block' : 'block');
+      first.replaceWith(wrap);
+      const track = document.createElement('div');
+      track.className = 'mb-track';
+      wrap.appendChild(track);
+      first.className = 'mb-banner flex';
+      track.appendChild(first);
+      const d = MB_EXTRA[aud];
+      const extra = document.createElement('a');
+      extra.href = '#';
+      extra.dataset.mainBanner = 'extra';
+      extra.className = 'mb-banner flex';
+      extra.innerHTML = `<span class="mb-img ${d.cls}" aria-hidden="true"><span class="mb-art"><i data-lucide="${d.icon}" class="w-24 h-24 text-white/85"></i></span><span class="mb-tag">이미지</span></span>
+        <span class="mb-text"><span class="mb-title">${d.title}</span><span class="mb-sub">${d.sub}</span></span>`;
+      track.appendChild(extra);
+      const slides = [...track.children];
+      const dots = document.createElement('div');
+      dots.className = 'mb-dots';
+      dots.dataset.mbDots = aud;
+      dots.innerHTML = slides.map((_, i) => `<button type="button" aria-label="배너 ${i + 1}"></button>`).join('');
+      wrap.appendChild(dots);
+      let cur = 0;
+      const go = (i) => {
+        cur = (i + slides.length) % slides.length;
+        track.style.transform = `translateX(-${cur * 100}%)`;
+        dots.querySelectorAll('button').forEach((b, k) => b.setAttribute('aria-current', String(k === cur)));
+        // 화면 밖 배너는 키보드 초점이 가지 않게
+        slides.forEach((sl, k) => { sl.tabIndex = k === cur ? 0 : -1; sl.setAttribute('aria-hidden', String(k !== cur)); });
+      };
+      dots.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) go([...dots.children].indexOf(b)); });
+      go(0);
+      let hold = false;
+      wrap.addEventListener('mouseenter', () => (hold = true));
+      wrap.addEventListener('mouseleave', () => (hold = false));
+      wrap.addEventListener('focusin', () => (hold = true));
+      wrap.addEventListener('focusout', () => (hold = false));
+      if (!calmMotion.matches) mbTimers[aud] = setInterval(() => { if (!hold) go(cur + 1); }, 5000);
+      refreshIcons();
+    });
+  }
+  window.addEventListener('hashchange', setupMainBanners);
 
   function renderUidBoard() {
     const groups = uidGroups();
@@ -4378,6 +4458,7 @@
   document.getElementById('sheetSwitch').innerHTML = Object.entries(SHEETS)
     .map(([k, v]) => `<button data-sheet="${k}" class="h-8 px-2.5 rounded text-[12px] font-semibold">${v}</button>`).join('');
   heroBoost = (location.hash.match(/hboost=(\w+)/) || [])[1] || 'strip';
+  setupMainBanners();   // [11.02] 주소 banners=2면 웹 메인 배너 2개 + 위치 표시
   const initial = (location.hash.match(/state=(\w+)/) || [])[1];
   state = STATES[initial] ? initial : '1';
   // 옵션 · 페이백 챌린지 설정
@@ -4902,7 +4983,7 @@
       '출금할까요?': 'Withdraw now?', '합계 금액': 'Total', '취소': 'Cancel',
       '초대 보상을 받을 거래소나 UID를 바꾸려면 고객센터로 문의해 주세요': 'To change the exchange or UID for referral rewards, contact support',
       '출금 신청을 보냈어요': 'Your withdrawal request was sent', '출금이 끝나면 알려드릴게요': "We'll let you know when it's done", 'CEX 거래소 목록으로 이동해요': 'Going to CEX list', 'DEX 거래소 목록으로 이동해요': 'Going to DEX list',
-      '부스트 안내로 이동해요': 'Going to the boost guide',
+      '부스트 안내로 이동해요': 'Going to the boost guide', '등록한 링크로 이동해요': 'Going to the registered link',
       // 진행 중인 이벤트
       '진행 중인 이벤트': 'Live events', '이벤트 전체 보기': 'View all events',
       '거래소가 여는 이벤트와 테더맥스 혜택이에요.': 'Events run by exchanges, plus TetherMax rewards.',
@@ -5022,6 +5103,7 @@
       [/^(.+) ([0-9,.]+) USDT, 확인이 필요한 (?:UID|지갑주소) ([0-9]+)개$/, '$1 $2 USDT, $3 to resolve'],
       [/^([0-9]+)개$/, '$1'],
       [/^UID ([0-9]+)개$/, '$1 UIDs'],
+      [/^배너 ([0-9]+)$/, 'Banner $1'],
       [/^확인 필요 ([0-9]+)개$/, '$1 to resolve'],
       [/^· 확인 필요 ([0-9]+)개$/, '· $1 to resolve'],
       [/^확인이 필요한 UID가 ([0-9]+)개 있어요\.$/, '$1 UIDs to resolve.'],
