@@ -3,7 +3,7 @@
 const RAIL = '#railListSide ';
 const GROUPS = [
   { id: 'w-main', name: '메인 · 연동', plat: 'web', fig: 'MP-W01' },
-  { id: 'w-row', name: '연동한 거래소 줄 모듈 ①~⑧', plat: 'web', fig: '줄 모듈' },
+  { id: 'w-row', name: '연동한 거래소 줄 모듈 ①~⑨', plat: 'web', fig: '줄 모듈' },
   { id: 'w-un', name: '메인 · 미연동', plat: 'web', fig: 'MP-W01N' },
   { id: 'w-link', name: '거래소 연동', plat: 'web', fig: 'MP-W02' },
   { id: 'w-ex', name: '연동한 거래소 (편집 · 전체 보기)', plat: 'web', fig: 'MP-W03' },
@@ -79,6 +79,10 @@ const CASES = [
     data: [['예시', 'Bybit · UID 881204773 · 0.00']],
     look: [['금액 "0.00 USDT" 회색. 나머지 규칙은 그대로', RAIL + '[data-ud-group="Bybit"]'], ['Gate · WOO X Pro(접힘 줄)의 0.00도 회색', '#railListSide [data-rail-fold="Gate"]']],
     req: ['REQ-501', 'REQ-502'] },
+  { id: 'ROW-9', g: 'w-row', t: '⑨ DEX · 검토 중 (소유권 인증 진행 중)', vp: 'web', h: 'state=4', f: ['review'], s: [{ hl: RAIL + '[data-ud-group="Apex"]' }],
+    data: [['예시', 'Apex · 지갑 0x91c4…a07b · 검토 중 (06:46)'], ['플래그', 'review (첫 지갑 연동은 최대 24시간)']],
+    look: [['금액 자리에 [검토 중] 칩(파랑). 확인 필요 아님 → 경고 아이콘 · 사유 칩 없음', RAIL + '[data-ud-group="Apex"]'], ['줄 아래 안내 바: "소유권 인증 진행 중 · {시간}"', RAIL + '[data-rev-bar]'], ['머리 2줄 [검토 중 N] 칩 (확인 필요와 따로, 확인 필요 개수에 넣지 않음)', '[data-rail-head] [data-ex-rev]'], ['줄 선택 → 안내 토스트 (인증이 끝나야 상세)'], ['순서: 거래소 안에서 정상 → 검토 중 → 확인 필요']],
+    note: ['확인 중 (11.02): 안내 바 시간 값(06:46)의 의미 · 24시간이 지난 뒤 처리 · 인증 성공 / 실패 후 상태 · Claim 팝업 제외 여부. 프로토타입은 출금 목록에서 제외'] },
   { id: 'HEAD-0', g: 'w-row', t: '머리 줄 · 확인 필요 0', vp: 'web', h: 'state=4', f: ['noBad'],
     data: [['조건', '확인 필요 UID 0개 (WOO X Pro는 정상 UID 9개)'], ['플래그', 'noBad']],
     look: [['머리 줄 2줄째에 [확인 필요] 칩 없음, [편집]만', '[data-rail-head]'], ['전체 보기 팝업에도 [확인 필요] 필터칩 없음 (E03)', '[data-ud-pop]']],
@@ -137,6 +141,10 @@ const CASES = [
     data: [['진입', '레일 머리 줄 [확인 필요 4] 칩 (이 상태로 바로 열림)'], ['예시', WOO_BAD]],
     look: [['확인 필요 UID가 있는 거래소만, 펼친 상태로 확인 필요 UID 줄만 (정상 UID 숨김)', '[data-sheet="uidPick"] [data-ud-list]'], ['줄: 경고 아이콘 + UID + 사유 칩, 금액 없음. 선택 → 사유별 처리 안내', '[data-sheet="uidPick"] [data-ud-pick="7720431986"]'], ['[전체 N] 선택 → 전체 목록으로', '[data-sheet="uidPick"] [data-ud-filter="all"]']],
     req: ['REQ-505'], note: [ASIS_ISSUE] },
+  { id: 'MP-W03-f', g: 'w-ex', t: '전체 보기 · [검토 중] 필터', vp: 'web', h: 'state=4', f: ['review'], s: [{ click: '[data-rail-head] [data-ex-rev]' }],
+    data: [['진입', '레일 머리 줄 [검토 중 1] 칩 (이 상태로 바로 열림)'], ['예시', 'Apex 지갑 0x91c4…a07b']],
+    look: [['필터 칩 [전체 N] [확인 필요 N] [검토 중 N]. 검토 중 UID가 있는 거래소만, 그 줄만', '[data-sheet="uidPick"] [data-ud-filter="review"]'], ['줄: 지갑주소 + [검토 중] 칩, 금액 없음. 선택 → 안내 토스트', '[data-sheet="uidPick"] [data-ud-list] [data-ud-pick]']],
+    note: ['확인 중 (11.02): 안내 바 시간 값(06:46)의 의미 · 24시간이 지난 뒤 처리 · 인증 성공 / 실패 후 상태 · Claim 팝업 제외 여부. 프로토타입은 출금 목록에서 제외'] },
   { id: 'MP-W03-e', g: 'w-ex', t: '전체 보기 · 확인 필요 0', vp: 'web', h: 'state=4', f: ['noBad'], s: [{ click: '[data-ud-pop]' }],
     data: [['플래그', 'noBad']], look: [['[확인 필요] 필터칩 없음 → [확인 필요] 필터 상태 자체가 없음 (E03)', '[data-sheet="uidPick"] [data-ud-list]']], req: ['REQ-504', 'REQ-505'] },
 
@@ -281,6 +289,10 @@ const CASES = [
     data: [['진입', '메인 머리 줄 [확인 필요 4] 칩'], ['예시', WOO_BAD]],
     look: [['확인 필요 UID가 있는 거래소만, 그 UID만 펼쳐서', '[data-sheet="uidPick"] [data-ud-list]'], ['경고 아이콘 + UID + 사유 칩, 선택 → 사유별 처리 안내', '[data-sheet="uidPick"] [data-ud-pick="7720431986"]']],
     req: ['REQ-505'], note: [ASIS_ISSUE] },
+  { id: 'MP-M03-d', g: 'm-ex', t: '전체 보기 · [검토 중] 필터', vp: 'mobile', h: 'state=4', f: ['review'], s: [{ click: '[data-ex-rev]' }],
+    data: [['진입', '메인 머리 줄 [검토 중 1] 칩'], ['예시', 'Apex 지갑 0x91c4…a07b']],
+    look: [['검토 중 UID가 있는 거래소만, 지갑주소 + [검토 중] 칩', '[data-sheet="uidPick"] [data-ud-filter="review"]']],
+    note: ['확인 중 (11.02): 안내 바 시간 값(06:46)의 의미 · 24시간이 지난 뒤 처리 · 인증 성공 / 실패 후 상태 · Claim 팝업 제외 여부. 프로토타입은 출금 목록에서 제외'] },
 
   // ───────── 모바일 · UID 상세 ─────────
   { id: 'MP-M04-a', g: 'm-ud', t: 'UID 상세', vp: 'mobile', h: 'state=4&ud=all&ux=okx&uu=4471029&uo=okx',

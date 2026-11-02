@@ -736,6 +736,9 @@
           <a href="#" data-ex-warn hidden data-ud-entry="bad" class="shrink-0 h-[22px] pl-1.5 pr-2 rounded-full bg-warn/10 text-warn text-[12px] font-bold inline-flex items-center gap-1 whitespace-nowrap hover:bg-warn/15 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-warn">
             <i data-lucide="alert-triangle" class="w-3 h-3" aria-hidden="true"></i><span data-ex-warn-text></span>
           </a>
+          <a href="#" data-ex-rev hidden data-ud-entry="review" class="shrink-0 h-[22px] pl-1.5 pr-2 rounded-full bg-brand-soft text-brand text-[12px] font-bold inline-flex items-center gap-1 whitespace-nowrap hover:bg-brand/15 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+            <i data-lucide="clock" class="w-3 h-3" aria-hidden="true"></i><span data-ex-rev-text></span>
+          </a>
           <button type="button" data-ex-edit hidden data-open-sheet="exEdit" class="ml-auto shrink-0 -m-2 p-2 rounded text-[13px] font-semibold text-mute whitespace-nowrap hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">편집</button>
         </div>
         <div data-rail-ud-chips class="rail-ud-only basis-full items-center gap-1.5 pt-2"></div>
@@ -910,6 +913,9 @@
             <a href="#" data-ex-warn hidden data-ud-entry="bad" class="shrink-0 h-[22px] pl-1.5 pr-2 rounded-full bg-warn/10 text-warn text-[12px] font-bold inline-flex items-center gap-1 whitespace-nowrap hover:bg-warn/15 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-warn">
               <i data-lucide="alert-triangle" class="w-3 h-3" aria-hidden="true"></i><span data-ex-warn-text></span>
             </a>
+            <a href="#" data-ex-rev hidden data-ud-entry="review" class="shrink-0 h-[22px] pl-1.5 pr-2 rounded-full bg-brand-soft text-brand text-[12px] font-bold inline-flex items-center gap-1 whitespace-nowrap hover:bg-brand/15 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+              <i data-lucide="clock" class="w-3 h-3" aria-hidden="true"></i><span data-ex-rev-text></span>
+            </a>
             <button type="button" data-ex-edit hidden data-open-sheet="exEdit" class="ml-auto -m-2 p-2 rounded text-[13px] font-semibold text-mute whitespace-nowrap hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">편집</button>
           </div>
         </div>
@@ -991,6 +997,9 @@
           <div data-head-row2 class="mt-2.5 min-h-[22px] flex items-center justify-between gap-x-2">
             <a href="#" data-ex-warn hidden data-ud-entry="bad" class="shrink-0 h-[22px] pl-1.5 pr-2 rounded-full bg-warn/10 text-warn text-[12px] font-bold inline-flex items-center gap-1 whitespace-nowrap hover:bg-warn/15 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-warn">
               <i data-lucide="alert-triangle" class="w-3 h-3" aria-hidden="true"></i><span data-ex-warn-text></span>
+            </a>
+            <a href="#" data-ex-rev hidden data-ud-entry="review" class="shrink-0 h-[22px] pl-1.5 pr-2 rounded-full bg-brand-soft text-brand text-[12px] font-bold inline-flex items-center gap-1 whitespace-nowrap hover:bg-brand/15 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+              <i data-lucide="clock" class="w-3 h-3" aria-hidden="true"></i><span data-ex-rev-text></span>
             </a>
             <button type="button" data-ex-edit hidden data-open-sheet="exEdit" class="ml-auto -m-2 p-2 rounded text-[13px] font-semibold text-mute whitespace-nowrap hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">편집</button>
           </div>
@@ -1779,6 +1788,10 @@
       { uid: '0x7a3f4c2e9b1d8a6f0e3c5b7d9a1f2e4c6b8d5d6e', amt: '120.00', state: 'on', claimable: '120.00', cumulative: '120.00', srcExchange: '117.00', srcEvent: '3.00',
         daily: [20.00, 25.00, 30.00, 22.50, 22.50] },
     ] },
+    // [11.02] 검토 중(소유권 인증 진행 중) 지갑 예시. 데이터 플래그 review로만 연동 목록에 들어간다. revLeft = 안내 바 시간 값 (의미 확인 중)
+    apex: { total: '0.00', uids: [
+      { uid: '0x91c4e2b7d05a3f86c1e9b4d72a0f5c38e6d1a07b', amt: '0.00', state: 'review', revLeft: '06:46' },
+    ] },
     aster: { total: '6.80', uids: [
       { uid: '0xA57e3c91b04d8f62e15a7c0b9d34f8e2a61c5d07', amt: '6.80', state: 'on', claimable: '6.80', cumulative: '6.80', srcExchange: '6.80', srcEvent: '0.00',
         daily: [1.20, 1.40, 1.60, 1.30, 1.30] },
@@ -1932,7 +1945,7 @@
   let linkedEx = 'woo';
   // ===== [DEV] 케이스 데이터 플래그: 프로토타입 셸이 ?f=a,b 로 넘긴다 =====
   //   noBad 확인 필요 UID 0 · singleBad Bybit(UID 1개) 이용 제한 · dexMulti Lighter 지갑 2개
-  //   cexOnly CEX만 연동 · dexOnly DEX만 연동
+  //   cexOnly CEX만 연동 · dexOnly DEX만 연동 · review Apex 지갑 1개 검토 중(소유권 인증 진행 중)
   const DEV = (() => {
     const q = new URLSearchParams(location.search);
     return { f: new Set((q.get('f') || '').split(',').filter(Boolean)), nd: q.get('nd') === 'on' ? 'on' : 'off', os: q.get('os') === 'no' ? 'no' : 'yes' };
@@ -1952,7 +1965,7 @@
     if (bs === '4' && devOn('cexOnly')) return [linkedEx, linkedEx === 'bitget' ? 'woo' : 'bitget', 'gate', 'okx', 'bybit'];
     if (['ok', '2', '3'].includes(bs)) return [linkedEx];
     if (bs === '4' && regMid) return MID_IDS.slice();
-    if (bs === '4') return [linkedEx, linkedEx === 'bitget' ? 'woo' : 'bitget', 'gate', 'okx', 'lighter', 'bybit', 'aster'];
+    if (bs === '4') return [linkedEx, linkedEx === 'bitget' ? 'woo' : 'bitget', 'gate', 'okx', 'lighter', 'bybit', 'aster'].concat(devOn('review') ? ['apex'] : []);
     return [];
   };
 
@@ -2333,14 +2346,24 @@
     side: { ex: Infinity, uid: 3 },    // [3A] 데스크톱 레일. 연동한 거래소를 모두 보여준다 (좁아서 UID는 3개까지)
     panel: { ex: 3, uid: 6 },   // 모바일 본문 패널. 여유가 있다
   };
-  const badOf = (g) => g.uids.filter((u) => u.state !== 'on').length;
-  // 정상 UID가 위(금액 큰 순), 확인이 필요한 UID는 맨 아래.
-  // 사이드에서 잘려 안 보여도 머리줄 '확인 필요' 칩이 알려 준다
+  // [11.02] 검토 중(review) = 소유권 인증 진행 중. 확인 필요(문제 상태)가 아니라 확인 필요 개수 · 필터에 넣지 않는다
+  const isRev = (u) => u.state === 'review';
+  const isBad = (u) => u.state !== 'on' && !isRev(u);
+  const badOf = (g) => g.uids.filter(isBad).length;
+  const revOf = (g) => g.uids.filter(isRev).length;
+  // 검토 중 칩(파랑) · 안내 바 (DEX 프로젝트 화면 기준. 안내 바 시간 값의 의미는 확인 중)
+  const REV_CHIP = '<span class="shrink-0 h-5 px-2 rounded-full bg-brand-soft text-brand text-[11px] font-bold inline-flex items-center whitespace-nowrap">검토 중</span>';
+  const revBar = (u, cls) => `<p data-rev-bar class="${cls || ''} flex items-center gap-1.5 rounded-lg bg-brand-soft px-2.5 py-2 text-[12px] leading-snug text-brand-dark"><i data-lucide="info" class="w-3.5 h-3.5 shrink-0" aria-hidden="true"></i><span>소유권 인증 진행 중 · ${u.revLeft || ''}</span></p>`;
+  // 정상 UID가 위(금액 큰 순), 그다음 검토 중, 확인이 필요한 UID는 맨 아래.
+  // 사이드에서 잘려 안 보여도 머리줄 '확인 필요' · '검토 중' 칩이 알려 준다
+  const uidRank = (u) => (u.state === 'on' ? 0 : isRev(u) ? 1 : 2);
   const sortUids = (uids) => [...uids].sort((a, b) => {
-    const aBad = a.state !== 'on', bBad = b.state !== 'on';
-    if (aBad !== bBad) return aBad ? 1 : -1;
+    if (uidRank(a) !== uidRank(b)) return uidRank(a) - uidRank(b);
     return money(b.amt || '0') - money(a.amt || '0');
   });
+  // UID 줄 오른쪽: 정상 = 금액, 검토 중 = 검토 중 칩, 확인 필요 = 사유 칩
+  const uidRight = (u, amt) => (u.state === 'on' ? amt : isRev(u) ? REV_CHIP : reasonChip(u.state));
+  const WARN_ICON = '<i data-lucide="alert-triangle" class="w-[14px] h-[14px] shrink-0 text-warn" aria-hidden="true"></i><span class="sr-only">확인 필요:</span>';
   // DEX 뱃지 하나를 연동한 거래소 · UID 상세 목록 · 인기 거래소에서 같이 쓴다
   const DEX_BADGE = '<span class="dex-badge shrink-0 h-[16px] px-1 rounded bg-hair text-[10px] font-bold leading-[16px] text-mute" translate="no">DEX</span>';
   const exTags = (g) => `
@@ -2359,9 +2382,11 @@
     // [2H] UID 수와 상관없이 UID 상세 페이지로 바로 간다 (첫 정상 UID, 없으면 첫 확인 필요 UID)
     const single = g.uids.length === 1;
     const one = single;   // [Figma ①②] UID 1개면 정상 · 확인 필요 모두 아랫줄에 "UID 번호"
-    const oneBad = single && g.uids[0].state !== 'on';   // ② 금액 자리에 사유 칩
+    const oneBad = single && isBad(g.uids[0]);   // ② 금액 자리에 사유 칩
+    const oneRev = single && isRev(g.uids[0]);   // [11.02] 검토 중: 금액 자리에 검토 중 칩 + 줄 아래 안내 바
     const zero = money(g.total) === 0;   // ⑧ 잔액 0.00은 회색
-    const amtOr = (cls) => (oneBad ? reasonChip(g.uids[0].state) : `<span class="${cls} ${zero ? 'text-faint' : ''}">${amountHTML(g.total)}</span>`);
+    const amtOr = (cls) => (oneBad ? reasonChip(g.uids[0].state) : oneRev ? REV_CHIP : `<span class="${cls} ${zero ? 'text-faint' : ''}">${amountHTML(g.total)}</span>`);
+    const bar = oneRev ? revBar(g.uids[0], side ? 'mx-1 mb-1' : 'mb-2') : '';
     const go = `data-uid-detail data-ud-group="${g.ex}"`;
     // 모든 줄을 같은 모양으로: [로고] 거래소명 / 아랫줄 · 금액(오른쪽) · ›
     // 아랫줄은 UID 1개면 그 번호, 여러 개면 "UID N개" (연동한 거래소 팝업과 같은 표기)
@@ -2379,7 +2404,7 @@
           </span>
           ${amtOr('side-amt shrink-0 text-[13px] leading-tight text-body whitespace-nowrap')}
           ${chev}
-        </button>` : `
+        </button>${bar}` : `
         <button type="button" ${go} aria-label="${label}" class="group w-[calc(100%+16px)] min-h-14 py-2 flex items-center gap-3 -mx-2 px-2 rounded-lg hover:bg-hair transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand">
           ${mark}
           <!-- 이름은 자르지 않는다. 좁은 폭(480px 이하)에서는 금액을 이름 아랫줄 오른쪽으로 내린다 -->
@@ -2392,7 +2417,7 @@
           </span>
           <span class="max-[480px]:hidden shrink-0">${amtOr('text-[15px] leading-tight text-ink whitespace-nowrap')}</span>
           ${chev}
-        </button>`;
+        </button>${bar}`;
   }
 
   // [3A] 레일 목록 (아코디언). UID 1개 거래소는 지금 줄 그대로 (누르면 상세, 확인 필요면 바로 처리 모달).
@@ -2410,19 +2435,18 @@
     const ok = u.state === 'on';
     return `
           <li><button type="button" data-rail-pick="${u.uid}" data-ud-group="${g.ex}" ${on ? 'aria-current="true" data-rail-cur' : ''} class="w-full flex items-center gap-2 pl-[42px] pr-1 py-1.5 rounded-lg text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand ${on ? RAIL_SEL : 'hover:bg-hair'}">
-            ${ok ? '' : '<i data-lucide="alert-triangle" class="w-[14px] h-[14px] shrink-0 text-warn" aria-hidden="true"></i><span class="sr-only">확인 필요:</span>'}
+            ${isBad(u) ? WARN_ICON : ''}
             <span class="min-w-0 flex-1 truncate text-[12px] tnum ${ok ? 'text-mute' : 'text-body'}" translate="no">${keyText(g, u)}</span>
-            ${ok
-              ? `<span class="side-amt shrink-0 text-[12px] whitespace-nowrap ${u.amt === '0.00' ? 'text-faint' : 'text-body'}">${amountHTML(u.amt || '0.00')}</span>`
-              : `<span class="shrink-0 h-5 px-2 rounded-full bg-warn/10 text-warn text-[11px] font-bold inline-flex items-center whitespace-nowrap">${reasonLabel(u.state)}</span>`}
+            ${uidRight(u, `<span class="side-amt shrink-0 text-[12px] whitespace-nowrap ${u.amt === '0.00' ? 'text-faint' : 'text-body'}">${amountHTML(u.amt || '0.00')}</span>`)}
           </button></li>`;
   };
   function railListHTML(groups) {
     const cur = uidPageOpen && udCur ? udCur : null;
     // [3A] UID 상세 [확인 필요] 칩: 확인 필요 UID가 있는 거래소만, 그 UID들만 펼쳐 보인다 (누르면 바로 처리 모달)
-    if (uidPageOpen && udFilter === 'bad') {
-      return groups.filter((g) => badOf(g)).map((g) => {
-        const bads = sortUids(g.uids).filter((u) => u.state !== 'on');
+    if (uidPageOpen && (udFilter === 'bad' || udFilter === 'review')) {
+      const pickF = udFilter === 'review' ? isRev : isBad;
+      return groups.filter((g) => g.uids.some(pickF)).map((g) => {
+        const bads = sortUids(g.uids).filter(pickF);
         return `
       <li>
         <div class="flex items-center gap-2.5 px-1 py-2">
@@ -2475,8 +2499,9 @@
       const gs = linkedOrder();
       const total = gs.reduce((n, g) => n + g.uids.length, 0);
       const badN = gs.reduce((n, g) => n + badOf(g), 0);
-      if (!badN && udFilter === 'bad') udFilter = 'all';
-      chipBox.innerHTML = uidPageOpen ? udChipHTML('all', '전체', total) + (badN ? udChipHTML('bad', '확인 필요', badN) : '') : '';
+      const revN = gs.reduce((n, g) => n + revOf(g), 0);
+      if ((!badN && udFilter === 'bad') || (!revN && udFilter === 'review')) udFilter = 'all';
+      chipBox.innerHTML = uidPageOpen ? udChipHTML('all', '전체', total) + (badN ? udChipHTML('bad', '확인 필요', badN) : '') + (revN ? udChipHTML('review', '검토 중', revN) : '') : '';
     }
     box.innerHTML = railListHTML(linkedOrder());
     refreshIcons();
@@ -2500,7 +2525,7 @@
     const g = uidGroups().find((x) => x.ex === pick.dataset.udGroup);
     const u = g && g.uids.find((x) => x.uid === pick.dataset.railPick);
     if (!g || !u) return;
-    if (u.state !== 'on') { showIssueToast(u.state); return; }   // 확인 필요: 바로 처리 모달
+    if (u.state !== 'on') { showIssueToast(u.state); return; }   // 확인 필요: 바로 처리 모달 (검토 중은 안내 토스트)
     openUidPage(g, u);
   });
 
@@ -2524,11 +2549,9 @@
     const shown = sorted.length <= cap.uid ? sorted : sorted.slice(0, cap.uid - 1);
     const uidRow = (u) => `
           <li class="flex items-center gap-2 py-1.5">
-            ${u.state === 'on' ? '' : '<i data-lucide="alert-triangle" class="w-[14px] h-[14px] shrink-0 text-warn" aria-hidden="true"></i><span class="sr-only">확인 필요:</span>'}
-            <span class="min-w-0 ${u.state === 'on' ? 'flex-1 text-mute' : 'text-body'} text-[13px] truncate tnum" translate="no">${keyText(g, u)}</span>
-            ${u.state === 'on'
-              ? `<span class="shrink-0 text-[13px] whitespace-nowrap ${u.amt === '0.00' ? 'text-faint' : 'text-body'}">${amountHTML(u.amt || '0.00')}</span>`
-              : reasonChip(u.state)}
+            ${isBad(u) ? WARN_ICON : ''}
+            <span class="min-w-0 ${u.state === 'on' ? 'flex-1 text-mute' : 'flex-1 text-body'} text-[13px] truncate tnum" translate="no">${keyText(g, u)}</span>
+            ${uidRight(u, `<span class="shrink-0 text-[13px] whitespace-nowrap ${u.amt === '0.00' ? 'text-faint' : 'text-body'}">${amountHTML(u.amt || '0.00')}</span>`)}
           </li>`;
     return `
       <li>${exRow(g, side)}
@@ -2550,6 +2573,7 @@
     off: '연동 해제 사유 확인을 진행해요',
     manual: '수동연동 실패 처리를 진행해요',
     expired: '안내 페이지로 이동해요',
+    review: '소유권 인증이 진행 중이에요',   // [11.02] 검토 중 지갑을 누르면 (상세는 인증이 끝난 뒤)
   };
   let issueTimer = null;
   function showIssueToast(stateKey) { showMockToast(ISSUE_TOAST[stateKey]); }
@@ -2978,7 +3002,8 @@
   function renderUidBoard() {
     const groups = uidGroups();
     // 확인이 필요한 UID가 있으면 경고 줄이 목록 자리 하나를 가져간다
-    const badAll = groups.reduce((a, g) => a + g.uids.filter((u) => u.state !== 'on').length, 0);
+    const badAll = groups.reduce((a, g) => a + badOf(g), 0);
+    const revAll = groups.reduce((a, g) => a + revOf(g), 0);   // [11.02] 검토 중 칩 (확인 필요와 따로)
     // [3A] 순서: 편집 순서(없으면 잔액 높은 순 · 같으면 최근 연동). 레일 · 모바일 목록 · 전체 보기 모두 같다
     const sorted = linkedOrder();
     // 편집은 거래소가 2곳 이상일 때만
@@ -2989,7 +3014,9 @@
     document.querySelectorAll('[data-ex-warn]').forEach((el) => { el.hidden = !badAll; });
     document.querySelectorAll('[data-ex-warn-text]').forEach((el) => { el.textContent = '확인 필요 ' + badAll; });
     document.querySelectorAll('[data-ex-warn-n]').forEach((el) => { el.textContent = String(badAll); });
-    document.querySelectorAll('[data-head-row2]').forEach((el) => { el.hidden = !badAll && groups.length < 2; });
+    document.querySelectorAll('[data-ex-rev]').forEach((el) => { el.hidden = !revAll; });
+    document.querySelectorAll('[data-ex-rev-text]').forEach((el) => { el.textContent = '검토 중 ' + revAll; });
+    document.querySelectorAll('[data-head-row2]').forEach((el) => { el.hidden = !badAll && !revAll && groups.length < 2; });
 
     document.querySelectorAll('[data-ex-all]').forEach((el) => {
       el.textContent = groups.length > EX_SHOW.panel.ex ? groups.length + '곳 전체 보기' : '전체 보기';
@@ -4004,7 +4031,7 @@
   // [2I] UID가 1개여도 같은 "왼쪽 목록 + 오른쪽 상세" 구조 (1279px 이하는 UID 전환 버튼). 연동 UID가 있으면 늘 목록을 둔다
   const udMulti = () => uidGroups().reduce((a, g) => a + g.uids.length, 0) >= 1;
   let udOpenEx = new Set();   // 목록에서 펼친 거래소
-  let udFilter = 'all';       // [2H] 목록 필터: 'all' 전체 | 'bad' 확인 필요
+  let udFilter = 'all';       // [2H] 목록 필터: 'all' 전체 | 'bad' 확인 필요 | 'review' 검토 중 (11.02)
   // 확인 필요 UID 전부. 사유 순서(이용 제한 → 인증 실패 → 연동 해제 → 수동연동 실패), 같은 사유 안에서는 거래소 순서
   const udBadList = () => REASON_ORDER.flatMap((k) => linkedOrder().flatMap((g) => sortUids(g.uids).filter((u) => u.state === k).map((u) => ({ g, u }))));
   function paintUdMode() {
@@ -4062,24 +4089,25 @@
     const groups = linkedOrder();
     const total = groups.reduce((a, g) => a + g.uids.length, 0);
     const badN = groups.reduce((a, g) => a + badOf(g), 0);
-    if (!badN) udFilter = 'all';
+    const revN = groups.reduce((a, g) => a + revOf(g), 0);
+    if ((!badN && udFilter === 'bad') || (!revN && udFilter === 'review')) udFilter = 'all';
     const isCur = (g, u) => !!cur0 && cur0.g.ex === g.ex && cur0.u.uid === u.uid;
     // [3A] 정상 UID를 고르면 오른쪽이 바뀌고, 확인 필요 UID를 고르면 처리 모달만 뜬다
     const act = (g, u, cur) => `data-ud-pick="${u.uid}" data-ud-group="${g.ex}" aria-current="${cur ? 'true' : 'false'}" ${cur ? 'data-ud-cur' : ''}`;
     const right = (u, cur) => {
-      if (u.state === 'on') return `<span class="shrink-0 text-[12px] whitespace-nowrap ${money(u.amt || '0') === 0 ? 'text-faint' : 'text-mute'}">${amountHTML(u.amt || '0.00')}</span>`;
-      return reasonChip(u.state);
+      return uidRight(u, `<span class="shrink-0 text-[12px] whitespace-nowrap ${money(u.amt || '0') === 0 ? 'text-faint' : 'text-mute'}">${amountHTML(u.amt || '0.00')}</span>`);
     };
     const chip = udChipHTML;
     // [2I] 필터 칩(전체 · 확인 필요)은 목록 위에 붙어 있어 목록을 스크롤해도 늘 보인다
     // [2I] 확인 필요 UID가 없으면 고를 것이 없어 칩 줄 자체를 두지 않는다
-    const chips = badN ? `<div class="sticky top-0 z-10 bg-white flex items-center gap-1.5 px-1 pt-1 pb-2">${chip('all', '전체', total)}${chip('bad', '확인 필요', badN)}</div>` : '';
+    const chips = badN || revN ? `<div class="sticky top-0 z-10 bg-white flex flex-wrap items-center gap-1.5 px-1 pt-1 pb-2">${chip('all', '전체', total)}${badN ? chip('bad', '확인 필요', badN) : ''}${revN ? chip('review', '검토 중', revN) : ''}</div>` : '';
 
     let body;
-    if (udFilter === 'bad') {
-      // 확인 필요 UID가 있는 거래소만, 펼친 상태로 확인 필요 UID 줄만 (경고 아이콘 + UID + 사유 칩, 금액 없음)
-      body = groups.filter((g) => badOf(g)).map((g) => {
-        const bads = sortUids(g.uids).filter((u) => u.state !== 'on');
+    if (udFilter === 'bad' || udFilter === 'review') {
+      // 확인 필요(검토 중) UID가 있는 거래소만, 펼친 상태로 그 UID 줄만 (확인 필요: 경고 아이콘 + UID + 사유 칩 / 검토 중: UID + 검토 중 칩, 금액 없음)
+      const pickF = udFilter === 'review' ? isRev : isBad;
+      body = groups.filter((g) => g.uids.some(pickF)).map((g) => {
+        const bads = sortUids(g.uids).filter(pickF);
         return `
         <div class="py-0.5">
           <div class="w-full flex items-center gap-2.5 px-2 py-2">
@@ -4091,9 +4119,9 @@
           </div>
           <ul class="pb-1">${bads.map((u) => `
             <li><button type="button" ${act(g, u, false)} class="w-full flex items-center gap-2 pl-11 pr-2 py-2 rounded-lg text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand ${HOV}">
-              <i data-lucide="alert-triangle" class="w-[14px] h-[14px] shrink-0 text-warn" aria-hidden="true"></i><span class="sr-only">확인 필요:</span>
+              ${isBad(u) ? WARN_ICON : ''}
               <span class="min-w-0 flex-1 truncate text-[13px] tnum text-body" translate="no">${keyText(g, u)}</span>
-              ${reasonChip(u.state)}
+              ${uidRight(u, '')}
             </button></li>`).join('')}
           </ul>
         </div>`;
@@ -4133,7 +4161,7 @@
           const cur = isCur(g, u);
           return `
           <li><button type="button" ${act(g, u, cur)} class="w-full flex flex-wrap items-center gap-x-2 gap-y-0.5 pl-11 pr-8 py-2 rounded-lg text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand ${cur ? SEL : HOV}">
-            ${u.state !== 'on' ? '<i data-lucide="alert-triangle" class="w-[14px] h-[14px] shrink-0 text-warn" aria-hidden="true"></i><span class="sr-only">확인 필요:</span>' : ''}<span class="whitespace-nowrap text-[13px] tnum text-body" translate="no">${keyText(g, u)}</span><span class="ml-auto">${right(u, cur)}</span>
+            ${isBad(u) ? WARN_ICON : ''}<span class="whitespace-nowrap text-[13px] tnum text-body" translate="no">${keyText(g, u)}</span><span class="ml-auto">${right(u, cur)}</span>
           </button></li>`;
         }).join('');
         // 보고 있는 거래소를 접어도 어디를 보는지 알 수 있게 거래소 줄에 연한 강조를 남긴다
@@ -4283,7 +4311,7 @@
       e.preventDefault();
       const g0 = linkedOrder()[0];
       udOpenEx = new Set(g0 && g0.uids.length > 1 ? [g0.ex] : []);
-      udFilter = entry.dataset.udEntry === 'bad' ? 'bad' : 'all';
+      udFilter = ['bad', 'review'].includes(entry.dataset.udEntry) ? entry.dataset.udEntry : 'all';   // [11.02] [검토 중 N] 칩 → 검토 중 필터
       openSheet('uidPick');
       return;
     }
@@ -4489,7 +4517,7 @@
       if (u.state !== 'on') u = firstOf(g);   // [3A] 상세는 정상 UID만 보여준다
       const uo = hv('uo') || '';
       const open = uo === 'none' ? [] : uo ? uo.split('.').map(byKey).filter(Boolean).map((x) => x.ex) : [g.ex];
-      udFilter = hv('ud') === 'bad' ? 'bad' : 'all';
+      udFilter = ['bad', 'review'].includes(hv('ud')) ? hv('ud') : 'all';
       if (u.state === 'on') openUidPage(g, u, open);
     }
   }
@@ -4932,6 +4960,7 @@
       '연동할 거래소 고르기': 'Pick an exchange to link',
       '계정 추가': 'Add account',
       '지갑주소': 'Wallet address',
+      '검토 중': 'Under review', '소유권 인증이 진행 중이에요': 'Ownership verification in progress',
       '인증 실패': 'Verification failed', '연동 해제': 'Unlinked', '연동 실패': 'Link failed',
       '소유권 재인증': 'Re-verify', '자세히 보기': 'View details', '사유 확인': 'See why', '요청됨': 'Requested',
       '소유권 인증에 실패했습니다.': 'Ownership check failed.', 'UID의 연동이 해제되었습니다.': 'This UID was unlinked.', 'UID 연동에 실패했습니다.': 'UID linking failed.', '확인이 필요한 UID입니다.': 'This UID needs a review.',
@@ -5069,6 +5098,8 @@
       [/^([0-9]+)곳 전체 보기$/, 'View all $1'],
       [/^([0-9,.]+) USDT가 적립됐어요$/, '$1 USDT has been credited'],
       [/^확인 필요 ([0-9]+)$/, 'To resolve $1'],
+      [/^검토 중 ([0-9]+)$/, 'Under review $1'],
+      [/^소유권 인증 진행 중 · (.*)$/, 'Ownership verification in progress · $1'],
       [/^(.+) 순서 바꾸기$/, 'Reorder $1'],
       [/^지갑주소 ([0-9]+)개$/, '$1 wallets'],
       [/^최대 ([0-9,]+) USDT$/, 'Up to $1 USDT'],

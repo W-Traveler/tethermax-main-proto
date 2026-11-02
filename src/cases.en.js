@@ -1,7 +1,7 @@
 // 셸 EN 전환용: 케이스 · 묶음 · 변경 사항 문구 (키 = 국문 원문). cases.js 문구를 바꾸면 여기도 같이 고친다 (점검 스크립트가 빠진 문구를 잡는다)
 const CASES_EN = {
  "메인 · 연동": "Main · Linked",
- "연동한 거래소 줄 모듈 ①~⑧": "Linked exchange row module ①–⑧",
+ "연동한 거래소 줄 모듈 ①~⑨": "Linked exchange row module ①–⑨",
  "메인 · 미연동": "Main · Not linked",
  "거래소 연동": "Link exchange",
  "연동한 거래소 (편집 · 전체 보기)": "Linked exchanges (Edit · View all)",
@@ -224,4 +224,15 @@ const CASES_EN = {
   "CEX 모듈 없이 DEX 모듈만": "DEX module only, no CEX module",
   "현행 출금 확인 창 → 확인하면 CEX · DEX 출금 가능 UID · 지갑 전체를 한 번에 신청. 목록 CEX 먼저, DEX 지갑이 있으면 네트워크 표시": "As-is claim confirm window → on confirm, all claimable CEX UIDs · DEX wallets are requested at once. List shows CEX first; network shown when DEX wallets are included",
   "탭 없음. CEX 모듈 → DEX 모듈. 구성 · ⓘ 정책은 웹 MP-W05와 같음": "No tabs. CEX module → DEX module. Layout · ⓘ policy same as web MP-W05",
+  "⑨ DEX · 검토 중 (소유권 인증 진행 중)": "⑨ DEX · Under review (ownership verification in progress)",
+  "금액 자리에 [검토 중] 칩(파랑). 확인 필요 아님 → 경고 아이콘 · 사유 칩 없음": "[Under review] chip (blue) in the amount slot. Not a To-resolve state → no warning icon · reason chip",
+  "줄 아래 안내 바: \"소유권 인증 진행 중 · {시간}\"": "Info bar under the row: \"Ownership verification in progress · {time}\"",
+  "머리 2줄 [검토 중 N] 칩 (확인 필요와 따로, 확인 필요 개수에 넣지 않음)": "Header line 2 [Under review N] chip (separate from To resolve, not counted in To resolve)",
+  "줄 선택 → 안내 토스트 (인증이 끝나야 상세)": "Row tap → info toast (details after verification)",
+  "순서: 거래소 안에서 정상 → 검토 중 → 확인 필요": "Order within an exchange: normal → under review → to resolve",
+  "확인 중 (11.02): 안내 바 시간 값(06:46)의 의미 · 24시간이 지난 뒤 처리 · 인증 성공 / 실패 후 상태 · Claim 팝업 제외 여부. 프로토타입은 출금 목록에서 제외": "To confirm (11.02): meaning of the info bar time (06:46) · what happens after 24 hours · state after success / failure · whether it is excluded from the Claim popup. The prototype excludes it from the claim list",
+  "전체 보기 · [검토 중] 필터": "View all · [Under review] filter",
+  "필터 칩 [전체 N] [확인 필요 N] [검토 중 N]. 검토 중 UID가 있는 거래소만, 그 줄만": "Filter chips [All N] [To resolve N] [Under review N]. Only exchanges with under-review items, only those rows",
+  "줄: 지갑주소 + [검토 중] 칩, 금액 없음. 선택 → 안내 토스트": "Row: wallet address + [Under review] chip, no amount. Tap → info toast",
+  "검토 중 UID가 있는 거래소만, 지갑주소 + [검토 중] 칩": "Only exchanges with under-review items, wallet address + [Under review] chip",
 };
