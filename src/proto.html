@@ -1639,7 +1639,7 @@
      768px 이상은 가운데 팝업, 767px 이하는 화면 전체 페이지. 위 총액 카드와 아래 버튼은 고정, 가운데 목록만 스크롤 -->
 <div id="wdPop" hidden class="fixed inset-0 z-[58]">
   <div class="sheet-dim hidden md:block absolute inset-0 bg-ink/40" data-wd-close></div>
-  <div role="dialog" aria-modal="true" aria-labelledby="wdTitle" class="absolute inset-0 bg-white flex flex-col md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[480px] md:h-[min(94vh,960px)] md:rounded-xl md:shadow-[0_24px_60px_-20px_rgba(12,10,9,0.4)]">
+  <div role="dialog" aria-modal="true" aria-labelledby="wdTitle" class="absolute inset-0 bg-white flex flex-col md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[600px] md:max-w-[calc(100vw-48px)] md:h-[min(94vh,960px)] md:rounded-xl md:shadow-[0_24px_60px_-20px_rgba(12,10,9,0.4)]">
     <div class="shrink-0 h-14 md:h-16 px-3 md:px-6 flex items-center gap-2">
       <button type="button" data-wd-close aria-label="뒤로" class="md:hidden w-10 h-10 shrink-0 rounded grid place-items-center text-ink hover:bg-hair transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand"><i data-lucide="arrow-left" class="w-5 h-5" aria-hidden="true"></i></button>
       <h2 id="wdTitle" class="min-w-0 flex-1 text-center md:text-left text-[17px] md:text-[19px] font-bold tracking-[-0.03em] text-ink">출금하기</h2>
@@ -2669,7 +2669,9 @@
   //   줄마다 세부 금액이 늘 보인다: 묶음 1은 이번 출금분, 묶음 2는 지금 보유한 금액
   //   [2I] 출금 정책은 "출금 가능 UID N개" 오른쪽 ⓘ 말풍선 하나로 (모듈마다)
   const WD_MIN = 10;
-  const DEX_NETWORK = 'Arbitrum One';   // DEX 페이백을 보내는 네트워크. 출금 팝업 · 확인 창 · 완료가 모두 이 값을 쓴다
+  const DEX_NETWORK = 'BNB Smart Chain (BEP20)';   // [11.02 DEX 프로젝트 MP-W05-A] DEX 페이백을 보내는 네트워크. 출금 팝업 하단 · 확인 창 · 완료가 모두 이 값을 쓴다
+  // [11.02 DEX 프로젝트 MP-W05-A] DEX 거래소별 페이백 반영 주기 (카드 맨 아래 줄)
+  const WD_UPDATE = { Lighter: '매주 월요일', Apex: '매시간', EdgeX: '매일 00:00 UTC', Aster: '매일 09:00 UTC' };
   let wdView = 'list';   // list | done
   let wdAt = null;
   const wdG2Open = { cex: false, dex: false };   // 모듈마다 출금 불가 묶음 펼침
@@ -2765,47 +2767,67 @@
       refreshIcons();
       return;
     }
-    // 위 총액 카드: CEX + DEX 이번에 출금되는 합계
+    // [11.02] DEX 프로젝트 MP-W05-A를 그대로 옮김: 총액 카드 → 섹션(CEX 거래소 · DEX 거래소)마다 계정 카드 한 목록 → 고정 하단
+    //   (이전 구성의 묶음 접기 · 출금 정책 ⓘ · 받는 곳 · 이번/다음 출금 줄은 없음)
     top.hidden = false;
     top.innerHTML = `
-      <div class="rounded-[10px] bg-[#F7F7F6] p-4">
-        <p class="text-[13px] text-mute">출금 가능한 페이백</p>
-        <p class="mt-1 text-[26px] leading-tight text-ink whitespace-nowrap">${wdAmt(total)}</p>
+      <div class="rounded-[10px] border border-line p-4">
+        <p class="text-[12px] text-mute" data-en="Total Available Cashback">출금 가능한 페이백</p>
+        <p class="mt-1 text-[24px] leading-tight text-ink whitespace-nowrap">${wdAmt(total)}</p>
       </div>`;
-    const need = (c) => `거래소 페이백 ${usd(c.need)} USDT 더 필요`;
-    // [11.02] 모듈: CEX → DEX 순서, 연동한 유형만. 모듈 안 구성은 이전 탭 화면과 같음
-    const mod = (k) => {
-      const items = all.filter((c) => (k === 'dex') === !!c.g.dex);
-      const ok = items.filter((c) => c.ok), no = items.filter((c) => !c.ok);
-      const wdKey = k === 'dex' ? '지갑' : 'UID';
-      // [2I] 출금 정책 말풍선 (모듈마다 하나, "출금 가능 UID · 지갑" 오른쪽 ⓘ)
-      const policy = k === 'dex'
-        ? ['지갑별 출금 금액이 10 USDT 이상이면 출금돼요', '이벤트 리워드는 같은 지갑의 거래소 페이백만큼까지 함께 출금돼요', '출금 가능한 지갑은 한 번에 모두 출금돼요']
-        : ['UID별 출금 금액이 10 USDT 이상이면 출금돼요', '이벤트 리워드는 같은 UID의 거래소 페이백만큼까지 함께 출금돼요', '출금 가능한 UID는 한 번에 모두 출금돼요'];
-      const tip = `<span class="tip tip-start align-middle ml-0.5"><button type="button" data-tip aria-expanded="false" aria-label="출금 정책" class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"><i data-lucide="info" class="w-[15px] h-[15px]" aria-hidden="true"></i></button><span role="tooltip"><span class="block font-bold">출금 정책</span><span class="mt-1 block space-y-0.5">${policy.map((t) => `<span class="flex gap-1.5"><span aria-hidden="true">·</span><span>${t}</span></span>`).join('')}</span></span></span>`;
-      const open = wdG2Open[k];
+    // 계정 상태 칩: 출금 가능(초록) / 10 USDT 미만은 CEX "최소 금액 미달", DEX "출금 불가" (DEX 프로젝트 화면 표기. 구분 기준 확인 중)
+    const chip = (c) => (c.ok
+      ? '<span data-wd-chip class="shrink-0 h-[18px] px-1.5 rounded bg-gain/10 text-[11px] leading-[18px] text-gain whitespace-nowrap" data-en="Available">출금 가능</span>'
+      : c.g.dex
+        ? '<span data-wd-chip class="shrink-0 h-[18px] px-1.5 rounded bg-hair text-[11px] leading-[18px] text-mute whitespace-nowrap" data-en="Unavailable">출금 불가</span>'
+        : '<span data-wd-chip class="shrink-0 h-[18px] px-1.5 rounded bg-hair text-[11px] leading-[18px] text-mute whitespace-nowrap" data-en="Below minimum">최소 금액 미달</span>');
+    const line = (k, v, en) => `<p class="flex items-baseline justify-between gap-3 text-[12px]"><span class="text-mute">${k}</span><span class="text-body whitespace-nowrap">${v}</span></p>`;
+    const card = (c) => {
+      // 출금 가능: 이번 출금분(거래소 페이백 + 거래소 페이백만큼까지의 이벤트 리워드) / 출금 불가: 지금 보유 금액
+      const ex = c.ok ? c.wdEx : c.ex, ev = c.ok ? c.wdEv : c.ev, amt = c.ok ? c.amt : c.bal;
+      const upd = c.g.dex && WD_UPDATE[c.g.ex] ? `
+          <p data-wd-upd class="mt-3 flex items-center justify-between gap-3 text-[12px]"><span class="inline-flex items-center gap-1 text-mute"><span data-en="Cashback updates">페이백 반영 주기</span><i data-lucide="info" class="w-3.5 h-3.5" aria-hidden="true"></i></span><span class="font-semibold text-body whitespace-nowrap">${WD_UPDATE[c.g.ex]}</span></p>` : '';
       return `
-      <section data-wd-mod="${k}" class="${k === 'dex' && has.cex ? 'mt-5 pt-5 border-t border-line' : ''}">
-        <h3 class="text-[15px] font-bold text-ink" translate="no">${k.toUpperCase()}</h3>
-        ${ok.length ? `
-        <div class="mt-2">
-          <p class="flex items-center text-[13px] font-semibold text-body"><span>출금 가능 ${wdKey} ${ok.length}개</span>${tip}</p>
-          <ul class="mt-1">${ok.map((c) => wdRow(c, `<span class="shrink-0 text-[15px] text-ink whitespace-nowrap">${wdAmt(c.amt)}</span>`)).join('')}</ul>
-        </div>` : ''}
-        ${no.length ? `
-        <div class="${ok.length ? 'mt-3 pt-3 border-t border-line' : 'mt-2'}">
-          <button type="button" data-wd-g2="${k}" aria-expanded="${open}" class="w-full py-1.5 flex items-center justify-between gap-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">
-            <span class="text-[13px] font-semibold text-body">출금 불가 ${wdKey} ${no.length}개</span>
-            <i data-lucide="chevron-down" class="w-4 h-4 shrink-0 text-faint transition-transform ${open ? 'rotate-180' : ''}" aria-hidden="true"></i>
-          </button>
-          ${open ? `<ul class="mt-1">${no.map((c) => wdRow(c, `<span class="shrink-0 max-w-[46%] text-right text-[12px] leading-snug text-mute break-keep">${need(c)}</span>`)).join('')}</ul>` : ''}
-        </div>` : ''}
+        <li data-wd-card data-ok="${c.ok ? 1 : 0}" class="rounded-lg border border-line p-4">
+          <div class="flex items-center gap-2.5">
+            ${logo(c.g.ex, 'w-7 h-7 text-[10px] rounded-full')}
+            <span class="min-w-0 flex-1">
+              <span class="block text-[14px] font-semibold text-ink whitespace-nowrap" translate="no">${c.g.ex}</span>
+              <span class="block mt-0.5 text-[12px] text-mute tnum whitespace-nowrap">${c.g.dex ? '<span>지갑</span> <span translate="no">' + shortAddr(c.u.uid) + '</span>' : '<span translate="no">UID ' + c.u.uid + '</span>'}</span>
+            </span>
+            ${chip(c)}
+          </div>
+          <p class="mt-3 flex items-baseline justify-between gap-3"><span class="text-[14px] text-ink" data-en="Available Cashback">출금 가능 페이백</span><span class="text-[14px] text-ink whitespace-nowrap">${wdAmt(amt)}</span></p>
+          <div class="mt-3 pt-3 border-t border-line space-y-1">
+            ${line('거래소 페이백', wdAmt(ex))}
+            ${line('이벤트 리워드', wdAmt(ev))}
+          </div>${upd}
+        </li>`;
+    };
+    // 섹션 안 순서: 출금 가능 먼저(금액 높은 순), 그다음 10 USDT 미만 (보유 높은 순)
+    const sec = (k) => {
+      const list = all.filter((c) => (k === 'dex') === !!c.g.dex).sort((a, b) => (b.ok - a.ok) || (b.ok ? b.amt - a.amt : b.bal - a.bal));
+      if (!list.length) return '';
+      return `
+      <section data-wd-mod="${k}" class="${k === 'dex' ? 'mt-5' : ''}">
+        <h3 class="text-[12px] text-mute" data-en="${k === 'dex' ? 'Decentralised Exchanges' : 'Centralised Exchanges'}">${k === 'dex' ? 'DEX 거래소' : 'CEX 거래소'}</h3>
+        <ul class="mt-2 space-y-3">${list.map(card).join('')}</ul>
       </section>`;
     };
-    body.innerHTML = (has.cex ? mod('cex') : '') + (has.dex ? mod('dex') : '');
-    foot.innerHTML = okAll.length
-      ? `<button type="button" data-wd-ask class="${btnPrimary}">${usd(total)} USDT 출금하기</button>`
-      : '<p class="h-12 rounded bg-hair text-[14px] font-semibold text-mute grid place-items-center">출금 가능한 페이백이 없어요</p>';
+    body.innerHTML = sec('cex') + sec('dex');
+    // 고정 하단: DEX 계정이 있으면 네트워크 · 수수료 / 10 USDT 미만 계정이 있으면 안내 / [출금하기] (출금 가능이 없으면 비활성)
+    const hasDex = all.some((c) => c.g.dex);
+    const under = all.some((c) => !c.ok);
+    const note = !okAll.length
+      ? '<p data-wd-note class="text-[12px] leading-relaxed text-mute text-center break-keep">출금할 수 있는 계정이 아직 없어요. 이벤트 리워드는 같은 계정의 페이백과 1:1로 함께 출금되고, 계정마다 10 USDT 이상이어야 해요.</p>'
+      : under ? '<p data-wd-note class="text-[12px] leading-relaxed text-mute text-center break-keep">계정마다 10 USDT 이상이어야 해요. 10 USDT 미만 계정은 이번 출금에서 빠져요.</p>' : '';
+    foot.innerHTML = `
+      ${hasDex ? `<div data-wd-net class="space-y-1 text-[12px]">
+        <p class="flex items-baseline justify-between gap-3"><span class="text-mute">네트워크</span><span class="text-body" translate="no">${DEX_NETWORK}</span></p>
+        <p class="flex items-baseline justify-between gap-3"><span class="text-mute">네트워크 수수료</span><span class="text-body">테더맥스가 전액 부담</span></p>
+      </div>` : ''}
+      ${note ? `<div class="${hasDex ? 'mt-2' : ''}">${note}</div>` : ''}
+      <button type="button" ${okAll.length ? 'data-wd-ask' : 'disabled aria-disabled="true"'} class="${hasDex || note ? 'mt-3 ' : ''}${okAll.length ? btnPrimary : 'w-full h-12 rounded bg-hair text-[15px] font-semibold text-faint cursor-not-allowed'}"><span data-en="Confirm Claim">출금하기</span></button>`;
     refreshIcons();
     fitWdTip();
   }
@@ -4737,8 +4759,9 @@
         }
         if (sp.wd) {
           openWd();
-          if (sp.g2) { wdG2Open[sp.wd] = true; paintWd(); refreshIcons(); }
           await wait(80);
+          // [11.02] g2: 10 USDT 미만 계정 카드가 보이게 목록을 내림
+          if (sp.g2) { const m = document.querySelector('[data-wd-card][data-ok="0"]'); const b = document.querySelector('[data-wd-body]'); if (m && b) b.scrollTop = m.offsetTop - b.offsetTop - 8; }
           // [11.02] 탭 대신 한 화면: wd: 'dex'면 DEX 모듈이 보이게 목록을 내림
           if (sp.wd === 'dex') { const m = document.querySelector('[data-wd-mod="dex"]'); const b = document.querySelector('[data-wd-body]'); if (m && b && document.querySelector('[data-wd-mod="cex"]')) b.scrollTop = m.offsetTop - b.offsetTop - 8; }
         }
@@ -5019,7 +5042,10 @@
       // 인기 거래소
       '인기 거래소': 'Top Popular Exchanges', '거래소 전체 보기': 'View all exchanges',
       // [2I] 출금하기 팝업
-      '출금 가능한 페이백': 'Claimable cashback', '받는 곳': 'Destination', '보내는 네트워크': 'Network', '네트워크': 'Network',
+      '출금 가능한 페이백': 'Claimable cashback', 'CEX 거래소': 'Centralised Exchanges', 'DEX 거래소': 'Decentralised Exchanges', '지갑': 'Wallet', '네트워크 수수료': 'Network fee', '테더맥스가 전액 부담': 'TetherMax covers the full cost',
+      '매주 월요일': 'Every Monday', '매시간': 'Hourly', '매일 00:00 UTC': 'Daily, 00:00 UTC', '매일 09:00 UTC': 'Daily, 09:00 UTC',
+      '계정마다 10 USDT 이상이어야 해요. 10 USDT 미만 계정은 이번 출금에서 빠져요.': 'Each account needs at least 10 USDT. Accounts under 10 USDT are not included this time.',
+      '출금할 수 있는 계정이 아직 없어요. 이벤트 리워드는 같은 계정의 페이백과 1:1로 함께 출금되고, 계정마다 10 USDT 이상이어야 해요.': 'No accounts are eligible for claim yet. Event rewards are matched 1:1 with cashback in the same account, and each account needs at least 10 USDT.', '받는 곳': 'Destination', '보내는 네트워크': 'Network', '네트워크': 'Network',
       '가스비는 테더맥스가 부담해요': 'TetherMax covers the gas fee', '건수': 'Items', '신청 시각': 'Requested at',
       '출금 정책': 'Claim policy',
       'UID별 출금 금액이 10 USDT 이상이면 출금돼요': 'Each UID can be claimed from 10 USDT',
