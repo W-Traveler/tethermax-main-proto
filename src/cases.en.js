@@ -264,4 +264,11 @@ const CASES_EN = {
   "페이백 반영 주기 · 네트워크 · 네트워크 수수료": "Cashback updates · Network · Network fee",
   "같은 목록 안 카드, 칩 \"최소 금액 미달\" · 보유 금액": "Card in the same list, chip \"Below minimum\" · current balance",
   "[출금하기] 비활성 + 하단 안내": "[Confirm Claim] disabled + footer note",
+  "상태 2: \"이제 거래만 하면 페이백이 쌓여요\" · [거래하러 가기] → 거래소 아웃링크 이동 모달 (MP-M01-h)": "State 2: \"Just trade and the cashback adds up\" · [Go trade] → exchange outlink modal (MP-M01-h)",
+  "상태 2 [거래하러 가기] → 아웃링크 이동 모달": "State 2 [Go trade] → outlink modal",
+  "거래소 아웃링크 이동 모달 (현행 테스트 서버 화면 구성): 모바일은 아래에서 올라오는 시트, 웹은 가운데 팝업": "Exchange outlink modal (current test-server layout): bottom sheet on mobile, centered popup on web",
+  "단계: 1. {거래소}에서 거래하기 · 2. 페이백 자동 적립 · 3. 테더맥스에서 출금": "Steps: 1. Trade on {exchange} · 2. Cashback added automatically · 3. Claim on TetherMax",
+  "안내 문구 (어드민 입력) · [{거래소}로 이동하기] → 거래소": "Guide text (set in admin) · [Go to {exchange}] → exchange",
+  "연동 거래소가 2곳 이상이면 가장 최근에 연동한 거래소 (11.03)": "With 2+ linked exchanges, the most recently linked one (11.03)",
+  "가안: 제목 · 단계 문구 · 버튼 문구": "Draft: title · step text · button text",
 };
