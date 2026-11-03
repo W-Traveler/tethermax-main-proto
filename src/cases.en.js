@@ -271,4 +271,12 @@ const CASES_EN = {
   "안내 문구 (어드민 입력) · [{거래소}로 이동하기] → 거래소": "Guide text (set in admin) · [Go to {exchange}] → exchange",
   "연동 거래소가 2곳 이상이면 가장 최근에 연동한 거래소 (11.03)": "With 2+ linked exchanges, the most recently linked one (11.03)",
   "가안: 제목 · 단계 문구 · 버튼 문구": "Draft: title · step text · button text",
+  "개인화 카드: 회원 상태별 안내 · 버튼. 카드 전체가 아니라 버튼만 눌림. 닫기(X): 상태 2 · 4는 세션 동안 숨김(앱 다시 열면 노출), 상태 3은 계정 기준으로 다시 노출 안 함 → 이후 상태 4 조건": "Personalized card: message · button by member state. Only the button is tappable. Close (X): states 2 · 4 hidden for the session (shown again on app reopen); state 3 never shown again (per account) → state 4 rules after that",
+  "상태 4: \"이번 달 벌써 N USDT 받았어요\" · [친구 초대하기]. N = 이번 달(UTC 매월 1일 00:00부터) 받은 거래소 페이백 합계. 0이면 카드 없음 (MP-M01-i)": "State 4: \"You have already earned N USDT this month\" · [Invite friends]. N = exchange cashback received this month (UTC, from the 1st 00:00). No card when 0 (MP-M01-i)",
+  "상태 3: \"첫 페이백 N USDT가 들어왔어요\" (N = 첫 입금 거래소 페이백) · [입금 알림 켜기] → 입금 알림 켜기 플로우 (11-3 탭)": "State 3: \"Your first cashback of N USDT is in\" (N = first exchange cashback deposit) · [Turn on cashback alerts] → alert flow (11-3 tab)",
+  "상태 판정 (11.03): 2 = 정상 연동 1개 이상 · 받은 거래소 페이백 0 / 3 = 첫 거래소 페이백 입금 후 · 상태 3 카드 닫기 전 / 4 = 상태 3 카드를 닫은 뒤 · 이번 달 거래소 페이백 > 0": "State rules (11.03): 2 = 1+ active link · no exchange cashback yet / 3 = after the first exchange cashback · before closing the state 3 card / 4 = after closing the state 3 card · exchange cashback this month > 0",
+  "가안: 이벤트 리워드는 판정 · 금액에 넣지 않음, 연동 계정이 모두 검토 중이면 카드 없음, [입금 알림 켜기] 신청 완료는 상태 3 카드를 닫은 것과 같게 처리": "Draft: event rewards excluded from state and amount; no card when all linked accounts are under review; completing [Turn on cashback alerts] counts as closing the state 3 card",
+  "정리 중: 거래소별 페이백 반영 시각 (대략 한국 시간 20 ~ 23시)": "Being compiled: cashback update time per exchange (roughly 20:00–23:00 KST)",
+  "상태 4 · 이번 달 페이백 0 (카드 없음)": "State 4 · no cashback this month (no card)",
+  "개인화 카드 없음. 잔액 카드부터 시작": "No personalized card. Starts with the balance card",
 };

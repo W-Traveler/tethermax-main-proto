@@ -1973,6 +1973,7 @@
   // ===== [DEV] 케이스 데이터 플래그: 프로토타입 셸이 ?f=a,b 로 넘긴다 =====
   //   noBad 확인 필요 UID 0 · singleBad Bybit(UID 1개) 이용 제한 · dexMulti Lighter 지갑 2개
   //   cexOnly CEX만 연동 · dexOnly DEX만 연동 · review Apex 지갑 1개 검토 중(소유권 인증 진행 중)
+  //   month0 상태 4 · 이번 달 받은 거래소 페이백 0 (개인화 카드 없음)
   const DEV = (() => {
     const q = new URLSearchParams(location.search);
     return { f: new Set((q.get('f') || '').split(',').filter(Boolean)), nd: q.get('nd') === 'on' ? 'on' : 'off', os: q.get('os') === 'no' ? 'no' : 'yes' };
@@ -2135,6 +2136,8 @@
     const d = notifyCopy(state);
     if (!d) return;
     box.hidden = false;   // 상태를 바꾸면 닫은 알림도 다시 보인다 (시안 확인용)
+    // [11.03] 상태 4는 이번 달(UTC) 받은 거래소 페이백이 0이면 카드 없음. 시안은 데이터 플래그 month0으로 확인
+    if (state === '4' && devOn('month0')) box.hidden = true;
     document.querySelector('[data-notify-title]').textContent = d.title;
     document.querySelector('[data-notify-sub]').textContent = d.sub;
     document.querySelector('[data-notify-sub]').hidden = !d.sub;
