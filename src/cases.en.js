@@ -351,7 +351,7 @@ const CASES_EN = {
   "거래소 줄 \"UID N개\"에는 검토 중 UID도 포함. 순서: 정상 → 검토 중 → 확인 필요": "Exchange row \"N UIDs\" includes UIDs under review. Order: normal → under review → to resolve",
   "셰브론(›) 없음. 줄 · 안내 바 모두 눌러도 동작 없음": "No chevron (›). Neither the row nor the notice bar is tappable",
   "열린 모든 탭에 같은 상태가 보이고, 처리가 끝나면 모든 탭에서 안내가 사라짐 (ROW-9d)": "Every open tab shows the same state; when processing completes the notice disappears in all tabs (ROW-9d)",
-  "처리가 끝나면 회원에게 알림, 성공이면 연동 완료. 검증 로직은 기존 로직을 따름. 검토 중 계정은 Claim 목록에 넣지 않음. 확인 중: 인증 실패 시 알림 · 줄 상태": "When processing ends the member gets a notification; if successful the account is linked. Verification follows the existing logic. Accounts under review are not in the Claim list. Being confirmed: notification and row state on failure",
+  "처리가 끝나면 회원에게 알림, 성공이면 연동 완료. 검증 로직 · 실패 시 알림 · 실패 후 줄 상태는 기존(as-is) 로직을 따름(실패하면 확인 필요 사유 칩). 검토 중 계정은 Claim 목록에 넣지 않음": "When processing ends the member gets a notification; if successful the account is linked. Verification, failure notification and the row after failure follow the existing (as-is) logic (a failure shows as a to-resolve reason chip). Accounts under review are not in the Claim list",
   "⑨ 지갑 검토 중 (연동 처리 중)": "⑨ Wallet under review (linking in progress)",
   "지갑 1개: 금액 자리에 [검토 중] 칩": "One wallet: [Under review] chip in the amount spot",
   "줄 아래 안내 바: \"지갑 연동 처리 중\" + 경과 시간. 셰브론 없음, 눌러도 동작 없음": "Notice bar below the row: \"Wallet linking in progress\" + elapsed time. No chevron, not tappable",
