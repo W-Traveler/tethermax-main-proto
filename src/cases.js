@@ -270,7 +270,7 @@ const CASES = [
   { id: 'NOTI-2', g: 'm-noti', t: '꺼짐 → [다음에 할게요]', vp: 'mobile', h: 'state=3', nd: 'off', os: 'yes', env: true, s: [{ notify: true }],
     data: [['기기 알림', '꺼짐']],
     look: [['[다음에 할게요] 또는 바깥 영역 → 팝업만 닫힘, 알림 신청 안 됨 (입금 알림 On · 기기 알림 Off 유지)', '[data-dev-nf-later]']],
-    req: ['REQ-801'], note: ['이 상태로 다음 진입 시 개인화 카드 처리 미정 (개요 OQ-09)'] },
+    req: ['REQ-801'], note: ['이 상태로 다음 진입 시: 앱 세션 첫 진입에 기기 알림 켜기 안내 팝업(MP-M01-d) 한 번만, 같은 세션에서는 다시 안 띄움. 개인화 카드에 기기 알림 꺼짐 메시지 없음 (11.03)'] },
   { id: 'NOTI-3', g: 'm-noti', t: '꺼짐 · OS 허용 창 가능', vp: 'mobile', h: 'state=3', nd: 'off', os: 'yes', env: true, s: [{ notify: true }],
     data: [['기기 알림', '꺼짐'], ['OS 허용 창', '띄울 수 있음 (예: Android 1회 거부 후)']],
     look: [['[알림 켜기] → 팝업 닫힘 → OS 알림 허용 창 (OS 제공 · 문구 변경 불가)', '[data-dev-nf-on]'], ['[허용] → 알림 신청 완료'], ['[허용 안 함] → 토스트 "기기 알림이 꺼져 있어 입금 알림을 받을 수 없어요" (E07)']],
