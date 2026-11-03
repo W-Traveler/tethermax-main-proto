@@ -4788,6 +4788,8 @@
       e.stopPropagation();
       if (state === '3') { notifyStart(); return; }
       if (state === '2') { devLog('ui', '개인화 카드 [거래하러 가기] → 거래소 아웃링크 이동 모달 (MP-M01-h)'); openOutPop(); return; }
+      // [11.03] 상태 4 [친구 초대하기] → 서비스 안 친구 초대 페이지 (현행 페이지, 프로토타입 범위 밖)
+      if (state === '4') { devLog('nav', '개인화 카드 [친구 초대하기] → 친구 초대 페이지 이동 (현행)'); _toast('친구 초대 페이지로 이동해요'); return; }
       devLog('nav', `개인화 카드 [${cta.textContent.trim()}] — 현행 화면 이동`);
       _toast('현행 페이지로 이동 (프로토타입 범위 밖)');
     }, true);
@@ -5056,6 +5058,7 @@
       '연동할 거래소 고르기': 'Pick an exchange to link',
       '계정 추가': 'Add account',
       '지갑주소': 'Wallet address',
+      '친구 초대 페이지로 이동해요': 'Going to the Invite friends page',
       '페이백 자동 적립': 'Cashback added automatically', '테더맥스에서 출금': 'Claim on TetherMax', '안내 문구 (어드민 입력)': 'Guide text (set in admin)', '거래소로 이동해요 (시안)': 'Going to the exchange (mock)',
       '검토 중': 'Under review', '검토 중인 지갑': 'Wallet under review', '첫 지갑 연동은 최대 24시간이 걸릴 수 있어요': 'Linking your first wallet can take up to 24 hours',
       '인증 실패': 'Verification failed', '연동 해제': 'Unlinked', '연동 실패': 'Link failed',
