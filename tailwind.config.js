@@ -1,6 +1,8 @@
 // Tailwind 3.4 설정 (원본 시안 토큰 그대로)
 module.exports = { content: ['./src/proto.html', './src/admin.html'], theme: ({
     theme: {
+      // [11.03] 768 ~ 1023px도 모바일 배치: md를 lg와 같은 1024px로
+      screens: { sm: '640px', md: '1024px', lg: '1024px', xl: '1280px', '2xl': '1536px' },
       extend: {
         colors: {
           brand: { DEFAULT: '#1D4ED8', dark: '#1740B8', soft: '#EFF4FF' },
