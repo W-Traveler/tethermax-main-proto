@@ -472,7 +472,7 @@
   .mb-title { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.3; word-break: keep-all; }
   .mb-sub { font-size: 14px; line-height: 1.45; color: rgba(255,255,255,.88); word-break: keep-all; }
   /* [11.02] 웹 메인 배너 2개 이상(기본 2개, 주소 banners=1이면 1개 · 위치 표시 없음): 한 칸 안에서 좌우로 넘김 + 오른쪽 아래 위치 표시. 확정: 5초마다 자동 넘김, 마우스를 올리거나 키보드 초점이면 멈춤, 움직임 줄이기면 자동 넘김 없음 */
-  .mb-slider { position: relative; min-width: 0; border-radius: 12px; overflow: hidden; }
+  .mb-slider { position: relative; min-width: 0; border-radius: 12px; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
   .mb-track { display: flex; height: 100%; transition: transform .45s ease; }
   @media (prefers-reduced-motion: reduce) { .mb-track { transition: none; } }
   .mb-track > .mb-banner { flex: 0 0 100%; border-radius: 0; }
@@ -3087,6 +3087,42 @@
       wrap.addEventListener('mouseleave', () => (hold = false));
       wrap.addEventListener('focusin', () => (hold = true));
       wrap.addEventListener('focusout', () => (hold = false));
+      // [11.03] 좌우 스와이프로도 넘김: 터치 · 마우스로 끌기, 트랙패드 가로 스와이프. 끝에서 넘기면 처음으로 (자동 넘김과 같음)
+      //   가로로 6px 넘게 움직이면 끌기로 보고, 배너 폭의 15%(최대 80px) 넘게 끌면 다음 · 이전 배너. 끌고 놓은 뒤에는 배너 링크로 이동하지 않음
+      slides.forEach((sl) => { sl.draggable = false; });
+      let sx = 0, sy = 0, dx = 0, drag = false, moved = false, wheelX = 0, wheelAt = 0;
+      wrap.addEventListener('pointerdown', (e) => {
+        if (e.button > 0 || e.target.closest('.mb-dots')) return;
+        sx = e.clientX; sy = e.clientY; dx = 0; drag = true; moved = false;
+      });
+      wrap.addEventListener('pointermove', (e) => {
+        if (!drag) return;
+        dx = e.clientX - sx;
+        if (!moved && Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(e.clientY - sy)) {
+          moved = true; hold = true; track.style.transition = 'none';
+          try { wrap.setPointerCapture(e.pointerId); } catch (err) { /* 무시 */ }
+        }
+        if (moved) track.style.transform = `translateX(calc(-${cur * 100}% + ${dx}px))`;
+      });
+      const endDrag = (e) => {
+        if (!drag) return;
+        drag = false;
+        if (!moved) return;
+        track.style.transition = '';
+        if (e.pointerType !== 'mouse' || !wrap.matches(':hover')) hold = false;
+        go(Math.abs(dx) > Math.min(80, wrap.clientWidth * 0.15) ? cur + (dx < 0 ? 1 : -1) : cur);
+      };
+      wrap.addEventListener('pointerup', endDrag);
+      wrap.addEventListener('pointercancel', endDrag);
+      wrap.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+      wrap.addEventListener('dragstart', (e) => e.preventDefault());
+      wrap.addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+        e.preventDefault();
+        if (Date.now() - wheelAt < 600) return;
+        wheelX += e.deltaX;
+        if (Math.abs(wheelX) > 40) { go(cur + (wheelX > 0 ? 1 : -1)); wheelX = 0; wheelAt = Date.now(); }
+      }, { passive: false });
       if (!calmMotion.matches) mbTimers[aud] = setInterval(() => { if (!hold) go(cur + 1); }, 5000);
       refreshIcons();
     });

@@ -1,5 +1,5 @@
 // Tailwind 3.4 설정 (원본 시안 토큰 그대로)
-module.exports = { content: ['./src/proto.html'], theme: ({
+module.exports = { content: ['./src/proto.html', './src/admin.html'], theme: ({
     theme: {
       extend: {
         colors: {

@@ -27,6 +27,10 @@ rmSync(twIn); rmSync(twOut);
 const proto = readFileSync(p('src/proto.html'), 'utf8');
 if (!proto.includes('/*__TW__*/')) throw new Error('src/proto.html 에 /*__TW__*/ 자리가 없습니다');
 writeFileSync(p('dist/proto.html'), proto.replace('/*__TW__*/', () => css));
+// 백오피스 화면 (BO-01)
+const admin = readFileSync(p('src/admin.html'), 'utf8');
+if (!admin.includes('/*__TW__*/')) throw new Error('src/admin.html 에 /*__TW__*/ 자리가 없습니다');
+writeFileSync(p('dist/admin.html'), admin.replace('/*__TW__*/', () => css));
 
 // 2) 셸
 const shell = readFileSync(p('src/index.html'), 'utf8');

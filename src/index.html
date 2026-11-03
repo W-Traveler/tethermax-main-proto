@@ -186,7 +186,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     ko: { title: '메인 페이지 개선 · 프로토타입', doc: '메인 개선 프로토타입', lang: '화면 언어', mk: '변경 사항 번호', mkTip: '화면 위 번호 표시 (M)', panel: '변경 사항', panelTip: '변경 사항 패널 (D)',
       screen: '화면', prev: '이전 케이스 (↑)', next: '다음 케이스 (↓)', state: '개인화 메시지 영역 (회원 상태별)', width: '사용자 폭', fluid: '창 폭', fluidTip: '브라우저 창 폭 그대로. 창을 늘이고 줄이면 구간별 화면이 바뀜',
       rerun: '↻ 처음부터', rerunTip: '이 케이스를 처음 상태로 (R)', drawer: '화면 변경 사항', legend: '번호 = 화면 위 번호', close: '패널 닫기', frame: '프로토타입 화면',
-      web: '웹', mobile: '모바일', td: '테스트 데이터', tdTip: '실제 데이터에 없는 경우를 보려고 바꾼 값', loading: '불러오는 중…', fail: '화면을 불러오지 못했어요. [처음부터]를 눌러 다시 열어 보세요.', err: '오류',
+      web: '웹', mobile: '모바일', admin: '백오피스', zAdmin: '데스크톱 전용 (반응형 없음)', noFig: 'Figma 화면 없음 · PRD 백오피스 기준', td: '테스트 데이터', tdTip: '실제 데이터에 없는 경우를 보려고 바꾼 값', loading: '불러오는 중…', fail: '화면을 불러오지 못했어요. [처음부터]를 눌러 다시 열어 보세요.', err: '오류',
       wFluid: '창 폭', wFixed: '고정 폭', zFit: '맞춤', zReal: '실제 크기', zFitTip: '창 높이에 맞춰 폰 화면 전체가 보이게 축소 (안쪽은 390×844 그대로)', zRealTip: '실제 크기 100%', zoomGrp: '390 보기 크기', zFitNow: '맞춤', zWeb: '웹 구성 (1024px 이상)', zMid: '768~1023px · Figma 화면 없음 (프로토타입 현재 동작)', zMob: '모바일 구성 (767px 이하)',
       envH: '기기 상태 바꿔 보기', dev: '기기 알림', on: '켜짐', off: '꺼짐', os: 'OS 알림 허용 창', osYes: '띄울 수 있음', osNo: '띄울 수 없음', envHelp: '바꾸면 바로 적용돼요', startNotify: '입금 알림 켜기 누르기', resume: '앱 복귀',
       resNone: '결과: 아직 없음', res: '결과: ', toast: '토스트: ', introH: '인터랙션', introHelp: '개인화 카드 진입 효과 (자리가 위에서 열리며 페이드인)', intro: '진입 효과 다시 보기', noteH: '범위 밖 · 미정', gone: '지금 화면(폭 · 상태)에는 없는 요소',
@@ -194,7 +194,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     en: { title: 'Main page improvement · Prototype', doc: 'Main page prototype', lang: 'Screen language', mk: 'Change markers', mkTip: 'Show markers on screen (M)', panel: 'Changes', panelTip: 'Changes panel (D)',
       screen: 'Screen', prev: 'Previous case (↑)', next: 'Next case (↓)', state: 'Personalized message (by member state)', width: 'Width', fluid: 'Window', fluidTip: 'Follows the browser window width. Resize the window to see each breakpoint',
       rerun: '↻ Restart', rerunTip: 'Reset this case (R)', drawer: 'Screen changes', legend: 'Number = marker on screen', close: 'Close panel', frame: 'Prototype screen',
-      web: 'Web', mobile: 'Mobile', td: 'Test data', tdTip: 'Values changed to show a case not in the real data', loading: 'Loading…', fail: "Couldn't load the screen. Press [Restart] to open it again.", err: 'error',
+      web: 'Web', mobile: 'Mobile', admin: 'Back office', zAdmin: 'Desktop only (not responsive)', noFig: 'No Figma screen · based on back-office PRD', td: 'Test data', tdTip: 'Values changed to show a case not in the real data', loading: 'Loading…', fail: "Couldn't load the screen. Press [Restart] to open it again.", err: 'error',
       wFluid: 'Window', wFixed: 'Fixed', zFit: 'Fit', zReal: 'Actual size', zFitTip: 'Scale the whole phone screen to fit the window height (still rendered at 390×844 inside)', zRealTip: 'Actual size 100%', zoomGrp: '390 view size', zFitNow: 'Fit', zWeb: 'Web layout (1024px and up)', zMid: '768–1023px · no Figma screen (current prototype behavior)', zMob: 'Mobile layout (767px and below)',
       envH: 'Try device states', dev: 'Device notifications', on: 'On', off: 'Off', os: 'OS permission prompt', osYes: 'Available', osNo: 'Unavailable', envHelp: 'Changes apply immediately', startNotify: 'Tap Turn on cashback alerts', resume: 'Return to app',
       resNone: 'Result: none yet', res: 'Result: ', toast: 'Toast: ', introH: 'Interaction', introHelp: 'Personalized card entry effect (opens from the top with fade-in)', intro: 'Replay entry effect', noteH: 'Out of scope · TBD', gone: 'Not on the current screen (width · state)',
@@ -208,13 +208,13 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     document.querySelectorAll('[data-t]').forEach((el) => (el.textContent = T(el.dataset.t)));
     document.querySelectorAll('[data-tt]').forEach((el) => (el.title = T(el.dataset.tt)));
     document.querySelectorAll('[data-ta]').forEach((el) => el.setAttribute('aria-label', T(el.dataset.ta)));
-    $('#grpSel').innerHTML = ['web', 'mobile'].map((p) => `<optgroup label="${T(p)}">${GROUPS.filter((g) => g.plat === p).map((g) => `<option value="${g.id}">${T(p)} · ${esc(tr(g.name))}</option>`).join('')}</optgroup>`).join('');
+    $('#grpSel').innerHTML = ['web', 'mobile', 'admin'].map((p) => `<optgroup label="${T(p)}">${GROUPS.filter((g) => g.plat === p).map((g) => `<option value="${g.id}">${T(p)} · ${esc(tr(g.name))}</option>`).join('')}</optgroup>`).join('');
   }
   let cur = null, run = 0, readyRun = 0, shownRun = 0, lastErr = '', env = { device: 'off', osPrompt: 'yes' };
   let showMk = store.get('tm:mk', 'on') !== 'off';
   lang = store.get('tm:lang', 'ko') === 'en' ? 'en' : 'ko';
   // 사용자 폭: 웹 케이스는 창 폭, 모바일 케이스는 390이 기본. 고른 값은 플랫폼별로 기억
-  const wPick = { web: store.get('tm:w:web', 'fluid'), mobile: store.get('tm:w:mobile', '390') };
+  const wPick = { web: store.get('tm:w:web', 'fluid'), mobile: store.get('tm:w:mobile', '390'), admin: store.get('tm:w:admin', 'fluid') === '1440' ? '1440' : 'fluid' };   // 백오피스는 데스크톱 전용 (390 없음)
   // [10.29] 390 보기 크기: fit(기본, 창 높이에 맞춰 축소) | real(100%)
   let zPick = store.get('tm:z', 'fit');
   let panelOn = store.get('tm:panel', window.innerWidth >= 1280 ? 'on' : 'off') === 'on';
@@ -235,6 +235,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.lang === lang));
     document.querySelectorAll('[data-w]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.w === wPick[platOf(cur)]));
     $('#zSeg').hidden = wPick[platOf(cur)] !== '390';
+    $('[data-w="390"]').hidden = platOf(cur) === 'admin';
     document.querySelectorAll('[data-z]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.z === zPick));
     const on = $('#chips [aria-current="true"]'); if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
@@ -257,7 +258,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     dev.style.transformOrigin = 'top center';
     dev.style.marginBottom = sc < 1 ? `${16 - 844 * (1 - sc)}px` : '';
     const px = w === 'fluid' ? Math.round(st.clientWidth) : +w;
-    const zone = px >= 1024 ? T('zWeb') : px >= 768 ? T('zMid') : T('zMob');
+    const zone = platOf(cur) === 'admin' ? T('zAdmin') : px >= 1024 ? T('zWeb') : px >= 768 ? T('zMid') : T('zMob');
     $('#wbadge').textContent = `${w === 'fluid' ? T('wFluid') : T('wFixed')} ${px}px · ${zone}` + (sc < 1 ? ` · ${T('zFitNow')} ${Math.round(sc * 100)}%` : '');
     st.style.justifyContent = w === '1440' && st.clientWidth < 1440 ? 'flex-start' : 'center';
   }
@@ -276,7 +277,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     $('#dev').removeAttribute('data-ready');
     const ld = $('#loading'); ld.hidden = false; ld.classList.remove('err'); ld.textContent = T('loading');
     lastErr = '';
-    $('#frame').src = 'proto.html?' + q.join('&') + '#' + hashOf(c);
+    $('#frame').src = (grpOf[c.g].page || 'proto.html') + '?' + q.join('&') + '#' + hashOf(c);
     resultClear(); paintEnv();
     setTimeout(() => {
       if (myRun !== run || readyRun === myRun || shownRun === myRun) return;
@@ -305,7 +306,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     $('#panelN').textContent = L.length;
     $('#spec').innerHTML = `
       <section class="sec">
-        <div class="meta"><span>${esc(figIdOf(c))}</span><span>·</span><span>Figma ${esc(g.fig)}</span><span>·</span><span>${T(g.plat)}</span>${c.f ? `<span class="td" title="${T('tdTip')}">${T('td')}</span>` : ''}</div>
+        <div class="meta"><span>${esc(figIdOf(c))}</span><span>·</span><span>${g.fig ? 'Figma ' + esc(g.fig) : T('noFig')}</span><span>·</span><span>${T(g.plat)}</span>${c.f ? `<span class="td" title="${T('tdTip')}">${T('td')}</span>` : ''}</div>
         <ol class="look">${L.map(([t, sel], i) => `<li ${sel ? `data-go="${i + 1}"` : 'class="nomk"'}><i>${i + 1}</i><span>${esc(tr(t))}</span></li>`).join('')}</ol>
       </section>
       ${c.env ? `<section class="sec"><h4>${T('envH')}</h4><div class="env">
