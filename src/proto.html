@@ -2376,8 +2376,8 @@
   const badOf = (g) => g.uids.filter(isBad).length;
   const revOf = (g) => g.uids.filter(isRev).length;
   // [11.03] DEX 디자인(Linked accounts states ST-1 · ST-4 · ST-5) 기준
-  //   검토 중 = UID · 지갑 연동 처리 중: 금액 자리에 [검토 중] 칩 + 줄 바로 아래 안내 바 "UID(지갑) 연동 처리 중 · 남은 시간"
-  //   소유권 인증 진행 중(own): 금액 그대로 + 줄 아래 안내 바 "소유권 인증 진행 중 · 남은 시간". 검토 중 칩 · 필터에는 넣지 않음
+  //   검토 중 = UID · 지갑 연동 처리 중: 금액 자리에 [검토 중] 칩 + 줄 바로 아래 안내 바 "UID(지갑) 연동 처리 중 · 경과 시간"
+  //   소유권 인증 진행 중(own): 금액 그대로 + 줄 아래 안내 바 "소유권 인증 진행 중 · 경과 시간". 검토 중 칩 · 필터에는 넣지 않음
   //   열린 모든 탭에 같은 상태가 보이고, 처리가 끝나면 모든 탭에서 안내가 사라지고 정상 줄이 된다 (프로토타입은 [DEV] revDone으로 시연)
   const REV_CHIP = '<span class="shrink-0 h-5 px-2 rounded-full bg-brand-soft text-brand text-[11px] font-bold inline-flex items-center whitespace-nowrap">검토 중</span>';
   const mmss = (sec) => String(Math.floor(Math.max(0, sec) / 60)).padStart(2, '0') + ':' + String(Math.max(0, sec) % 60).padStart(2, '0');
@@ -2387,10 +2387,10 @@
     const text = rev ? (g.dex ? '지갑 연동 처리 중' : 'UID 연동 처리 중') : '소유권 인증 진행 중';
     return `<div data-rev-bar="${rev ? 'review' : 'own'}" class="my-1 flex items-center gap-2 rounded-lg bg-brand-soft px-3 py-2.5 text-[12.5px] leading-snug text-brand-dark"><i data-lucide="clock" class="w-4 h-4 shrink-0" aria-hidden="true"></i><span class="min-w-0 flex-1">${text}</span><b class="tnum font-bold" data-rev-time="${u.uid}">${mmss(rev ? u.revSec : u.own)}</b></div>`;
   };
-  // 남은 시간은 1초마다 줄어든다 (0이 된 뒤 처리는 확인 중)
+  // [11.03] 시간 값은 연동 요청 후 경과 시간 (1초마다 늘어남). 처리가 끝나면 회원에게 알림, 성공이면 연동 완료. 검증 로직은 기존(소유권 인증 진행 중) 로직을 따름
   setInterval(() => {
     uidGroups().forEach((g) => g.uids.forEach((u) => {
-      if (isRev(u) && u.revSec > 0) u.revSec -= 1; else if (u.own > 0) u.own -= 1; else return;
+      if (isRev(u)) u.revSec += 1; else if (u.own) u.own += 1; else return;
       document.querySelectorAll(`[data-rev-time="${u.uid}"]`).forEach((el) => (el.textContent = mmss(isRev(u) ? u.revSec : u.own)));
     }));
   }, 1000);
@@ -2418,7 +2418,8 @@
           <span class="relative shrink-0">
             ${logo(g.ex, 'w-7 h-7 text-[11px] rounded-full')}
           </span>`;
-    const chev = '<i data-lucide="chevron-right" class="w-4 h-4 shrink-0 text-faint transition-transform group-hover:translate-x-0.5" aria-hidden="true"></i>';
+    // [11.03] 검토 중 줄은 누를 수 없어 셰브론 없음 (자리는 비워 금액 끝을 맞춘다)
+    const chev = g.uids.length === 1 && isRev(g.uids[0]) ? '<span class="w-4 shrink-0" aria-hidden="true"></span>' : '<i data-lucide="chevron-right" class="w-4 h-4 shrink-0 text-faint transition-transform group-hover:translate-x-0.5" aria-hidden="true"></i>';
     // [2H] UID 수와 상관없이 UID 상세 페이지로 바로 간다 (첫 정상 UID, 없으면 첫 확인 필요 UID)
     const single = g.uids.length === 1;
     const one = single;   // [Figma ①②] UID 1개면 정상 · 확인 필요 모두 아랫줄에 "UID 번호"
@@ -2642,12 +2643,8 @@
     if (e.target.closest('[data-out-go]')) { document.getElementById('outPop').hidden = true; showMockToast('거래소로 이동해요 (시안)'); }
   });
   document.addEventListener('keydown', (e) => { const p = document.getElementById('outPop'); if (e.key === 'Escape' && p && !p.hidden) p.hidden = true; });
-  // [11.03] 검토 중 줄을 고르면 팝업 없이 줄 아래 안내 바를 강조한다 (상세는 처리가 끝난 뒤)
-  function issuePick(g, u) {
-    if (!isRev(u)) { showIssueToast(u.state); return; }
-    const bar = [...document.querySelectorAll(`[data-rev-time="${u.uid}"]`)].map((el) => el.closest('[data-rev-bar]')).find((el) => el && el.getClientRects().length);
-    if (bar) { bar.animate([{ boxShadow: '0 0 0 2px #1D4ED8' }, { boxShadow: '0 0 0 0 transparent' }], { duration: 900 }); }
-  }
+  // [11.03] 검토 중 줄 · 안내 바는 눌러도 동작 없음 (존 답변). 확인 필요는 사유별 안내
+  function issuePick(g, u) { if (!isRev(u)) showIssueToast(u.state); }
   function openRevPop(g, u) {
     const pop = document.getElementById('revPop');
     pop.querySelector('[data-rev-who]').innerHTML = `
