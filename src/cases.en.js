@@ -236,7 +236,6 @@ const CASES_EN = {
   "연동 계정이 모두 확인 필요(정상 연동 0개)면 카드 없음 (11.03)": "No card when every linked account needs attention (no active links) (11.03)",
   "상태 판정 (11.03): 2 = 정상 연동 1개 이상 · 받은 거래소 페이백 0 / 3 = 첫 거래소 페이백 입금 후 · 상태 3 카드 닫기 전 / 4 = 상태 3 카드를 닫은 뒤 · 이번 달 거래소 페이백 > 0": "State rules (11.03): 2 = 1+ active link · no exchange cashback yet / 3 = after the first exchange cashback · before closing the state 3 card / 4 = after closing the state 3 card · exchange cashback this month > 0",
   "가안: 이벤트 리워드는 판정 · 금액에 넣지 않음, 연동 계정이 모두 검토 중이면 카드 없음, [입금 알림 켜기] 신청 완료는 상태 3 카드를 닫은 것과 같게 처리": "Draft: event rewards excluded from state and amount; no card when all linked accounts are under review; completing [Turn on cashback alerts] counts as closing the state 3 card",
-  "정리 중: 거래소별 페이백 반영 시각 (대략 한국 시간 20 ~ 23시)": "Being compiled: cashback update time per exchange (roughly 20:00–23:00 KST)",
   "상태 4 · 이번 달 페이백 0 (카드 없음)": "State 4 · no cashback this month (no card)",
   "개인화 카드 없음. 잔액 카드부터 시작": "No personalized card. Starts with the balance card",
   "웹 메인 배너 관리": "Web main banner management",
