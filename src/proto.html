@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>window.addEventListener("error",function(e){try{parent.postMessage({type:"tm:error",msg:String(e.message||"")+(e.lineno?" (line "+e.lineno+")":"")},"*")}catch(_){}});if(/[?&]frame=1/.test(location.search)){try{sessionStorage.removeItem("tm:introSig")}catch(_){}}</script>
+<script>window.addEventListener("error",function(e){try{parent.postMessage({type:"tm:error",msg:String(e.message||"")+(e.lineno?" (line "+e.lineno+")":"")},"*")}catch(_){}});if(/[?&]frame=1/.test(location.search)){try{sessionStorage.removeItem("tm:introSig");sessionStorage.removeItem("tm:dexStripOff")}catch(_){}}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <!-- 시안 2D: 2C 복사본. 메인의 페이백 챌린지는 보기 전용(참여 여부 · 진행 상태). 참여 · 받기 · 레벨표 · 유의사항은 이벤트 상세 페이지에서 -->
 <title>TetherMax 메인 (개편 시안 v5)</title>
@@ -307,7 +307,7 @@
   /* [2I] DEX 뱃지와 앞 이름 사이는 어디서나 8px. 감싼 줄의 간격(4px · 6px)에 모자란 만큼만 더한다 */
   .gap-x-1 > .dex-badge { margin-left: 4px; }
   .gap-x-1\.5 > .dex-badge { margin-left: 2px; }
-  /* [4A] 인기 거래소 (1024px 이상): 1024~1279px 카드 2 × 2, 1280px 이상 한 줄 4장. 1023px 이하는 가로 스와이프 */
+  /* [4A] 인기 거래소 (1024px 이상): 한 줄 4장, 넘치면 줄바꿈 없이 좌우 스와이프. 1023px 이하도 가로 스와이프 */
   @media (min-width: 1024px) {
     .ex-wrap #exGrid.ex-earn { display: flex; gap: 12px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; padding-bottom: 2px; }
     .ex-wrap #exGrid.ex-earn::-webkit-scrollbar { display: none; }
@@ -892,12 +892,17 @@
       <!-- [5A] 모바일: DEX 띠는 카드 밖, 잔액 카드와 연동한 거래소 카드 사이 (격자 간격 12px) -->
       <!-- 모바일 DEX 띠: 운영 배너 슬롯과 별도로 관리 (배너 관리는 웹만)
            [5A] 부스트 축소형 띠(#boostBanner [data-boost-strip])와 같은 모양: 바탕 #FFF3E6 · 안쪽 여백 11px 14px · 모서리 14px · 그림자 없음.
-           왼쪽 32px 칸에 DEX 로고 2 × 2 (14px · 사이 4px) → 제목 한 줄(좁으면 두 줄) → 주황 ›. 닫기 없음, 띠 전체를 누르면 DEX 거래소 목록 -->
-      <a href="#" data-ex-list="dex" data-dex-strip class="md:hidden flex items-center gap-2.5 rounded-xl bg-[#FFF3E6] px-[14px] py-[11px] hover:bg-[#FFEAD5] active:translate-y-px transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
-        <span class="shrink-0 w-8 h-8 grid grid-cols-2 gap-1" role="img" aria-label="ApeX, Aster, EdgeX, Lighter"><span data-logo="Apex" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Aster" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="EdgeX" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Lighter" data-logo-size="w-[14px] h-[14px] text-[6px]"></span></span>
-        <span class="min-w-0 flex-1 text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">이제 DEX도 페이백 받아보세요</span>
-        <i data-lucide="chevron-right" class="w-4 h-4 text-[#C2410C] shrink-0" aria-hidden="true"></i>
-      </a>
+           왼쪽 32px 칸에 DEX 로고 2 × 2 (14px · 사이 4px) → 제목 한 줄(좁으면 두 줄) → 주황 › → 닫기(X). 띠를 누르면 DEX 거래소 목록, [11.03] 닫기(X)는 세션 동안 숨김 -->
+      <div data-dex-strip class="md:hidden flex items-center rounded-xl bg-[#FFF3E6] hover:bg-[#FFEAD5] transition-colors">
+        <a href="#" data-ex-list="dex" class="min-w-0 flex-1 flex items-center gap-2.5 rounded-xl pl-[14px] pr-1 py-[11px] active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+          <span class="shrink-0 w-8 h-8 grid grid-cols-2 gap-1" role="img" aria-label="ApeX, Aster, EdgeX, Lighter"><span data-logo="Apex" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Aster" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="EdgeX" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Lighter" data-logo-size="w-[14px] h-[14px] text-[6px]"></span></span>
+          <span class="min-w-0 flex-1 text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">이제 DEX도 페이백 받아보세요</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-[#C2410C] shrink-0" aria-hidden="true"></i>
+        </a>
+        <button type="button" data-dex-strip-close aria-label="닫기" class="shrink-0 mr-1.5 w-8 h-8 rounded-lg grid place-items-center text-faint hover:text-ink hover:bg-black/5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+          <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
+        </button>
+      </div>
 
       <!-- 연동한 거래소 -->
       <section class="panel p-5 md:p-6 flex flex-col h-full lg:min-h-[300px] md:hidden">
@@ -974,12 +979,17 @@
       <!-- [5A] 모바일: DEX 띠는 카드 밖, 잔액 카드와 연동한 거래소 카드 사이 (격자 간격 12px) -->
       <!-- 모바일 DEX 띠: 운영 배너 슬롯과 별도로 관리 (배너 관리는 웹만)
            [5A] 부스트 축소형 띠(#boostBanner [data-boost-strip])와 같은 모양: 바탕 #FFF3E6 · 안쪽 여백 11px 14px · 모서리 14px · 그림자 없음.
-           왼쪽 32px 칸에 DEX 로고 2 × 2 (14px · 사이 4px) → 제목 한 줄(좁으면 두 줄) → 주황 ›. 닫기 없음, 띠 전체를 누르면 DEX 거래소 목록 -->
-      <a href="#" data-ex-list="dex" data-dex-strip class="md:hidden flex items-center gap-2.5 rounded-xl bg-[#FFF3E6] px-[14px] py-[11px] hover:bg-[#FFEAD5] active:translate-y-px transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
-        <span class="shrink-0 w-8 h-8 grid grid-cols-2 gap-1" role="img" aria-label="ApeX, Aster, EdgeX, Lighter"><span data-logo="Apex" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Aster" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="EdgeX" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Lighter" data-logo-size="w-[14px] h-[14px] text-[6px]"></span></span>
-        <span class="min-w-0 flex-1 text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">이제 DEX도 페이백 받아보세요</span>
-        <i data-lucide="chevron-right" class="w-4 h-4 text-[#C2410C] shrink-0" aria-hidden="true"></i>
-      </a>
+           왼쪽 32px 칸에 DEX 로고 2 × 2 (14px · 사이 4px) → 제목 한 줄(좁으면 두 줄) → 주황 › → 닫기(X). 띠를 누르면 DEX 거래소 목록, [11.03] 닫기(X)는 세션 동안 숨김 -->
+      <div data-dex-strip class="md:hidden flex items-center rounded-xl bg-[#FFF3E6] hover:bg-[#FFEAD5] transition-colors">
+        <a href="#" data-ex-list="dex" class="min-w-0 flex-1 flex items-center gap-2.5 rounded-xl pl-[14px] pr-1 py-[11px] active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+          <span class="shrink-0 w-8 h-8 grid grid-cols-2 gap-1" role="img" aria-label="ApeX, Aster, EdgeX, Lighter"><span data-logo="Apex" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Aster" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="EdgeX" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Lighter" data-logo-size="w-[14px] h-[14px] text-[6px]"></span></span>
+          <span class="min-w-0 flex-1 text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">이제 DEX도 페이백 받아보세요</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-[#C2410C] shrink-0" aria-hidden="true"></i>
+        </a>
+        <button type="button" data-dex-strip-close aria-label="닫기" class="shrink-0 mr-1.5 w-8 h-8 rounded-lg grid place-items-center text-faint hover:text-ink hover:bg-black/5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+          <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
+        </button>
+      </div>
 
       <!-- 연동한 거래소 -->
       <section class="panel p-5 md:p-6 flex flex-col h-full lg:min-h-[300px] md:hidden">
@@ -1030,14 +1040,13 @@
   </div>
 
   <!-- ========== [5A] 본문 맨 위 (1024px 이상 연동 회원 2·3·4): 배너 영역 + 세로 참여 목록 ==========
-       1280px 이상: 한 줄 두 칸 (왼쪽 배너 2 : 오른쪽 참여 목록 1, 사이 16px). 두 칸 위 · 아래 끝을 맞춘다 (배너 높이 = 참여 목록 높이).
-       1024~1279px: 배너(본문 폭 전체) → 참여 목록(본문 폭 전체).
+       한 줄 두 칸 (왼쪽 배너 2 : 오른쪽 참여 목록 1, 사이 16px). 두 칸 위 · 아래 끝을 맞춘다 (배너 높이 = 참여 목록 높이).
        위 끝 = 레일 잔액 카드 위 끝. 아래는 섹션 간격(48px) 후 실시간 페이백 현황 -->
   <div class="hidden lg:block" data-show="2 3 4" data-top-row>
     <section class="wrap sec-top">
       <!-- [10.29] 참여 목록 칸 최소 300px. 폭이 모자라면 배너 칸이 줄어든다 (REQ-205) -->
       <div class="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(300px,1fr)] items-stretch">
-        <!-- [10.29] 웹 메인 배너 · 연동용 (REQ-204). 어드민 '이벤트 메인 배너 관리' 차용: 이미지 + 제목 + 부제목(국문 · 영문) + 링크.
+        <!-- [10.29] 웹 메인 배너 · 연동용 (REQ-204). 어드민 [웹 메인 배너 관리] 등록: 이미지 + 제목 · 부제목(관리 언어 15개) + 링크.
              버튼 · 닫기 없음, 배너 전체 선택. 이미지는 칸을 꽉 채우고(넘치면 잘림) 제목 · 부제목은 이미지 위 왼쪽 아래 텍스트.
              아래 그림은 어드민 등록 이미지 자리표시. 첫 등록 콘텐츠: DEX 배너 → DEX 거래소 목록. 모바일은 이 배너를 쓰지 않음(DEX 띠) -->
         <a href="#" data-ex-list="dex" data-web-banner data-main-banner="linked" class="mb-banner flex">
@@ -1169,7 +1178,7 @@
         <a href="#" data-pb-landing class="shrink-0 -m-2 p-2 rounded text-[13px] font-semibold text-brand inline-flex items-center gap-0.5 whitespace-nowrap hover:text-brand-dark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">전체 보기<i data-lucide="chevron-right" class="w-4 h-4"></i></a>
       </div>
 
-      <!-- [4A] 인기 거래소 카드 4장: 1280px 이상 한 줄 4장(같은 폭, 본문 폭 꽉), 1024~1279px 2 × 2, 1023px 이하 가로 스와이프.
+      <!-- [4A] 인기 거래소 카드 4장: 1024px 이상 한 줄 4장(같은 폭, 본문 폭 꽉, 넘치면 좌우 스와이프), 1023px 이하 가로 스와이프.
            CEX · DEX 진입(회색 타일 · 목록 줄)은 없애고 머리 줄 "전체 보기 ›" 하나로 -->
       <div class="ex-wrap sec-body">
       <ul id="exGrid" class="ex-earn grid grid-cols-2 gap-3"></ul>
@@ -1289,7 +1298,6 @@
       <span class="min-w-0 break-all text-[13px] leading-snug tnum text-body" translate="no" data-ud-addr-text></span>
       <button type="button" data-ud-copy aria-label="지갑주소 복사" class="-m-1 p-1 shrink-0 rounded text-faint hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
     </p>
-    <p data-ud-exp hidden class="mt-1 text-[12px] text-mute"></p>
   </div>
   <!-- 선택한 UID 머리: 거래소 · UID · 상태. 1023px 이하 뒤로가기는 위 페이지 머리가 맡는다. [3A] 1024px 이상은 맨 왼쪽 ← (메인으로) -->
   <div data-ud-head class="flex items-center gap-2.5">
@@ -1301,8 +1309,6 @@
         <span class="min-w-0 tnum whitespace-nowrap" translate="no" data-ud-uid></span>
         <button type="button" data-ud-copy aria-label="UID 복사" class="-m-1 p-1 shrink-0 rounded text-faint hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
       </p>
-      <!-- [2I] 레퍼럴 만료가 있는 지갑: 남은 기간 (12일 이하면 주황) -->
-      <p data-ud-exp hidden class="mt-0.5 text-[12px] text-mute"></p>
     </div>
     <span class="shrink-0" data-ud-badge></span>
   </div>
@@ -1310,12 +1316,6 @@
   <!-- 데스크톱 2열: 왼쪽 요약 + 타임라인 / 오른쪽 주간 내역.
        모바일 1열: 요약 → 주간 내역 → 타임라인 -->
   <!-- [2H] 요약만 회색 블록. 주간 내역 · 타임라인은 카드 없이 제목 + 내용, 사이는 얇은 구분선 -->
-  <!-- [2I] 레퍼럴 만료 12일 이하: 페이백 요약 위 주황 안내 -->
-  <div data-ud-exp-box hidden class="mt-5 rounded-[10px] bg-amber-50 border border-amber-200 px-4 py-3 flex items-start gap-2.5">
-    <i data-lucide="alert-triangle" class="w-4 h-4 mt-0.5 shrink-0 text-amber-600" aria-hidden="true"></i>
-    <p class="min-w-0 flex-1 text-[13px] leading-snug text-amber-900 break-keep" data-ud-exp-msg></p>
-    <button type="button" data-exp-more class="shrink-0 -my-1 py-1 text-[13px] font-semibold text-amber-700 hover:text-amber-900 whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">자세히 보기</button>
-  </div>
   <div data-ud-grid class="mt-5 grid gap-x-8 gap-y-6 lg:grid-cols-2 lg:items-start">
     <!-- 페이백 요약 -->
     <div class="min-w-0 order-1 lg:order-none lg:col-start-1 lg:row-start-1 rounded-[10px] bg-[#F7F7F6] p-5">
@@ -1668,18 +1668,6 @@
   </div>
 </div>
 
-<!-- [11.02] 검토 중(소유권 인증 진행 중) 지갑을 고르면 뜨는 안내 팝업. 상세는 인증이 끝난 뒤 -->
-<div id="revPop" hidden class="fixed inset-0 z-[59]">
-  <div class="sheet-dim absolute inset-0 bg-ink/40" data-rev-close></div>
-  <div role="dialog" aria-modal="true" aria-labelledby="revTitle" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] max-w-[calc(100vw-32px)] bg-white rounded-xl shadow-[0_24px_60px_-20px_rgba(12,10,9,0.45)] p-5">
-    <h3 id="revTitle" class="text-[17px] font-bold tracking-[-0.03em] text-ink">검토 중인 지갑</h3>
-    <div class="mt-4 flex items-center gap-2.5" data-rev-who></div>
-    <div class="mt-3" data-rev-body></div>
-    <p class="mt-2 text-[12px] leading-relaxed text-mute break-keep">첫 지갑 연동은 최대 24시간이 걸릴 수 있어요</p>
-    <button type="button" data-rev-close class="btn-primary mt-5 w-full h-12 rounded text-[15px] font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">확인</button>
-  </div>
-</div>
-
 <!-- [11.03] 거래소 아웃링크 이동 모달 (현행 테스트 서버 화면 구성을 따름). 개인화 카드 상태 2 [거래하러 가기]에서 연다.
      웹(768px 이상)은 가운데 팝업, 모바일은 아래에서 올라오는 시트. 단계 문구 · 안내 문구는 가안 -->
 <div id="outPop" hidden class="fixed inset-0 z-[59]">
@@ -1769,8 +1757,7 @@
     { id: 'bitunix',  name: 'Bitunix',   rate: 75, base: 0.06,  avg: 41 },
     { id: 'okx',      name: 'OKX',       rate: 65, base: 0.05,  avg: 40 },
     { id: 'bybit',    name: 'Bybit',     rate: 64, base: 0.055, avg: 39 },
-    // Aster 레퍼럴 자동 연장 논의 중이라 꺼 둠. 만료가 생기면 referralDays 값을 켜면 다시 보인다 (예: referralDays: 365)
-    { id: 'aster',    name: 'Aster',     rate: 58, base: 0.035, avg: 35, dex: true, referralDays: 0 },
+    { id: 'aster',    name: 'Aster',     rate: 58, base: 0.035, avg: 35, dex: true },
     { id: 'edgex',    name: 'EdgeX',     rate: 55, base: 0.03,  avg: 32, dex: true },
     { id: 'apex',     name: 'Apex',      rate: 52, base: 0.02,  avg: 29, dex: true },
     // 언어별 구성: enOnly는 영문에서만 노출(국문 미지원). 아래 rate/base/avg는 형식 맞춤용 임시값
@@ -1791,16 +1778,13 @@
   const BTC = {
     now: '85,392',        // 지금 가격
     prev: '84,833',       // 어제 라운드 정답
-    myGuess: '085,400',   // 내가 넣은 예측
     reward: 1000,         // 최대 보상
   };
-  let btcJoined = false;   // 오늘 참여했는지 (시안 확인용 토글)
 
   // [신규] 연동된 UID. 거래소마다 여러 개를 걸 수 있다
   // state: on = 정상, issue = 이슈 UID(고객센터 확인), fail = 소유권 인증 실패, off = 연동 해제됨, manual = 수동연동 실패
   // DEX는 지갑주소로 연동한다. 화면에서는 앞뒤만 남기고 가운데를 줄인다
   // [2I] 연동한 DEX 지갑 (id로 짝짓는다). [3A] DEX 지갑도 오늘의 투표 적립금(이벤트 리워드)을 받는다: amt = 거래소 페이백 + 이벤트 리워드
-  //   레퍼럴 만료가 있는 거래소는 거래소 데이터 referralDays로 켠다 (지금은 모두 꺼짐)
   const DEX_LINKS = {
     lighter: { total: '120.00', uids: [
       { uid: '0x7a3f4c2e9b1d8a6f0e3c5b7d9a1f2e4c6b8d5d6e', amt: '120.00', state: 'on', claimable: '120.00', cumulative: '120.00', srcExchange: '117.00', srcEvent: '3.00',
@@ -1845,7 +1829,7 @@
     { id: 'bitget', ex: 'Bitget', total: '6,401.84', uids: [
       { uid: '2049183376', amt: '12.00', state: 'on', srcExchange: '5.00', srcEvent: '7.00', cumulative: '1,240.50',
         daily: [1.20, 0, 2.40, 0, 1.40] },
-      { uid: '2087615520', amt: '2,261.84', state: 'on', srcExchange: '0.00', srcEvent: '2,261.84', cumulative: '2,261.84', daily: [0, 0, 0, 0, 0] },
+      { uid: '2087615520', amt: '2,261.84', state: 'on', srcExchange: '2,251.84', srcEvent: '10.00', cumulative: '2,261.84', daily: [0, 0, 0, 0, 0] },
       { uid: '2093348871', amt: '2,210.00', state: 'on', srcExchange: '0.00', srcEvent: '2,210.00', cumulative: '2,210.00', daily: [0, 0, 0, 0, 0] },
       { uid: '2011572904', amt: '1,918.00', state: 'on', srcExchange: '0.00', srcEvent: '1,918.00', cumulative: '1,918.00', daily: [0, 0, 0, 0, 0] },
     ] },
@@ -1897,7 +1881,6 @@
   const MANY15 = [['Flipster', '58201937'], ['Bitunix', '730215884'], ['HTX', '40917562'], ['Toobit', '61028457'], ['KuCoin', '5291736048'], ['BingX', '884120593']];
   let many15 = false;    // [3A] 상태 4를 연동 13곳 회원으로 (7곳 + CEX 6곳, 잔액 0.00 · UID 1개). 시안 확인용 토글, 주소 &many15=1
   let regMid = false;    // [2I] 상태 4를 "거래소 4곳" 회원으로 (시안 확인용, 주소 &mid=1)
-  let pollPick = null;   // 'long' | 'short' | null (시안 확인용)
   // 테더맥스가 직접 여는 혜택 (앞 둘은 실제 앱 화면 기준)
   // tone = 혜택 이미지가 들어올 자리의 임시 색. 규격은 IMAGES.md에 있다
   const TM_EVENTS = [
@@ -1992,7 +1975,6 @@
   };
 
   let state = '1';      // 회원 상태 1~4
-  let refStage = '142';    // [2I] 레퍼럴 남은 기간: '142' | '12' | 'exp'(만료). referralDays가 켜진 거래소에만 쓰인다 (지금은 꺼져 있어 패널 · 주소 값 없음)
   let sheet = null;     // 열린 창: null | input(연동 창) | fail | ok | addOk
   let toast = false;    // 창을 닫은 뒤 뜨는 알림
   let picked = '';      // 목록에서 눌러 창으로 넘어간 거래소
@@ -2255,6 +2237,20 @@
   document.getElementById('notifyClose').addEventListener('click', () => {
     document.getElementById('notifyWrap').hidden = true;
   });
+  // [11.03] 모바일 DEX 띠 닫기(X): 이 세션 동안 숨김. 같은 탭 새로고침에도 유지(sessionStorage를 못 쓰면 이 페이지에서만)
+  const DEX_STRIP_KEY = 'tm:dexStripOff';
+  let dexStripOff = false;
+  try { dexStripOff = sessionStorage.getItem(DEX_STRIP_KEY) === '1'; } catch (e) { /* 무시 */ }
+  const paintDexStrip = () => document.querySelectorAll('[data-dex-strip]').forEach((el) => (el.hidden = dexStripOff));
+  paintDexStrip();
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-dex-strip-close]')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    dexStripOff = true;
+    try { sessionStorage.setItem(DEX_STRIP_KEY, '1'); } catch (err) { /* 무시 */ }
+    paintDexStrip();
+  });
   document.getElementById('calcClose').addEventListener('click', () => {
     document.getElementById('calcBanner').hidden = true;
   });
@@ -2262,7 +2258,7 @@
   // ===== [신규] 연동된 UID =====
   // 거래소별로 묶고, 문제가 있는 UID는 무엇을 해야 하는지 바로 아래에 적는다
   const UID_SHOWN = 4;   // 카드에 바로 보이는 UID 수. 나머지는 눌러서 편다
-  const UID_MSG = { issue: '확인 필요', fail: '인증 실패', off: '연동 해제', manual: '연동 실패', expired: '레퍼럴 만료' };
+  const UID_MSG = { issue: '확인 필요', fail: '인증 실패', off: '연동 해제', manual: '연동 실패' };
   // [Figma] 사유 칩: 이용 제한 · 인증 실패 · 연동 해제 · 연동 실패
   const reasonLabel = (st) => (st === 'issue' ? '이용 제한' : UID_MSG[st]);
   const reasonChip = (st) => `<span class="shrink-0 h-5 px-2 rounded-full bg-warn/10 text-warn text-[11px] font-bold inline-flex items-center whitespace-nowrap">${reasonLabel(st)}</span>`;
@@ -2273,8 +2269,6 @@
     fail: { icon: 'shield-x', color: 'text-warn', msg: '소유권 인증에 실패했습니다.', action: '소유권 재인증' },
     off: { icon: 'unlink', color: 'text-amber-600', msg: 'UID의 연동이 해제되었습니다.', action: '사유 확인' },
     manual: { icon: 'alert-triangle', color: 'text-amber-600', msg: 'UID 연동에 실패했습니다.', action: '사유 확인' },
-    // [2I] 레퍼럴 만료 (Aster 등 레퍼럴 만료가 있는 DEX). 주황 계열
-    expired: { icon: 'calendar-x', color: 'text-amber-600', msg: '레퍼럴 연동이 만료됐어요', sub: '이 지갑의 페이백이 중단됐어요. 다시 받는 방법은 안내를 확인해 주세요.', action: '안내 보기' },
   };
   // 확인이 필요한 사유. 설명은 묶음당 한 번만 나온다
   // 아이콘·색은 UID_ISSUE를 따른다 (사유마다 다른 아이콘, 빨강 2 · 주황 2)
@@ -2291,36 +2285,22 @@
     manual: {
       title: '수동연동 실패',
     },
-    expired: {
-      title: '레퍼럴 만료',
-    },
   };
-  const REASON_ORDER = ['issue', 'fail', 'off', 'manual', 'expired'];
+  const REASON_ORDER = ['issue', 'fail', 'off', 'manual'];
   // [2H] UID 상세의 상태 배지 · 문제 카드 아이콘 바탕. 이용 제한·인증 실패는 빨강, 연동 해제·연동 실패는 주황
   const ISSUE_TONE = {
     issue: 'bg-warn/10 text-warn', fail: 'bg-warn/10 text-warn',
-    off: 'bg-amber-500/10 text-amber-600', manual: 'bg-amber-500/10 text-amber-600', expired: 'bg-amber-500/10 text-amber-600',
+    off: 'bg-amber-500/10 text-amber-600', manual: 'bg-amber-500/10 text-amber-600',
   };
   // 지갑주소는 길다. 앞 6자리와 뒤 4자리만 남긴다
   const shortAddr = (a) => a.slice(0, 6) + '…' + a.slice(-4);
   const keyWord = (dex) => (dex ? '지갑주소' : 'UID');
   const keyText = (g, u) => (g.dex ? shortAddr(u.uid) : u.uid);
-  // [2I] DEX 지갑 묶음. 레퍼럴 만료가 있는 거래소(referralDays)는 패널의 남은 기간(refStage)을 따른다: 만료면 확인 필요 UID(레퍼럴 만료)
+  // [2I] DEX 지갑 묶음
   function dexGroup(id, e) {
     const src = (isMid() && MID_DEX[id]) || DEX_LINKS[id] || DEX_LINKS.lighter;
-    const g = { total: src.total, ex: e.name, dex: true, uids: src.uids.map((u) => ({ ...u })) };
-    if (e.referralDays) {
-      if (refStage === 'exp') g.uids.forEach((u) => (u.state = 'expired'));
-      else g.refDays = Number(refStage);
-    }
-    return g;
+    return { total: src.total, ex: e.name, dex: true, uids: src.uids.map((u) => ({ ...u })) };
   }
-  // [2I] 레퍼럴 만료일: 오늘 + 남은 일수 (yy.mm.dd)
-  const refDate = (days) => {
-    const d = new Date(); d.setDate(d.getDate() + days);
-    const p2 = (n) => String(n).padStart(2, '0');
-    return `${p2(d.getFullYear() % 100)}.${p2(d.getMonth() + 1)}.${p2(d.getDate())}`;
-  };
 // 상태마다 연동한 거래소가 다르다. 2·3번은 막 연동한 한 곳뿐이다
   function uidGroups() {
     const ids = linkedIds(state);
@@ -2407,8 +2387,7 @@
   // DEX 뱃지 하나를 연동한 거래소 · UID 상세 목록 · 인기 거래소에서 같이 쓴다
   const DEX_BADGE = '<span class="dex-badge shrink-0 h-[16px] px-1 rounded bg-hair text-[10px] font-bold leading-[16px] text-mute" translate="no">DEX</span>';
   const exTags = (g) => `
-              ${g.dex ? DEX_BADGE : ''}
-              ${g.refDays && g.refDays <= 12 ? '<span class="shrink-0 h-[16px] px-1 rounded bg-amber-500/10 text-[10px] font-bold leading-[16px] text-amber-600" translate="no">D-' + g.refDays + '</span>' : ''}`;
+              ${g.dex ? DEX_BADGE : ''}`;
 
   // 거래소 한 줄. 누르면 UID 상세 페이지에서 그 거래소를 펼친 채로 연다
   function exRow(g, side) {
@@ -2612,11 +2591,9 @@
     fail: '소유권 인증 실패 처리를 진행해요',
     off: '연동 해제 사유 확인을 진행해요',
     manual: '수동연동 실패 처리를 진행해요',
-    expired: '안내 페이지로 이동해요',
   };
   let issueTimer = null;
   function showIssueToast(stateKey) { showMockToast(ISSUE_TOAST[stateKey]); }
-  // [11.02] 정상이 아닌 UID를 골랐을 때: 검토 중이면 안내 팝업, 확인 필요면 사유별 안내 토스트
   // [11.03] 거래소 아웃링크 이동 모달 (개인화 카드 상태 2 [거래하러 가기]). 연동한 거래소가 1곳이면 그 거래소,
   //   2곳 이상이면 가장 최근에 연동한 거래소 (linkedIds의 마지막 = 가장 최근 연동)
   function openOutPop(exName) {
@@ -2645,22 +2622,6 @@
   document.addEventListener('keydown', (e) => { const p = document.getElementById('outPop'); if (e.key === 'Escape' && p && !p.hidden) p.hidden = true; });
   // [11.03] 검토 중 줄 · 안내 바는 눌러도 동작 없음 (존 답변). 확인 필요는 사유별 안내
   function issuePick(g, u) { if (!isRev(u)) showIssueToast(u.state); }
-  function openRevPop(g, u) {
-    const pop = document.getElementById('revPop');
-    pop.querySelector('[data-rev-who]').innerHTML = `
-      ${logo(g.ex, 'w-8 h-8 text-[11px] rounded-full')}
-      <span class="min-w-0 flex-1">
-        <span class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5"><span class="text-[14px] font-semibold text-ink whitespace-nowrap" translate="no">${g.ex}</span>${exTags(g)}</span>
-        <span class="block mt-0.5 text-[12px] tnum text-mute whitespace-nowrap" translate="no">${keyText(g, u)}</span>
-      </span>
-      ${REV_CHIP}`;
-    pop.querySelector('[data-rev-body]').innerHTML = revBar(u);
-    pop.hidden = false;
-    refreshIcons();
-    pop.querySelector('button[data-rev-close]').focus({ preventScroll: true });
-  }
-  document.addEventListener('click', (e) => { if (e.target.closest('[data-rev-close]')) document.getElementById('revPop').hidden = true; });
-  document.addEventListener('keydown', (e) => { const p = document.getElementById('revPop'); if (e.key === 'Escape' && p && !p.hidden) p.hidden = true; });
   function showMockToast(msg) {
     const t = document.getElementById('issueToast');
     if (!t || !msg) return;
@@ -2734,7 +2695,7 @@
   function wdItems() {
     const out = [];
     linkedOrder().forEach((g) => g.uids.forEach((u) => {
-      if (u.state !== 'on') return;   // 확인 필요 UID(레퍼럴 만료 포함)는 넣지 않는다
+      if (u.state !== 'on') return;   // 확인 필요 UID는 넣지 않는다
       const d = uidDetailOf(u);
       const ex = d.srcEx, ev = d.srcEv;
       if (!(ex + ev > 0)) return;
@@ -2971,10 +2932,6 @@
     if (!document.getElementById('wdConfirm').hidden) document.getElementById('wdConfirm').hidden = true;
     else closeWd();
   });
-  // [2I] 레퍼럴 만료 임박 안내의 [자세히 보기] (referralDays가 켜진 거래소에서만 보인다)
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-exp-more]')) showMockToast('안내 페이지로 이동해요');
-  });
 
   // [2I] 푸터: 이메일 복사 · 회사/약관 페이지 · SNS (페이지 · 채널은 범위 밖이라 토스트만)
   document.addEventListener('click', (e) => {
@@ -3175,8 +3132,8 @@
     if (sideBox) sideBox.innerHTML = railListHTML(sorted);
     // 미리 잡아 둔 목록 높이(머리의 data-exn)를 푼다. 이제부터는 실제 줄 수만큼
     delete document.documentElement.dataset.exn;
-    // [5A] DEX 배너(웹 맨 위) · 띠(모바일)는 연동 회원(2·3·4)에게 늘 보인다 (닫기 · 패널 토글 없음).
-    //   실서비스 노출 조건 · 기간은 웹은 배너 슬롯 어드민, 모바일 띠는 따로 정한다
+    // [5A] DEX 배너(웹 맨 위) · 띠(모바일)는 연동 회원(2·3·4)에게 보인다. 웹 배너는 닫기 없음, [11.03] 모바일 띠는 닫기(X)로 세션 동안 숨김.
+    //   웹 배너는 배너 슬롯 어드민, 모바일 띠는 고정(어드민 관리 대상 아님)
     requestAnimationFrame(paintRailScroll);
 
     // 연동 현황 KPI
@@ -3285,24 +3242,22 @@
 
   // [3A] 페이백 챌린지는 오늘의 미션 마지막 줄. 회원 상태(1~4)와 상관없이 같은 모양이고,
   //   [도전하기]를 누르면 이벤트 상세 페이지로 간다 (시안에선 안내만)
-  const GOAL_MISSION = { icon: 'trophy', done: false, title: '페이백 챌린지', sub: '지금 참여하고 혜택 받기', cta: '도전하기', goal: true };
+  const GOAL_MISSION = { icon: 'trophy', title: '페이백 챌린지', sub: '지금 참여하고 혜택 받기', cta: '도전하기', goal: true };
 
   // 오늘의 투표 페이지. 영어 보기면 그대로 넘긴다
   const VOTE_HREF = 'asis:오늘의 투표';
   // ===== 오늘의 BTC 가격 맞히기 =====
-  // 미션 줄 하나. 남은 일은 파란 버튼, 끝낸 일은 회색 글씨 (토스 미션 카드와 같은 방식)
+  // 미션 줄 하나: 아이콘 · 제목 · 설명 · 파란 버튼
   function missionRow(d) {
     // [3A] 챌린지 줄: 버튼은 이벤트 상세 페이지로
     const act = d.goal
       ? `<a href="#" data-go-detail class="btn-soft shrink-0 h-9 px-3.5 rounded-lg text-[13px] font-bold inline-flex items-center whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">${d.cta}</a>`
-      : d.done
-        ? `<span class="shrink-0 text-[13px] font-semibold text-faint">${d.doneText}</span>`
-        : `<a href="${d.href || '#'}" class="btn-soft shrink-0 h-9 px-3.5 rounded-lg text-[13px] font-bold inline-flex items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">${d.cta}</a>`;
+      : `<a href="${d.href || '#'}" class="btn-soft shrink-0 h-9 px-3.5 rounded-lg text-[13px] font-bold inline-flex items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">${d.cta}</a>`;
     return `
       <li class="border-t border-line first:border-0">
         <div class="flex items-center gap-3.5 py-3 min-h-[60px]">
           <span class="w-10 h-10 rounded-xl bg-hair grid place-items-center shrink-0">
-            <i data-lucide="${d.icon}" class="w-5 h-5 ${d.done ? 'text-faint' : 'text-brand'}" aria-hidden="true"></i>
+            <i data-lucide="${d.icon}" class="w-5 h-5 text-brand" aria-hidden="true"></i>
           </span>
           <span class="min-w-0 flex-1">
             <span class="block text-[15px] font-semibold text-ink break-keep">${d.title}</span>
@@ -3341,16 +3296,10 @@
 
     // [3A] 순서: BTC 가격 맞히기 → 오늘의 투표 → 페이백 챌린지
     const rows = [
-      btcJoined
-        ? { icon: 'target', done: true, title: 'BTC 가격 맞히기',
-            sub: '예측 ' + BTC.myGuess + ' 접수됐어요', doneText: '참여 완료' }
-        : { icon: 'target', done: false, title: 'BTC 가격 맞히기',
-            sub: '맞히고 최대 ' + BTC.reward.toLocaleString('ko-KR') + ' USDT 상금받기', cta: '참여하기' },
-      pollPick
-        ? { icon: 'arrow-up-down', done: true, title: '오늘의 투표',
-            sub: (pollPick === 'long' ? '롱' : '숏') + '에 걸었어요', doneText: '투표 완료', href: VOTE_HREF }
-        : { icon: 'arrow-up-down', done: false, title: '오늘의 투표',
-            sub: 'BTC 방향 예측하고 적립금 모으기', cta: '투표하기', href: VOTE_HREF },
+      { icon: 'target', title: 'BTC 가격 맞히기',
+        sub: '맞히고 최대 ' + BTC.reward.toLocaleString('ko-KR') + ' USDT 상금받기', cta: '참여하기' },
+      { icon: 'arrow-up-down', title: '오늘의 투표',
+        sub: 'BTC 방향 예측하고 적립금 모으기', cta: '투표하기', href: VOTE_HREF },
       GOAL_MISSION,
     ];
     // [10.30] 오늘의 투표 출시 전(주소 acts=2): 참여 이벤트 2개 (BTC 가격 맞히기 · 페이백 챌린지). 같은 순서에서 오늘의 투표만 빠진다
@@ -3366,7 +3315,6 @@
     });
     refreshIcons();
   }
-  const renderPoll = paintBtc;   // 투표도 같은 목록을 다시 그린다
 
   // ===== 진행 중인 이벤트 =====
   // 혜택과 이벤트는 카드 크기와 썸네일 규격을 같게 둔다. 이미지를 한 사이즈로 만들어 쓰기 위해서다.
@@ -4007,17 +3955,6 @@
     uidEl.classList.toggle('break-all', !!g.dex);
     box.querySelector('[data-ud-addr]').hidden = !(g.dex && udMulti());
     box.querySelector('[data-ud-addr-text]').textContent = g.dex ? u.uid : '';
-    // [2I] 레퍼럴 만료가 있는 지갑(Aster): 주소 아래 남은 기간. 12일 이하면 주황 + 페이백 요약 위 안내
-    const exp = g.refDays && u.state === 'on' ? g.refDays : 0;
-    const soon = exp > 0 && exp <= 12;
-    box.querySelectorAll('[data-ud-exp]').forEach((el) => {
-      el.textContent = exp ? `레퍼럴 만료까지 D-${exp} (${refDate(exp)})` : '';
-      el.hidden = !exp;
-      el.classList.toggle('text-amber-600', soon);
-      el.classList.toggle('text-mute', !soon);
-    });
-    box.querySelector('[data-ud-exp-box]').hidden = !soon;
-    if (soon) box.querySelector('[data-ud-exp-msg]').textContent = `레퍼럴 연동이 ${exp}일 후 만료돼요. 만료되면 이 지갑의 페이백이 중단돼요.`;
     // [2H] 상태 배지(머리 · UID 전환 버튼)
     const issue = u.state !== 'on';
     const badge = `<span class="h-6 px-2.5 rounded-full ${issue ? ISSUE_TONE[u.state] : 'bg-gain/10 text-gain'} text-[12px] font-bold inline-flex items-center whitespace-nowrap">${issue ? UID_REASON[u.state].title : '활성'}</span>`;
@@ -5111,7 +5048,7 @@
       '지갑주소': 'Wallet address',
       '친구 초대 페이지로 이동해요': 'Going to the Invite friends page',
       '페이백 자동 적립': 'Cashback added automatically', '테더맥스에서 출금': 'Claim on TetherMax', '안내 문구 (어드민 입력)': 'Guide text (set in admin)', '거래소로 이동해요 (시안)': 'Going to the exchange (mock)',
-      '검토 중': 'Under review', 'UID 연동 처리 중': 'UID linking in progress', '지갑 연동 처리 중': 'Wallet linking in progress', '소유권 인증 진행 중': 'Ownership verification in progress', '검토 중인 지갑': 'Wallet under review', '첫 지갑 연동은 최대 24시간이 걸릴 수 있어요': 'Linking your first wallet can take up to 24 hours',
+      '검토 중': 'Under review', 'UID 연동 처리 중': 'UID linking in progress', '지갑 연동 처리 중': 'Wallet linking in progress', '소유권 인증 진행 중': 'Ownership verification in progress',
       '인증 실패': 'Verification failed', '연동 해제': 'Unlinked', '연동 실패': 'Link failed',
       '소유권 재인증': 'Re-verify', '자세히 보기': 'View details', '사유 확인': 'See why', '요청됨': 'Requested',
       '소유권 인증에 실패했습니다.': 'Ownership check failed.', 'UID의 연동이 해제되었습니다.': 'This UID was unlinked.', 'UID 연동에 실패했습니다.': 'UID linking failed.', '확인이 필요한 UID입니다.': 'This UID needs a review.',
@@ -5126,8 +5063,6 @@
       'BTC 가격 맞히기': 'Guess the BTC price', '매일 1회': 'Once a day',
       '시간': 'h', '분': 'm', '초': 's',
       '맞히면 최대': 'Guess right and win up to', '를 받아요.': '.', '참여하기': 'Join',
-      '오늘 예측': 'Today’s guess', '접수됐어요. 결과는 마감 후에 알려드려요.': 'is in. We will share the result after the deadline.',
-      '내 예측 보기': 'See my guess',
       // 연속 방문
       '연속 방문': 'Day streak', '를 드려요.': '.',
       '를 드렸어요. 내일부터 다시 시작해요.': ' today. A new streak starts tomorrow.',
@@ -5136,9 +5071,7 @@
             '맞히고 최대 1,000 USDT 상금받기': 'Guess right and win up to 1,000 USDT', 'BTC 방향 예측하고 적립금 모으기': 'Call the BTC direction and earn credits',
       '최대 1,000 USDT 상금': 'Up to 1,000 USDT', '방향 맞히고 적립금': 'Call it and earn', '참여하고 혜택 받기': 'Join and get rewards',
       '오늘 시장, 롱일까요 숏일까요?': 'Long or short today?', '오늘 밤 12시 마감': 'Closes at midnight',
-      '투표하기': 'Vote', '투표 완료': 'Voted', '참여 완료': 'Joined',
-      '롱에 걸었어요': 'You picked long', '숏에 걸었어요': 'You picked short',
-      '내 투표 보기': 'See my vote', '맞히고 리워드 받기': 'Guess right, earn rewards',
+      '투표하기': 'Vote', '맞히고 리워드 받기': 'Guess right, earn rewards',
       // 인기 거래소
       '인기 거래소': 'Top Popular Exchanges', '거래소 전체 보기': 'View all exchanges',
       // [2I] 출금하기 팝업
@@ -5154,10 +5087,6 @@
       '지갑별 출금 금액이 10 USDT 이상이면 출금돼요': "You can claim when a wallet's amount reaches 10 USDT",
       '이벤트 리워드는 같은 지갑의 거래소 페이백만큼까지 함께 출금돼요': "Event rewards go out with it, up to that wallet's exchange cashback",
       '출금 가능한 지갑은 한 번에 모두 출금돼요': 'All eligible wallets are claimed at once',
-      // [2I] 레퍼럴 만료
-      '레퍼럴 만료': 'Referral expired', '레퍼럴 연동이 만료됐어요': 'Your referral link has expired',
-      '이 지갑의 페이백이 중단됐어요. 다시 받는 방법은 안내를 확인해 주세요.': 'Cashback to this wallet has stopped. See the guide to get them again.',
-      '안내 보기': 'View guide', '안내 페이지로 이동해요': 'Going to the guide page',
       '출금 가능한 페이백이 없어요': 'No cashback to claim yet',
       '출금할까요?': 'Claim now?', '합계 금액': 'Total', '취소': 'Cancel',
       '초대 보상을 받을 거래소나 UID를 바꾸려면 고객센터로 문의해 주세요': 'To change the exchange or UID for referral rewards, contact support',
@@ -5259,10 +5188,9 @@
       [/^(.+) 순서 바꾸기$/, 'Reorder $1'],
       [/^지갑주소 ([0-9]+)개$/, '$1 wallets'],
       [/^최대 ([0-9,]+) USDT$/, 'Up to $1 USDT'],
-      [/^예측 ([0-9,]+) 접수됐어요$/, 'Your guess $1 is in'],
       [/^거래소 ([0-9]+)개, UID ([0-9]+)개$/, 'Exchanges $1 · UIDs $2'],
       [/^([0-9]+)곳 전체 보기$/, 'View all $1'],
-      // [2I] 출금 팝업 · 레퍼럴 만료
+      // [2I] 출금 팝업
       [/^출금 가능 UID ([0-9]+)개$/, (m, n) => n + (n === '1' ? ' claimable UID' : ' claimable UIDs')],
       [/^출금 불가 UID ([0-9]+)개$/, (m, n) => n + (n === '1' ? ' UID' : ' UIDs') + ' not yet claimable'],
       [/^출금 가능 지갑 ([0-9]+)개$/, (m, n) => n + (n === '1' ? ' claimable wallet' : ' claimable wallets')],
@@ -5274,8 +5202,6 @@
       [/^출금할 수 있는 ([0-9]+)건이 모두 함께 출금돼요$/, 'All $1 eligible items will be claimed together'],
       [/^거래소 페이백 ([0-9,]+\.[0-9]{2}) USDT 더 필요$/, 'Needs $1 USDT more exchange cashback'],
       [/^연동한 (.+) 지갑$/, 'Linked $1 wallet'],
-      [/^레퍼럴 만료까지 D-([0-9]+) \((.+)\)$/, 'Referral expires D-$1 ($2)'],
-      [/^레퍼럴 연동이 ([0-9]+)일 후 만료돼요\. 만료되면 이 지갑의 페이백이 중단돼요\.$/, 'Your referral link expires in $1 days. Cashback to this wallet will stop once it expires.'],
       [/^UID ([0-9]+)개 전체 보기$/, 'View all $1 UIDs'],
       [/^지갑주소 ([0-9]+)개 전체 보기$/, 'View all $1 wallet addresses'],
       [/^UID ([0-9]+)개 전체 보기$/, 'View all $1 UIDs'],

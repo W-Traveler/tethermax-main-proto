@@ -362,7 +362,7 @@
   function goLang(c) { ed.lang = c; paintEdit(); const f = $('[data-bo-edit] [data-tf="t"]'); if (f) f.focus({ preventScroll: true }); }
   const langIdx = () => LANGS.findIndex((l) => l[0] === ed.lang);
 
-  // REQ-A-012 입력 검증 (미결 #3 가안): 이미지 · 제목 한국어 · 영어 · 링크 필수, 직접 입력 주소는 https만
+  // REQ-A-012 입력 검증: 이미지 · 제목 한국어 · 영어 · 링크 필수, 직접 입력 주소는 https만
   function validate(x) {
     const e = {};
     if (!x.img) e.img = L('PC 이미지를 등록해 주세요', 'Add a PC image');
