@@ -54,7 +54,7 @@ const CASES_EN = {
  "전체 보기 팝업에도 [확인 필요] 필터칩 없음 (E03)": "No [To resolve] filter chip in the View all popup either (E03)",
  "미연동 (상태 1)": "Not linked (state 1)",
  "레일: 연동 유도 카드는 기존(AS-IS) 문구 · 단계 그대로 — \"3단계로 첫 페이백 받기\" 체크리스트 (1 테더맥스 계정 만들기 완료 · 2 파트너 거래소 둘러보기 · 3 거래소 계정 연동하기 + 3 USDT) (11.03)": "Rail: link prompt card keeps the AS-IS copy and steps — \"Unlock Your First Cashback in 3 Steps!\" checklist (1 Create TetherMax account done · 2 Browse partners · 3 Link your account with us + 3 USDT) (11.03)",
- "[계정 연동하기] · 3단계 줄 → 거래소 연동 창 (MP-W02-a). 버튼 광택 7초마다 한 번 (움직임 줄이기면 없음)": "[Link an account] · step 3 row → link account window (MP-W02-a). Button shine once every 7 s (none with reduced motion)",
+ "[계정 연동하기] · 3단계 줄 → 거래소 연동 창 (MP-W02-a). 웹 레일 카드는 인터랙션 없음 (모바일만, 11.03)": "[Link an account] · step 3 row → link account window (MP-W02-a). No interaction on the web rail card (mobile only, 11.03)",
  "계산기: 레일 연동 유도 카드 아래 \"페이백 미리보기\" 카드 (기존 문구 그대로, 11.03). 본문 계산기 카드 없음": "Calculator: \"Cashback Preview\" card under the rail link prompt card (AS-IS copy, 11.03). No calculator card in the body",
  "웹 메인 배너 · 미연동용 (기존 부스트 배너 자리, 어드민 등록). 구성은 연동용과 같음 (첫 등록: 부스트 배너 → 부스트 안내)": "Web main banner · for unlinked members (former boost banner slot, registered in admin). Same layout as the linked one (first entry: boost banner → boost guide)",
  "세계 최고 페이백 보장 카드 (실시간 페이백 현황이 카드 안, 지급 시각 없음)": "World's highest cashback guarantee card (Real-time Cashback inside the card, no payout time)",
