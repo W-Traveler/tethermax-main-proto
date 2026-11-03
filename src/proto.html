@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>window.addEventListener("error",function(e){try{parent.postMessage({type:"tm:error",msg:String(e.message||"")+(e.lineno?" (line "+e.lineno+")":"")},"*")}catch(_){}});if(/[?&]frame=1/.test(location.search)){try{sessionStorage.removeItem("tm:introSig");sessionStorage.removeItem("tm:dexStripOff")}catch(_){}}</script>
+<script>window.addEventListener("error",function(e){try{parent.postMessage({type:"tm:error",msg:String(e.message||"")+(e.lineno?" (line "+e.lineno+")":"")},"*")}catch(_){}});if(/[?&]frame=1/.test(location.search)){try{sessionStorage.removeItem("tm:introSig")}catch(_){}}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <!-- 시안 2D: 2C 복사본. 메인의 페이백 챌린지는 보기 전용(참여 여부 · 진행 상태). 참여 · 받기 · 레벨표 · 유의사항은 이벤트 상세 페이지에서 -->
 <title>TetherMax 메인 (개편 시안 v5)</title>
@@ -447,6 +447,12 @@
   }
   @container (max-width: 339px) { [data-roll-name] { display: none !important; } }
 
+  /* [11.03] 웹 맨 위 참여 목록: 줄들이 칸 높이를 똑같이 나눠 갖고, 줄 안 아이콘 · 문구 · 버튼은 세로 가운데 (2개일 때 위아래 빈 공간 없음) */
+  /* 국문 · 영문 어순이 달라 통째로 바꾸는 문구 */
+  html[lang="en"] [data-only="ko"], html:not([lang="en"]) [data-only="en"] { display: none !important; }
+  [data-mission-fill] { flex: 1 1 auto; display: flex; flex-direction: column; }
+  [data-mission-fill] > li { flex: 1 1 0; display: flex; align-items: center; }
+  [data-mission-fill] > li > div { flex: 1 1 auto; }
   /* [10.29] 웹 메인 배너 (REQ-204, 1024px 이상만 · display는 클래스(flex / hidden lg:flex)로 준다): 이미지가 칸을 꽉 채우고, 제목 · 부제목은 이미지 위 왼쪽 아래 텍스트. 버튼 · 닫기 없음.
      .mb-img 안의 그림은 어드민 등록 이미지 자리표시다. 마우스를 올리면 이미지가 살짝 커진다(움직임 줄이기면 없음) */
   .mb-banner { position: relative; align-items: flex-end; min-width: 0; min-height: 220px; border-radius: 12px; overflow: hidden; isolation: isolate; color: #fff; }
@@ -476,7 +482,7 @@
 
   /* 웹(데스크톱) 미연동: 모바일 기본(하단 고정 켬)에 맞춰 계산기는 떠 있는 배너 대신 본문 카드로 둔다 */
   @media (min-width: 1024px) {
-    [data-calc-inline]:not([hidden]) { display: block !important; }   /* 미연동(data-show="1")일 때만 */
+    [data-calc-inline] { display: none !important; }   /* [11.03] 웹은 계산기를 레일 "페이백 미리보기" 카드로 (본문 카드 없음) */
     #calcBanner { display: none !important; }
   }
 
@@ -743,32 +749,25 @@
 
   <!-- 미연동: 연동 유도 카드는 이 칸 안에서만 스크롤한다 -->
   <div data-show="1" class="rail-aside-scroll flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
-  <!-- 미연동: 연동 유도 카드. 이 시안의 1순위 행동이라 사이드바의 다른 요소와 확실히 구분한다
-       (파랑 바탕 + 테두리). 연동하면 생기는 것 3가지를 보여 "왜 연동하나"에 답한다 -->
+  <!-- [11.03] 웹 미연동 레일 연동 유도 카드: 기존(AS-IS) 문구 · 단계 그대로 (DEX Figma MP-W01N). 1 테더맥스 계정 만들기(완료) · 2 파트너 거래소 둘러보기 · 3 거래소 계정 연동하기 + 3 USDT -->
   <div>
-    <div class="link-card rounded-2xl p-4">
-      <p class="text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">연동 한 번이면 페이백이 계속 쌓여요</p>
-      <!-- 안내형: 모바일 연동 카드와 같은 3단계. 사이드바 폭이 좁아 세로로 쌓는다 -->
-      <ol class="mt-3 rounded-xl bg-white px-3 py-2.5 flex flex-col gap-2">
-        <li class="flex items-center gap-2"><span class="w-[22px] h-[22px] rounded-full bg-brand-soft text-brand grid place-items-center text-[11.5px] font-bold shrink-0">1</span><span class="text-[12.5px] font-semibold text-ink tracking-[-0.02em]">거래소 고르기</span></li>
-        <li class="flex items-center gap-2"><span class="w-[22px] h-[22px] rounded-full bg-brand-soft text-brand grid place-items-center text-[11.5px] font-bold shrink-0">2</span><span class="text-[12.5px] font-semibold text-ink tracking-[-0.02em]">UID 붙여넣기</span></li>
-        <li class="flex items-center gap-2"><span class="w-[22px] h-[22px] rounded-full bg-brand-soft text-brand grid place-items-center text-[11.5px] font-bold shrink-0">3</span><span class="text-[12.5px] font-semibold text-ink tracking-[-0.02em]">페이백 받기</span></li>
+    <div class="link-card rounded-2xl p-4" data-link-steps>
+      <p class="text-[14px] font-bold tracking-[-0.02em] text-ink break-keep"><span data-only="ko">3단계로 <span class="text-brand">첫 페이백</span> 받기</span><span data-only="en">Unlock Your <span class="text-brand">First Cashback</span> in 3 Steps!</span></p>
+      <ol class="mt-3 rounded-xl bg-white px-3 flex flex-col">
+        <li class="flex items-center gap-2 py-2.5"><span class="w-[18px] h-[18px] rounded-full bg-ink/70 text-white grid place-items-center text-[10.5px] font-bold shrink-0">1</span><span class="min-w-0 flex-1 text-[12.5px] text-body tracking-[-0.02em]" data-en="Create TetherMax account">테더맥스 계정 만들기</span><i data-lucide="circle-check" class="w-[18px] h-[18px] text-white fill-brand shrink-0" aria-label="완료"></i></li>
+        <li class="border-t border-line"><a href="#" data-mock-go="파트너 거래소 목록으로 이동해요" class="flex items-center gap-2 py-2.5 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand"><span class="w-[18px] h-[18px] rounded-full bg-ink/70 text-white grid place-items-center text-[10.5px] font-bold shrink-0">2</span><span class="min-w-0 flex-1 text-[12.5px] text-body tracking-[-0.02em]" data-en="Browse partners">파트너 거래소 둘러보기</span><i data-lucide="chevron-right" class="w-4 h-4 text-ink shrink-0" aria-hidden="true"></i></a></li>
+        <li class="border-t border-line"><button type="button" data-open-sheet="input" class="w-full text-left flex items-center gap-2 py-2.5 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand"><span class="w-[18px] h-[18px] rounded-full bg-ink/70 text-white grid place-items-center text-[10.5px] font-bold shrink-0">3</span><span class="min-w-0 flex-1 text-[12.5px] text-body tracking-[-0.02em]" data-en="Link your account with us">거래소 계정 연동하기</span><span class="shrink-0 h-5 px-2 rounded-full bg-brand text-white text-[11px] font-semibold inline-flex items-center gap-1"><i data-lucide="gift" class="w-3 h-3" aria-hidden="true"></i>3 USDT</span><i data-lucide="chevron-right" class="w-4 h-4 text-ink shrink-0" aria-hidden="true"></i></button></li>
       </ol>
-      <p class="mt-2 flex items-center gap-1.5 text-[12px] text-body break-keep">
-        <i data-lucide="check" class="w-3.5 h-3.5 text-brand shrink-0" aria-hidden="true"></i>거래소 계정의 UID만 있으면 돼요
-      </p>
-      <ul class="mt-3 pt-3 border-t border-[#C6D6FB] flex flex-col gap-2">
-        <li class="flex items-start gap-2 text-[12.5px] leading-snug text-ink break-keep">
-          <span class="w-6 h-6 -mt-0.5 rounded-full bg-white text-brand grid place-items-center shrink-0"><i data-lucide="gift" class="w-3.5 h-3.5" aria-hidden="true"></i></span>
-          <span class="min-w-0 pt-0.5">연동하면 바로 3 USDT 지급</span>
-        </li>
-      </ul>
-      <button type="button" data-open-sheet="input" class="btn-primary link-shine mt-4 w-full h-12 rounded text-[15px] font-semibold inline-flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
-        <i data-lucide="plus" class="w-[18px] h-[18px]"></i>거래소 연동
+      <button type="button" data-open-sheet="input" class="btn-primary link-shine mt-3 w-full h-11 rounded text-[15px] font-semibold inline-flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+        <i data-lucide="plus" class="w-[18px] h-[18px]"></i><span data-en="Link an account">계정 연동하기</span>
       </button>
     </div>
+    <!-- [11.03] 웹 미연동 계산기: 레일 연동 유도 카드 아래 "Cashback Preview" 카드 (DEX Figma MP-W01N, 문구 AS-IS). 카드 전체 → 페이백 계산기 -->
+    <a href="#" data-mock-go="페이백 계산기로 이동해요" data-calc-rail class="mt-3 block rounded-2xl border border-[#C6D6FB] bg-brand-soft/60 p-4 hover:bg-brand-soft transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+      <span class="flex items-center gap-1.5 text-[13px] font-semibold text-brand"><i data-lucide="calculator" class="w-4 h-4" aria-hidden="true"></i><span class="flex-1" data-en="Cashback Preview">페이백 미리보기</span><i data-lucide="chevron-right" class="w-4 h-4 text-faint" aria-hidden="true"></i></span>
+      <span class="block mt-2 text-[12.5px] leading-relaxed text-body break-keep"><span data-only="ko"><b class="text-ink">81,836</b>명의 회원이 한 달에 평균 <b class="text-ink">47.00 USDT</b> ~ <b class="text-ink">284.00 USDT</b>를 페이백으로 받고 있어요.</span><span data-only="en"><b class="text-ink">81,836</b> of our users earn an average of <b class="text-ink">47.00 USDT</b> to <b class="text-ink">284.00 USDT</b> in cashback per month.</span></span>
+    </a>
   </div>
-
 
   </div>
 
@@ -883,16 +882,13 @@
       <!-- [5A] 모바일: DEX 띠는 카드 밖, 잔액 카드와 연동한 거래소 카드 사이 (격자 간격 12px) -->
       <!-- 모바일 DEX 띠: 운영 배너 슬롯과 별도로 관리 (배너 관리는 웹만)
            [5A] 부스트 축소형 띠(#boostBanner [data-boost-strip])와 같은 모양: 바탕 #FFF3E6 · 안쪽 여백 11px 14px · 모서리 14px · 그림자 없음.
-           왼쪽 32px 칸에 DEX 로고 2 × 2 (14px · 사이 4px) → 제목 한 줄(좁으면 두 줄) → 주황 › → 닫기(X). 띠를 누르면 DEX 거래소 목록, [11.03] 닫기(X)는 세션 동안 숨김 -->
+           왼쪽 32px 칸에 DEX 로고 2 × 2 (14px · 사이 4px) → 제목 한 줄(좁으면 두 줄) → 주황 ›. 띠를 누르면 DEX 거래소 목록. 닫기 없음. [11.03] DEX 지갑 연동 0개 회원만 노출 (검토 중 · 확인 필요 지갑도 개수에 포함, 가안) -->
       <div data-dex-strip class="md:hidden flex items-center rounded-xl bg-[#FFF3E6] hover:bg-[#FFEAD5] transition-colors">
-        <a href="#" data-ex-list="dex" class="min-w-0 flex-1 flex items-center gap-2.5 rounded-xl pl-[14px] pr-1 py-[11px] active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+        <a href="#" data-ex-list="dex" class="min-w-0 flex-1 flex items-center gap-2.5 rounded-xl px-[14px] py-[11px] active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
           <span class="shrink-0 w-8 h-8 grid grid-cols-2 gap-1" role="img" aria-label="ApeX, Aster, EdgeX, Lighter"><span data-logo="Apex" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Aster" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="EdgeX" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Lighter" data-logo-size="w-[14px] h-[14px] text-[6px]"></span></span>
           <span class="min-w-0 flex-1 text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">이제 DEX도 페이백 받아보세요</span>
           <i data-lucide="chevron-right" class="w-4 h-4 text-[#C2410C] shrink-0" aria-hidden="true"></i>
         </a>
-        <button type="button" data-dex-strip-close aria-label="닫기" class="shrink-0 mr-1.5 w-8 h-8 rounded-lg grid place-items-center text-faint hover:text-ink hover:bg-black/5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
-          <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
-        </button>
       </div>
 
       <!-- 연동한 거래소 -->
@@ -970,16 +966,13 @@
       <!-- [5A] 모바일: DEX 띠는 카드 밖, 잔액 카드와 연동한 거래소 카드 사이 (격자 간격 12px) -->
       <!-- 모바일 DEX 띠: 운영 배너 슬롯과 별도로 관리 (배너 관리는 웹만)
            [5A] 부스트 축소형 띠(#boostBanner [data-boost-strip])와 같은 모양: 바탕 #FFF3E6 · 안쪽 여백 11px 14px · 모서리 14px · 그림자 없음.
-           왼쪽 32px 칸에 DEX 로고 2 × 2 (14px · 사이 4px) → 제목 한 줄(좁으면 두 줄) → 주황 › → 닫기(X). 띠를 누르면 DEX 거래소 목록, [11.03] 닫기(X)는 세션 동안 숨김 -->
+           왼쪽 32px 칸에 DEX 로고 2 × 2 (14px · 사이 4px) → 제목 한 줄(좁으면 두 줄) → 주황 ›. 띠를 누르면 DEX 거래소 목록. 닫기 없음. [11.03] DEX 지갑 연동 0개 회원만 노출 (검토 중 · 확인 필요 지갑도 개수에 포함, 가안) -->
       <div data-dex-strip class="md:hidden flex items-center rounded-xl bg-[#FFF3E6] hover:bg-[#FFEAD5] transition-colors">
-        <a href="#" data-ex-list="dex" class="min-w-0 flex-1 flex items-center gap-2.5 rounded-xl pl-[14px] pr-1 py-[11px] active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+        <a href="#" data-ex-list="dex" class="min-w-0 flex-1 flex items-center gap-2.5 rounded-xl px-[14px] py-[11px] active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
           <span class="shrink-0 w-8 h-8 grid grid-cols-2 gap-1" role="img" aria-label="ApeX, Aster, EdgeX, Lighter"><span data-logo="Apex" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Aster" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="EdgeX" data-logo-size="w-[14px] h-[14px] text-[6px]"></span><span data-logo="Lighter" data-logo-size="w-[14px] h-[14px] text-[6px]"></span></span>
           <span class="min-w-0 flex-1 text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">이제 DEX도 페이백 받아보세요</span>
           <i data-lucide="chevron-right" class="w-4 h-4 text-[#C2410C] shrink-0" aria-hidden="true"></i>
         </a>
-        <button type="button" data-dex-strip-close aria-label="닫기" class="shrink-0 mr-1.5 w-8 h-8 rounded-lg grid place-items-center text-faint hover:text-ink hover:bg-black/5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
-          <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
-        </button>
       </div>
 
       <!-- 연동한 거래소 -->
@@ -1051,8 +1044,8 @@
           </span>
         </a>
         <!-- [5A] 세로 참여 목록: 모바일 참여 목록([data-mission-list])과 같은 줄 모양 · 같은 내용 (BTC 가격 맞히기 → 오늘의 투표 → 페이백 챌린지). 제목 줄 없음 -->
-        <section class="panel min-w-0 px-5 py-1 flex flex-col justify-center">
-          <ul data-mission-list aria-label="참여 이벤트"></ul>
+        <section class="panel min-w-0 px-5 py-1 flex flex-col">
+          <ul data-mission-list data-mission-fill aria-label="참여 이벤트"></ul>
         </section>
       </div>
     </section>
@@ -2098,6 +2091,7 @@
     });
   }, { passive: true });
   function paintLive() {
+    paintDexStrip();
     const box = document.getElementById('notifyWrap');
     if (!box) return;
     const d = notifyCopy(state);
@@ -2228,20 +2222,11 @@
   document.getElementById('notifyClose').addEventListener('click', () => {
     document.getElementById('notifyWrap').hidden = true;
   });
-  // [11.03] 모바일 DEX 띠 닫기(X): 이 세션 동안 숨김. 같은 탭 새로고침에도 유지(sessionStorage를 못 쓰면 이 페이지에서만)
-  const DEX_STRIP_KEY = 'tm:dexStripOff';
-  let dexStripOff = false;
-  try { dexStripOff = sessionStorage.getItem(DEX_STRIP_KEY) === '1'; } catch (e) { /* 무시 */ }
-  const paintDexStrip = () => document.querySelectorAll('[data-dex-strip]').forEach((el) => (el.hidden = dexStripOff));
-  paintDexStrip();
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('[data-dex-strip-close]')) return;
-    e.preventDefault();
-    e.stopPropagation();
-    dexStripOff = true;
-    try { sessionStorage.setItem(DEX_STRIP_KEY, '1'); } catch (err) { /* 무시 */ }
-    paintDexStrip();
-  });
+  // [11.03] 모바일 DEX 띠: DEX 지갑 연동이 0개인 회원만 노출. 닫기 없음. 검토 중 · 확인 필요 지갑도 개수에 넣음(가안)
+  const paintDexStrip = () => {
+    const wallets = uidGroups().filter((g) => g.dex).reduce((n, g) => n + g.uids.length, 0);
+    document.querySelectorAll('[data-dex-strip]').forEach((el) => (el.hidden = wallets > 0));
+  };
   document.getElementById('calcClose').addEventListener('click', () => {
     document.getElementById('calcBanner').hidden = true;
   });
@@ -2969,6 +2954,13 @@
     if (!e.target.closest('[data-pb-landing]')) return;
     e.preventDefault();
     showMockToast('Cashback Hub로 이동해요');
+  });
+  // [11.03] 범위 밖 이동 (토스트만): 레일 연동 유도 카드 [파트너 거래소 둘러보기] · 페이백 미리보기
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('[data-mock-go]');
+    if (!a) return;
+    e.preventDefault();
+    showMockToast(a.dataset.mockGo);
   });
   // [2I] DEX 배너 · 띠 → DEX 거래소 목록 (범위 밖이라 토스트만)
   document.addEventListener('click', (e) => {
@@ -5081,7 +5073,7 @@
       '출금 가능한 페이백이 없어요': 'No cashback to claim yet',
       '출금할까요?': 'Claim now?', '합계 금액': 'Total', '취소': 'Cancel',
       '초대 보상을 받을 거래소나 UID를 바꾸려면 고객센터로 문의해 주세요': 'To change the exchange or UID for referral rewards, contact support',
-      '출금 신청을 보냈어요': 'Your claim request was sent', '출금이 끝나면 알려드릴게요': "We'll let you know when it's done", 'CEX 거래소 목록으로 이동해요': 'Going to CEX list', 'DEX 거래소 목록으로 이동해요': 'Going to DEX list',
+      '출금 신청을 보냈어요': 'Your claim request was sent', '출금이 끝나면 알려드릴게요': "We'll let you know when it's done", 'CEX 거래소 목록으로 이동해요': 'Going to CEX list', 'DEX 거래소 목록으로 이동해요': 'Going to DEX list', '파트너 거래소 목록으로 이동해요': 'Going to partner exchanges', '페이백 계산기로 이동해요': 'Going to the cashback calculator', '완료': 'Done', '계정 연동하기': 'Link an account',
       '부스트 안내로 이동해요': 'Going to the boost guide', '등록한 링크로 이동해요': 'Going to the registered link',
       // 진행 중인 이벤트
       '진행 중인 이벤트': 'Live events', '이벤트 전체 보기': 'View all events',
