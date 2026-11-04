@@ -57,7 +57,3 @@ TetherMax 메인 페이지 개선의 **개발 확인용 프로토타입**입니�
 - 영문은 Figma 영문 섹션 기준입니다. 웹 미연동 레일 체크리스트는 AS-IS 문구입니다.
 - 영문 "페이백" = **Cashback**, 출금 = **Claim** 계열 (Payback · Withdraw 금지).
 - PRD · Figma에 없는 규칙을 설명 문구로 추가하지 않습니다. 필요하면 먼저 요청자에게 묻습니다.
-
-## 남은 일
-
-- 잔액 카드 신규 이미지 → `assets/brand/balance-card.png` (64×64, @2x 128px 투명 PNG)
