@@ -1433,11 +1433,12 @@
 
 <!-- 하단 고정 연동 바 (모바일). 계산기 배너와 같은 무게의 흰 패널 한 줄 -->
 <div id="linkSticky" class="md:hidden fixed z-30 inset-x-0 bottom-[calc(68px+env(safe-area-inset-bottom))] px-4 pb-2">
-  <a href="#" data-open-sheet="input" class="panel p-2.5 flex items-center gap-3 shadow-[0_0_0_1px_rgba(12,10,9,0.08),0_12px_28px_-10px_rgba(12,10,9,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+  <!-- [11.04] [연동하기] 버튼을 눌러야 거래소 연동 시트가 열림 (REQ-307-2) -->
+  <div class="panel p-2.5 flex items-center gap-3 shadow-[0_0_0_1px_rgba(12,10,9,0.08),0_12px_28px_-10px_rgba(12,10,9,0.3)]">
     <span class="w-9 h-9 rounded-lg bg-brand-soft text-brand grid place-items-center shrink-0"><i data-lucide="link" class="w-5 h-5" aria-hidden="true"></i></span>
     <span class="min-w-0 flex-1 text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">연동 한 번이면 페이백이 계속 쌓여요</span>
-    <span class="shrink-0 h-9 px-3.5 rounded-lg bg-brand-soft text-brand text-[13px] font-semibold inline-flex items-center whitespace-nowrap"><span>연동하기</span></span>
-  </a>
+    <a href="#" data-open-sheet="input" class="shrink-0 h-9 px-3.5 rounded-lg bg-brand-soft text-brand text-[13px] font-semibold inline-flex items-center whitespace-nowrap hover:bg-brand/15 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"><span>연동하기</span></a>
+  </div>
 </div>
 
 <!-- ========== UID 입력 바텀시트 ========== -->

@@ -152,7 +152,7 @@ const CASES_EN = {
  "실시간 페이백 현황은 신뢰지표 영역 안, 지급 시각 없음": "Real-time Cashback inside the trust indicator area, no payout time",
  "하단 고정 연동 배너 (스크롤 시)": "Fixed bottom link banner (on scroll)",
  "카드가 사라지면 하단 스티키 배너가 아래에서 위로, 다시 보이면 내려감": "When the card scrolls away, a sticky bottom banner slides up; slides down when the card is visible again",
- "선택 → 연동 시트. 올라와 있는 동안 토스트는 배너 위": "Tap → link sheet. Toasts appear above the banner while it is up",
+ "[연동하기] → 연동 시트. 올라와 있는 동안 토스트는 배너 위": "[Link] → link sheet. Toasts appear above the banner while it is up",
  "본문 끝이 가리지 않게 탭바 + 배너 높이만큼 아래 여백": "Bottom padding of tab bar + banner height so the end of content isn't covered",
  "거래소 연동 시트 · 기본": "Link sheet · Default",
  "현행(as-is) 연동 시트, 88vh · 하단 버튼 고정": "As-is link sheet, 88vh · fixed bottom button",
