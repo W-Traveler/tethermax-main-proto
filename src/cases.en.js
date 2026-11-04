@@ -146,7 +146,7 @@ const CASES_EN = {
  "메인 화면 복귀 처리": "Returning to the main screen",
  "오른쪽 \"기기 상태 바꿔 보기\"에서 기기 알림을 바꾼 뒤 [앱 복귀]를 누르면 다시 확인: 켜짐 → 신청 완료 / 꺼짐 → 유지": "Change device notifications in \"Try device states\" on the right, then press [Return to app] to check again: on → request complete / off → unchanged",
  "웹뷰가 앱 복귀를 감지하는 방식은 개발 확인 (REQ-801-5)": "How the webview detects returning to the app to be confirmed by dev (REQ-801-5)",
- "첫 화면(390×844, 탭바 제외 780px)에 연동 유도 카드 → 부스트 띠 → 보장 카드 → 계산기 카드까지": "First screen (390×844, 780px excluding tab bar) shows link prompt card → boost strip → guarantee card → calculator card",
+ "첫 화면(390×844, 탭바 제외 780px)에 연동 유도 카드 → 부스트 띠 → 보장 카드 → 계산기 카드 일부까지": "First screen (390×844, 780px excluding tab bar) shows link prompt card → boost strip → guarantee card → part of calculator card",
  "연동 유도 카드: 파란 바탕 · 테두리, 닫기 없음 → [거래소 연동] → 연동 시트 (MP-M02-a)": "Link prompt card: blue background · border, no close → [Link Account] → link sheet (MP-M02-a)",
  "부스트 배너 축소형 한 줄 띠": "Cashback Boost banner, compact single-line strip",
  "실시간 페이백 현황은 보장 카드 안, 지급 시각 없음": "Real-time Cashback inside the guarantee card, no payout time",
