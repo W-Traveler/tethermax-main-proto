@@ -252,8 +252,8 @@
   // ---------- 목록 ----------
   function paint() {
     const list = draft[tab];
-    $('[data-bo-tabs]').innerHTML = [['linked', L('연동 회원용', 'Linked members'), L('상태 2 · 3 · 4', 'States 2 · 3 · 4')], ['unlinked', L('미연동 회원용', 'Not-linked members'), L('상태 1', 'State 1')]]
-      .map(([v, a, b]) => `<button type="button" role="tab" class="tab h-12 text-[14px] font-semibold text-mute" data-bo-tab="${v}" aria-selected="${tab === v}">${a} <span class="font-normal text-[12px]">(${b})</span>${isDirty(v) ? `<span class="ml-1 inline-block w-1.5 h-1.5 rounded-full bg-[#F87171] align-middle" title="${L('저장 안 한 변경 있음', 'Unsaved changes')}"></span>` : ''}</button>`).join('');
+    $('[data-bo-tabs]').innerHTML = [['linked', L('연동 회원용', 'Linked members')], ['unlinked', L('미연동 회원용', 'Not-linked members')]]
+      .map(([v, a]) => `<button type="button" role="tab" class="tab h-12 text-[14px] font-semibold text-mute" data-bo-tab="${v}" aria-selected="${tab === v}">${a}${isDirty(v) ? `<span class="ml-1 inline-block w-1.5 h-1.5 rounded-full bg-[#F87171] align-middle" title="${L('저장 안 한 변경 있음', 'Unsaved changes')}"></span>` : ''}</button>`).join('');
     $('[data-bo-count]').innerHTML = `${L('배너', 'Banners')} <span data-bo-num>${list.length}</span> / ${MAX}`;
     const add = $('[data-bo-add]'); add.disabled = list.length >= MAX;
     const s = sel[tab];

@@ -249,7 +249,7 @@ const CASES_EN = {
   "메뉴 · 하위 페이지는 프로토타입 헤더 기준": "Menus and sub-pages follow the prototype header",
   "미결 #7 헤더 메뉴가 어드민 관리 데이터인지, 프론트 고정 값인지 확인": "Open #7 check whether the header menu is admin-managed data or fixed in the frontend",
   "순서 바꾸고 저장": "Reorder and save",
-  "목록 2개: 연동 회원용(상태 2 · 3 · 4) · 미연동 회원용(상태 1)을 따로 관리. 한 목록을 저장해도 다른 목록은 그대로 (REQ-A-001)": "Two lists: linked members (states 2 · 3 · 4) and not-linked members (state 1), managed separately. Saving one list leaves the other unchanged (REQ-A-001)",
+  "목록 2개: 연동 회원용 · 미연동 회원용을 따로 관리. 한 목록을 저장해도 다른 목록은 그대로 (REQ-A-001)": "Two lists: linked members and not-linked members, managed separately. Saving one list leaves the other unchanged (REQ-A-001)",
   "미결 #2 이미지 규격(권장 크기 · 형식 · 용량 · 글자 안전 영역)은 디자인 확인": "Open #2 image spec (recommended size · format · file size · text safe area) to be confirmed by design",
   "부스트 대상 거래소는 배너 이미지에 포함해 제작. 대상이 바뀌면 이미지 교체 (어드민 자동 연동 없음)": "Boost target exchanges are part of the banner image. Replace the image when targets change (no automatic admin link)",
   "마지막 1개는 선택 상자 비활성 + \"마지막 1개는 삭제할 수 없어요\" (REQ-A-008)": "Last item: checkbox disabled + \"The last item cannot be deleted\" (REQ-A-008)",
