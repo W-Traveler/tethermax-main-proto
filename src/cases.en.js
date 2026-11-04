@@ -270,7 +270,7 @@ const CASES_EN = {
   "[배너 추가]: 편집 창을 열고 적용하면 목록 끝에 추가 · [선택 항목 삭제]: 저장해야 반영 (REQ-A-007)": "[Add banner]: opens the edit window and adds to the end on apply · [Delete selected]: applies on save (REQ-A-007)",
   "노출 기간 설정 없음. [저장] 시 목록 전체(순서 · 삭제 · 수정)를 한 번에 저장하고 바로 노출 (REQ-A-009 · 010)": "No display period. [Save] stores the whole list (order · deletions · edits) at once and it goes live immediately (REQ-A-009 · 010)",
   "마지막 저장 시각(UTC) · 저장한 관리자 표시 (REQ-A-014)": "Shows last saved time (UTC) and admin (REQ-A-014)",
-  "현행 어드민에 메인 관리 메뉴가 없어 새로 만듦 (11.03): 왼쪽 메뉴 [메인 관리] → [웹 메인 배너 관리]. 메뉴 이름 · 위치는 가안. 색 · 왼쪽 메뉴 · 목록 표는 현행 어드민 기준": "The current admin has no main page menu, so a new one is added (11.03): left menu [Main page] → [Web main banners]. Menu name and position are drafts. Colors, left menu and list table follow the current admin",
+  "현행 어드민에 메인 관리 메뉴가 없어 새로 만듦 (11.04 확정): 왼쪽 메뉴 [메인 관리] → [웹 메인 배너 관리]. 색 · 왼쪽 메뉴 · 목록 표는 현행 어드민 기준": "The current admin has no main page menu, so a new one is added (confirmed 11.04): left menu [Main page] → [Web main banners]. Colors, left menu and list table follow the current admin",
   "미리보기 없음: 웹 메인 배너는 반응형이라 칸 크기가 화면 폭마다 달라짐": "No preview: the web main banner is responsive, so its slot size changes with screen width",
   "미결 #4 글자 수 · #8 직접 입력 링크를 같은 창 / 새 창으로 열지는 미정": "Open #4 character limits · #8 whether entered URLs open in the same or a new window: TBD",
   "미연동 회원용 탭: 배너 · 순서 · 저장이 연동용과 따로": "Not-linked tab: banners, order and save are separate from the linked list",
