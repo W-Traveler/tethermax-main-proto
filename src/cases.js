@@ -19,7 +19,7 @@ const GROUPS = [
 ];
 const D4 = [['회원 상태', '4 일반 회원'], ['연동 거래소', '7곳 (CEX 5 · DEX 2), UID 25개'], ['확인 필요 UID', '4개 (WOO X Pro)'], ['총 페이백 보유', '6,560.32 USDT · 오늘 +4.20']];
 const WOO_BAD = 'WOO X Pro: 7720431986 이용 제한 · 5918048595 인증 실패 · 1258924123 연동 해제 · 1603392174 연동 실패';
-const ASIS_ISSUE = '확인 필요 UID의 사유별 처리 안내는 현행(as-is). 프로토타입은 토스트로 대체';
+const ASIS_ISSUE = '확인 필요 UID 선택 시 AS-IS 프로세스 준용. 프로토타입은 토스트로 대체';
 const CASES = [
   // ───────── 웹 · 메인 (연동) ─────────
   // [10.29] 웹은 일반 회원(상태 4) 화면 하나로 본다. 회원 상태별 차이는 모바일 개인화 메시지 영역(MP-M01)에서만
@@ -53,7 +53,7 @@ const CASES = [
     req: ['REQ-501', 'REQ-901'] },
   { id: 'ROW-2', g: 'w-row', t: '② UID 1개 · 확인 필요', vp: 'web', h: 'state=4', f: ['singleBad'], s: [{ hl: RAIL + '[data-ud-group="Bybit"]' }],
     data: [['예시', 'Bybit · UID 881204773 · 이용 제한'], ['플래그', 'singleBad']],
-    look: [['아랫줄 "UID {번호}", 금액 자리에 사유 칩 (이용 제한 · 인증 실패 · 연동 해제 · 연동 실패)', RAIL + '[data-ud-group="Bybit"]'], ['줄 선택 → 상세로 가지 않고 사유별 처리 안내', '#railListSide [data-ud-group="Bybit"]'], ['머리 줄 [확인 필요 N]에 이 UID도 포함 (5)', '[data-rail-head] [data-ex-warn]']],
+    look: [['아랫줄 "UID {번호}", 금액 자리에 사유 칩 (이용 제한 · 인증 실패 · 연동 해제 · 연동 실패)', RAIL + '[data-ud-group="Bybit"]'], ['줄 선택 → 상세로 가지 않고 AS-IS 프로세스 준용', '#railListSide [data-ud-group="Bybit"]'], ['머리 줄 [확인 필요 N]에 이 UID도 포함 (5)', '[data-rail-head] [data-ex-warn]']],
     req: ['REQ-501'], note: [ASIS_ISSUE] },
   { id: 'ROW-3', g: 'w-row', t: '③ UID 2개 이상 · 접힘', vp: 'web', h: 'state=4', s: [{ hl: RAIL + '[data-rail-fold="Bitget"]' }],
     data: [['예시', 'Bitget · UID 4개 · 6,401.84']],
@@ -65,7 +65,7 @@ const CASES = [
     req: ['REQ-502'] },
   { id: 'ROW-5', g: 'w-row', t: '⑤ 확인 필요 UID 줄', vp: 'web', h: 'state=4', s: [{ click: RAIL + '[data-rail-fold="WOO X Pro"]' }, { hl: RAIL + '[data-rail-pick="7720431986"]' }],
     data: [['예시', WOO_BAD]],
-    look: [['경고 아이콘 + "{번호}" + 사유 칩, 금액 없음. 정상 UID 아래쪽', RAIL + '[data-rail-pick="7720431986"]'], ['줄 선택 → 사유별 처리 안내 (상세로 가지 않음)', '#railListSide [data-rail-pick="5918048595"]']],
+    look: [['경고 아이콘 + "{번호}" + 사유 칩, 금액 없음. 정상 UID 아래쪽', RAIL + '[data-rail-pick="7720431986"]'], ['줄 선택 → AS-IS 프로세스 준용 (상세로 가지 않음)', '#railListSide [data-rail-pick="5918048595"]']],
     req: ['REQ-502'], note: [ASIS_ISSUE] },
   { id: 'ROW-6', g: 'w-row', t: '⑥ DEX · 지갑 1개', vp: 'web', h: 'state=4', s: [{ hl: RAIL + '[data-ud-group="Lighter"]' }],
     data: [['예시', 'Lighter · 0x7a3f…5d6e · 120.00']],
@@ -135,11 +135,11 @@ const CASES = [
     req: ['REQ-503'], be: ['BE-402'] },
   { id: 'MP-W03-c', g: 'w-ex', t: '전체 보기 팝업', vp: 'web', h: 'state=4', s: [{ click: '[data-ud-pop]' }],
     data: [['진입', '머리 줄 [7곳 전체 보기]'], ['필터칩', '[전체 25] · [확인 필요 4] (N = UID 수)']],
-    look: [['타이틀 "연동한 거래소", 처음엔 첫 거래소만 펼침', '[data-sheet="uidPick"]'], ['UID 1개 거래소는 접지 않음, UID 2개 이상은 ⌄로 펼침', '[data-sheet="uidPick"] [data-ud-pick="881204773"]'], ['정상 UID 선택 → UID 상세, 확인 필요 UID 선택 → 사유별 처리 안내', '[data-sheet="uidPick"] [data-ud-pick="2087615520"]']],
+    look: [['타이틀 "연동한 거래소", 처음엔 첫 거래소만 펼침', '[data-sheet="uidPick"]'], ['UID 1개 거래소는 접지 않음, UID 2개 이상은 ⌄로 펼침', '[data-sheet="uidPick"] [data-ud-pick="881204773"]'], ['정상 UID 선택 → UID 상세, 확인 필요 UID 선택 → AS-IS 프로세스 준용', '[data-sheet="uidPick"] [data-ud-pick="2087615520"]']],
     req: ['REQ-504'], note: [ASIS_ISSUE] },
   { id: 'MP-W03-d', g: 'w-ex', t: '전체 보기 · [확인 필요] 필터', vp: 'web', h: 'state=4', s: [{ click: '[data-rail-head] [data-ex-warn]' }],
     data: [['진입', '레일 머리 줄 [확인 필요 4] 칩 (이 상태로 바로 열림)'], ['예시', WOO_BAD]],
-    look: [['확인 필요 UID가 있는 거래소만, 펼친 상태로 확인 필요 UID 줄만 (정상 UID 숨김)', '[data-sheet="uidPick"] [data-ud-list]'], ['줄: 경고 아이콘 + UID + 사유 칩, 금액 없음. 선택 → 사유별 처리 안내', '[data-sheet="uidPick"] [data-ud-pick="7720431986"]'], ['[전체 N] 선택 → 전체 목록으로', '[data-sheet="uidPick"] [data-ud-filter="all"]']],
+    look: [['확인 필요 UID가 있는 거래소만, 펼친 상태로 확인 필요 UID 줄만 (정상 UID 숨김)', '[data-sheet="uidPick"] [data-ud-list]'], ['줄: 경고 아이콘 + UID + 사유 칩, 금액 없음. 선택 → AS-IS 프로세스 준용', '[data-sheet="uidPick"] [data-ud-pick="7720431986"]'], ['[전체 N] 선택 → 전체 목록으로', '[data-sheet="uidPick"] [data-ud-filter="all"]']],
     req: ['REQ-505'], note: [ASIS_ISSUE] },
   { id: 'MP-W03-f', g: 'w-ex', t: '전체 보기 · [검토 중] 필터', vp: 'web', h: 'state=4', f: ['review'], s: [{ click: '[data-ud-pop]' }, { click: '[data-sheet="uidPick"] [data-ud-filter="review"]' }],
     data: [['진입', '레일 머리 줄 [N곳 전체 보기] → [검토 중 N] 필터'], ['예시', 'Bitget UID 131232131231 · Apex 지갑 0x91c4…a07b']],
@@ -165,7 +165,7 @@ const CASES = [
     req: ['REQ-601'] },
   { id: 'MP-W04-c', g: 'w-ud', t: '레일 · 확인 필요 필터', vp: 'web', h: 'state=4&ud=bad&ux=okx&uu=4471029&uo=okx',
     data: [['보는 UID', 'OKX 4471029 (오른쪽 상세 그대로)'], ['예시', WOO_BAD]],
-    look: [['[확인 필요 N]: 확인 필요 UID가 있는 거래소만, 그 UID만 펼쳐서', '#railListSide'], ['오른쪽 상세는 보던 정상 UID 그대로', '[data-ud-head]'], ['확인 필요 UID 선택 → 사유별 처리 안내, 상세 안 바뀜', '#railListSide [data-rail-pick="7720431986"]']],
+    look: [['[확인 필요 N]: 확인 필요 UID가 있는 거래소만, 그 UID만 펼쳐서', '#railListSide'], ['오른쪽 상세는 보던 정상 UID 그대로', '[data-ud-head]'], ['확인 필요 UID 선택 → AS-IS 프로세스 준용, 상세 안 바뀜', '#railListSide [data-rail-pick="7720431986"]']],
     req: ['REQ-601'], note: [ASIS_ISSUE] },
   { id: 'MP-W04-d', g: 'w-ud', t: '주간 페이백 내역 · 내역 없음', vp: 'web', h: 'state=4&ud=all&ux=bitget&uu=2087615520&uo=bitget',
     data: [['보는 UID', 'Bitget 2087615520 · 이번 주 받은 페이백 0']],
@@ -229,7 +229,7 @@ const CASES = [
     req: ['REQ-501'] },
   { id: 'MP-M01-f', g: 'm-main', t: '② UID 1개 · 확인 필요 (모바일)', vp: 'mobile', h: 'state=4&eo=bybit.bitget.okx.lighter.gate.woo.aster', f: ['singleBad'], s: [{ hl: '#railList2 [data-ud-group="Bybit"], #railList [data-ud-group="Bybit"]' }],
     data: [['예시', 'Bybit · UID 881204773 · 이용 제한 (편집 순서 맨 앞)'], ['플래그', 'singleBad']],
-    look: [['금액 자리에 사유 칩, 줄 선택 → 사유별 처리 안내', '#railList2 [data-ud-group="Bybit"], #railList [data-ud-group="Bybit"]']], req: ['REQ-501'], note: [ASIS_ISSUE] },
+    look: [['금액 자리에 사유 칩, 줄 선택 → AS-IS 프로세스 준용', '#railList2 [data-ud-group="Bybit"], #railList [data-ud-group="Bybit"]']], req: ['REQ-501'], note: [ASIS_ISSUE] },
   { id: 'MP-M01-h', g: 'm-main', t: '상태 2 [거래하러 가기] → 아웃링크 이동 모달', vp: 'mobile', h: 'state=2', s: [{ click: '[data-notify-cta-m]' }],
     data: [['조건', '상태 2 · 연동 1곳 (WOO X Pro)']],
     look: [['거래소 아웃링크 이동 모달 (현행 테스트 서버 화면 구성): 모바일은 아래에서 올라오는 시트, 웹은 가운데 팝업', '#outPop [data-out-title]'], ['단계: 1. {거래소}에서 거래하기 · 2. 페이백 자동 적립 · 3. 테더맥스에서 출금', '#outPop [data-out-steps]'], ['안내 문구 (어드민 입력) · [{거래소}로 이동하기] → 거래소', '#outPop [data-out-go]']],
@@ -291,7 +291,7 @@ const CASES = [
     req: ['REQ-504'], note: [ASIS_ISSUE] },
   { id: 'MP-M03-c', g: 'm-ex', t: '전체 보기 · [확인 필요] 필터', vp: 'mobile', h: 'state=4', s: [{ click: '[data-ex-warn]' }],
     data: [['진입', '메인 머리 줄 [확인 필요 4] 칩'], ['예시', WOO_BAD]],
-    look: [['확인 필요 UID가 있는 거래소만, 그 UID만 펼쳐서', '[data-sheet="uidPick"] [data-ud-list]'], ['경고 아이콘 + UID + 사유 칩, 선택 → 사유별 처리 안내', '[data-sheet="uidPick"] [data-ud-pick="7720431986"]']],
+    look: [['확인 필요 UID가 있는 거래소만, 그 UID만 펼쳐서', '[data-sheet="uidPick"] [data-ud-list]'], ['경고 아이콘 + UID + 사유 칩, 선택 → AS-IS 프로세스 준용', '[data-sheet="uidPick"] [data-ud-pick="7720431986"]']],
     req: ['REQ-505'], note: [ASIS_ISSUE] },
   { id: 'MP-M03-d', g: 'm-ex', t: '전체 보기 · [검토 중] 필터', vp: 'mobile', h: 'state=4', f: ['review'], s: [{ click: '[data-ud-entry="all"]' }, { click: '[data-sheet="uidPick"] [data-ud-filter="review"]' }],
     data: [['진입', '메인 [전체 보기] → [검토 중 N] 필터'], ['예시', 'Bitget UID 131232131231 · Apex 지갑 0x91c4…a07b']],
@@ -303,7 +303,7 @@ const CASES = [
     req: ['REQ-602', 'REQ-603', 'REQ-604'], be: ['BE-601'] },
   { id: 'MP-M04-b', g: 'm-ud', t: 'UID 전환 시트', vp: 'mobile', h: 'state=4&ud=all&ux=okx&uu=4471029&uo=okx', s: [{ click: '#uidPage [data-open-sheet="uidPick"]' }],
     data: [['조작', 'UID 전환 버튼 선택']],
-    look: [['타이틀 "UID 선택", 거래소별 묶음, 보고 있는 UID 표시', '[data-sheet="uidPick"]'], ['다른 정상 UID → 시트 닫고 그 UID 상세, 확인 필요 UID → 사유별 처리 안내', '[data-sheet="uidPick"] [data-ud-pick="4471030"]']],
+    look: [['타이틀 "UID 선택", 거래소별 묶음, 보고 있는 UID 표시', '[data-sheet="uidPick"]'], ['다른 정상 UID → 시트 닫고 그 UID 상세, 확인 필요 UID → AS-IS 프로세스 준용', '[data-sheet="uidPick"] [data-ud-pick="4471030"]']],
     req: ['REQ-605'] },
   { id: 'MP-M04-c', g: 'm-ud', t: 'DEX 지갑', vp: 'mobile', h: 'state=4&ud=all&ux=lighter&uu=0x7a3f4c2e9b1d8a6f0e3c5b7d9a1f2e4c6b8d5d6e&uo=lighter',
     data: [['보는 지갑', 'Lighter 0x7a3f…5d6e']], look: [['전환 버튼 아래 "지갑주소" 칸에 전체 주소 + 복사, 길면 말줄임 없이 두 줄', '[data-ud-copy] ^2']], req: ['REQ-602'] },
