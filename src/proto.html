@@ -473,7 +473,7 @@
 
   /* 웹(데스크톱) 미연동: 모바일 기본(하단 고정 켬)에 맞춰 계산기는 떠 있는 배너 대신 본문 카드로 둔다 */
   @media (min-width: 1024px) {
-    [data-calc-inline] { display: none !important; }   /* [11.03] 웹은 계산기를 레일 "페이백 미리보기" 카드로 (본문 카드 없음) */
+    [data-calc-inline] { display: none !important; }   /* [11.03] 웹은 계산기를 레일 페이백 계산기 카드로 (본문 카드 없음) */
     #calcBanner { display: none !important; }
   }
 
@@ -755,7 +755,7 @@
     </div>
     <!-- [11.03] 웹 미연동 계산기: 레일 연동 유도 카드 아래 "Cashback Preview" 카드 (DEX Figma MP-W01N, 문구 AS-IS). 카드 전체 → 페이백 계산기 -->
     <a href="#" data-mock-go="페이백 계산기로 이동해요" data-calc-rail class="mt-3 block rounded-2xl border border-[#C6D6FB] bg-brand-soft/60 p-4 hover:bg-brand-soft transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
-      <span class="flex items-center gap-1.5 text-[13px] font-semibold text-brand"><i data-lucide="calculator" class="w-4 h-4" aria-hidden="true"></i><span class="flex-1" data-en="Cashback Preview">페이백 미리보기</span><i data-lucide="chevron-right" class="w-4 h-4 text-faint" aria-hidden="true"></i></span>
+      <span class="flex items-center gap-1.5 text-[13px] font-semibold text-brand"><i data-lucide="calculator" class="w-4 h-4" aria-hidden="true"></i><span class="flex-1" data-en="Cashback Preview">페이백 계산기</span><i data-lucide="chevron-right" class="w-4 h-4 text-faint" aria-hidden="true"></i></span>
       <span class="block mt-2 text-[12.5px] leading-relaxed text-body break-keep"><span data-only="ko"><b class="text-ink">81,836</b>명의 회원이 한 달에 평균 <b class="text-ink">47.00 USDT</b> ~ <b class="text-ink">284.00 USDT</b>를 페이백으로 받고 있어요.</span><span data-only="en"><b class="text-ink">81,836</b> of our users earn an average of <b class="text-ink">47.00 USDT</b> to <b class="text-ink">284.00 USDT</b> in cashback per month.</span></span>
     </a>
   </div>
@@ -2948,7 +2948,7 @@
     e.preventDefault();
     showMockToast('Cashback Hub로 이동해요');
   });
-  // [11.03] 범위 밖 이동 (토스트만): 레일 연동 유도 카드 [파트너 거래소 둘러보기] · 페이백 미리보기
+  // [11.03] 범위 밖 이동 (토스트만): 레일 연동 유도 카드 [파트너 거래소 둘러보기] · 페이백 계산기 카드
   document.addEventListener('click', (e) => {
     const a = e.target.closest('[data-mock-go]');
     if (!a) return;
