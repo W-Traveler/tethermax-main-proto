@@ -96,6 +96,7 @@
 ## 문구 톤
 
 - 화면 · 패널 문구는 기획 문서 톤: 짧은 명사구, 사실만. 은유 · 비유 · 슬로건식 표현 금지.
+- 영문 문구는 Figma 영문 섹션 "English (EN)"(`413:9190`) 기준입니다(11.04). 출금 창은 범위 밖이라 DEX 프로젝트 문구 그대로 둡니다. 웹 미연동 레일(AS-IS 체크리스트)은 확정 결정의 문구를 씁니다.
 - 영문에서는 "페이백"을 항상 **Cashback**으로 씁니다 (Payback · paid back 금지). 고유명사도 같음: Cashback Boost · Cashback Challenge · Cashback Hub.
 - 영문에서는 출금 관련 문구를 모두 **Claim** 계열로 씁니다 (Withdraw · withdrawable · withdrawal 금지): "Claim" · "Claim N USDT" · "Claim now?" · Claimable cashback · N claimable UIDs · not yet claimable · Claim policy · No cashback to claim yet. 국문은 "출금" 그대로 (11.02).
 - Figma나 PRD에 없는 규칙(폭 구간, 수치 등)을 설명 문구로만 추가하지 않습니다. 필요하면 먼저 요청자에게 묻고, 넣는다면 Figma 화면 케이스와 PRD를 함께 맞춥니다.
