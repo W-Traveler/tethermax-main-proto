@@ -408,24 +408,11 @@
 
   /* ===== [2E] 미연동 연동 카드 =====
      웹 레일 연동 유도 카드(.link-card)는 현행(AS-IS) 그대로, 움직임 없음 (11.03).
-     버튼 광택(.link-shine)은 모바일 연동 유도 카드 · 하단 스티키 연동 배너만. 움직임 줄이기 설정이 아닐 때만 */
+     버튼 광택은 쓰지 않음 (11.04). 모바일 연동 유도 카드는 진입 효과만 */
   .link-card {
     background: linear-gradient(160deg, #EFF4FF 0%, #E2EBFF 100%);
     box-shadow: inset 0 0 0 1px #C6D6FB;
   }
-  .link-shine { position: relative; overflow: hidden; isolation: isolate; }
-  @media (prefers-reduced-motion: no-preference) {
-    /* 연동 버튼: 7초마다 광택이 한 번 지나간다. 나머지 시간은 가만히 있다 */
-    .link-shine::after {
-      content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-      background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.42) 50%, transparent 70%);
-      transform: translateX(-130%);
-      animation: linkShine 7s ease-in-out 1.4s infinite;
-    }
-    @keyframes linkShine { 0% { transform: translateX(-130%); } 13%, 100% { transform: translateX(130%); } }
-  }
-  /* 버튼 글자·아이콘이 광택 위에 오게 */
-  .link-shine > * { position: relative; }
 
   /* 실시간 페이백 현황이 신뢰지표 안(좁은 칸)에 들어가면 시각은 뺀다 */
   [data-roll-host="trust"] [data-roll-at] { display: none !important; }
@@ -518,8 +505,6 @@
     #uidPage[data-mode="multi"] [data-ud-grid] { margin-top: 0; }
   }
 
-  /* 연한 파랑 버튼 위 광택은 진한 파랑으로 (흰 광택은 안 보인다) */
-  .link-shine.link-shine-soft::after { background: linear-gradient(105deg, transparent 25%, rgba(29, 78, 216, 0.34) 50%, transparent 75%); }
 </style>
 <script>
   // [2I] 연동한 거래소 목록 자리를 미리 잡는다. 목록은 본문 끝 스크립트가 그리므로, 그 전에 화면이 먼저 그려지면
@@ -1451,7 +1436,7 @@
   <a href="#" data-open-sheet="input" class="panel p-2.5 flex items-center gap-3 shadow-[0_0_0_1px_rgba(12,10,9,0.08),0_12px_28px_-10px_rgba(12,10,9,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
     <span class="w-9 h-9 rounded-lg bg-brand-soft text-brand grid place-items-center shrink-0"><i data-lucide="link" class="w-5 h-5" aria-hidden="true"></i></span>
     <span class="min-w-0 flex-1 text-[14px] font-bold tracking-[-0.02em] text-ink break-keep">연동 한 번이면 페이백이 계속 쌓여요</span>
-    <span class="link-shine link-shine-soft shrink-0 h-9 px-3.5 rounded-lg bg-brand-soft text-brand text-[13px] font-semibold inline-flex items-center whitespace-nowrap"><span>연동하기</span></span>
+    <span class="shrink-0 h-9 px-3.5 rounded-lg bg-brand-soft text-brand text-[13px] font-semibold inline-flex items-center whitespace-nowrap"><span>연동하기</span></span>
   </a>
 </div>
 
@@ -2122,8 +2107,7 @@
     paintSticky();
     document.getElementById('notifyCard').classList.toggle('ring-2', main);
     document.getElementById('notifyCard').classList.toggle('ring-brand', main);
-    // 미연동: 버튼 광택 (데스크톱 사이드바 카드와 같은 움직임). 진입 효과는 아래 playIntro (모든 상태 공통)
-    document.querySelector('[data-notify-cta-m]').classList.toggle('link-shine', main);
+    // [11.04] 버튼 광택 없음. 진입 효과는 아래 playIntro (모든 상태 공통)
     const mCta = document.querySelector('[data-notify-cta-m]');
     [['bg-brand-soft', 'bg-brand'], ['text-brand', 'text-white'], ['hover:bg-brand/15', 'hover:bg-brand-dark'], ['h-10', 'h-12'], ['font-semibold', 'font-bold']]
       .forEach(([sub, pri]) => { mCta.classList.toggle(sub, !main); mCta.classList.toggle(pri, main); });
