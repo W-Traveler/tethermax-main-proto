@@ -52,6 +52,9 @@ button{cursor:pointer}
 .set{flex:none;display:flex;align-items:center;gap:10px;min-height:48px;padding:7px max(16px,env(safe-area-inset-left));background:var(--set);color:var(--set-ink);overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--bar-line)}
 .set::-webkit-scrollbar{display:none}
 .set > *{flex:none}
+/* 왼쪽 화면 이동(묶음 드롭다운 · 이전 · 다음)은 가로 스크롤해도 고정 */
+.nav{position:sticky;left:0;z-index:2;display:flex;align-items:center;gap:10px;margin:-7px 0 -7px calc(-1 * max(16px,env(safe-area-inset-left)));padding:7px 10px 7px max(16px,env(safe-area-inset-left));background:var(--set);box-shadow:8px 0 8px -4px var(--set)}
+.nav::before{content:'';position:absolute;top:0;bottom:0;right:100%;width:32px;background:var(--set)}
 .lbl{font-size:11.5px;font-weight:700;color:var(--set-mute);white-space:nowrap}
 .sel{height:32px;max-width:300px;border:1px solid var(--bar-line);border-radius:8px;background:rgba(255,255,255,.06);color:var(--set-ink);padding:0 8px;font-size:13px;font-weight:600}
 .sel option,.sel optgroup{color:#111827;background:#fff}
@@ -135,10 +138,12 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
   </header>
 
   <div class="set" role="group" aria-label="화면 · 시나리오 설정">
+    <div class="nav" id="nav">
     <span class="lbl" data-t="screen">화면</span>
     <button type="button" class="ib" id="prev" title="이전 케이스 (↑)" aria-label="이전 케이스" data-tt="prev" data-ta="prev"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg></button>
     <select class="sel" id="grpSel" aria-label="화면 묶음"></select>
     <button type="button" class="ib" id="next" title="다음 케이스 (↓)" aria-label="다음 케이스" data-tt="next" data-ta="next"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button>
+    </div>
     <div class="chips" id="chips"></div>
     <span class="div" id="stDiv"></span>
     <span class="lbl" id="stLbl" data-t="state">개인화 메시지 영역 (회원 상태별)</span>
@@ -237,6 +242,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     $('#zSeg').hidden = wPick[platOf(cur)] !== '390';
     $('[data-w="390"]').hidden = platOf(cur) === 'admin';
     document.querySelectorAll('[data-z]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.z === zPick));
+    $('.set').style.scrollPaddingLeft = $('#nav').offsetWidth + 'px';   // 고정된 왼쪽 영역 뒤로 칩이 숨지 않게
     const on = $('#chips [aria-current="true"]'); if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
   // [10.29] 팝업 · 시트가 열리면 변경 사항 패널을 잠시 접는다 (닫히면 다시 열림). 그동안 [변경 사항]을 누르면 바로 다시 보인다
