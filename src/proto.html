@@ -2474,7 +2474,8 @@
       const badN = gs.reduce((n, g) => n + badOf(g), 0);
       const revN = gs.reduce((n, g) => n + revOf(g), 0);
       if ((!badN && udFilter === 'bad') || (!revN && udFilter === 'review')) udFilter = 'all';
-      chipBox.innerHTML = uidPageOpen ? udChipHTML('all', '전체', total) + (badN ? udChipHTML('bad', '확인 필요', badN) : '') + (revN ? udChipHTML('review', '검토 중', revN) : '') : '';
+      // [11.04] 확인 필요 · 검토 중이 둘 다 0이면 필터 줄 자체를 두지 않음 (전체 보기와 같은 규칙, REQ-601-2)
+      chipBox.innerHTML = uidPageOpen && (badN || revN) ? udChipHTML('all', '전체', total) + (badN ? udChipHTML('bad', '확인 필요', badN) : '') + (revN ? udChipHTML('review', '검토 중', revN) : '') : '';
     }
     box.innerHTML = railListHTML(linkedOrder());
     refreshIcons();
