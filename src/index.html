@@ -61,6 +61,13 @@ button{cursor:pointer}
 .ib{width:32px;height:32px;border:1px solid var(--bar-line);border-radius:8px;background:transparent;color:var(--set-ink);display:grid;place-items:center}
 .ib svg{width:15px;height:15px}
 .chips{display:flex;gap:6px}
+/* 768px 이상: 케이스 칩이 많으면 줄바꿈해서 전부 보이게 (가로 스크롤 없음) */
+@media (min-width:768px){
+  .set{flex-wrap:wrap;row-gap:8px;overflow-x:visible}
+  .nav{position:static;margin:0;padding:0;box-shadow:none}
+  .nav::before{display:none}
+  .set > .chips{order:9;flex:1 1 100%;min-width:0;flex-wrap:wrap}
+}
 .chip{height:32px;padding:0 11px;border:1px solid var(--bar-line);border-radius:8px;background:var(--chip);color:var(--set-ink);display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;white-space:nowrap}
 .chip .cid{font:500 10.5px var(--mono);color:var(--set-mute)}
 .chip .td{font:700 10px var(--sans);padding:1px 5px;border-radius:4px;background:rgba(245,158,11,.2);color:#FCD34D}
@@ -180,6 +187,8 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
 
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
+  // 좁은 화면(가로 스크롤 줄): 마우스 휠로도 좌우 이동
+  $('.set').addEventListener('wheel', (e) => { const el = e.currentTarget; if (el.scrollWidth <= el.clientWidth || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return; el.scrollLeft += e.deltaY; e.preventDefault(); }, { passive: false });
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const byId = Object.fromEntries(CASES.map((c) => [c.id, c]));
   const grpOf = Object.fromEntries(GROUPS.map((g) => [g.id, g]));
