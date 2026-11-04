@@ -122,10 +122,9 @@
             </span>
             <span data-bo-tool-msg class="text-[12px] text-mute ml-1"></span>
           </div>
-          <p data-bo-hist class="text-[12px] text-mute"></p>
         </div>
 
-        <!-- 목록 표: 순서(끌기 · ↑↓) · 선택 · 이미지 · 제목 · 언어 입력 상태 · 링크 · 최종 수정 · 수정 -->
+        <!-- 목록 표: 순서(끌기 · ↑↓) · 선택 · 이미지 · 제목 · 언어 입력 상태 · 링크 · 최종 수정일자 · 최종 수정자 · 수정 -->
         <table class="tbl" data-bo-table>
           <thead><tr data-bo-head></tr></thead>
           <tbody data-bo-list></tbody>
@@ -195,16 +194,18 @@
   const langName = (c) => { const l = LANGS.find((x) => x[0] === c); return l ? L(l[1], l[2]) : c; };
   // 링크 페이지 목록: 헤더 메뉴 → 하위 페이지 (미결 #7)
   const MENUS = [
-    ['cashback', '페이백', 'Cashback', [['exchanges', '거래소', 'Exchanges'], ['brokers', '브로커', 'Brokers'], ['calc', '페이백 계산기', 'Cashback calculator']]],
+    ['cashback', '페이백', 'Cashback', [['exchanges', '거래소', 'Exchanges', [['binance', 'Binance', 'Binance'], ['bybit', 'Bybit', 'Bybit'], ['okx', 'OKX', 'OKX'], ['gate', 'Gate', 'Gate'], ['mexc', 'MEXC', 'MEXC']]], ['brokers', '브로커', 'Brokers'], ['calc', '페이백 계산기', 'Cashback calculator']]],
     ['rewards', '리워드 허브', 'Rewards Hub', [['events', '거래소 이벤트', 'Exchange Events'], ['benefits', '혜택', 'Benefits'], ['points', '포인트', 'Points']]],
     ['explore', '탐색', 'Explore', [['guide', '초보자 가이드', 'Beginner guide'], ['about', 'TetherMax 소개', 'About TetherMax']]],
   ];
   const menuOf = (pg) => MENUS.find((m) => m[3].some((p) => p[0] === pg));
-  const pageName = (v) => { const m = menuOf(v); if (!m) return ''; const p = m[3].find((x) => x[0] === v); return `${L(m[1], m[2])} › ${L(p[1], p[2])}`; };
+  // 3단계: 하위 페이지 아래에 페이지가 더 있으면 세 번째 드롭다운 (거래소 상세는 예시 데이터)
+  const subsOf = (pg) => { const m = menuOf(pg); const p = m && m[3].find((x) => x[0] === pg); return (p && p[3]) || []; };
+  const pageName = (v, sub) => { const m = menuOf(v); if (!m) return ''; const p = m[3].find((x) => x[0] === v); const c = subsOf(v).find((x) => x[0] === sub); return `${L(m[1], m[2])} › ${L(p[1], p[2])}${c ? ' › ' + L(c[1], c[2]) : ''}`; };
   const tx = (o) => Object.fromEntries(LANGS.map(([c]) => [c, o[c] || '']));
-  const ex = (img, t, s, page, at) => ({ img, t: tx(t), s: tx(s), lt: 'page', menu: (menuOf(page) || [''])[0], page, url: '', at });
+  const ex = (img, t, s, page, at) => ({ img, t: tx(t), s: tx(s), lt: 'page', menu: (menuOf(page) || [''])[0], page, url: '', at, by: at ? 'eon' : '' });
   // 헤더 하위 페이지에 없는 링크는 주소 직접 입력 (REQ-A-013 첫 등록 배너)
-  const exU = (img, t, s, url, at) => ({ img, t: tx(t), s: tx(s), lt: 'url', menu: '', page: '', url, at });
+  const exU = (img, t, s, url, at) => ({ img, t: tx(t), s: tx(s), lt: 'url', menu: '', page: '', url, at, by: at ? 'eon' : '' });
   // 예시 데이터: 첫 등록 콘텐츠(REQ-A-013) + 두 번째부터는 예시. 번역 문구는 자리표시
   const SEED = {
     linked: [
@@ -223,7 +224,6 @@
   const n = +hv('n') || 2;   // 연동용 항목 수 (기본 2, n=1 · n=5 케이스)
   const saved = { linked: SEED.linked.slice(0, Math.max(1, Math.min(5, n))), unlinked: SEED.unlinked.slice() };
   if (hv('ld') === '1' && saved.linked[1]) saved.linked[1] = { ...saved.linked[1], lt: 'url', page: '', url: 'https://example.com/event/gold-bar' };
-  const hist = { linked: ['2026-11-02 09:43:18 (UTC)', 'eon'], unlinked: ['2026-11-02 09:45:40 (UTC)', 'eon'] };
   const MAX = 5;
   let tab = hv('tab') === 'unlinked' ? 'unlinked' : 'linked';
   let uid = 0;
@@ -263,11 +263,11 @@
     $('[data-bo-tool-msg]').textContent = list.length >= MAX ? L('최대 5개까지 등록할 수 있어요', 'You can add up to 5 banners')
       : all ? L('목록마다 1개 이상 남겨야 해요', 'Keep at least one banner in each list')
         : s.size ? L(`${s.size}개 선택 · 삭제는 저장해야 반영돼요`, `${s.size} selected · deletion applies on save`) : '';
-    $('[data-bo-head]').innerHTML = [L('순서', 'Order'), '', L('이미지 (PC)', 'Image (PC)'), L('제목 · 부제목 (한국어)', 'Title · subtitle (Korean)'), L('언어', 'Languages'), L('링크', 'Link'), L('최종 수정일자', 'Last updated'), ''].map((h) => `<th>${h}</th>`).join('');
+    $('[data-bo-head]').innerHTML = [L('순서', 'Order'), '', L('이미지 (PC)', 'Image (PC)'), L('제목 · 부제목 (한국어)', 'Title · subtitle (Korean)'), L('언어', 'Languages'), L('링크', 'Link'), L('최종 수정일자', 'Last updated'), L('최종 수정자', 'Updated by'), ''].map((h) => `<th>${h}</th>`).join('');
     const one = list.length === 1;
     $('[data-bo-list]').innerHTML = list.map((x, i) => {
       const f = filled(x);
-      const lk = x.lt === 'url' ? `<span class="text-mute">${L('주소', 'URL')}</span> <span class="text-ink break-all">${esc(x.url)}</span>` : `<span class="text-ink">${esc(pageName(x.page))}</span>`;
+      const lk = x.lt === 'url' ? `<span class="text-mute">${L('주소', 'URL')}</span> <span class="text-ink break-all">${esc(x.url)}</span>` : `<span class="text-ink">${esc(pageName(x.page, x.sub))}</span>`;
       return `<tr data-bo-item="${i + 1}" draggable="true">
         <td class="w-[112px]"><span data-bo-order class="flex items-center gap-1.5"><span class="grip" aria-hidden="true" title="${L('끌어서 순서 변경', 'Drag to reorder')}"><i data-lucide="grip-vertical" class="w-4 h-4"></i></span><b class="w-4 text-center text-ink">${i + 1}</b>
           <button type="button" class="ib" data-bo-up aria-label="${L('위로', 'Move up')}" ${i === 0 ? 'disabled' : ''}><i data-lucide="chevron-up" class="w-3.5 h-3.5"></i></button>
@@ -277,11 +277,11 @@
         <td class="min-w-[220px]" data-bo-title><p class="font-semibold text-ink">${esc(x.t.ko || L('(제목 없음)', '(no title)'))}${x._new ? ` <span class="chip chip-new">${L('새 배너', 'New')}</span>` : x._chg ? ` <span class="chip chip-chg">${L('수정됨', 'Edited')}</span>` : ''}</p><p class="mt-0.5 text-[12px] text-mute">${esc(x.s.ko)}</p></td>
         <td class="w-[110px]" data-bo-langs><span class="chip ${f === LANGS.length ? 'chip-ok' : 'chip-part'}">${f} / ${LANGS.length}</span></td>
         <td class="max-w-[220px] text-[12.5px]" data-bo-link>${lk}</td>
-        <td class="w-[190px] text-[12px] text-mute whitespace-nowrap">${x.at ? esc(x.at) + ' (UTC)' : '—'}</td>
+        <td class="w-[190px] text-[12px] text-mute whitespace-nowrap" data-bo-at>${x.at ? esc(x.at) + ' (UTC)' : '—'}</td>
+        <td class="w-[110px] text-[12px] text-mute whitespace-nowrap" data-bo-by>${x.by ? esc(x.by) : '—'}</td>
         <td class="w-[80px] text-right"><button type="button" class="btn btn-line btn-sm" data-bo-edit-open>${L('수정', 'Edit')}</button></td>
       </tr>`;
-    }).join('') + (one ? `<tr><td colspan="8" class="!h-10 text-[12px] text-mute" data-bo-last>${L('마지막 1개는 삭제할 수 없어요 (목록마다 1개 이상)', 'The last banner cannot be deleted (at least one per list)')}</td></tr>` : '');
-    $('[data-bo-hist]').innerHTML = `${L('마지막 저장', 'Last saved')} <b class="font-semibold text-body">${hist[tab][0]}</b> · ${hist[tab][1]}`;
+    }).join('') + (one ? `<tr><td colspan="9" class="!h-10 text-[12px] text-mute" data-bo-last>${L('마지막 1개는 삭제할 수 없어요 (목록마다 1개 이상)', 'The last banner cannot be deleted (at least one per list)')}</td></tr>` : '');
     $('[data-bo-dirty]').textContent = isDirty(tab) ? L('저장하지 않은 변경이 있어요', 'You have unsaved changes') : '';
     icons();
   }
@@ -362,7 +362,11 @@
                 <option value="">${L('하위 페이지 선택', 'Select a sub-page')}</option>
                 ${((MENUS.find((m) => m[0] === x.menu) || [0, 0, 0, []])[3]).map(([v, ko, en]) => `<option value="${v}" ${x.page === v ? 'selected' : ''}>${L(ko, en)}</option>`).join('')}
               </select>
-            </div>${errOf('page')}
+            </div>${x.lt === 'page' && subsOf(x.page).length ? `
+            <select class="fld mt-2" data-ef="sub" aria-label="${L('3단계 페이지', 'Level 3 page')}">
+              <option value="">${L('선택 안 함 (위에서 고른 페이지로 연결)', 'None (link to the page selected above)')}</option>
+              ${subsOf(x.page).map(([v, ko, en]) => `<option value="${v}" ${x.sub === v ? 'selected' : ''}>${L(ko, en)}</option>`).join('')}
+            </select>` : ''}${errOf('page')}
           </div>
           <div>
             <label class="flex items-center gap-1.5 mb-1 text-[12.5px] text-ink"><input type="radio" name="lt" value="url" data-ef="lt" ${x.lt === 'url' ? 'checked' : ''} class="accent-[#60A5FA]">${L('주소 직접 입력 (목록에 없을 때)', 'Enter URL (if not in the list)')}</label>
@@ -465,8 +469,9 @@
     if (t.matches('[data-bo-file]')) { const f = t.files && t.files[0]; if (f && ed) { ed.x.img = URL.createObjectURL(f); delete ed.errs.img; paintEdit(); } t.value = ''; return; }
     if (ed && t.matches('[data-ef]')) {
       const k = t.dataset.ef;
-      if (k === 'lt') { ed.x.lt = t.value; if (ed.x.lt === 'page') ed.x.url = ''; else { ed.x.page = ''; ed.x.menu = ''; } delete ed.errs.page; delete ed.errs.url; paintEdit(); return; }
-      if (k === 'menu') { ed.x.menu = t.value; ed.x.page = ''; delete ed.errs.page; paintEdit(); return; }
+      if (k === 'lt') { ed.x.lt = t.value; if (ed.x.lt === 'page') ed.x.url = ''; else { ed.x.page = ''; ed.x.menu = ''; ed.x.sub = ''; } delete ed.errs.page; delete ed.errs.url; paintEdit(); return; }
+      if (k === 'menu') { ed.x.menu = t.value; ed.x.page = ''; ed.x.sub = ''; delete ed.errs.page; paintEdit(); return; }
+      if (k === 'page') { ed.x.page = t.value; ed.x.sub = ''; delete ed.errs.page; paintEdit(); return; }
       ed.x[k] = t.value.trim(); delete ed.errs[k]; paintEdit();
     }
   });
@@ -486,12 +491,11 @@
     const bad = list.findIndex((x) => Object.keys(validate(x)).length);
     if (bad >= 0) { openEdit(bad); apply(); return; }
     const at = nowUtc();
-    list.forEach((x) => { if (x._new || x._chg) x.at = at; delete x._new; delete x._chg; });
+    list.forEach((x) => { if (x._new || x._chg) { x.at = at; x.by = 'eon'; } delete x._new; delete x._chg; });
     saved[tab] = clone(list);
-    hist[tab] = [at + ' (UTC)', 'eon'];
     sel[tab].clear(); paint();
     toast(L('저장했어요. 웹 메인에 바로 반영돼요', 'Saved. Live on the web main page now'));
-    if (window.devLog) window.devLog('api', `웹 메인 배너 저장 (${tab === 'linked' ? '연동용' : '미연동용'} ${list.length}개, 목록 전체 · 캐시 무효화 NFR-A-001)`);
+    if (window.devLog) window.devLog('api', `웹 메인 배너 저장 (${tab === 'linked' ? '연동용' : '미연동용'} ${list.length}개, 목록 전체 · 캐시 무효화)`);
   }
   paint();
   icons();
@@ -509,6 +513,7 @@
       for (const sp of steps || []) {
         if (sp.wait) await wait(sp.wait);
         if (sp.click) { const el = visible(sp.click); if (el) el.click(); else window.devLog('warn', `조작 대상을 못 찾음: ${sp.click}`); await wait(sp.after || 120); }
+        if (sp.select) { const el = visible(sp.select[0]); if (el) { el.value = sp.select[1]; el.dispatchEvent(new Event('change', { bubbles: true })); } else window.devLog('warn', `조작 대상을 못 찾음: ${sp.select[0]}`); await wait(sp.after || 120); }
         if (sp.hl) { await wait(60); const el = visible(sp.hl); if (el) el.scrollIntoView({ block: 'center', inline: 'nearest' }); }
       }
       post({ type: 'tm:stepsDone' });
