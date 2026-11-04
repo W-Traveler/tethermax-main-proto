@@ -193,23 +193,30 @@
   ];
   const REQ = ['ko', 'en'];
   const langName = (c) => { const l = LANGS.find((x) => x[0] === c); return l ? L(l[1], l[2]) : c; };
-  // 링크 페이지 목록 (미결 #7 가안)
-  const PAGES = [['dex', 'DEX 거래소 목록', 'DEX exchange list'], ['boost', '페이백 부스트 안내', 'Cashback Boost'], ['hub', 'Cashback Hub', 'Cashback Hub'], ['calc', '페이백 계산기', 'Cashback calculator'], ['event', '이벤트 상세', 'Event detail']];
-  const pageName = (v) => { const p = PAGES.find((x) => x[0] === v); return p ? L(p[1], p[2]) : ''; };
+  // 링크 페이지 목록: 헤더 메뉴 → 하위 페이지 (미결 #7)
+  const MENUS = [
+    ['cashback', '페이백', 'Cashback', [['exchanges', '거래소', 'Exchanges'], ['brokers', '브로커', 'Brokers'], ['calc', '페이백 계산기', 'Cashback calculator']]],
+    ['rewards', '리워드 허브', 'Rewards Hub', [['events', '거래소 이벤트', 'Exchange Events'], ['benefits', '혜택', 'Benefits'], ['points', '포인트', 'Points']]],
+    ['explore', '탐색', 'Explore', [['guide', '초보자 가이드', 'Beginner guide'], ['about', 'TetherMax 소개', 'About TetherMax']]],
+  ];
+  const menuOf = (pg) => MENUS.find((m) => m[3].some((p) => p[0] === pg));
+  const pageName = (v) => { const m = menuOf(v); if (!m) return ''; const p = m[3].find((x) => x[0] === v); return `${L(m[1], m[2])} › ${L(p[1], p[2])}`; };
   const tx = (o) => Object.fromEntries(LANGS.map(([c]) => [c, o[c] || '']));
-  const ex = (img, t, s, page, at) => ({ img, t: tx(t), s: tx(s), lt: 'page', page, url: '', at });
+  const ex = (img, t, s, page, at) => ({ img, t: tx(t), s: tx(s), lt: 'page', menu: (menuOf(page) || [''])[0], page, url: '', at });
+  // 헤더 하위 페이지에 없는 링크는 주소 직접 입력 (REQ-A-013 첫 등록 배너)
+  const exU = (img, t, s, url, at) => ({ img, t: tx(t), s: tx(s), lt: 'url', menu: '', page: '', url, at });
   // 예시 데이터: 첫 등록 콘텐츠(REQ-A-013) + 두 번째부터는 예시. 번역 문구는 자리표시
   const SEED = {
     linked: [
-      ex('dex', { ko: '이제 DEX도 페이백 받아보세요', en: 'Get cashback on DEXs now', zhCN: '现在 DEX 也能获得返佣', zhTW: '現在 DEX 也能獲得返佣', ja: 'DEXでもキャッシュバックを受け取れます' },
-        { ko: 'KYC 없이 지갑 주소만 입력하면 돼요', en: 'No KYC. Just enter your wallet address.', zhCN: '无需 KYC，只需输入钱包地址', zhTW: '無需 KYC，只需輸入錢包地址', ja: 'KYC不要。ウォレットアドレスを入力するだけ' }, 'dex', '2026-11-02 09:40:12'),
-      ex('gold', { ko: '친구 초대하고 골드 바 받아가세요', en: 'Invite a friend, get a gold bar' }, { ko: '친구를 초대하면 리워드를 더 받아요.', en: 'Invite friends to earn more rewards.' }, 'event', '2026-11-02 09:41:30'),
+      exU('dex', { ko: '이제 DEX도 페이백 받아보세요', en: 'Get cashback on DEXs now', zhCN: '现在 DEX 也能获得返佣', zhTW: '現在 DEX 也能獲得返佣', ja: 'DEXでもキャッシュバックを受け取れます' },
+        { ko: 'KYC 없이 지갑 주소만 입력하면 돼요', en: 'No KYC. Just enter your wallet address.', zhCN: '无需 KYC，只需输入钱包地址', zhTW: '無需 KYC，只需輸入錢包地址', ja: 'KYC不要。ウォレットアドレスを入力するだけ' }, 'https://example.com/exchanges?type=dex', '2026-11-02 09:40:12'),
+      ex('gold', { ko: '친구 초대하고 골드 바 받아가세요', en: 'Invite a friend, get a gold bar' }, { ko: '친구를 초대하면 리워드를 더 받아요.', en: 'Invite friends to earn more rewards.' }, 'benefits', '2026-11-02 09:41:30'),
       ex('calc', { ko: '매달 내는 수수료, 돌려받을 수 있어요', en: 'Get back your monthly fees' }, { ko: '거래량만 넣으면 한 달 페이백을 바로 알려드려요.', en: 'Enter your volume and see your monthly cashback.' }, 'calc', '2026-11-02 09:42:05'),
-      ex('boost', { ko: '거래소 이벤트 모아 보기', en: 'All exchange events' }, { ko: '진행 중인 거래소 이벤트를 한 번에 확인하세요.', en: 'See every running exchange event at once.' }, 'event', '2026-11-02 09:42:51'),
-      ex('dex', { ko: 'DEX 페이백 반영 주기 안내', en: 'DEX cashback update cycle' }, { ko: '거래소마다 페이백이 들어오는 주기가 달라요.', en: 'Each DEX updates cashback on its own cycle.' }, 'hub', '2026-11-02 09:43:18'),
+      ex('boost', { ko: '거래소 이벤트 모아 보기', en: 'All exchange events' }, { ko: '진행 중인 거래소 이벤트를 한 번에 확인하세요.', en: 'See every running exchange event at once.' }, 'events', '2026-11-02 09:42:51'),
+      ex('dex', { ko: 'DEX 페이백 반영 주기 안내', en: 'DEX cashback update cycle' }, { ko: '거래소마다 페이백이 들어오는 주기가 달라요.', en: 'Each DEX updates cashback on its own cycle.' }, 'guide', '2026-11-02 09:43:18'),
     ],
     unlinked: [
-      ex('boost', { ko: '첫 연동이면 페이백을 더 얹어드려요', en: 'First time here? Your cashback comes boosted' }, { ko: 'UID를 처음 연동할 때 한 번 드리는 혜택이에요.', en: 'A one-time bonus when you link a UID for the first time.' }, 'boost', '2026-11-02 09:45:02'),
+      exU('boost', { ko: '첫 연동이면 페이백을 더 얹어드려요', en: 'First time here? Your cashback comes boosted' }, { ko: 'UID를 처음 연동할 때 한 번 드리는 혜택이에요.', en: 'A one-time bonus when you link a UID for the first time.' }, 'https://example.com/boost', '2026-11-02 09:45:02'),
       ex('calc', { ko: '매달 내는 수수료, 돌려받을 수 있어요', en: 'Get back your monthly fees' }, { ko: '거래량만 넣으면 한 달 페이백을 바로 알려드려요.', en: 'Enter your volume and see your monthly cashback.' }, 'calc', '2026-11-02 09:45:40'),
     ],
   };
@@ -345,11 +352,17 @@
         <h3 class="text-[13px] font-semibold text-ink">${L('링크', 'Link')} <span class="text-[#F87171]">*</span> <span class="font-normal text-mute">${L('배너 전체 선택 시 이동 · 버튼 문구 · 닫기 설정 없음', 'Whole banner is the link · no button text or close option')}</span></h3>
         <div class="mt-2 grid grid-cols-2 gap-4">
           <div>
-            <label class="flex items-center gap-1.5 mb-1 text-[12.5px] text-ink"><input type="radio" name="lt" value="page" data-ef="lt" ${x.lt === 'page' ? 'checked' : ''} class="accent-[#60A5FA]">${L('페이지 목록에서 선택', 'Choose from page list')}</label>
-            <select class="fld" data-ef="page" ${x.lt !== 'page' ? 'disabled' : ''} ${inv('page')}>
-              <option value="">${L('페이지 선택', 'Select a page')}</option>
-              ${PAGES.map(([v, ko, en]) => `<option value="${v}" ${x.page === v ? 'selected' : ''}>${L(ko, en)}</option>`).join('')}
-            </select>${errOf('page')}
+            <label class="flex items-center gap-1.5 mb-1 text-[12.5px] text-ink"><input type="radio" name="lt" value="page" data-ef="lt" ${x.lt === 'page' ? 'checked' : ''} class="accent-[#60A5FA]">${L('헤더 메뉴에서 선택', 'Choose from header menu')}</label>
+            <div class="grid grid-cols-2 gap-2">
+              <select class="fld" data-ef="menu" aria-label="${L('메뉴', 'Menu')}" ${x.lt !== 'page' ? 'disabled' : ''} ${inv('page')}>
+                <option value="">${L('메뉴 선택', 'Select a menu')}</option>
+                ${MENUS.map(([v, ko, en]) => `<option value="${v}" ${x.menu === v ? 'selected' : ''}>${L(ko, en)}</option>`).join('')}
+              </select>
+              <select class="fld" data-ef="page" aria-label="${L('하위 페이지', 'Sub-page')}" ${x.lt !== 'page' || !x.menu ? 'disabled' : ''} ${inv('page')}>
+                <option value="">${L('하위 페이지 선택', 'Select a sub-page')}</option>
+                ${((MENUS.find((m) => m[0] === x.menu) || [0, 0, 0, []])[3]).map(([v, ko, en]) => `<option value="${v}" ${x.page === v ? 'selected' : ''}>${L(ko, en)}</option>`).join('')}
+              </select>
+            </div>${errOf('page')}
           </div>
           <div>
             <label class="flex items-center gap-1.5 mb-1 text-[12.5px] text-ink"><input type="radio" name="lt" value="url" data-ef="lt" ${x.lt === 'url' ? 'checked' : ''} class="accent-[#60A5FA]">${L('주소 직접 입력 (목록에 없을 때)', 'Enter URL (if not in the list)')}</label>
@@ -452,7 +465,8 @@
     if (t.matches('[data-bo-file]')) { const f = t.files && t.files[0]; if (f && ed) { ed.x.img = URL.createObjectURL(f); delete ed.errs.img; paintEdit(); } t.value = ''; return; }
     if (ed && t.matches('[data-ef]')) {
       const k = t.dataset.ef;
-      if (k === 'lt') { ed.x.lt = t.value; if (ed.x.lt === 'page') ed.x.url = ''; else ed.x.page = ''; delete ed.errs.page; delete ed.errs.url; paintEdit(); return; }
+      if (k === 'lt') { ed.x.lt = t.value; if (ed.x.lt === 'page') ed.x.url = ''; else { ed.x.page = ''; ed.x.menu = ''; } delete ed.errs.page; delete ed.errs.url; paintEdit(); return; }
+      if (k === 'menu') { ed.x.menu = t.value; ed.x.page = ''; delete ed.errs.page; paintEdit(); return; }
       ed.x[k] = t.value.trim(); delete ed.errs[k]; paintEdit();
     }
   });
