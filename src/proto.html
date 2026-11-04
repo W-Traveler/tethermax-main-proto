@@ -2751,7 +2751,8 @@
       : c.g.dex
         ? '<span data-wd-chip class="shrink-0 h-[18px] px-1.5 rounded bg-hair text-[11px] leading-[18px] text-mute whitespace-nowrap" data-en="Unavailable">출금 불가</span>'
         : '<span data-wd-chip class="shrink-0 h-[18px] px-1.5 rounded bg-hair text-[11px] leading-[18px] text-mute whitespace-nowrap" data-en="Below minimum">최소 금액 미달</span>');
-    const line = (k, v, en) => `<p class="flex items-baseline justify-between gap-3 text-[12px]"><span class="text-mute">${k}</span><span class="text-body whitespace-nowrap">${v}</span></p>`;
+    // 출금 창은 DEX 프로젝트 팝업 문구 그대로 (메인 개선 범위 밖). UID 상세와 같은 국문이라 영문은 data-en으로 고정
+    const line = (k, v, en) => `<p class="flex items-baseline justify-between gap-3 text-[12px]"><span class="text-mute"${en ? ` data-en="${en}"` : ''}>${k}</span><span class="text-body whitespace-nowrap">${v}</span></p>`;
     const card = (c) => {
       // 출금 가능: 이번 출금분(거래소 페이백 + 거래소 페이백만큼까지의 이벤트 리워드) / 출금 불가: 지금 보유 금액
       const ex = c.ok ? c.wdEx : c.ex, ev = c.ok ? c.wdEv : c.ev, amt = c.ok ? c.amt : c.bal;
@@ -2769,8 +2770,8 @@
           </div>
           <p class="mt-3 flex items-baseline justify-between gap-3"><span class="text-[14px] text-ink" data-en="Available Cashback">출금 가능 페이백</span><span class="text-[14px] text-ink whitespace-nowrap">${wdAmt(amt)}</span></p>
           <div class="mt-3 pt-3 border-t border-line space-y-1">
-            ${line('거래소 페이백', wdAmt(ex))}
-            ${line('이벤트 리워드', wdAmt(ev))}
+            ${line('거래소 페이백', wdAmt(ex), 'Exchange Cashback')}
+            ${line('이벤트 리워드', wdAmt(ev), 'Event Reward')}
           </div>${upd}
         </li>`;
     };
