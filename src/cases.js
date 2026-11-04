@@ -5,14 +5,12 @@ const GROUPS = [
   { id: 'w-main', name: '메인 · 연동', plat: 'web', fig: 'MP-W01' },
   { id: 'w-row', name: '연동한 거래소 줄 모듈 ①~⑨', plat: 'web', fig: '줄 모듈' },
   { id: 'w-un', name: '메인 · 미연동', plat: 'web', fig: 'MP-W01N' },
-  { id: 'w-link', name: '거래소 연동', plat: 'web', fig: 'MP-W02' },
   { id: 'w-ex', name: '연동한 거래소 (편집 · 전체 보기)', plat: 'web', fig: 'MP-W03' },
   { id: 'w-ud', name: 'UID 상세', plat: 'web', fig: 'MP-W04' },
   { id: 'w-wd', name: '출금하기', plat: 'web', fig: 'MP-W05' },
   { id: 'm-main', name: '메인 · 연동', plat: 'mobile', fig: 'MP-M01' },
   { id: 'm-noti', name: '입금 알림 켜기 플로우', plat: 'mobile', fig: '11-3' },
   { id: 'm-un', name: '메인 · 미연동', plat: 'mobile', fig: 'MP-M01N' },
-  { id: 'm-link', name: '거래소 연동', plat: 'mobile', fig: 'MP-M02' },
   { id: 'm-ex', name: '연동한 거래소 (편집 · 전체 보기)', plat: 'mobile', fig: 'MP-M03' },
   { id: 'm-ud', name: 'UID 상세', plat: 'mobile', fig: 'MP-M04' },
   { id: 'm-wd', name: '출금하기', plat: 'mobile', fig: 'MP-M05' },
@@ -108,7 +106,7 @@ const CASES = [
     data: [['회원 상태', '1 미연동 (연동한 계정 없음)']],
     look: [
       ['레일: 연동 유도 카드는 기존(AS-IS) 문구 · 단계 그대로 — "3단계로 첫 페이백 받기" 체크리스트 (1 테더맥스 계정 만들기 완료 · 2 파트너 거래소 둘러보기 · 3 거래소 계정 연동하기 + 3 USDT) (11.03)', '.link-card'],
-      ['[계정 연동하기] · 3단계 줄 → 거래소 연동 창 (MP-W02-a). 웹 레일 카드는 인터랙션 없음 (모바일만, 11.03)', '.link-card > [data-open-sheet="input"]'],
+      ['[계정 연동하기] · 3단계 줄 → 거래소 연동 팝업 호출 (DEX PRD 기준, 프로토타입은 토스트)', '.link-card > [data-open-sheet="input"]'],
       ['레일 연동 유도 카드 아래 페이백 계산기 카드 (EN "Cashback Preview", 기존 문구 그대로, 11.03). 본문 페이백 계산기 카드 없음', '[data-calc-rail]'],
       ['웹 메인 배너 · 미연동용 (기존 부스트 배너 자리, 어드민 등록). 구성은 연동용과 같음 (첫 등록: 부스트 배너 → 부스트 안내)', '[data-mb-slider="unlinked"]'],
       ['웹 메인 배너 2개 이상: 한 칸 안에서 좌우로 넘김(자동 · 좌우 스와이프). 오른쪽 아래 위치 표시(현재 = 긴 막대, 나머지 = 점), 점 선택 시 그 배너로 이동. 1개면 위치 표시 없음', '[data-mb-dots="unlinked"]'],
@@ -125,20 +123,6 @@ const CASES = [
     data: [['조건', '어드민 미연동용 목록에 배너 1개 등록']],
     look: [['웹 메인 배너 1개: 넘김 · 위치 표시 없음', '[data-main-banner="unlinked"]']],
     req: ['REQ-204'] },
-
-  // ───────── 웹 · 거래소 연동 ─────────
-  { id: 'MP-W02-a', g: 'w-link', t: '거래소 연동 창 · 기본', vp: 'web', h: 'state=1&sheet=input',
-    data: [['진입', '미연동 [거래소 연동] (연동 회원은 [+ 계정 추가 연동])']],
-    look: [['현행(as-is) 거래소 연동 팝업 사용. 첫 연동은 인기 제휴 첫 번째(Bitget)가 선택된 채 열림', '[data-sheet~="input"]'], ['UID 형식 오류면 문구 + 버튼 비활성 (E05)', '#uidInput']],
-    req: ['REQ-401'], note: ['연동 완료 · 실패 화면은 범위 밖 (현행 그대로, 프로토타입에서는 연동하기를 누르면 창만 닫힘)'] },
-  { id: 'MP-W02-b', g: 'w-link', t: '거래소 선택 열림 (필터 신규)', vp: 'web', h: 'state=1&sheet=input', s: [{ click: '#exTrigger' }],
-    data: [['조작', '거래소 선택 열기']],
-    look: [['[전체] [CEX] [DEX] 필터칩, 기본 [전체] (열 때마다 초기화)', '#exFilter'], ['[전체]에서 DEX 거래소는 DEX 칩', '#exList'], ['인기 제휴 거래소 영역은 필터와 관계없이 그대로', '#exTop'], ['검색 중에는 인기 제휴 숨김, 결과 없으면 "검색 결과가 없어요. 이름을 다시 확인해 주세요." (E04)', '#exSearch']],
-    req: ['REQ-402'] },
-  { id: 'MP-W02-c', g: 'w-link', t: 'DEX 선택 (신규)', vp: 'web', h: 'state=1&sheet=input', s: [{ click: '#exTrigger' }, { click: '[data-exfilter="dex"]' }, { click: '[data-ex="lighter"]' }],
-    data: [['조작', '거래소 선택 → [DEX] → Lighter']],
-    look: [['입력칸이 지갑주소 기준 (0x로 시작), 형식 오류면 "지갑주소는 0x로 시작해요"', '#uidInput'], ['탭 · 안내 컷: 지갑 연결하기 → 계정 화면 열기 → 지갑주소 복사', '[data-sheet~="input"] [role="tablist"]'], ['버튼 [지갑주소 연동하기], 가입 안내 없음', '#uidSubmit']],
-    req: ['REQ-403'], be: ['BE-501'], note: ['연동 완료 · 실패 화면은 범위 밖 (현행 그대로). DEX면 문구 속 UID → 지갑주소'] },
 
   // ───────── 웹 · 연동한 거래소 ─────────
   { id: 'MP-W03-a', g: 'w-ex', t: '메인 레일 · 여러 UID 펼침', vp: 'web', h: 'state=4', s: [{ click: RAIL + '[data-rail-fold="WOO X Pro"]' }, { hl: RAIL + '[data-rail-fold="WOO X Pro"]' }],
@@ -287,24 +271,16 @@ const CASES = [
   // ───────── 모바일 · 미연동 ─────────
   { id: 'MP-M01N-a', intro: true, g: 'm-un', t: '미연동 (상태 1)', vp: 'mobile', h: 'state=1',
     data: [['회원 상태', '1 미연동']],
-    look: [['첫 화면(390×844, 탭바 제외 780px)에 연동 유도 카드 → 부스트 띠 → 신뢰지표 영역 → 페이백 계산기 카드 일부까지', '#notifyCard'], ['연동 유도 카드: 파란 바탕 · 테두리, 닫기 없음 → [거래소 연동] → 연동 시트 (MP-M02-a)', '[data-notify-cta-m]'], ['부스트 배너 축소형 한 줄 띠', '#boostBanner'], ['실시간 페이백 현황은 신뢰지표 영역 안, 지급 시각 없음', '[data-roll-host="trust"]']],
+    look: [['첫 화면(390×844, 탭바 제외 780px)에 연동 유도 카드 → 부스트 띠 → 신뢰지표 영역 → 페이백 계산기 카드 일부까지', '#notifyCard'], ['연동 유도 카드: 파란 바탕 · 테두리, 닫기 없음 → [거래소 연동] → 거래소 연동 팝업 호출 (DEX PRD 기준, 프로토타입은 토스트)', '[data-notify-cta-m]'], ['부스트 배너 축소형 한 줄 띠', '#boostBanner'], ['실시간 페이백 현황은 신뢰지표 영역 안, 지급 시각 없음', '[data-roll-host="trust"]']],
     req: ['REQ-301', 'REQ-302', 'REQ-303', 'REQ-304', 'REQ-305'] },
   { id: 'MP-M01N-b', g: 'm-un', t: '하단 고정 연동 배너 (스크롤 시)', vp: 'mobile', h: 'state=1', s: [{ scroll: 1100 }],
     data: [['조작', '연동 유도 카드가 화면 밖으로 나갈 때까지 스크롤']],
-    look: [['카드가 사라지면 하단 스티키 배너가 아래에서 위로, 다시 보이면 내려감', '#linkSticky'], ['[연동하기] → 연동 시트. 올라와 있는 동안 토스트는 배너 위'], ['본문 끝이 가리지 않게 탭바 + 배너 높이만큼 아래 여백']],
+    look: [['카드가 사라지면 하단 스티키 배너가 아래에서 위로, 다시 보이면 내려감', '#linkSticky'], ['[연동하기] → 거래소 연동 팝업 호출 (DEX PRD 기준, 프로토타입은 토스트). 올라와 있는 동안 토스트는 배너 위'], ['본문 끝이 가리지 않게 탭바 + 배너 높이만큼 아래 여백']],
     req: ['REQ-307'] },
   { id: 'MP-M01N-c', g: 'm-un', t: '혜택 퀵메뉴 2개 (오늘의 투표 출시 전)', vp: 'mobile', h: 'state=1&acts=2', s: [{ hl: '[data-mission-cols]' }],
     data: [['조건', '오늘의 투표 출시 전']],
     look: [['혜택 퀵메뉴 2개: BTC 가격 맞히기 · 페이백 챌린지. 카드 높이는 줄 수만큼 줄어듦', '[data-mission-cols] ^1']],
     req: ['REQ-205'], note: ['오늘의 투표 출시 여부에 따라 3개 / 2개. 출시 전환 방식은 개발 확인 (11.1 #16)'] },
-
-  // ───────── 모바일 · 거래소 연동 ─────────
-  { id: 'MP-M02-a', g: 'm-link', t: '거래소 연동 시트 · 기본', vp: 'mobile', h: 'state=1&sheet=input',
-    data: [['진입', '[거래소 연동] · 하단 스티키 배너 · [+ 계정 추가 연동]']], look: [['현행(as-is) 연동 시트, 88vh · 하단 버튼 고정', '[data-sheet~="input"]']], req: ['REQ-401'] },
-  { id: 'MP-M02-b', g: 'm-link', t: '거래소 선택 (필터 신규)', vp: 'mobile', h: 'state=1&sheet=input', s: [{ click: '#exTrigger' }],
-    data: [['조작', '거래소 선택 열기']], look: [['[전체] [CEX] [DEX] 필터칩, 기본 [전체]', '#exFilter'], ['인기 제휴 거래소는 필터와 관계없이 그대로', '#exTop']], req: ['REQ-402'] },
-  { id: 'MP-M02-c', g: 'm-link', t: 'DEX 선택 (신규)', vp: 'mobile', h: 'state=1&sheet=input', s: [{ click: '#exTrigger' }, { click: '[data-exfilter="dex"]' }, { click: '[data-ex="lighter"]' }],
-    data: [['조작', '[DEX] → Lighter']], look: [['입력칸 · 탭 · 버튼이 지갑주소 기준, [지갑주소 연동하기]', '#uidInput']], req: ['REQ-403'], be: ['BE-501'] },
 
   // ───────── 모바일 · 연동한 거래소 ─────────
   { id: 'MP-M03-a', g: 'm-ex', t: '편집 시트', vp: 'mobile', h: 'state=4&sheet=exEdit',
