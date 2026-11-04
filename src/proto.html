@@ -4347,7 +4347,7 @@
     const row = e.target.closest('[data-uid-detail]');
     if (row) {
       e.preventDefault();
-      // [11.04] 모바일: 계정 2개 이상인 거래소 줄 → 전체 보기 시트를 그 거래소만 펼친 상태로 호출 (REQ-501-4). 계정 1개는 바로 상세
+      // [11.04] 모바일: 계정 2개 이상인 거래소 줄 → 전체 보기 시트를 그 거래소만 펼친 상태로 호출 (REQ-501-3). 계정 1개는 바로 상세
       const gm = linkedOrder().find((x) => x.ex === row.dataset.udGroup);
       if (gm && gm.uids.length > 1 && !uidPageOpen && window.matchMedia('(max-width: 1023px)').matches) {
         udOpenEx = new Set([gm.ex]); udFilter = 'all'; openSheet('uidPick'); return;
