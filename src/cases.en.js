@@ -173,7 +173,7 @@ const CASES_EN = {
  "UID가 여러 개면 머리 대신 UID 전환 버튼 (거래소 · UID · 상태 칩 · ⌄)": "With multiple UIDs, a UID switch button replaces the header (exchange · UID · status chip · ⌄)",
  "주간 내역은 360px 폭에서도 금액 한 줄": "Weekly history keeps amounts on one line even at 360px",
  "UID 전환 시트": "UID switch sheet",
- "타이틀 \"UID 선택\", 거래소별 묶음, 보고 있는 UID 표시": "Title \"Choose UID\", grouped by exchange, UID being viewed marked",
+ "타이틀 \"계정 선택\", 거래소별 묶음, 보고 있는 UID 표시": "Title \"Select account\", grouped by exchange, UID being viewed marked",
  "다른 정상 UID → 시트 닫고 그 UID 상세, 확인 필요 UID → AS-IS 프로세스 준용": "Another normal UID → sheet closes, that UID's detail; UID to resolve → the as-is process",
  "DEX 지갑": "DEX wallet",
  "전환 버튼 아래 \"지갑주소\" 칸에 전체 주소 + 복사, 길면 말줄임 없이 두 줄": "Full address + copy in the \"Wallet address\" field under the switch button; long addresses wrap to two lines without ellipsis",

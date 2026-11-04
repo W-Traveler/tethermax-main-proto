@@ -4388,7 +4388,7 @@
     if (k === 'exEdit') { exeDraftAuto = false; paintExEdit(false); }
     if (k === 'uidPick') {
       if (uidPageOpen && udCur) udOpenEx.add(udCur.g.ex);
-      document.querySelectorAll('[data-ud-pick-title]').forEach((el) => (el.textContent = uidPageOpen ? 'UID 선택' : '연동한 거래소'));
+      document.querySelectorAll('[data-ud-pick-title]').forEach((el) => (el.textContent = uidPageOpen ? '계정 선택' : '연동한 거래소'));
       paintUdList(); setTimeout(revealUdCur, 0);
     }
     sheet = k;
@@ -5127,7 +5127,7 @@
       '신규 마켓 추가: HYPE-PERP': 'New market: HYPE-PERP', '신규 상장 안내': 'New listing notice',
       '활성': 'Active',
       '편집': 'Edit', '연동한 거래소 편집': 'Edit linked exchanges', '끌어서 순서를 바꿔요.': 'Drag to reorder.',
-      '잔액 순 정렬': 'Sort by balance', '저장': 'Save', 'UID 선택': 'Select UID',
+      '잔액 순 정렬': 'Sort by balance', '저장': 'Save', '계정 선택': 'Select account',
       'UID 바꾸기': 'Switch UID', 'UID 목록': 'UID list',
       '이용 제한 UID 확인을 진행해요': 'Reviewing the restricted UID', '소유권 인증 실패 처리를 진행해요': 'Handling the failed ownership check',
       '연동 해제 사유 확인을 진행해요': 'Checking why the UID was unlinked', '수동연동 실패 처리를 진행해요': 'Handling the failed manual link',

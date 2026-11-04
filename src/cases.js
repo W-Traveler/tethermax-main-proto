@@ -303,7 +303,7 @@ const CASES = [
     req: ['REQ-602', 'REQ-603', 'REQ-604'], be: ['BE-601'] },
   { id: 'MP-M04-b', g: 'm-ud', t: 'UID 전환 시트', vp: 'mobile', h: 'state=4&ud=all&ux=okx&uu=4471029&uo=okx', s: [{ click: '#uidPage [data-open-sheet="uidPick"]' }],
     data: [['조작', 'UID 전환 버튼 선택']],
-    look: [['타이틀 "UID 선택", 거래소별 묶음, 보고 있는 UID 표시', '[data-sheet="uidPick"]'], ['다른 정상 UID → 시트 닫고 그 UID 상세, 확인 필요 UID → AS-IS 프로세스 준용', '[data-sheet="uidPick"] [data-ud-pick="4471030"]']],
+    look: [['타이틀 "계정 선택", 거래소별 묶음, 보고 있는 UID 표시', '[data-sheet="uidPick"]'], ['다른 정상 UID → 시트 닫고 그 UID 상세, 확인 필요 UID → AS-IS 프로세스 준용', '[data-sheet="uidPick"] [data-ud-pick="4471030"]']],
     req: ['REQ-605'] },
   { id: 'MP-M04-c', g: 'm-ud', t: 'DEX 지갑', vp: 'mobile', h: 'state=4&ud=all&ux=lighter&uu=0x7a3f4c2e9b1d8a6f0e3c5b7d9a1f2e4c6b8d5d6e&uo=lighter',
     data: [['보는 지갑', 'Lighter 0x7a3f…5d6e']], look: [['전환 버튼 아래 "지갑주소" 칸에 전체 주소 + 복사, 길면 말줄임 없이 두 줄', '[data-ud-copy] ^2']], req: ['REQ-602'] },
