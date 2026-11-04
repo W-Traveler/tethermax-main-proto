@@ -214,7 +214,7 @@ const CASES = [
       ['잔액 카드: 신규 이미지로 교체. "오늘 +N USDT"는 오늘 반영된 페이백이 있을 때만 노출 (상태 2는 미노출)', 'section[aria-label="총 페이백 보유 금액"]'],
       ['DEX 띠: DEX 지갑 연동 완료 0회 회원만 노출(연동 해제된 지갑도 완료 1회로 셈), 닫기 없음. 이 데이터는 DEX 지갑이 있어 미노출 (MP-M01-j)'],
       ['연동한 거래소: 앞 3곳만, 머리 줄 2단 (1줄 제목 · [N곳 전체 보기] / 2줄 [확인 필요 N] · [편집])', '#railList2, #railList'],
-      ['모바일 메인은 펼침 없음. 줄 선택 → UID 상세 (UID 2개 이상이면 첫 정상 UID), 정상 UID가 없으면 첫 확인 필요 UID의 처리 안내', '#railList2 [data-ud-group="Bitget"], #railList [data-ud-group="Bitget"]', ['4']],
+      ['모바일 메인은 펼침 없음. 계정 2개 이상인 거래소 줄 선택 → 전체 보기 시트가 그 거래소만 펼친 상태로 열림. 계정 1개면 바로 UID 상세, 확인 필요면 AS-IS 프로세스 준용', '#railList2 [data-ud-group="Bitget"], #railList [data-ud-group="Bitget"]', ['4']],
       ['실시간 페이백 현황: 한 줄 띠 오토 롤링. 거래소명 · 지급 시각 없음, 420px 미만은 "UID" 라벨 · [지급 완료] 칩 숨김, 마스킹 별표 3개', '[data-roll-host="mine"]'],
       ['인기 거래소 가로 스와이프 · 한 장씩 스냅', '#exchanges'],
     ],

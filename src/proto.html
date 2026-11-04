@@ -4344,7 +4344,15 @@
   }
   document.addEventListener('click', (e) => {
     const row = e.target.closest('[data-uid-detail]');
-    if (row) { e.preventDefault(); enterUidPage('ex', row.dataset.udGroup); return; }
+    if (row) {
+      e.preventDefault();
+      // [11.04] 모바일: 계정 2개 이상인 거래소 줄 → 전체 보기 시트를 그 거래소만 펼친 상태로 호출 (REQ-501-4). 계정 1개는 바로 상세
+      const gm = linkedOrder().find((x) => x.ex === row.dataset.udGroup);
+      if (gm && gm.uids.length > 1 && !uidPageOpen && window.matchMedia('(max-width: 1023px)').matches) {
+        udOpenEx = new Set([gm.ex]); udFilter = 'all'; openSheet('uidPick'); return;
+      }
+      enterUidPage('ex', row.dataset.udGroup); return;
+    }
     // [3A] 레일 "N곳 전체 보기": 가운데 창 (모바일 "전체 보기"가 여는 UID 전환 목록과 같은 내용, 첫 거래소 펼침)
     const entry = e.target.closest('[data-ud-pop], [data-ud-entry]');
     if (entry) {

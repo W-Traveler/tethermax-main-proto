@@ -118,7 +118,7 @@ const CASES_EN = {
  "DEX 띠 → DEX 거래소 목록. 닫기 없음. DEX 지갑 연동 완료가 0회인 회원만 노출": "DEX strip → DEX exchange list. No close. Shown only to members who have never completed a DEX wallet link",
  "검토 중 · 수동연동 실패(완료 전) 지갑은 세지 않고, 연동 해제 · 확인 필요 지갑은 완료 1회로 셈": "Wallets under review or with a failed manual link (never completed) don't count; unlinked or to-resolve wallets count as completed",
  "연동한 거래소: 앞 3곳만, 머리 줄 2단 (1줄 제목 · [N곳 전체 보기] / 2줄 [확인 필요 N] · [편집])": "Linked exchanges: first 3 only, 2-line header (line 1 title · [View all N] / line 2 [To resolve N] · [Edit])",
- "모바일 메인은 펼침 없음. 줄 선택 → UID 상세 (UID 2개 이상이면 첫 정상 UID), 정상 UID가 없으면 첫 확인 필요 UID의 처리 안내": "No expanding on mobile main. Tap row → UID detail (first normal UID if 2+ UIDs); if no normal UID, guidance for the first UID to resolve",
+ "모바일 메인은 펼침 없음. 계정 2개 이상인 거래소 줄 선택 → 전체 보기 시트가 그 거래소만 펼친 상태로 열림. 계정 1개면 바로 UID 상세, 확인 필요면 AS-IS 프로세스 준용": "No expanding on mobile main. Tap an exchange row with 2+ accounts → the View all sheet opens with only that exchange expanded. One account → UID detail; to resolve → as-is process",
  "실시간 페이백 현황: 한 줄 띠 오토 롤링. 거래소명 · 지급 시각 없음, 420px 미만은 \"UID\" 라벨 · [지급 완료] 칩 숨김, 마스킹 별표 3개": "Real-time Cashback: single-line auto-rolling strip. No exchange name · payout time; under 420px the \"UID\" label · [Paid] chip are hidden, masking with 3 asterisks",
  "인기 거래소 가로 스와이프 · 한 장씩 스냅": "Top Popular Exchanges swipe horizontally · snap one card at a time",
  "기기 알림 켜기 안내 팝업": "Device notification prompt popup",
