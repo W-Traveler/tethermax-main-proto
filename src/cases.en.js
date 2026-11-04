@@ -19,7 +19,7 @@ const CASES_EN = {
  "웹 메인 배너 · 연동용 (어드민 등록): 이미지 + 제목 · 부제목, 버튼 · 닫기 없음, 배너 전체 선택 → 등록한 링크 (첫 등록: DEX 배너 → DEX 거래소 목록)": "Web main banner · for linked members (registered in admin): image + title · subtitle, no button or close, whole banner tappable → registered link (first entry: DEX banner → DEX exchange list)",
  "참여 목록: BTC 가격 맞히기 · 오늘의 투표 · 페이백 챌린지. 칸 최소 300px, 폭이 모자라면 배너 칸이 줄어듦": "Participation list: Guess the BTC price · Today's vote · Cashback Challenge. Column at least 300px; when space runs short, the banner column shrinks",
  "실시간 페이백 현황: 한 줄 띠 오토 롤링 (한 건씩 위로, 마우스 올리면 정지). 마스킹: CEX \"UID\" + 앞 2 · 뒤 2자리, DEX 지갑주소 앞 6 … 뒤 4": "Real-time Cashback: single-line auto-rolling strip (one item up at a time, pauses on hover). Masking: CEX \"UID\" + first 2 · last 2 digits, DEX wallet address first 6 … last 4",
- "인기 거래소 4곳: 최종 페이백률 · 진행 중 이벤트 수. 화면 폭이 좁아 넘치면 좌우 스와이프. [전체 보기] → Cashback Hub": "Top Popular Exchanges (4): final cashback rate · number of ongoing events. Swipes horizontally when the screen is too narrow. [View all] → Cashback Hub",
+ "인기 거래소(어드민 지정): 최종 페이백률 · 진행 중 이벤트 수. 화면 폭이 좁아 넘치면 좌우 스와이프. [전체 보기] → Cashback Hub": "Popular exchanges (set in admin): final cashback rate · number of ongoing events. Swipes horizontally when the screen is too narrow. [View all] → Cashback Hub",
  "레일 동작(스크롤 시 따라오는 방식)은 AS-IS 준용, 변경 없음": "Rail behavior (how it follows on scroll) follows AS-IS, no change",
  "① UID 1개 · 정상": "① 1 UID · Normal",
  "아랫줄 \"UID {번호}\", 오른쪽 금액 · ›": "Second line \"UID {number}\", amount · › on the right",
