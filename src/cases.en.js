@@ -134,7 +134,7 @@ const CASES_EN = {
  "신청 완료는 상태 3 카드를 닫은 것과 같게 처리 → 이후 상태 4 조건 (BE-302-5)": "Completing sign-up is treated the same as closing the state 3 card → state 4 conditions afterward (BE-302-5)",
  "꺼짐 → [다음에 할게요]": "Off → [Maybe later]",
  "[다음에 할게요] 또는 바깥 영역 → 팝업만 닫힘, 알림 신청 안 됨 (입금 알림 On · 기기 알림 Off 유지)": "[Maybe later] or outside area → only the popup closes, no alert request (cashback alerts On · device notifications Off kept)",
- "이 상태로 다음 진입 시: 앱 세션 첫 진입에 기기 알림 켜기 안내 팝업(MP-M01-d) 한 번만, 같은 세션에서는 다시 안 띄움. 개인화 카드에 기기 알림 꺼짐 메시지 없음 (11.03)": "On the next visit in this state: show the device notification prompt (MP-M01-d) once on the first entry of an app session, not again in the same session. No \"device notifications off\" message on the personalized card (11.03)",
+ "이 상태로 다음 진입 시: 기기 알림 켜기 안내 팝업(MP-M01-d)을 7일에 1회 자동 노출 (마지막 노출일 기준, 기록은 기기 저장). 개인화 카드에 기기 알림 꺼짐 메시지 없음": "On the next visit in this state: auto-show the device notification prompt (MP-M01-d) once every 7 days (from the last show, record kept on the device). No \"device notifications off\" message on the personalized card",
  "꺼짐 · OS 허용 창 가능": "Off · OS permission prompt available",
  "[알림 켜기] → 팝업 닫힘 → OS 알림 허용 창 (OS 제공 · 문구 변경 불가)": "[Turn on notifications] → popup closes → OS notification permission prompt (provided by OS · copy cannot be changed)",
  "[허용] → 알림 신청 완료": "[Allow] → alert request complete",
