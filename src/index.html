@@ -193,7 +193,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
       rerun: '↻ 처음부터', rerunTip: '이 케이스를 처음 상태로 (R)', drawer: '화면 변경 사항', legend: '번호 = 화면 위 번호', close: '패널 닫기', frame: '프로토타입 화면',
       web: '웹', mobile: '모바일', admin: '백오피스', zAdmin: '데스크톱 전용 (반응형 없음)', noFig: 'Figma 화면 없음 · PRD 백오피스 기준', td: '테스트 데이터', tdTip: '실제 데이터에 없는 경우를 보려고 바꾼 값', loading: '불러오는 중…', fail: '화면을 불러오지 못했어요. [처음부터]를 눌러 다시 열어 보세요.', err: '오류',
       wFluid: '창 폭', wFixed: '고정 폭', zFit: '맞춤', zReal: '실제 크기', zFitTip: '창 높이에 맞춰 폰 화면 전체가 보이게 축소 (안쪽은 390×844 그대로)', zRealTip: '실제 크기 100%', zoomGrp: '390 보기 크기', zFitNow: '맞춤', zWeb: '웹 구성 (1024px 이상)', zMid: '768~1023px · Figma 화면 없음 (프로토타입 현재 동작)', zMob: '모바일 구성 (767px 이하)',
-      envH: '기기 상태 바꿔 보기', dev: '기기 알림', on: '켜짐', off: '꺼짐', os: 'OS 알림 허용 창', osYes: '띄울 수 있음', osNo: '띄울 수 없음', envHelp: '바꾸면 바로 적용돼요', startNotify: '입금 알림 켜기 누르기', resume: '앱 복귀',
+      envH: '기기 상태 바꿔 보기', dev: '기기 알림', on: '켜짐', off: '꺼짐', os: 'OS 알림 허용 창', osYes: '띄울 수 있음', osNo: '띄울 수 없음', envHelp: '바꾸면 바로 적용돼요', startNotify: '필수 알림 켜기 누르기', resume: '앱 복귀',
       resNone: '결과: 아직 없음', res: '결과: ', toast: '토스트: ', introH: '인터랙션', introHelp: '개인화 카드 진입 효과 (자리가 위에서 열리며 페이드인)', intro: '진입 효과 다시 보기', noteH: '범위 밖 · 미정', gone: '지금 화면(폭 · 상태)에는 없는 요소',
       help: '번호를 누르면 화면에서 그 위치로 이동해요. 사용자 폭 [창 폭]에서 브라우저 창(F12 기기 모드 포함)을 늘이고 줄이면 구간별 화면이 바뀌어요 (왼쪽 아래에 지금 폭 표시).', keys: '<kbd>↑</kbd> <kbd>↓</kbd> 케이스 이동 · <kbd>R</kbd> 처음부터 · <kbd>M</kbd> 번호 표시 · <kbd>D</kbd> 패널' },
     en: { title: 'Main page improvement · Prototype', doc: 'Main page prototype', lang: 'Screen language', mk: 'Change markers', mkTip: 'Show markers on screen (M)', panel: 'Changes', panelTip: 'Changes panel (D)',
@@ -356,7 +356,7 @@ kbd{font:600 11px var(--mono);padding:0 4px;border:1px solid var(--line);border-
     if (d.type === 'tm:log') resultAdd(d.kind, d.msg);
     if (d.type === 'tm:env') { if (d.device) env.device = d.device; paintEnv(); }
     if (d.type === 'tm:markClick') focusItem(d.n);
-    // 입금 알림 플로우 케이스(env)는 패널의 "기기 상태 바꿔 보기"로 팝업을 조작하므로 접지 않는다
+    // 필수 알림 플로우 케이스(env)는 패널의 "기기 상태 바꿔 보기"로 팝업을 조작하므로 접지 않는다
     if (d.type === 'tm:layer') { layerHide = !!d.open && !cur.env; paintPanel(); }
     if (d.type === 'tm:markVis') {
       document.querySelectorAll('ol.look li[data-go]').forEach((li) => {

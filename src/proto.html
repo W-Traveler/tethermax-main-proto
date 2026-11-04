@@ -2039,7 +2039,7 @@
       '1': { title: '연동 한 번이면 페이백이 계속 쌓여요',
              sub: '', cta: '거래소 연동' },
       '2': { title: '이제 거래만 하면 페이백이 쌓여요', sub: e.name + '에서 거래하면 수수료의 ' + e.rate + '%를 돌려받아요.', cta: '거래하러 가기' },
-      '3': { title: '첫 페이백 7.40 USDT가 들어왔어요', sub: '페이백이 들어오면 바로 알려드려요.', cta: '입금 알림 켜기' },
+      '3': { title: '첫 페이백 7.40 USDT가 들어왔어요', sub: '페이백이 들어오면 바로 알려드려요.', cta: '필수 알림 켜기' },
       '4': { title: '이번 달 벌써 ' + monthPb() + ' USDT 받았어요', sub: '친구를 초대하면 리워드를 더 받아요.', cta: '친구 초대하기' },
     })[bs];
   };
@@ -4638,7 +4638,7 @@
       return true;
     };
 
-    // ---------- 입금 알림 켜기 플로우 (MP-M01-d · 11-3) ----------
+    // ---------- 필수 알림 켜기 플로우 (MP-M01-d · 11-3) ----------
     const env = { device: DEV.nd, osPrompt: DEV.os, pushOn: false };
     const ov = (html, onClick) => {
       const d = document.createElement('div');
@@ -4653,7 +4653,7 @@
     const WHY_EN = { 'OS 창 [허용]': 'OS prompt [Allow]', 'OS 창 [허용 안 함]': "OS prompt [Don't allow]", '복귀 시 기기 알림 켜져 있음': 'device notifications on at return', '복귀 시 기기 알림 꺼져 있음': 'device notifications off at return', '기기 알림 켜져 있음': 'device notifications on', '바깥 영역 선택': 'tapped outside', '[다음에 할게요]': '[Maybe later]' };
     const enLog = () => document.documentElement.lang === 'en';
     const done = (why) => devLog('result', enLog() ? `Alert request complete — ${WHY_EN[why] || why} (personalized card change after request TBD · FE 11.1 #9)` : `알림 신청 완료 — ${why} (신청 완료 후 개인화 카드 변화는 미정 · FE 11.1 #9)`);
-    const notDone = (why) => devLog('result', enLog() ? `Alert not requested — ${WHY_EN[why] || why} (cashback alerts On · device notifications Off kept)` : `알림 신청 안 됨 — ${why} (입금 알림 On · 기기 알림 Off 유지)`);
+    const notDone = (why) => devLog('result', enLog() ? `Alert not requested — ${WHY_EN[why] || why} (cashback alerts On · device notifications Off kept)` : `알림 신청 안 됨 — ${why} (필수 알림 On · 기기 알림 Off 유지)`);
     const checkDevice = (from) => {
       devLog('ui', `기기 알림 상태 확인 (${from}): ${env.device === 'on' ? '켜져 있음' : '꺼져 있음'}`);
       return env.device === 'on';
@@ -4705,7 +4705,7 @@
         if (b.dataset.devOs === 'yes') { env.device = 'on'; post({ type: 'tm:env', device: 'on' }); done('OS 창 [허용]'); }
         else {
           devLog('ui', 'OS 창 [허용 안 함]');
-          showMockToast('기기 알림이 꺼져 있어 입금 알림을 받을 수 없어요');
+          showMockToast('기기 알림이 꺼져 있어 필수 알림을 받을 수 없어요');
           notDone('OS 창 [허용 안 함]');
         }
       });
@@ -4731,12 +4731,12 @@
     }
     function resume(from) {
       devLog('ui', `메인 화면 다시 노출 (${from})`);
-      if (!env.pushOn) { devLog('ui', '입금 알림 Off 회원 — 확인할 것 없음'); return; }
+      if (!env.pushOn) { devLog('ui', '필수 알림 Off 회원 — 확인할 것 없음'); return; }
       if (checkDevice('복귀')) done('복귀 시 기기 알림 켜져 있음'); else notDone('복귀 시 기기 알림 꺼져 있음');
     }
     function notifyStart() {
-      devLog('ui', '개인화 카드 [입금 알림 켜기] 선택 (MP-M01-b · 상태 3)');
-      devLog('api', '입금 알림 On 저장 — 필수 알림 · 동의 화면 없음 (BE-801)');
+      devLog('ui', '개인화 카드 [필수 알림 켜기] 선택 (MP-M01-b · 상태 3)');
+      devLog('api', '필수 알림 On 저장 — 동의 화면 없음 (BE-801)');
       env.pushOn = true;
       if (checkDevice('저장 직후')) done('기기 알림 켜져 있음'); else notifyPopup();
     }
@@ -4883,7 +4883,7 @@
       '기기 알림이 꺼져 있어요': 'Device notifications are off', '알림을 켜면 페이백이 들어왔을 때 바로 알려드려요': 'Turn them on and we will tell you the moment cashback lands',
       '지금': 'now', '페이백이 들어왔어요': 'Cashback just landed', '알림 켜기': 'Turn on notifications', '다음에 할게요': 'Maybe later', '알림 미리보기': 'Notification preview',
       '미리보기 발송 문구는 확정 전 (FE 11.1 #8)': 'Preview copy not final (FE 11.1 #8)',
-      '기기 알림이 꺼져 있어 입금 알림을 받을 수 없어요': 'Device notifications are off, so cashback alerts cannot be delivered',
+      '기기 알림이 꺼져 있어 필수 알림을 받을 수 없어요': 'Device notifications are off, so cashback alerts cannot be delivered',
       // 헤더 · 탭바 · 공통
       'TetherMax 홈': 'TetherMax home', '주 메뉴': 'Main menu', '알림 2개': '2 notifications', '언어': 'Language', '내 계정': 'My account',
       '페이백': 'Cashback', '리워드 허브': 'Rewards Hub', '탐색': 'Explore', '홍': 'G', '홍길동': 'Gildong Hong',
@@ -4909,7 +4909,7 @@
       // 상태 3·4 문구
       '첫 페이백 4.20 USDT가': 'Your first cashback of 4.20 USDT', '들어왔어요': 'is in',
       '거래할 때마다 수수료 일부가 잔액으로 돌아와요.': 'Part of every trading fee comes back to your balance.',
-      '입금 알림 켜기': 'Turn on cashback alerts',
+      '필수 알림 켜기': 'Turn on cashback alerts',
       '이번 달 벌써': 'You have already earned', '128.60 USDT 받았어요': '128.60 USDT this month',
       '연동한 거래소에서 거래할 때마다 수수료가 돌아와요.': 'Every trade on a linked exchange sends fees back to you.',
       '친구 초대하기': 'Invite friends',
