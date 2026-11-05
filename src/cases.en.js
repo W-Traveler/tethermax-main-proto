@@ -281,7 +281,7 @@ const CASES_EN = {
   "언어 15개를 한 줄씩 늘어놓지 않고 왼쪽 목록에서 골라 입력. 언어마다 상태: 입력됨 / 필수 / 영어 표시(비어 있음)": "Instead of 15 languages stacked line by line, pick a language from the left list. Status per language: Filled / Required / English (empty)",
   "고른 언어의 제목 · 부제목. 영어만 필수, 나머지는 선택이며 비워 두면 영어 문구를 칸 안 안내로 표시": "Title and subtitle for the selected language. Only English is required; others optional, and when empty the English text shows as a placeholder",
   "N / 15 입력: 입력할 때마다 갱신": "N / 15 filled: updates as you type",
-  "[이전 언어] · [다음 언어], 부제목 칸에서 Enter = 다음 언어": "[Previous] · [Next] language; Enter in the subtitle field = next language",
+  "언어 이동: 왼쪽 목록에서 선택, 부제목 칸에서 Enter = 다음 언어 (이전 · 다음 언어 버튼 없음)": "Switch language: pick from the list on the left, Enter in the subtitle field = next language (no previous \u00b7 next buttons)",
   "[적용]: 목록에 반영(줄에 \"수정됨\"), 웹 메인 반영은 목록 [저장] 후": "[Apply]: updates the list (row shows \"Edited\"); goes live after the list is saved",
   "관리 언어 15개 (현행 어드민 순서에서 영어만 맨 앞): 영어 · 한국어 · 중국어(간체) · 중국어(번체) · 몽골어 · 러시아어 · 터키어 · 포르투갈어 · 베트남어 · 인도네시아어 · 스페인어 · 일본어 · 아랍어 · 프랑스어 · 우즈벡어. 아랍어 칸은 오른쪽에서 왼쪽으로 입력": "15 managed languages (current admin order, with English moved first): English · Korean · Chinese (Simplified) · Chinese (Traditional) · Mongolian · Russian · Turkish · Portuguese · Vietnamese · Indonesian · Spanish · Japanese · Arabic · French · Uzbek. Arabic fields are right-to-left",
   "예시 번역 문구는 자리표시": "Sample translations are placeholders",

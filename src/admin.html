@@ -339,9 +339,7 @@
               <input class="fld" data-tf="s" value="${esc(sVal)}" ${rtl} placeholder="${esc(!isReq && x.s.en ? L('비워 두면 영어로 표시: ', 'Empty shows English: ') + x.s.en : '')}"></label>
             ${!isReq ? `<p class="text-[12px] text-mute" data-bo-fallback>${L('비워 두면 이 언어 화면에서 영어 제목 · 부제목이 보여요.', 'If left empty, this language shows the English title and subtitle.')}</p>` : ''}
             <div class="pt-1 flex items-center gap-2">
-              <button type="button" class="btn btn-line btn-sm" data-bo-lang-prev ${LANGS[0][0] === lang ? 'disabled' : ''}>← ${L('이전 언어', 'Previous')}</button>
-              <button type="button" class="btn btn-line btn-sm" data-bo-lang-next ${LANGS[LANGS.length - 1][0] === lang ? 'disabled' : ''}>${L('다음 언어', 'Next')} →</button>
-              <span class="text-[11.5px] text-faint ml-1">${L('Enter: 다음 언어', 'Enter: next language')}</span>
+              <span class="text-[11.5px] text-faint" data-bo-enter-hint>${L('부제목 칸에서 Enter: 다음 언어', 'Enter in the subtitle field: next language')}</span>
             </div>
           </div>
         </div>
@@ -428,8 +426,6 @@
     if (up || dn) { const i = itemOf(t), j = up ? i - 1 : i + 1; if (j >= 0 && j < list.length) { [list[i], list[j]] = [list[j], list[i]]; paint(); } return; }
     if (t.closest('[data-bo-edit-open]')) { openEdit(itemOf(t)); return; }
     if (t.closest('[data-bo-lang]')) { goLang(t.closest('[data-bo-lang]').dataset.boLang); return; }
-    if (t.closest('[data-bo-lang-prev]')) { goLang(LANGS[Math.max(0, langIdx() - 1)][0]); return; }
-    if (t.closest('[data-bo-lang-next]')) { goLang(LANGS[Math.min(LANGS.length - 1, langIdx() + 1)][0]); return; }
     if (t.closest('[data-bo-pick]')) { $('[data-bo-file]').click(); return; }
     if (t.closest('[data-bo-apply]')) { apply(); return; }
     if (t.closest('[data-bo-edit-cancel]') || t.closest('[data-bo-x]') || t.matches('[data-bo-edit-wrap]')) { cancelEdit(); return; }
