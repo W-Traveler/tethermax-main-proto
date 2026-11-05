@@ -248,7 +248,7 @@ const CASES_EN = {
   "[딥링크]: 현행 어드민 푸시 설정의 딥링크 목록을 그대로 사용. [페이지]를 고르고, 세부 항목이 있는 페이지는 [세부 항목]까지 고름. 페이지를 바꾸면 세부 항목 선택은 비움 (REQ-A-004)": "[Deep link]: reuses the deep link list from the current admin push settings. Pick a [Page]; for pages with detail items, also pick a [Detail item]. Changing the page clears the detail item (REQ-A-004)",
   "페이지 목록 · 거래소 세부 항목은 현행 푸시 설정 화면 기준 (11.05). 다른 페이지의 세부 항목은 확인 전": "Page list and exchange detail items follow the current push settings screen (11.05). Detail items of other pages not yet confirmed",
   "세부 항목이 있는 페이지 (예: Exchange Detail Page → Bitget)는 세부 항목까지 골라야 적용됨. 없는 페이지는 [세부 항목] 비활성 (\"세부 항목 없음\")": "Pages with detail items (e.g. Exchange Detail Page → Bitget) need a detail item before applying. For pages without them, [Detail item] is disabled (\"No detail items\")",
-  "미결 #7 푸시 딥링크 목록의 각 항목에 대응하는 웹 주소가 있는지, 목록이 어드민 관리 데이터인지 확인": "Open #7 check whether each push deep link item has a matching web URL, and whether the list is admin-managed data",
+  "미결 #7 푸시 딥링크 목록의 각 항목에 대응하는 웹 주소가 있는지, 페이지가 추가되면 목록이 자동으로 업데이트되는지 확인": "Open #7 check whether each push deep link item has a matching web URL, and whether the list updates automatically when a page is added",
   "순서 바꾸고 저장": "Reorder and save",
   "목록 2개: 연동 회원용 · 미연동 회원용을 따로 관리. 한 목록을 저장해도 다른 목록은 그대로 (REQ-A-001)": "Two lists: linked members and not-linked members, managed separately. Saving one list leaves the other unchanged (REQ-A-001)",
   "미결 #2 이미지 규격(권장 크기 · 형식 · 용량 · 글자 안전 영역)은 디자인 확인": "Open #2 image spec (recommended size · format · file size · text safe area) to be confirmed by design",
