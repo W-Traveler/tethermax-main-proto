@@ -200,9 +200,9 @@
   const subsOf = (pg) => { const p = PAGES.find((x) => x[0] === pg); return (p && p[2]) || []; };
   const tx = (o) => Object.fromEntries(LANGS.map(([c]) => [c, o[c] || '']));
   const ex = (img, t, s, page, at, sub = '') => ({ img, t: tx(t), s: tx(s), lt: 'page', page, sub, url: '', at, by: at ? 'eon' : '' });
-  // 딥링크 목록에 없는 링크는 주소 직접 입력 (REQ-A-013 첫 등록 배너)
+  // 딥링크 목록에 없는 링크는 주소 직접 입력 (REQ-A-012 첫 등록 배너)
   const exU = (img, t, s, url, at) => ({ img, t: tx(t), s: tx(s), lt: 'url', page: '', sub: '', url, at, by: at ? 'eon' : '' });
-  // 예시 데이터: 첫 등록 콘텐츠(REQ-A-013) + 두 번째부터는 예시. 번역 문구는 자리표시
+  // 예시 데이터: 첫 등록 콘텐츠(REQ-A-012) + 두 번째부터는 예시. 번역 문구는 자리표시
   const SEED = {
     linked: [
       exU('dex', { ko: '이제 DEX도 페이백 받아보세요', en: 'Get cashback on DEXs now', zhCN: '现在 DEX 也能获得返佣', zhTW: '現在 DEX 也能獲得返佣', ja: 'DEXでもキャッシュバックを受け取れます' },
@@ -316,7 +316,7 @@
           ${x.img ? thumb(x.img, 'imgbox block') : `<span class="imgbox imgbox-empty" ${inv('img')}>${L('이미지 없음', 'No image')}</span>`}
           <div class="pt-1 space-y-2">
             <button type="button" class="btn btn-line btn-sm" data-bo-pick>${x.img ? L('이미지 변경', 'Change image') : L('파일 선택', 'Choose file')}</button>
-            <p class="text-[12px] text-mute leading-relaxed">${L('PC 이미지 1장 · 모바일 이미지 없음 (웹 메인 배너는 1024px 이상만 노출)', 'One PC image · no mobile image (web main banner shows at 1024px and up only)')}<br>${L('권장 규격 미정 (미결 #2)', 'Recommended spec TBD (open #2)')}</p>
+            <p class="text-[12px] text-mute leading-relaxed">${L('PC 이미지 1장 · 모바일 이미지 없음 (웹 메인 배너는 1024px 이상만 노출)', 'One PC image · no mobile image (web main banner shows at 1024px and up only)')}<br>${L('권장 규격 미정 (미결 #1)', 'Recommended spec TBD (open #1)')}</p>
           </div>
         </div>
         ${errOf('img')}
@@ -377,7 +377,7 @@
   function goLang(c) { ed.lang = c; paintEdit(); const f = $('[data-bo-edit] [data-tf="t"]'); if (f) f.focus({ preventScroll: true }); }
   const langIdx = () => LANGS.findIndex((l) => l[0] === ed.lang);
 
-  // REQ-A-012 입력 검증: 이미지 · 영어 제목 · 링크 필수, 직접 입력 주소는 https만
+  // REQ-A-011 입력 검증: 이미지 · 영어 제목 · 링크 필수, 직접 입력 주소는 https만
   function validate(x) {
     const e = {};
     if (!x.img) e.img = L('PC 이미지를 등록해 주세요', 'Add a PC image');
@@ -397,7 +397,7 @@
       const first = $('[data-bo-edit] [aria-invalid="true"]');
       if (first) { first.scrollIntoView({ block: 'center' }); if (first.focus) first.focus({ preventScroll: true }); }
       toast(L('입력하지 않았거나 형식이 맞지 않는 칸이 있어요', 'Some fields are empty or in the wrong format'));
-      if (window.devLog) window.devLog('ui', '적용 막음 — 입력 검증 오류 (REQ-A-012)');
+      if (window.devLog) window.devLog('ui', '적용 막음 — 입력 검증 오류 (REQ-A-011)');
       return;
     }
     const x = ed.x; delete x._new;
@@ -474,7 +474,7 @@
 
   const notice = (msg) => { const n = $('[data-bo-notice]'); n.textContent = msg; n.hidden = false; if (window.devLog) window.devLog('toast', msg); };
   const firstBad = (list) => list.findIndex((x) => Object.keys(validate(x)).length);
-  // REQ-A-015 임시저장: 목록 전체를 임시저장본으로. 웹 메인에는 반영하지 않음
+  // REQ-A-014 임시저장: 목록 전체를 임시저장본으로. 웹 메인에는 반영하지 않음
   function saveTemp() {
     const list = draft[tab];
     if (!isDirty(tab)) return;
