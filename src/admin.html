@@ -35,6 +35,7 @@
   .btn-line:not(:disabled):hover { background: rgba(255,255,255,.06); }
   .btn-pri { background: #FAFAFA; color: #111214; }
   .btn-pri:not(:disabled):hover { background: #E4E4E7; }
+  .btn-blue { background: #2563EB; color: #FFFFFF; } .btn-blue:not(:disabled):hover { background: #1D4ED8; }
   .btn-sm { height: 30px; padding: 0 12px; font-size: 12.5px; }
   .btn:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, tr:focus-visible { outline: 2px solid #60A5FA; outline-offset: 2px; }
   .ib { width: 26px; height: 26px; border-radius: 6px; border: 1px solid #3A3C44; background: #121317; display: grid; place-items: center; color: #D4D4D8; }
@@ -104,9 +105,21 @@
   </nav>
 
   <main class="flex-1 min-w-0 flex flex-col">
-    <div class="flex-1 px-7 py-5 pb-28">
-      <h1 class="text-[30px] font-bold tracking-[-0.03em] text-ink" data-k="웹 메인 배너 관리">웹 메인 배너 관리</h1>
-      <p class="mt-1 text-[13px] text-mute" data-k="1024px 이상 웹 메인 맨 위 왼쪽 칸에 노출. 저장하면 바로 반영되고, 노출 기간 설정은 없습니다.">1024px 이상 웹 메인 맨 위 왼쪽 칸에 노출. 저장하면 바로 반영되고, 노출 기간 설정은 없습니다.</p>
+    <div class="flex-1 px-7 py-5 pb-10">
+      <!-- [11.05] 임시저장 · 발행 (현행 어드민 임시저장 방식). 상태 · [취소] · [임시저장] · [발행]은 머리 오른쪽, 목록(탭)마다 따로 -->
+      <div class="flex items-start justify-between gap-6 max-w-[1400px]">
+        <div>
+          <h1 class="text-[30px] font-bold tracking-[-0.03em] text-ink" data-k="웹 메인 배너 관리">웹 메인 배너 관리</h1>
+          <p class="mt-1 text-[13px] text-mute" data-k="1024px 이상 웹 메인 맨 위 왼쪽 칸에 노출. 발행하면 바로 반영되고, 노출 기간 설정은 없습니다.">1024px 이상 웹 메인 맨 위 왼쪽 칸에 노출. 발행하면 바로 반영되고, 노출 기간 설정은 없습니다.</p>
+        </div>
+        <div data-bo-bar class="shrink-0 flex items-center gap-2 pt-2">
+          <span data-bo-status class="mr-2 inline-flex items-center gap-1.5 text-[12px] text-mute"></span>
+          <button type="button" class="btn btn-line" data-bo-cancel data-k="취소">취소</button>
+          <button type="button" class="btn btn-line" data-bo-temp data-k="임시저장">임시저장</button>
+          <button type="button" class="btn btn-blue" data-bo-save data-k="발행">발행</button>
+        </div>
+      </div>
+      <div data-bo-notice hidden class="mt-4 max-w-[1400px] rounded-lg border border-[#1F6B3A] bg-[#0F2A1A] px-4 py-3 text-[13px] text-[#86EFAC]"></div>
 
       <section class="card mt-6 max-w-[1400px]">
         <!-- REQ-A-001 목록 2개 -->
@@ -132,12 +145,6 @@
       </section>
     </div>
 
-    <!-- 저장 · 취소 (화면 아래 고정). 목록 전체(순서 · 삭제 · 수정)를 한 번에 저장 (REQ-A-010) -->
-    <div data-bo-bar class="sticky bottom-0 bg-[#1D1E23] border-t border-line px-7 py-3 flex items-center gap-2">
-      <button type="button" class="btn btn-pri" data-bo-save data-k="저장">저장</button>
-      <button type="button" class="btn btn-line" data-bo-cancel data-k="취소">취소</button>
-      <span data-bo-dirty class="ml-2 text-[12px] text-mute"></span>
-    </div>
   </main>
 </div>
 
@@ -152,7 +159,7 @@
     <div class="h-16 shrink-0 px-6 flex items-center gap-2 border-t border-line">
       <button type="button" class="btn btn-pri" data-bo-apply data-k="적용">적용</button>
       <button type="button" class="btn btn-line" data-bo-edit-cancel data-k="취소">취소</button>
-      <span class="ml-2 text-[12px] text-mute" data-k="적용한 내용은 목록 [저장]을 눌러야 웹 메인에 반영돼요">적용한 내용은 목록 [저장]을 눌러야 웹 메인에 반영돼요</span>
+      <span class="ml-2 text-[12px] text-mute" data-k="적용한 내용은 [발행]을 눌러야 웹 메인에 반영돼요">적용한 내용은 [발행]을 눌러야 웹 메인에 반영돼요</span>
     </div>
   </div>
 </div>
@@ -161,7 +168,7 @@
 <div data-bo-confirm-wrap class="fixed inset-0 z-50 grid place-items-center bg-black/60" hidden>
   <div data-bo-confirm role="dialog" aria-modal="true" aria-labelledby="cfT" class="card w-[400px] p-6 shadow-xl">
     <h2 id="cfT" class="text-[17px] font-bold text-ink" data-k="저장하지 않은 변경을 버릴까요?">저장하지 않은 변경을 버릴까요?</h2>
-    <p class="mt-1.5 text-[13px] text-body" data-k="마지막으로 저장한 상태로 돌아갑니다.">마지막으로 저장한 상태로 돌아갑니다.</p>
+    <p class="mt-1.5 text-[13px] text-body" data-k="마지막 임시저장 상태(없으면 발행본)로 돌아갑니다.">마지막 임시저장 상태(없으면 발행본)로 돌아갑니다.</p>
     <div class="mt-5 flex justify-end gap-2">
       <button type="button" class="btn btn-line" data-bo-keep data-k="계속 편집">계속 편집</button>
       <button type="button" class="btn btn-pri" data-bo-discard data-k="버리기">버리기</button>
@@ -176,10 +183,11 @@
   // 영문 보기: 키 = 화면 국문
   const DICT = {
     '검색': 'Search', '프리로그인 랜딩 페이지': 'Pre-login landing page', '메인 관리': 'Main page', '웹 메인 배너 관리': 'Web main banners', '신규': 'New', '회원관리': 'Members', '페이백': 'Cashback', '거래소': 'Exchanges', '거래소 리뷰': 'Exchange reviews', '이벤트': 'Events', '공지': 'Notices', '푸시': 'Push', '엑셀': 'Excel', '쿠폰': 'Coupons',
-    '1024px 이상 웹 메인 맨 위 왼쪽 칸에 노출. 저장하면 바로 반영되고, 노출 기간 설정은 없습니다.': 'Shown in the top-left slot of the web main page (1024px and up). Changes go live on save. No display period setting.',
+    '1024px 이상 웹 메인 맨 위 왼쪽 칸에 노출. 발행하면 바로 반영되고, 노출 기간 설정은 없습니다.': 'Shown in the top-left slot of the web main page (1024px and up). Changes go live on publish. No display period setting.',
+    '임시저장': 'Save draft', '발행': 'Publish',
     '배너 추가': 'Add banner', '선택 항목 삭제': 'Delete selected', '취소': 'Cancel', '저장': 'Save', '적용': 'Apply',
-    '적용한 내용은 목록 [저장]을 눌러야 웹 메인에 반영돼요': 'Applied changes go live after you [Save] the list',
-    '저장하지 않은 변경을 버릴까요?': 'Discard unsaved changes?', '마지막으로 저장한 상태로 돌아갑니다.': 'Goes back to the last saved state.', '계속 편집': 'Keep editing', '버리기': 'Discard',
+    '적용한 내용은 [발행]을 눌러야 웹 메인에 반영돼요': 'Applied changes go live after you [Publish]',
+    '저장하지 않은 변경을 버릴까요?': 'Discard unsaved changes?', '마지막 임시저장 상태(없으면 발행본)로 돌아갑니다.': 'Goes back to the last draft (or the published version if there is none).', '계속 편집': 'Keep editing', '버리기': 'Discard',
   };
   const L = (ko, en) => (EN ? en : ko);
   if (EN) { document.documentElement.lang = 'en'; document.querySelectorAll('[data-k]').forEach((el) => { if (DICT[el.dataset.k]) el.textContent = DICT[el.dataset.k]; }); }
@@ -235,7 +243,11 @@
   const draft = { linked: clone(saved.linked), unlinked: clone(saved.unlinked) };
   const sel = { linked: new Set(), unlinked: new Set() };
   const strip = (a) => JSON.stringify(a.map(({ _new, _chg, ...r }) => r));
-  const isDirty = (t) => strip(draft[t]) !== strip(saved[t]);
+  // saved = 발행본, temp = 임시저장본(없으면 null), draft = 화면에서 고치는 중인 목록
+  const temp = { linked: null, unlinked: null };
+  const base = (t) => temp[t] || saved[t];
+  const isDirty = (t) => strip(draft[t]) !== strip(base(t));
+  const hasTemp = (t) => !!temp[t];
   const filled = (x) => LANGS.filter(([c]) => String(x.t[c] || '').trim()).length;
   const nowUtc = () => new Date().toISOString().replace('T', ' ').slice(0, 19);
   const $ = (s, r = document) => r.querySelector(s);
@@ -263,7 +275,7 @@
     $('[data-bo-del]').disabled = !s.size || all;
     $('[data-bo-tool-msg]').textContent = list.length >= MAX ? L('최대 5개까지 등록할 수 있어요', 'You can add up to 5 banners')
       : all ? L('목록마다 1개 이상 남겨야 해요', 'Keep at least one banner in each list')
-        : s.size ? L(`${s.size}개 선택 · 삭제는 저장해야 반영돼요`, `${s.size} selected · deletion applies on save`) : '';
+        : s.size ? L(`${s.size}개 선택 · 삭제는 발행해야 반영돼요`, `${s.size} selected · deletion applies on publish`) : '';
     $('[data-bo-head]').innerHTML = [L('순서', 'Order'), '', L('이미지 (PC)', 'Image (PC)'), L('제목 · 부제목 (영어)', 'Title · subtitle (English)'), L('언어', 'Languages'), L('최종 수정일자', 'Last updated'), L('최종 수정자', 'Updated by'), ''].map((h) => `<th>${h}</th>`).join('');
     const one = list.length === 1;
     $('[data-bo-list]').innerHTML = list.map((x, i) => {
@@ -281,7 +293,14 @@
         <td class="w-[80px] text-right"><button type="button" class="btn btn-line btn-sm" data-bo-edit-open>${L('수정', 'Edit')}</button></td>
       </tr>`;
     }).join('') + (one ? `<tr><td colspan="8" class="!h-10 text-[12px] text-mute" data-bo-last>${L('마지막 1개는 삭제할 수 없어요 (목록마다 1개 이상)', 'The last banner cannot be deleted (at least one per list)')}</td></tr>` : '');
-    $('[data-bo-dirty]').textContent = isDirty(tab) ? L('저장하지 않은 변경이 있어요', 'You have unsaved changes') : '';
+    const st = isDirty(tab) ? ['#F87171', L('저장하지 않은 변경 있음', 'Unsaved changes')]
+      : hasTemp(tab) ? ['#FBBF24', L('임시저장본 있음 (발행 대기)', 'Draft saved (waiting to publish)')]
+        : ['#4ADE80', L('발행본과 같음 (대기 중인 변경 없음)', 'Same as published (no pending changes)')];
+    $('[data-bo-status]').innerHTML = `<span class="w-2 h-2 rounded-full" style="background:${st[0]}"></span>${st[1]}`;
+    $('[data-bo-temp]').disabled = !isDirty(tab);
+    $('[data-bo-save]').disabled = !isDirty(tab) && !hasTemp(tab);
+    $('[data-bo-cancel]').disabled = !isDirty(tab);
+    if (isDirty(tab)) $('[data-bo-notice]').hidden = true;
     icons();
   }
 
@@ -409,7 +428,7 @@
   const itemOf = (el) => { const tr = el.closest('[data-bo-item]'); return tr ? +tr.dataset.boItem - 1 : -1; };
   document.addEventListener('click', (e) => {
     const t = e.target;
-    const tb = t.closest('[data-bo-tab]'); if (tb) { tab = tb.dataset.boTab; paint(); return; }
+    const tb = t.closest('[data-bo-tab]'); if (tb) { tab = tb.dataset.boTab; $('[data-bo-notice]').hidden = true; paint(); return; }
     const list = draft[tab];
     if (t.closest('[data-bo-add]')) {
       if (list.length >= MAX) return;
@@ -419,7 +438,7 @@
     if (t.closest('[data-bo-del]')) {
       const s = sel[tab]; if (!s.size || s.size >= list.length) return;
       draft[tab] = list.filter((x) => !s.has(key(x))); s.clear(); paint();
-      toast(L('선택한 배너를 뺐어요. 저장하면 반영돼요', 'Removed the selected banners. Save to apply'));
+      toast(L('선택한 배너를 뺐어요. 발행하면 반영돼요', 'Removed the selected banners. Publish to apply'));
       return;
     }
     const up = t.closest('[data-bo-up]'), dn = t.closest('[data-bo-down]');
@@ -430,6 +449,7 @@
     if (t.closest('[data-bo-apply]')) { apply(); return; }
     if (t.closest('[data-bo-edit-cancel]') || t.closest('[data-bo-x]') || t.matches('[data-bo-edit-wrap]')) { cancelEdit(); return; }
     if (t.closest('[data-bo-save]')) { save(); return; }
+    if (t.closest('[data-bo-temp]')) { saveTemp(); return; }
     if (t.closest('[data-bo-cancel]')) {
       if (!isDirty(tab)) { toast(L('바뀐 내용이 없어요', 'Nothing changed')); return; }
       $('[data-bo-confirm-wrap]').hidden = false; $('[data-bo-keep]').focus(); return;
@@ -437,7 +457,7 @@
     if (t.closest('[data-bo-keep]') || t.matches('[data-bo-confirm-wrap]')) { $('[data-bo-confirm-wrap]').hidden = true; return; }
     if (t.closest('[data-bo-discard]')) {
       $('[data-bo-confirm-wrap]').hidden = true;
-      draft[tab] = clone(saved[tab]); sel[tab].clear(); paint();
+      draft[tab] = clone(base(tab)); sel[tab].clear(); paint();
       toast(L('저장하지 않은 변경을 버렸어요', 'Discarded unsaved changes'));
     }
   });
@@ -476,17 +496,31 @@
   });
   document.addEventListener('dragend', () => { dragFrom = -1; document.querySelectorAll('.dragging, .drop-above').forEach((r) => r.classList.remove('dragging', 'drop-above')); });
 
-  // REQ-A-010 저장: 목록 전체(순서 · 삭제 · 수정)를 한 번에
+  const notice = (msg) => { const n = $('[data-bo-notice]'); n.textContent = msg; n.hidden = false; if (window.devLog) window.devLog('toast', msg); };
+  const firstBad = (list) => list.findIndex((x) => Object.keys(validate(x)).length);
+  // REQ-A-015 임시저장: 목록 전체를 임시저장본으로. 웹 메인에는 반영하지 않음
+  function saveTemp() {
+    const list = draft[tab];
+    if (!isDirty(tab)) return;
+    const bad = firstBad(list);
+    if (bad >= 0) { openEdit(bad); apply(); return; }
+    temp[tab] = clone(list);
+    sel[tab].clear(); paint();
+    notice(L('임시저장했습니다. 발행 전까지 웹 메인에는 반영되지 않습니다.', 'Draft saved. It will not appear on the web main page until you publish.'));
+    if (window.devLog) window.devLog('api', `웹 메인 배너 임시저장 (${tab === 'linked' ? '연동용' : '미연동용'} ${list.length}개, 목록 전체)`);
+  }
+  // REQ-A-010 발행: 목록 전체(순서 · 삭제 · 수정)를 한 번에 웹 메인에 반영, 임시저장본은 비움
   function save() {
     const list = draft[tab];
-    const bad = list.findIndex((x) => Object.keys(validate(x)).length);
+    if (!isDirty(tab) && !hasTemp(tab)) return;
+    const bad = firstBad(list);
     if (bad >= 0) { openEdit(bad); apply(); return; }
     const at = nowUtc();
     list.forEach((x) => { if (x._new || x._chg) { x.at = at; x.by = 'eon'; } delete x._new; delete x._chg; });
-    saved[tab] = clone(list);
-    sel[tab].clear(); paint();
-    toast(L('저장했어요. 웹 메인에 바로 반영돼요', 'Saved. Live on the web main page now'));
-    if (window.devLog) window.devLog('api', `웹 메인 배너 저장 (${tab === 'linked' ? '연동용' : '미연동용'} ${list.length}개, 목록 전체 · 캐시 무효화)`);
+    saved[tab] = clone(list); temp[tab] = null; draft[tab] = clone(list);
+    sel[tab].clear(); $('[data-bo-notice]').hidden = true; paint();
+    toast(L('발행했어요. 웹 메인에 바로 반영돼요', 'Published. Live on the web main page now'));
+    if (window.devLog) window.devLog('api', `웹 메인 배너 발행 (${tab === 'linked' ? '연동용' : '미연동용'} ${list.length}개, 목록 전체 · 캐시 무효화)`);
   }
   paint();
   icons();
