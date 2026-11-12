@@ -419,7 +419,6 @@ button, select { font: inherit; cursor: pointer; }
       eb: "Before Auto Claim", ebSub: "Balance earned before Auto Claim started. Claim it once to receive it.",
       ebTip: "Cashback and event rewards earned before Auto Claim started are not paid automatically. Claim once to receive them. Leftover event rewards are then paid with your new cashback.",
       ebAll: "Total for all linked accounts. Eligible accounts are claimed together.", ebBtn: "Claim Earlier Balance", ebIngBtn: "Claim in progress", ebIng: "Payout is being processed. This section closes when it's done.", carryIng: n => `When it's done, ${n} USDT of event rewards moves to Auto Claim and is paid with your new cashback.`, carryLbl: "Moves to Auto Claim", resDoneT: "Earlier balance paid out", resDoneP: "Your claim for the balance earned before Auto Claim is complete.", resPaid: "Paid amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: n => `The remaining ${n} USDT of event rewards has moved to Auto Claim. As new exchange cashback comes in, the same amount is paid with it automatically.`, resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `${n} USDT is back in your Before Auto Claim balance. Please claim again. If your claim keeps failing, please contact Support.`, resClose: "Close", resRetry: "Claim Again", failNote: "Your last claim couldn't be processed. Please claim again. If your claim keeps failing, please contact Support.",
-      nIng: n => `${n} account${n > 1 ? "s are" : " is"} already being processed and won't be included.`,
       lu: "Linked UID", seeAll: "See All", uids: n => `${n} UIDs`, more: "Using multiple exchanges? Link more UIDs",
       exB: "Exclusive Benefits", exE: "Exchange Events", ongoing: "Ongoing", ben: [["TetherMax x Bybit Global League", "Join Global League"], ["Sign up for an exchange", "Get extra Cashback"]],
       prize: "Total Prize Pool", join: "Join Now",
@@ -428,7 +427,6 @@ button, select { font: inherit; cursor: pointer; }
       wk: "Weekly Cashback History", viewAll: "View All",
       udEb: "Before Auto Claim", udLater: "Event Reward paid later", udFoot: "Claim it with Total Cashback Balance on the main page.", udGo: "Go to main page", udIng: "Claim in progress",
       mt: "Claim Earlier Balance", now: "Claim amount", later: "Moves to Auto Claim", evtNow: "Claimed now", carryNote: n => `After this claim, ${n} USDT of event rewards moves to Auto Claim. As new exchange cashback comes in, the same amount of event rewards is paid with it automatically.`, ok: "Available", ing: "In progress",
-      ingNote: "This account is already being paid out. It's not included this time.",
       net: "Network", fee: "Network fee", feeV: "TetherMax covers the full cost",
       fine: "Event rewards are claimed up to your exchange cashback. A claim can't be cancelled.",
       confirm: "Confirm Claim", toast: "Claim requested. Payout is being processed.", toastCarry: n => `Claim requested. ${n} USDT of event rewards will move to Auto Claim.`,
@@ -443,7 +441,6 @@ button, select { font: inherit; cursor: pointer; }
       eb: "자동 출금 전 잔액", ebSub: "자동 출금 시작 전에 쌓인 금액이에요. 한 번 출금 신청하면 받을 수 있어요.",
       ebTip: "자동 출금이 시작되기 전에 쌓인 캐시백과 이벤트 리워드는 자동으로 출금되지 않아요. 한 번 출금 신청하면 받을 수 있고, 남은 이벤트 리워드는 이후 새 캐시백과 함께 지급돼요.",
       ebAll: "연동된 전체 계정 합계예요. 조건에 맞는 계정이 함께 신청돼요.", ebBtn: "자동 출금 전 잔액 출금", ebIngBtn: "출금 처리 중", ebIng: "출금이 처리되고 있어요. 처리가 끝나면 이 영역은 사라져요.", carryIng: n => `처리가 끝나면 이벤트 리워드 ${n} USDT는 자동 출금으로 이월되고, 새 캐시백과 함께 지급돼요.`, carryLbl: "자동 출금으로 이월", resDoneT: "자동 출금 전 잔액 출금이 완료됐어요", resDoneP: "신청한 자동 출금 전 잔액이 지급됐어요.", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: n => `남은 이벤트 리워드 ${n} USDT는 자동 출금으로 이월됐어요. 새 거래소 캐시백이 쌓이면 그 금액만큼 함께 자동 지급돼요.`, resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `신청한 ${n} USDT는 자동 출금 전 잔액으로 다시 반영됐어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.`, resClose: "닫기", resRetry: "다시 신청", failNote: "지난 출금 신청이 처리되지 않았어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.",
-      nIng: n => `${n}개 계정은 이미 출금이 진행 중이라 이번에는 제외돼요.`,
       lu: "연동 UID", seeAll: "전체 보기", uids: n => `UID ${n}개`, more: "여러 거래소를 쓰시나요? UID 더 연동하기",
       exB: "회원 전용 혜택", exE: "거래소 이벤트", ongoing: "진행 중", ben: [["TetherMax x Bybit 글로벌 리그", "글로벌 리그 참여"], ["거래소 가입하기", "추가 캐시백 받기"]],
       prize: "총 상금", join: "참여하기",
@@ -452,7 +449,6 @@ button, select { font: inherit; cursor: pointer; }
       wk: "주간 캐시백 내역", viewAll: "전체 보기",
       udEb: "자동 출금 전 잔액", udLater: "나중에 지급되는 이벤트 리워드", udFoot: "메인 페이지의 총 캐시백 잔액에서 출금 신청할 수 있어요.", udGo: "메인 페이지로 가기", udIng: "출금 처리 중",
       mt: "자동 출금 전 잔액 출금", now: "출금 신청 금액", later: "자동 출금으로 이월", evtNow: "이번에 출금", carryNote: n => `출금 신청이 완료되면 이벤트 리워드 ${n} USDT는 자동 출금으로 이월돼요. 새 거래소 캐시백이 쌓이면 그 금액만큼 함께 자동 지급돼요.`, ok: "출금 가능", ing: "처리 중",
-      ingNote: "이미 출금이 진행 중인 계정이에요. 이번 출금에는 포함되지 않아요.",
       net: "네트워크", fee: "네트워크 수수료", feeV: "TetherMax가 전액 부담해요",
       fine: "이벤트 리워드는 거래소 캐시백 금액까지만 출금 신청돼요. 출금 신청은 취소할 수 없어요.",
       confirm: "출금 신청하기", toast: "출금을 신청했어요. 처리 중이에요.", toastCarry: n => `출금을 신청했어요. 이벤트 리워드 ${n} USDT는 자동 출금으로 이월돼요.`,
@@ -535,7 +531,7 @@ button, select { font: inherit; cursor: pointer; }
   }
   function ebBlock(c, inUid) {
     if (!c.eligible) return "";
-    const t = L(), rows = snapRows(c), act = rows.filter(r => !r.ing);
+    const t = L(), rows = snapRows(c), act = rows;
     const remain = rows.reduce((a, r) => a + r.remain, 0);
     const mk = n => (c.modal || c.noMk) ? "" : `data-n="${n}"`;
     const tip = `<span class="info" tabindex="0" aria-label="설명">i<span class="tip">${t.ebTip}</span></span>`;
@@ -545,10 +541,7 @@ button, select { font: inherit; cursor: pointer; }
       btn = `<button class="btn btn-block" disabled ${mk(3)}>${t.ebIngBtn}</button>`;
       status = `<div class="eb-status" ${mk(4)}>${t.ebIng}</div>`;
     } else {
-      const can = act.some(r => r.now >= 10);
-      btn = `<button class="btn btn-primary btn-block" id="open-claim" ${mk(3)} ${can ? "" : "disabled"}>${t.ebBtn}</button>`;
-      const n = rows.length - act.length;
-      if (n) status = `<div class="eb-status" ${mk(4)}><span class="chip chip-grey">${t.ing}</span>${t.nIng(n)}</div>`;
+      btn = `<button class="btn btn-primary btn-block" id="open-claim" ${mk(3)}>${t.ebBtn}</button>`;
     }
     return `<div class="eb ${inUid ? "eb-in" : ""}" ${mk(1)}>
       <div class="eb-row"><div><div class="eb-label">${t.eb} ${tip}</div><div class="eb-sub">${inUid ? t.ebAll : t.ebSub}</div></div>
@@ -614,12 +607,11 @@ button, select { font: inherit; cursor: pointer; }
   const weekly = () => `<section class="card wk"><div class="wk-head"><b>${L().wk}</b><span class="link" style="font-size:14px">${L().viewAll}</span></div><div class="wk-days">${[6, 7, 8, 9, 10, 11, 12].map(d => `<span class="${d === 12 ? "on" : ""}">${d}</span>`).join("")}</div></section>`;
 
   function claimDialog(c, mobile) {
-    const t = L(), rows = snapRows(c), act = rows.filter(r => !r.ing);
+    const t = L(), rows = snapRows(c), act = rows;
     const nowSum = act.reduce((a, r) => a + r.now, 0), laterSum = act.reduce((a, r) => a + r.later, 0);
     let first = true;
     const cards = rows.map(r => {
-      const head = `<div class="uc-head"><span class="ex" style="background:${r.color}">${r.logo}</span><div>${r.ex}<small>UID ${r.uid}</small></div><span class="chip ${r.ing ? "chip-grey" : "chip-ok"}">${r.ing ? t.ing : t.ok}</span></div>`;
-      if (r.ing) return `<div class="uc off" data-n="5">${head}<div class="uc-strong"><span>${t.now}</span><span class="num">${fmt(r.now)} USDT</span></div><div class="uc-note">${t.ingNote}</div></div>`;
+      const head = `<div class="uc-head"><span class="ex" style="background:${r.color}">${r.logo}</span><div>${r.ex}<small>UID ${r.uid}</small></div><span class="chip chip-ok">${t.ok}</span></div>`;
       const n2 = first ? 'data-n="2"' : "", n3 = first && r.later ? 'data-n="3"' : "";
       first = false;
       return `<div class="uc" ${n2}>${head}<div class="uc-strong"><span>${t.now}</span><span class="num">${fmt(r.now)} USDT</span></div>
@@ -632,7 +624,7 @@ button, select { font: inherit; cursor: pointer; }
         ${cards}<div style="height:2px"></div></div>
       <div class="modal-foot">
         <p class="fine" data-n="4">${t.fine}</p>
-        <button class="btn btn-primary btn-block" style="height:42px;font-size:15px" id="confirm" data-n="${rows.some(r => r.ing) ? 6 : 5}" ${nowSum >= 10 ? "" : "disabled"}>${t.confirm}</button>
+        <button class="btn btn-primary btn-block" style="height:42px;font-size:15px" id="confirm" data-n="5">${t.confirm}</button>
       </div>`;
     return `<div class="scrim" id="scrim"></div>` + (mobile
       ? `<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="grab"></div>${body}</div>`
