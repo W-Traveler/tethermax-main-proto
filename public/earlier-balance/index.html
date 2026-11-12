@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자동 출금 전 잔액 출금 · 프로토타입</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Prototype shell follows the daily-vote prototype. Service screens follow the live tethermax.co logged-in pages (Nov 2026): dashboard rail 347px + main column, UID details swap the rail, mobile 375 with sticky Auto Claim. */
+:root {
+  --tm-blue: #0031c6;
+  --tm-blue-hover: #0028a3;
+  --tm-bar-blue: #2453f0;
+  --tm-text: rgba(0,0,0,.87);
+  --tm-text-2: rgba(0,0,0,.6);
+  --tm-text-3: rgba(0,0,0,.38);
+  --tm-divider: rgba(0,0,0,.12);
+  --tm-page: #f8fafc;
+  --tm-paper: #ffffff;
+  --tm-success: #1b5e20;
+  --tm-success-bg: #c8e6c9;
+  --tm-success-dot: #2e7d32;
+  --tm-warn: #e65100;
+  --tm-warn-bg: #fff3e0;
+  --tm-grey-chip: #e6e7e9;
+  --bar: #151a24;
+  --bar-2: #1d2330;
+  --bar-line: #2c3443;
+  --bar-text: #e8ebf1;
+  --bar-dim: #8f98a8;
+  --canvas: #e6e8ec;
+  --mk: #e2367a;
+  --font-tm: "Wanted Sans Variable", "Wanted Sans", "Inter", "Noto Sans KR", system-ui, sans-serif;
+  --font-ko: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --card-shadow: 0 1px 4px rgba(15,23,42,.06);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--canvas); font-family: var(--font-ko); font-size: 14px; color: #111; display: flex; flex-direction: column; overflow: hidden; }
+button, select { font: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid #5b8cff; outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ===== prototype toolbar ===== */
+.bar1 { background: var(--bar); color: var(--bar-text); display: flex; align-items: center; gap: 14px; padding: 10px 16px; flex: none; flex-wrap: wrap; }
+.bar1 h1 { margin: 0; font-size: 15px; font-weight: 700; }
+.ver { background: #1f47d8; color: #fff; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 6px; }
+.sp { margin-left: auto; }
+.seg { display: inline-flex; background: #0e121a; border: 1px solid var(--bar-line); border-radius: 8px; padding: 2px; }
+.seg button { border: 0; background: transparent; color: var(--bar-dim); padding: 5px 11px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+.seg button[aria-pressed="true"] { background: #fff; color: #111; }
+.chk { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.chk input { accent-color: #3d6bff; width: 16px; height: 16px; }
+.btn-bar { background: #fff; color: #111; border: 0; border-radius: 8px; padding: 6px 12px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; }
+.badge { background: var(--mk); color: #fff; border-radius: 10px; font-size: 11px; min-width: 20px; height: 20px; display: inline-grid; place-items: center; padding: 0 6px; }
+.bar2 { background: var(--bar-2); color: var(--bar-text); display: flex; align-items: center; gap: 10px; padding: 8px 16px; flex: none; flex-wrap: wrap; border-top: 1px solid var(--bar-line); }
+.lbl { font-size: 12px; color: var(--bar-dim); }
+.arrow { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--bar-line); background: #0e121a; color: var(--bar-text); }
+.sel { background: #0e121a; color: var(--bar-text); border: 1px solid var(--bar-line); border-radius: 8px; padding: 6px 10px; min-width: 280px; font-size: 13px; }
+.cases { display: flex; gap: 6px; flex-wrap: wrap; }
+.case { border: 1px solid var(--bar-line); background: #0e121a; color: var(--bar-dim); border-radius: 8px; padding: 5px 10px; font-size: 13px; display: inline-flex; gap: 8px; align-items: center; }
+.case code { font-family: var(--font-mono); font-size: 11px; background: rgba(255,255,255,.08); padding: 1px 6px; border-radius: 4px; }
+.case[aria-pressed="true"] { background: #1f47d8; border-color: #1f47d8; color: #fff; }
+.vsep { width: 1px; height: 22px; background: var(--bar-line); }
+
+.work { flex: 1; display: flex; min-height: 0; }
+.canvas { flex: 1; overflow: auto; padding: 24px; }
+.stagebox { margin: 0 auto; }
+.scaler { transform-origin: top left; }
+.status { position: fixed; left: 12px; bottom: 12px; background: #2b313d; color: #fff; font-size: 12px; padding: 5px 10px; border-radius: 6px; pointer-events: none; }
+
+.panel { width: 350px; flex: none; background: #fff; border-left: 1px solid #d7dbe2; display: flex; flex-direction: column; min-height: 0; }
+.panel[hidden] { display: none; }
+.panel-head { display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid #eceff3; }
+.panel-head h2 { margin: 0; font-size: 15px; }
+.panel-head small { color: #6b7280; font-size: 12px; }
+.panel-head button { margin-left: auto; border: 0; background: transparent; font-size: 18px; color: #6b7280; }
+.panel-body { overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.p-ids { display: flex; gap: 6px; flex-wrap: wrap; }
+.p-ids span { font-family: var(--font-mono); font-size: 11px; background: #eef1f6; padding: 2px 8px; border-radius: 4px; color: #374151; }
+.p-title { font-size: 15px; font-weight: 700; margin: 0; }
+.p-lead { margin: 0; line-height: 1.6; color: #374151; font-size: 13px; }
+.p-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.p-list li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; font-size: 13px; line-height: 1.55; color: #1f2937; cursor: pointer; }
+.p-list .n { width: 22px; height: 22px; border-radius: 50%; background: var(--mk); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+.p-list .new { display: inline-block; font-size: 10px; font-weight: 700; color: #1f47d8; background: #e6ecff; border-radius: 3px; padding: 0 5px; margin-right: 4px; }
+.p-calc { background: #f6f8fb; border: 1px solid #e3e7ee; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.7; color: #374151; }
+.p-foot { font-size: 12px; color: #6b7280; line-height: 1.6; border-top: 1px solid #eceff3; padding-top: 12px; }
+
+.show-mk [data-n] { outline: 1.5px dashed var(--mk); outline-offset: 3px; position: relative; }
+.show-mk [data-n]::after { content: attr(data-n); position: absolute; left: -9px; top: -11px; width: 18px; height: 18px; border-radius: 50%; background: var(--mk); color: #fff; font: 700 10px/18px var(--font-ko); text-align: center; z-index: 40; pointer-events: none; }
+@keyframes flash { 0%,100% { outline-color: var(--mk); } 50% { outline-color: transparent; } }
+.show-mk [data-n].flash { animation: flash .35s 3; outline-width: 2.5px; }
+
+/* ===== TetherMax live UI ===== */
+.tm { font-family: var(--font-tm); color: var(--tm-text); background: var(--tm-page); position: relative; }
+.tm .card { background: var(--tm-paper); border-radius: 8px; box-shadow: var(--card-shadow); }
+.tm .btn { border: 0; border-radius: 4px; font-weight: 500; font-size: 14px; height: 37px; padding: 0 16px; }
+.tm .btn-primary { background: var(--tm-blue); color: #fff; }
+.tm .btn-primary:hover { background: var(--tm-blue-hover); }
+.tm .btn[disabled], .tm .btn-off { background: rgba(0,0,0,.12); color: rgba(0,0,0,.38); cursor: default; }
+.tm .btn-block { width: 100%; }
+.chip { display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 11px; font-size: 12px; white-space: nowrap; }
+.chip-ok { background: var(--tm-success-bg); color: var(--tm-success); }
+.chip-grey { background: var(--tm-grey-chip); color: #5d6067; }
+.chip-tag { background: #eceff1; color: var(--tm-text-2); border-radius: 4px; height: 20px; font-size: 11px; }
+
+.tm-header { height: 64px; display: flex; align-items: center; padding: 0 40px; gap: 34px; background: var(--tm-paper); }
+.tm-logo { display: flex; align-items: center; gap: 5px; color: var(--tm-blue); font-weight: 700; font-size: 21px; letter-spacing: -.3px; }
+.tm-logo svg { width: 31px; height: 16px; }
+.tm-nav { display: flex; gap: 30px; font-weight: 600; font-size: 16px; color: var(--tm-text); }
+.tm-nav span::after { content: ""; display: inline-block; margin-left: 7px; border: 4px solid transparent; border-top-color: rgba(0,0,0,.54); transform: translateY(2px); }
+.tm-icons { margin-left: auto; display: flex; gap: 24px; align-items: center; }
+.ico { width: 22px; height: 22px; display: inline-block; color: #3c3c3f; }
+
+.web-wrap { width: 1134px; margin: 0 auto; display: grid; grid-template-columns: 347px 1fr; gap: 28px; padding: 40px 0 60px; }
+.rail { display: flex; flex-direction: column; gap: 16px; }
+.main-col { display: flex; flex-direction: column; gap: 28px; }
+
+/* balance card */
+.bal { overflow: hidden; }
+.bal-top { display: flex; align-items: center; min-height: 72px; padding-right: 16px; }
+.bal-img { width: 65px; height: 65px; flex: none; margin: 3px 12px 3px 0; object-fit: cover; object-position: left; }
+.bal-main { flex: 1; min-width: 0; }
+.bal-amt { font-size: 16px; font-weight: 600; line-height: 1.5; }
+.bal-label { font-size: 12px; color: var(--tm-text-2); }
+
+/* NEW: earlier balance */
+.eb { border-top: 1px solid var(--tm-divider); margin: 0 16px; padding: 14px 0 16px; display: flex; flex-direction: column; gap: 10px; }
+.eb.eb-in { margin: 8px 0 0; padding-bottom: 0; }
+.eb-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.eb-label { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+.eb-sub { font-size: 12px; color: var(--tm-text-2); margin-top: 2px; line-height: 1.4; }
+.eb-amt { font-size: 16px; font-weight: 600; white-space: nowrap; text-align: right; }
+.eb-amt small { display: block; font-size: 11px; font-weight: 400; color: var(--tm-text-2); }
+.eb-status { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--tm-text-2); line-height: 1.45; flex-wrap: wrap; }
+.info { width: 15px; height: 15px; border-radius: 50%; border: 1.2px solid var(--tm-text-3); color: var(--tm-text-2); font-size: 9px; font-weight: 700; display: inline-grid; place-items: center; position: relative; cursor: help; font-family: Inter, sans-serif; }
+.info .tip { display: none; position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); width: 250px; background: #3c3c3f; color: #fff; font-weight: 400; font-size: 12px; line-height: 1.5; padding: 8px 10px; border-radius: 4px; z-index: 45; font-family: var(--font-tm); }
+.info:hover .tip, .info:focus .tip { display: block; }
+
+/* linked uid */
+.lu { padding: 16px; }
+.lu-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.lu-head b { font-size: 16px; font-weight: 600; }
+.link { color: var(--tm-blue); font-size: 13px; font-weight: 500; }
+.lu-row { display: flex; align-items: center; gap: 10px; padding: 12px 0; cursor: pointer; }
+.ex { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 9px; font-weight: 700; flex: none; font-family: Inter, sans-serif; letter-spacing: -.2px; }
+.lu-name { flex: 1; font-size: 14px; font-weight: 500; }
+.lu-name small { display: block; font-size: 12px; font-weight: 400; color: var(--tm-text-2); }
+.lu-amt { font-size: 14px; font-weight: 500; white-space: nowrap; }
+.caret { width: 0; height: 0; border: 4px solid transparent; border-top-color: rgba(0,0,0,.54); margin-left: 6px; transform: translateY(2px); }
+.lu-uids { padding: 0 0 6px 42px; display: flex; flex-direction: column; gap: 10px; }
+.lu-uid { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--tm-text-2); cursor: pointer; }
+.lu-uid .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--tm-success-dot); }
+.lu-uid .amt { margin-left: auto; color: var(--tm-text); }
+.lu-foot { border-top: 1px solid var(--tm-divider); margin-top: 8px; padding-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--tm-text-2); }
+.plus-ico { width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid var(--tm-text-2); display: grid; place-items: center; font-size: 12px; line-height: 1; }
+
+/* sections */
+.sec { padding: 24px 24px 28px; }
+.sec-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.sec-head h3 { margin: 0; font-size: 24px; font-weight: 700; }
+.ben-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.ben { border-radius: 8px; box-shadow: 0 1px 6px rgba(15,23,42,.08); padding: 16px; display: flex; flex-direction: column; gap: 10px; background: #fff; }
+.ben-img { height: 140px; border-radius: 4px; background: #111 center/cover no-repeat; }
+.ben-t { font-size: 14px; color: var(--tm-text-2); }
+.ev-img { height: 140px; border-radius: 4px; background: linear-gradient(150deg, #0d1424, #1b2a49); position: relative; }
+.ev-img span { position: absolute; left: 10px; top: 10px; background: #000; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 3px; font-family: Inter, sans-serif; }
+.ev-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--tm-text-2); }
+.ev-row b { color: var(--tm-text); font-weight: 500; }
+.cd { display: flex; gap: 4px; align-items: center; font-size: 12px; color: var(--tm-text-2); }
+.cd i { font-style: normal; background: #f1f3f5; color: var(--tm-text); padding: 1px 5px; border-radius: 3px; }
+
+/* uid details */
+.ud-head { padding: 16px; display: flex; align-items: center; gap: 10px; }
+.back { font-size: 20px; color: #3c3c3f; cursor: pointer; padding: 0 4px; }
+.ud-name { flex: 1; }
+.ud-name b { display: block; font-size: 16px; font-weight: 600; }
+.ud-name small { font-size: 12px; color: var(--tm-text-2); white-space: nowrap; }
+.ud { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.kv { display: flex; justify-content: space-between; gap: 12px; }
+.kv.big { font-size: 14px; }
+.kv.big span:last-child { font-size: 16px; font-weight: 600; }
+.kv.mid { font-size: 14px; color: var(--tm-text-2); }
+.kv.small { font-size: 12px; color: var(--tm-text-2); }
+.kv.small span:last-child { color: var(--tm-text); }
+.hr { height: 1px; background: var(--tm-divider); margin: 6px 0; }
+.bar { height: 4px; background: #e8eefc; border-radius: 2px; overflow: hidden; margin-top: 4px; }
+.bar i { display: block; height: 100%; background: var(--tm-bar-blue); }
+.cl { font-size: 11px; color: var(--tm-text-2); }
+.warn { background: var(--tm-warn-bg); color: #7a3600; font-size: 13px; padding: 10px 12px; border-radius: 4px; display: flex; gap: 8px; align-items: center; }
+.warn b { font-weight: 600; }
+.ud-eb { border: 1px solid #d6dff7; background: #f5f8ff; border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.ud-eb-head { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; }
+.ud-eb .kv { font-size: 12px; color: var(--tm-text-2); }
+.ud-eb .kv span:last-child { color: var(--tm-text); }
+.ud-eb .later { color: var(--tm-warn); }
+.ud-eb .later span:last-child { color: var(--tm-warn); }
+.ud-eb-foot { font-size: 12px; color: var(--tm-text-2); line-height: 1.45; display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 2px; }
+.ud-eb-foot .link { white-space: nowrap; cursor: pointer; }
+.tl { padding: 16px; }
+.tl b { font-size: 16px; font-weight: 600; }
+.tl-row { display: flex; justify-content: space-between; margin-top: 16px; position: relative; }
+.tl-row::before { content: ""; position: absolute; left: 50px; right: 50px; top: 27px; border-top: 1px dashed #c9ced6; }
+.tl-it { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100px; position: relative; font-size: 11px; color: var(--tm-text-2); }
+.tl-it i { width: 54px; height: 54px; border-radius: 6px; background: #f1f3f5; display: block; }
+.tl-it strong { font-weight: 500; color: var(--tm-text); font-size: 12px; }
+.tl small { display: block; font-size: 11px; color: var(--tm-text-2); margin-top: 12px; }
+.wk { padding: 16px 20px 24px; }
+.wk-head { display: flex; justify-content: space-between; align-items: center; }
+.wk-head b { font-size: 16px; font-weight: 600; }
+.wk-days { display: flex; justify-content: space-between; margin-top: 18px; padding: 0 10px; font-size: 15px; }
+.wk-days span { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; }
+.wk-days span.on { border: 1px solid #333; }
+
+/* modal */
+.scrim { position: absolute; inset: 0; background: rgba(0,0,0,.5); z-index: 20; }
+.modal { position: absolute; left: 50%; transform: translateX(-50%); background: #fff; border-radius: 8px; box-shadow: 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14); display: flex; flex-direction: column; z-index: 21; }
+.modal-head { display: flex; justify-content: space-between; align-items: center; padding: 22px 24px 14px; }
+.modal-head h2 { margin: 0; font-size: 20px; font-weight: 600; }
+.x { border: 0; background: transparent; font-size: 24px; line-height: 1; color: #3c3c3f; padding: 2px 6px; }
+.modal-body { padding: 4px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+.total { border: 1px solid var(--tm-divider); border-radius: 8px; padding: 16px; }
+.total small { font-size: 12px; color: var(--tm-text-2); }
+.total .amt { font-size: 26px; font-weight: 600; margin-top: 2px; }
+.total .amt span { font-size: 14px; font-weight: 400; color: var(--tm-text-2); margin-left: 4px; }
+.total .later { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--tm-divider); display: flex; justify-content: space-between; font-size: 13px; color: var(--tm-warn); }
+.carry { margin-top: 12px; background: #f0f4ff; border: 1px solid #c9d6fb; border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; }
+.carry-h { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; color: var(--tm-blue); gap: 10px; }
+.carry-h span:first-child { display: flex; align-items: center; gap: 6px; }
+.carry-h svg { flex: none; }
+.carry p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--tm-text-2); }
+.uc-rows .sub-row { padding-left: 8px; font-size: 12px; }
+.uc-rows .carry-sub { color: var(--tm-blue); }
+.uc { border: 1px solid var(--tm-divider); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.uc.off { background: #fafafa; }
+.uc.off .uc-strong { color: var(--tm-text-3); }
+.uc-head { display: flex; align-items: center; gap: 10px; }
+.uc-head .ex { width: 28px; height: 28px; }
+.uc-head div { flex: 1; font-size: 14px; font-weight: 600; }
+.uc-head small { display: block; font-size: 12px; font-weight: 400; color: var(--tm-text-2); }
+.uc-strong { display: flex; justify-content: space-between; font-size: 14px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid var(--tm-divider); }
+.uc-rows { display: flex; flex-direction: column; gap: 5px; font-size: 12px; color: var(--tm-text-2); }
+.uc-rows div { display: flex; justify-content: space-between; gap: 12px; }
+.uc-rows .later { color: var(--tm-warn); padding-top: 6px; border-top: 1px dashed var(--tm-divider); }
+.uc-note { font-size: 12px; color: var(--tm-text-2); background: var(--tm-page); border-radius: 4px; padding: 8px 10px; line-height: 1.5; }
+.modal-foot { padding: 14px 24px 22px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--tm-divider); }
+.modal-foot .kv { font-size: 13px; color: var(--tm-text-2); }
+.modal-foot .kv span:last-child { color: var(--tm-text); text-align: right; }
+.fine { font-size: 12px; color: var(--tm-text-2); line-height: 1.55; margin: 2px 0; }
+.toast { position: absolute; left: 50%; transform: translateX(-50%); background: #323232; color: #fff; padding: 12px 18px; border-radius: 4px; font-size: 14px; z-index: 30; white-space: nowrap; box-shadow: 0 3px 5px rgba(0,0,0,.2); }
+
+/* mobile web */
+.phone { width: 393px; height: 852px; border-radius: 44px; background: #111; padding: 9px; }
+.screen { width: 375px; height: 834px; border-radius: 36px; overflow: hidden; position: relative; background: var(--tm-page); display: flex; flex-direction: column; }
+.m-head { height: 64px; display: flex; align-items: center; padding: 0 12px 0 10px; gap: 18px; background: var(--tm-page); flex: none; padding-top: 6px; }
+.m-head .tm-logo { font-size: 19px; margin-right: auto; }
+.m-scroll { flex: 1; overflow-y: auto; padding: 0 16px 24px; display: flex; flex-direction: column; gap: 16px; }
+.m-scroll .sec { padding: 0; background: transparent; box-shadow: none; }
+.m-scroll .sec-head h3 { font-size: 15px; }
+.m-ben { display: flex; gap: 16px; overflow: hidden; }
+.m-ben > div { width: 160px; flex: none; }
+.m-ben .ben-img { height: 150px; border-radius: 6px; }
+.m-ben b { display: block; font-size: 13px; font-weight: 600; margin-top: 8px; }
+.m-ben small { font-size: 12px; color: var(--tm-text-2); }
+.m-sticky { flex: none; background: #fff; border-top: 1px solid var(--tm-divider); padding: 12px 16px 18px; }
+.fab { position: absolute; right: 18px; bottom: 24px; width: 54px; height: 54px; border-radius: 50%; background: var(--tm-blue); z-index: 5; box-shadow: 0 4px 10px rgba(0,49,198,.3); }
+.screen.has-sticky .fab { bottom: 92px; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; max-height: 88%; background: #fff; border-radius: 16px 16px 0 0; display: flex; flex-direction: column; z-index: 21; }
+.sheet .grab { width: 36px; height: 4px; border-radius: 2px; background: #d0d4da; margin: 8px auto 0; }
+.sheet .modal-head { padding: 14px 16px 10px; }
+.sheet .modal-head h2 { font-size: 18px; }
+.sheet .modal-body { padding: 4px 16px; }
+.sheet .modal-foot { padding: 12px 16px 22px; }
+
+/* invite friends · invitation reward (MAX-587) */
+.iv-wrap { width: 774px; margin: 0 auto; padding: 40px 0 60px; display: flex; flex-direction: column; gap: 0; }
+.iv-tabs { display: flex; gap: 0; margin-bottom: 20px; }
+.iv-tabs span { padding: 10px 16px 12px; font-size: 14px; color: var(--tm-text-2); border-bottom: 2px solid transparent; }
+.iv-tabs span.on { color: var(--tm-blue); border-bottom-color: var(--tm-blue); font-weight: 500; }
+.iv-seg { display: inline-flex; background: #eceff3; border-radius: 4px; padding: 3px; align-self: flex-start; margin-bottom: 24px; }
+.iv-seg span { padding: 4px 8px; font-size: 12px; color: var(--tm-text-2); border-radius: 3px; }
+.iv-seg span.on { background: #fff; color: var(--tm-text); }
+.iv-card { padding: 16px; display: flex; align-items: center; gap: 12px; }
+.iv-card .lbl2 { font-size: 11px; color: var(--tm-text-2); }
+.iv-card .amt2 { font-size: 16px; font-weight: 600; margin-top: 2px; }
+.iv-card .grow { flex: 1; }
+.btn-ol { background: #fff; color: var(--tm-text); border: 1px solid rgba(0,0,0,.5) !important; }
+.tm .btn-wd { min-width: 136px; }
+.iv-note { font-size: 12px; color: var(--tm-text-2); margin-top: 8px; display: flex; gap: 6px; align-items: center; }
+.iv-h { display: flex; align-items: center; gap: 8px; margin: 40px 0 20px; font-size: 16px; font-weight: 600; }
+.iv-h i { font-style: normal; background: var(--tm-blue); color: #fff; font-size: 11px; border-radius: 10px; padding: 1px 7px; font-weight: 500; }
+.iv-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.iv-table th { font-size: 11px; color: var(--tm-text-2); font-weight: 400; text-align: left; padding: 0 0 18px; }
+.iv-table td { padding: 14px 0; }
+.iv-table .r { text-align: right; font-variant-numeric: tabular-nums; }
+.iv-ex { display: flex; align-items: center; gap: 6px; font-weight: 500; }
+.iv-ex .ex { width: 22px; height: 22px; font-size: 7px; }
+.iv-terms { padding: 16px; margin-top: 36px; font-size: 12px; color: var(--tm-text-2); line-height: 1.7; }
+.iv-terms b { display: block; font-size: 14px; color: var(--tm-text); margin-bottom: 8px; font-weight: 600; }
+.sel-modal { position: absolute; left: 50%; transform: translateX(-50%); background: #fff; border-radius: 4px; padding: 20px; z-index: 21; box-shadow: 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14); display: flex; flex-direction: column; gap: 16px; }
+.sel-modal h2 { margin: 0; font-size: 18px; font-weight: 500; line-height: 1.4; }
+.sel-modal p { margin: -6px 0 0; font-size: 13px; color: var(--tm-text-2); line-height: 1.5; }
+.sel-list { display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; }
+.sel-it { display: flex; align-items: center; gap: 10px; border: 1px solid var(--tm-divider); border-radius: 12px; padding: 10px; font-size: 13px; cursor: pointer; background: #fff; text-align: left; width: 100%; }
+.sel-it .ex { width: 30px; height: 30px; }
+.sel-it span.u { flex: 1; }
+.sel-it.on { border-color: var(--tm-blue); box-shadow: 0 0 0 1px var(--tm-blue) inset; }
+.sel-it[disabled] { cursor: default; background: #fafafa; color: var(--tm-text-3); }
+.res { position: absolute; left: 50%; transform: translateX(-50%); background: #fff; border-radius: 8px; padding: 24px 20px 20px; z-index: 21; box-shadow: 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14); display: flex; flex-direction: column; gap: 14px; }
+.res h2 { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.4; }
+.res p.res-p { margin: -6px 0 0; font-size: 13px; color: var(--tm-text-2); line-height: 1.55; }
+.res .total .amt { font-size: 22px; }
+.res .carry { margin-top: 0; }
+.res .btn { height: 40px; font-size: 14px; }
+.sel-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.tm .btn-cancel { background: #eceef1; color: var(--tm-text); height: 36px; }
+.sel-btns .btn { height: 36px; }
+.m-iv { padding: 0 16px 24px; }
+.m-iv .iv-tabs { margin: 0 -16px 12px; background: #fff; }
+.m-iv .iv-tabs span { flex: 1; text-align: center; font-size: 14px; }
+.m-iv .iv-seg { margin-bottom: 14px; }
+.m-iv .iv-card { flex-direction: column; align-items: stretch; gap: 8px; }
+.m-iv .iv-btn2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.m-iv .iv-h { margin: 28px 0 14px; }
+.m-iv .iv-table { font-size: 12px; }
+.phone .sel-modal { width: calc(100% - 32px); top: 170px; }
+
+.chat { position: absolute; right: 32px; bottom: 100px; width: 340px; background: #fff; border-radius: 12px; box-shadow: 0 12px 30px rgba(0,0,0,.2); z-index: 22; display: flex; flex-direction: column; }
+.chat-m { left: 12px; right: 12px; width: auto; bottom: 90px; }
+.chat-h { border-radius: 12px 12px 0 0; background: var(--tm-blue); color: #fff; padding: 12px 14px; font-size: 14px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+.chat-b { padding: 14px; display: flex; flex-direction: column; gap: 8px; min-height: 160px; background: #f6f8fb; }
+.msg { max-width: 80%; padding: 8px 11px; border-radius: 12px; font-size: 13px; line-height: 1.45; }
+.msg.me { align-self: flex-end; background: var(--tm-blue); color: #fff; border-bottom-right-radius: 3px; }
+.msg.bot { align-self: flex-start; background: #fff; border: 1px solid var(--tm-divider); border-bottom-left-radius: 3px; }
+.chat-in { border-radius: 0 0 12px 12px; border-top: 1px solid var(--tm-divider); padding: 12px 14px; font-size: 13px; color: var(--tm-text-3); }
+/* backoffice */
+.adm { display: grid; grid-template-columns: 220px 1fr; background: #101317; font-family: var(--font-ko); color: #e5e7eb; min-height: 760px; width: 1440px; }
+.adm-side { background: #0b0d10; padding: 18px 14px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.adm-side .logo { color: #fff; font-weight: 700; font-size: 18px; margin-bottom: 12px; font-family: Inter, sans-serif; }
+.adm-side .grp { color: #9ca3af; margin-top: 10px; }
+.adm-side .it { padding: 7px 10px; border-radius: 6px; color: #cbd5e1; }
+.adm-side .it.on { background: #1e3a6e; color: #fff; }
+.adm-main { padding: 22px 26px; display: flex; flex-direction: column; gap: 16px; overflow: hidden; }
+.adm-main h2 { margin: 0; font-size: 22px; font-weight: 700; color: #fff; }
+.adm-search { display: flex; gap: 8px; }
+.adm-search div { background: #1a1f27; border: 1px solid #2b313b; border-radius: 6px; padding: 8px 12px; color: #9ca3af; font-size: 13px; }
+.adm-search .b { margin-left: auto; background: #fff; color: #111; font-weight: 600; }
+.adm-tw { overflow-x: auto; border: 1px solid #2b313b; border-radius: 8px; }
+.adm table { border-collapse: collapse; width: 100%; font-size: 12.5px; white-space: nowrap; }
+.adm th { background: #1a1f27; color: #cbd5e1; font-weight: 600; text-align: left; padding: 10px 12px; border-bottom: 1px solid #2b313b; }
+.adm td { padding: 10px 12px; border-bottom: 1px solid #222832; }
+.adm .r { text-align: right; font-variant-numeric: tabular-nums; }
+.adm .nc { background: rgba(31,71,216,.18); }
+.adm .pill { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.pill.go { background: #2563eb; color: #fff; } .pill.ing { background: #6b7280; color: #fff; } .pill.ok { background: #166534; color: #dcfce7; } .pill.fail { background: #7f1d1d; color: #fee2e2; }
+.adm .src-m { color: #93c5fd; font-weight: 600; }
+.adm .note { font-size: 12px; color: #9ca3af; }
+@media (prefers-reduced-motion: reduce) { .show-mk [data-n].flash { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="bar1">
+  <h1>자동 출금 전 잔액 출금 · 프로토타입</h1>
+  <span class="sp"></span>
+  <div class="seg" role="group" aria-label="서비스 문구 언어"><button id="lang-en" aria-pressed="true">EN</button><button id="lang-ko" aria-pressed="false">KO</button></div>
+  <label class="chk"><input type="checkbox" id="mk-toggle" checked> 설명 번호</label>
+  <button class="btn-bar" id="panel-toggle">화면 설명 <span class="badge" id="mk-count">0</span></button>
+</div>
+<div class="bar2">
+  <span class="lbl">화면</span>
+  <button class="arrow" id="prev" aria-label="이전 화면">‹</button>
+  <select class="sel" id="screen-sel" aria-label="화면 선택"></select>
+  <button class="arrow" id="next" aria-label="다음 화면">›</button>
+  <div class="cases" id="cases"></div>
+  <span class="vsep"></span>
+  <span class="lbl">보기</span>
+  <div class="seg" role="group" aria-label="배율"><button id="fit-on" aria-pressed="true">창에 맞춤</button><button id="fit-off" aria-pressed="false">100%</button></div>
+  <button class="btn-bar" id="restart">↻ 처음부터</button>
+</div>
+<div class="work">
+  <div class="canvas" id="canvas"><div class="stagebox" id="stagebox"><div class="scaler" id="scaler"></div></div></div>
+  <aside class="panel" id="panel" aria-label="화면 설명">
+    <div class="panel-head"><h2>화면 설명</h2><small>번호 = 화면 위 번호</small><button id="panel-close" aria-label="패널 닫기">×</button></div>
+    <div class="panel-body" id="panel-body"></div>
+  </aside>
+</div>
+<div class="status" id="status"></div>
+
+<script>
+(function () {
+  /* ---------- sample member ---------- */
+  // snap: 배포 시점에 묶인 금액(남은 스냅샷 커미션 / 이벤트 리워드). null = 스냅샷 없음
+  const ACCTS = [
+    { ex: "OKX", color: "#000", logo: "OKX", uids: [
+      { uid: "850358337912128386", amt: 9728.40, acc: 21791.16, exCb: 6397.92, evt: 3330.48, claim: 9728.40, snap: { c: 30, e: 45 } },
+      { uid: "617755618866586639", amt: 2.01, acc: 301.86, exCb: 2.01, evt: 0, claim: 0, snap: null } ] },
+    { ex: "Bitget", color: "#00b7c7", logo: "BG", uids: [
+      { uid: "7605865687", amt: 8149.17, acc: 12034.50, exCb: 6120.40, evt: 2028.77, claim: 8149.17, snap: { c: 12, e: 5 } } ] },
+    { ex: "WOO X Pro", color: "#111", logo: "WOO", uids: [
+      { uid: "99939529", amt: 42.09, acc: 42.09, exCb: 10.09, evt: 32.00, claim: 20.18, snap: null } ] }
+  ];
+  const SNAP = [];
+  ACCTS.forEach(a => a.uids.forEach(u => { if (u.snap) SNAP.push({ ex: a.ex, color: a.color, logo: a.logo, uid: u.uid, c: u.snap.c, e: u.snap.e }); }));
+  const fmt = n => Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const short = u => u.length > 12 ? u.slice(0, 4) + "…" + u.slice(-4) : u;
+  const calc = s => { const en = Math.min(s.e, s.c); return { now: s.c + en, en, later: s.e - en, remain: s.c + s.e }; };
+
+  /* ---------- copy (EN = live site language, KO = draft) ---------- */
+  const T = {
+    en: {
+      nav: ["Cashback", "Rewards Hub", "Discover"], total: "Total Cashback Balance", auto: "Auto Claim",
+      eb: "Before Auto Claim", ebSub: "Balance earned before Auto Claim started. Claim it once to receive it.",
+      ebTip: "Cashback and event rewards earned before Auto Claim started are not paid automatically. Claim once to receive them. Leftover event rewards are then paid with your new cashback.",
+      ebAll: "Total for all linked accounts. Eligible accounts are claimed together.", ebBtn: "Claim Earlier Balance", ebIngBtn: "Claim in progress", ebIng: "Payout is being processed. This section closes when it's done.", carryIng: n => `When it's done, ${n} USDT of event rewards moves to Auto Claim and is paid with your new cashback.`, carryLbl: "Moves to Auto Claim", resDoneT: "Earlier balance paid out", resDoneP: "Your claim for the balance earned before Auto Claim is complete.", resPaid: "Paid amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: n => `The remaining ${n} USDT of event rewards has moved to Auto Claim. As new exchange cashback comes in, the same amount is paid with it automatically.`, resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `${n} USDT is back in your Before Auto Claim balance. Please claim again. If your claim keeps failing, please contact Support.`, resClose: "Close", resRetry: "Claim Again", failNote: "Your last claim couldn't be processed. Please claim again. If your claim keeps failing, please contact Support.",
+      nIng: n => `${n} account${n > 1 ? "s are" : " is"} already being processed and won't be included.`,
+      lu: "Linked UID", seeAll: "See All", uids: n => `${n} UIDs`, more: "Using multiple exchanges? Link more UIDs",
+      exB: "Exclusive Benefits", exE: "Exchange Events", ongoing: "Ongoing", ben: [["TetherMax x Bybit Global League", "Join Global League"], ["Sign up for an exchange", "Get extra Cashback"]],
+      prize: "Total Prize Pool", join: "Join Now",
+      active: "Active", avail: "Available Cashback", accum: "Accumulated Cashback", exCb: "Exchange Cashback", evt: "Event Reward",
+      claimable: (a, b) => `Claimable ${a} USDT / ${b} USDT`, min: "Minimum claim amount", tl: "Earning Timeline", tlI: ["Start Trading", "Cut-off Time", "Updated"], tlN: "*Updates may vary by up to 1 hour",
+      wk: "Weekly Cashback History", viewAll: "View All",
+      udEb: "Before Auto Claim", udLater: "Event Reward paid later", udFoot: "Claim it with Total Cashback Balance on the main page.", udGo: "Go to main page", udIng: "Claim in progress",
+      mt: "Claim Earlier Balance", now: "Claim amount", later: "Moves to Auto Claim", evtNow: "Claimed now", carryNote: n => `After this claim, ${n} USDT of event rewards moves to Auto Claim. As new exchange cashback comes in, the same amount of event rewards is paid with it automatically.`, ok: "Available", ing: "In progress",
+      ingNote: "This account is already being paid out. It's not included this time.",
+      net: "Network", fee: "Network fee", feeV: "TetherMax covers the full cost",
+      fine: "Event rewards are claimed up to your exchange cashback. A claim can't be cancelled.",
+      confirm: "Confirm Claim", toast: "Claim requested. Payout is being processed.", toastCarry: n => `Claim requested. ${n} USDT of event rewards will move to Auto Claim.`,
+      ivTabs: ["TetherMax Points (TP)", "Invite Friends"], ivSeg: ["Invite", "Invitation Reward"], ivAvail: "Available Invitation Rewards", ivWd: "Withdraw", ivHist: "Reward History", ivRef: "Referral Details",
+      ivIng: "Withdrawal in progress. You can withdraw again once it's done.", ivUidH: "Exchange UID Registration Status", ivTh: ["Exchange", "No. of Registered UIDs", "Cumulative Invitation Rewards (USDT)"], ivTerms: "Terms & Conditions",
+      ivTermsT: "If you sign up using this link, you do not need to enter a separate friend invitation code. Members who signed up before being invited by a friend are excluded from the event. The reward ratio may change or be limited due to the operator's circumstances.",
+      ivEbSub: "Invitation rewards earned before Auto Claim started. Choose a UID to receive them.", ivCsSub: "Invitation rewards earned before Auto Claim started are paid through Customer Support.", ivCsBtn: "Contact Support", chatT: "TetherMax Support", chatMsg: "Hi, I'd like to withdraw my invitation rewards earned before Auto Claim started.", chatBot: "Thanks. Please tell us the exchange UID you want to receive the rewards to.", chatPh: "Type a message", selT: "Select a UID to withdraw referral rewards", selP: "Rewards are paid to the selected UID.", cancel: "Cancel", conf2: "Confirm", inProg: "In progress",
+      linkT: "UID Link Required", linkP: "Link your UID to withdraw rewards.", link: "Link", ivToast: "Withdrawal requested. Payout is being processed."
+    },
+    ko: {
+      nav: ["캐시백", "리워드 허브", "탐색"], total: "총 캐시백 잔액", auto: "자동 출금",
+      eb: "자동 출금 전 잔액", ebSub: "자동 출금 시작 전에 쌓인 금액이에요. 한 번 출금 신청하면 받을 수 있어요.",
+      ebTip: "자동 출금이 시작되기 전에 쌓인 캐시백과 이벤트 리워드는 자동으로 출금되지 않아요. 한 번 출금 신청하면 받을 수 있고, 남은 이벤트 리워드는 이후 새 캐시백과 함께 지급돼요.",
+      ebAll: "연동된 전체 계정 합계예요. 조건에 맞는 계정이 함께 신청돼요.", ebBtn: "자동 출금 전 잔액 출금", ebIngBtn: "출금 처리 중", ebIng: "출금이 처리되고 있어요. 처리가 끝나면 이 영역은 사라져요.", carryIng: n => `처리가 끝나면 이벤트 리워드 ${n} USDT는 자동 출금으로 이월되고, 새 캐시백과 함께 지급돼요.`, carryLbl: "자동 출금으로 이월", resDoneT: "자동 출금 전 잔액 출금이 완료됐어요", resDoneP: "신청한 자동 출금 전 잔액이 지급됐어요.", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: n => `남은 이벤트 리워드 ${n} USDT는 자동 출금으로 이월됐어요. 새 거래소 캐시백이 쌓이면 그 금액만큼 함께 자동 지급돼요.`, resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `신청한 ${n} USDT는 자동 출금 전 잔액으로 다시 반영됐어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.`, resClose: "닫기", resRetry: "다시 신청", failNote: "지난 출금 신청이 처리되지 않았어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.",
+      nIng: n => `${n}개 계정은 이미 출금이 진행 중이라 이번에는 제외돼요.`,
+      lu: "연동 UID", seeAll: "전체 보기", uids: n => `UID ${n}개`, more: "여러 거래소를 쓰시나요? UID 더 연동하기",
+      exB: "회원 전용 혜택", exE: "거래소 이벤트", ongoing: "진행 중", ben: [["TetherMax x Bybit 글로벌 리그", "글로벌 리그 참여"], ["거래소 가입하기", "추가 캐시백 받기"]],
+      prize: "총 상금", join: "참여하기",
+      active: "활성", avail: "출금 가능 캐시백", accum: "누적 캐시백", exCb: "거래소 캐시백", evt: "이벤트 리워드",
+      claimable: (a, b) => `출금 가능 ${a} USDT / ${b} USDT`, min: "최소 출금 금액", tl: "적립 일정", tlI: ["거래 시작", "마감 시각", "업데이트"], tlN: "*업데이트는 최대 1시간 차이가 날 수 있어요",
+      wk: "주간 캐시백 내역", viewAll: "전체 보기",
+      udEb: "자동 출금 전 잔액", udLater: "나중에 지급되는 이벤트 리워드", udFoot: "메인 페이지의 총 캐시백 잔액에서 출금 신청할 수 있어요.", udGo: "메인 페이지로 가기", udIng: "출금 처리 중",
+      mt: "자동 출금 전 잔액 출금", now: "출금 신청 금액", later: "자동 출금으로 이월", evtNow: "이번에 출금", carryNote: n => `출금 신청이 완료되면 이벤트 리워드 ${n} USDT는 자동 출금으로 이월돼요. 새 거래소 캐시백이 쌓이면 그 금액만큼 함께 자동 지급돼요.`, ok: "출금 가능", ing: "처리 중",
+      ingNote: "이미 출금이 진행 중인 계정이에요. 이번 출금에는 포함되지 않아요.",
+      net: "네트워크", fee: "네트워크 수수료", feeV: "TetherMax가 전액 부담해요",
+      fine: "이벤트 리워드는 거래소 캐시백 금액까지만 출금 신청돼요. 출금 신청은 취소할 수 없어요.",
+      confirm: "출금 신청하기", toast: "출금을 신청했어요. 처리 중이에요.", toastCarry: n => `출금을 신청했어요. 이벤트 리워드 ${n} USDT는 자동 출금으로 이월돼요.`,
+      ivTabs: ["테더맥스 포인트 (TP)", "친구 초대"], ivSeg: ["초대하기", "초대 리워드"], ivAvail: "출금 가능 초대 리워드", ivWd: "출금", ivHist: "리워드 내역", ivRef: "초대 현황",
+      ivIng: "출금이 처리되고 있어요. 처리가 끝나면 다시 출금할 수 있어요.", ivUidH: "거래소 UID 등록 현황", ivTh: ["거래소", "등록 UID 수", "누적 초대 리워드 (USDT)"], ivTerms: "유의사항",
+      ivTermsT: "해당 링크로 가입하면 별도의 친구 초대 코드를 입력하지 않아도 됩니다. 친구에게 초대받기 이전에 가입한 회원은 이벤트 대상에서 제외됩니다. 리워드 비율은 운영사의 사정상 변경 및 제한될 수 있습니다.",
+      ivEbSub: "자동 출금 시작 전에 쌓인 초대 리워드예요. 받을 UID를 선택해 출금 신청할 수 있어요.", ivCsSub: "자동 출금 시작 전에 쌓인 초대 리워드는 고객센터를 통해 지급돼요.", ivCsBtn: "고객센터 문의", chatT: "TetherMax 고객센터", chatMsg: "자동 출금 시작 전에 쌓인 초대 리워드를 출금하고 싶어요.", chatBot: "문의 감사합니다. 리워드를 받을 거래소 UID를 알려주세요.", chatPh: "메시지를 입력하세요", selT: "초대 리워드를 받을 UID를 선택하세요", selP: "선택한 UID로 리워드가 지급돼요.", cancel: "취소", conf2: "확인", inProg: "처리 중",
+      linkT: "UID 연동이 필요해요", linkP: "리워드를 출금하려면 UID를 먼저 연동해 주세요.", link: "연동하기", ivToast: "출금을 신청했어요. 처리 중이에요."
+    }
+  };
+
+  /* ---------- screens ---------- */
+  const SCREENS = [
+    { id: "EB-W01", name: "웹 · 01 메인 페이지", dev: "web", view: "dash", cases: [
+      { k: "a", name: "대상 회원", c: { ing: [], claimed: false, eligible: true } },
+      { k: "b", name: "신청 완료", c: { ing: SNAP.map(s => s.uid), claimed: true, eligible: true } },
+      { k: "c", name: "대상 아님 (현재 화면)", c: { ing: [], claimed: false, eligible: false } },
+      { k: "d", name: "예외 · 신청 반려/실패", c: { ing: [], claimed: false, eligible: true, failed: true } } ] },
+    { id: "EB-W02", name: "웹 · 02 출금 확인 모달", dev: "web", view: "dash", cases: [
+      { k: "a", name: "전체 출금 가능", c: { ing: [], eligible: true, modal: true } } ] },
+    { id: "EB-W03", name: "웹 · 03 UID 상세", dev: "web", view: "uid", cases: [
+      { k: "a", name: "대상 회원", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: true } },
+      { k: "b", name: "신청 완료", c: { uid: "850358337912128386", ing: SNAP.map(s => s.uid), claimed: true, eligible: true } },
+      { k: "c", name: "대상 아님 (현재 화면)", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: false } },
+      { k: "d", name: "예외 · 신청 반려/실패", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: true, failed: true } } ] },
+    { id: "EB-M01", name: "모바일 · 01 메인 페이지", dev: "mobile", view: "dash", cases: null },
+    { id: "EB-M02", name: "모바일 · 02 출금 확인 시트", dev: "mobile", view: "dash", cases: null },
+    { id: "EB-M03", name: "모바일 · 03 UID 상세", dev: "mobile", view: "uid", cases: null },
+  ];
+  SCREENS[3].cases = SCREENS[0].cases; SCREENS[4].cases = SCREENS[1].cases; SCREENS[5].cases = SCREENS[2].cases;
+  const IV_CASES = [
+    { k: "a", name: "대상 회원", c: { inv: "main" } },
+    { k: "b", name: "UID 선택 모달", c: { inv: "select" } },
+    { k: "c", name: "UID 선택됨", c: { inv: "selected" } },
+    { k: "d", name: "신청 완료", c: { inv: "done" } },
+    { k: "e", name: "연동 UID 없음", c: { inv: "nolink" } },
+    { k: "f", name: "대상 아님 (현재 화면)", c: { inv: "none" } },
+    { k: "g", name: "예외 · 신청 반려/실패", c: { inv: "failed" } } ];
+  const IV_CS_CASES = [
+    { k: "a", name: "대상 회원", c: { inv: "cs" } },
+    { k: "b", name: "고객센터 문의 연결", c: { inv: "cs-chat" } },
+    { k: "c", name: "대상 아님 (현재 화면)", c: { inv: "none" } } ];
+  SCREENS.splice(3, 0,
+    { id: "EB-W04", name: "웹 · 04 초대 리워드 A안 · CS 문의 유지", dev: "web", view: "invite", cases: IV_CS_CASES },
+    { id: "EB-W05", name: "웹 · 05 초대 리워드 B안 · 셀프 출금 (제안)", dev: "web", view: "invite", cases: IV_CASES });
+  const RES_CASES = [
+    { k: "a", name: "출금 완료 팝업", c: { ing: [], claimed: false, eligible: false, result: "done", noMk: true } },
+    { k: "b", name: "반려·실패 팝업", c: { ing: [], claimed: false, eligible: true, failed: true, result: "failed", noMk: true } } ];
+  SCREENS.splice(5, 0, { id: "EB-W06", name: "웹 · 06 결과 팝업", dev: "web", view: "dash", cases: RES_CASES });
+  SCREENS.push({ id: "EB-M06", name: "모바일 · 06 결과 팝업", dev: "mobile", view: "dash", cases: RES_CASES });
+  SCREENS.splice(9, 0,
+    { id: "EB-M04", name: "모바일 · 04 초대 리워드 A안 · CS 문의 유지", dev: "mobile", view: "invite", cases: IV_CS_CASES },
+    { id: "EB-M05", name: "모바일 · 05 초대 리워드 B안 · 셀프 출금 (제안)", dev: "mobile", view: "invite", cases: IV_CASES });
+
+  const S = { ivSel: null, inModal: false, si: 0, ci: 0, lang: "en", mk: true, panel: true, fit: true, toast: "" };
+  let toastTimer;
+  const cur = () => SCREENS[S.si], cc = () => cur().cases[S.ci], cid = () => `${cur().id}-${cc().k}`, L = () => T[S.lang];
+  const isMob = () => cur().dev === "mobile";
+  const idx = id => SCREENS.findIndex(s => s.id === id);
+
+  function snapRows(c) { return SNAP.map(s => ({ ...s, ...calc(s), ing: (c.ing || []).includes(s.uid) })); }
+
+  /* ---------- icons ---------- */
+  const logo = `<div class="tm-logo"><svg viewBox="0 0 32 16" aria-hidden="true"><path d="M8 2a6 6 0 1 0 4.2 10.3L16 8.6l3.8 3.7A6 6 0 1 0 19.8 3.7L16 7.4 12.2 3.7A6 6 0 0 0 8 2Zm0 3.4c.7 0 1.3.3 1.8.7L13.6 8l-3.8 3.9A2.6 2.6 0 1 1 8 5.4Zm16 0a2.6 2.6 0 1 1-1.8 4.5L18.4 8l3.8-3.9c.5-.4 1.1-.7 1.8-.7Z" fill="currentColor"/></svg>TetherMax</div>`;
+  const I = {
+    bell: `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>`,
+    user: `<svg class="ico" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="9.5" r="3.4" fill="#fff"/><path d="M5.8 18.2c1.4-2.3 3.6-3.4 6.2-3.4s4.8 1.1 6.2 3.4" stroke="#fff" stroke-width="1.8" fill="none"/></svg>`,
+    sun: `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>`,
+    globe: `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.8 3 2.8 16 0 19M12 2.5c-2.8 3-2.8 16 0 19"/></svg>`,
+    menu: `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>`,
+    copy: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-left:4px"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>`
+  };
+  const coinImg = `<img class="bal-img" src="https://tethermax.co/_next/image?url=%2Fstatic%2Fimages%2Flanding%2Ftokens.webp&w=256&q=75" alt="" onerror="this.outerHTML='<span class=&quot;bal-img&quot; style=&quot;display:block;background:linear-gradient(135deg,#d6dbe2,#8c96a3);border-radius:0 40px 40px 0&quot;></span>'">`;
+  const BEN = ["https://tethermax-prod.s3.ap-northeast-1.amazonaws.com/home/benefit/banner/aee8561e-4dfe-4e75-8a9c-967cf527ec03.webp", "https://tethermax-prod.s3.ap-northeast-1.amazonaws.com/home/benefit/banner/ddafa8bd-f723-406d-80d0-a9b5901b4d89.webp"];
+
+  /* ---------- service parts ---------- */
+  const ARROW = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12h14M13 6l6 6-6 6"/></svg>`;
+  function carryBox(label, amt, note, mk) {
+    return `<div class="carry" ${mk || ""}><div class="carry-h"><span>${ARROW}${label}</span><span class="num">${fmt(amt)} USDT</span></div><p>${note}</p></div>`;
+  }
+  function ebBlock(c, inUid) {
+    if (!c.eligible) return "";
+    const t = L(), rows = snapRows(c), act = rows.filter(r => !r.ing);
+    const remain = rows.reduce((a, r) => a + r.remain, 0);
+    const mk = n => (c.modal || c.noMk) ? "" : `data-n="${n}"`;
+    const tip = `<span class="info" tabindex="0" aria-label="설명">i<span class="tip">${t.ebTip}</span></span>`;
+    let btn, status = "", fail = "";
+    if (c.failed) fail = `<div class="warn" ${mk(4)}>⚠ <span>${t.failNote}</span></div>`;
+    if (c.claimed) {
+      btn = `<button class="btn btn-block" disabled ${mk(3)}>${t.ebIngBtn}</button>`;
+      status = `<div class="eb-status" ${mk(4)}>${t.ebIng}</div>`;
+    } else {
+      const can = act.some(r => r.now >= 10);
+      btn = `<button class="btn btn-primary btn-block" id="open-claim" ${mk(3)} ${can ? "" : "disabled"}>${t.ebBtn}</button>`;
+      const n = rows.length - act.length;
+      if (n) status = `<div class="eb-status" ${mk(4)}><span class="chip chip-grey">${t.ing}</span>${t.nIng(n)}</div>`;
+    }
+    return `<div class="eb ${inUid ? "eb-in" : ""}" ${mk(1)}>
+      <div class="eb-row"><div><div class="eb-label">${t.eb} ${tip}</div><div class="eb-sub">${inUid ? t.ebAll : t.ebSub}</div></div>
+        <div class="eb-amt num" ${mk(2)}>${fmt(remain)} USDT</div></div>
+      ${fail}${btn}${status}</div>`;
+  }
+
+  function balCard(c) {
+    const t = L();
+    const total = ACCTS.reduce((a, x) => a + x.uids.reduce((b, u) => b + u.amt, 0), 0);
+    return `<section class="card bal">
+      <div class="bal-top">${coinImg}<div class="bal-main"><div class="bal-amt num">${fmt(total)} USDT</div><div class="bal-label">${t.total}</div></div>
+        <button class="btn btn-off" tabindex="-1">${t.auto}</button></div>
+      ${ebBlock(c)}</section>`;
+  }
+
+  function linked() {
+    const t = L();
+    const rows = ACCTS.map(a => {
+      const sum = a.uids.reduce((b, u) => b + u.amt, 0);
+      const head = `<div class="lu-row" data-uid="${a.uids[0].uid}"><span class="ex" style="background:${a.color}">${a.logo}</span><div class="lu-name">${a.ex}${a.uids.length > 1 ? `<small>${t.uids(a.uids.length)}</small>` : ""}</div><span class="lu-amt num">${fmt(sum)} USDT</span>${a.uids.length > 1 ? '<span class="caret"></span>' : ""}</div>`;
+      const uidLines = a.uids.length > 1 ? `<div class="lu-uids">${a.uids.map(u => `<div class="lu-uid" data-uid="${u.uid}"><span class="dot"></span>UID ${u.uid}<span class="amt num">${fmt(u.amt)} USDT</span></div>`).join("")}</div>`
+        : `<div class="lu-uids"><div class="lu-uid" data-uid="${a.uids[0].uid}"><span class="dot"></span>UID ${a.uids[0].uid}</div></div>`;
+      return head + uidLines;
+    }).join("");
+    return `<section class="card lu"><div class="lu-head"><b>${t.lu}</b><span class="link">${t.seeAll}</span></div>${rows}
+      <div class="lu-foot"><span class="plus-ico">+</span>${t.more}</div></section>`;
+  }
+
+  function benefits() {
+    const t = L();
+    return `<section class="card sec"><div class="sec-head"><h3>${t.exB}</h3><span class="link" style="font-size:14px">${t.seeAll}</span></div>
+      <div class="ben-grid">${t.ben.map((b, i) => `<div class="ben"><div class="ben-img" style="background-image:url('${BEN[i]}')"></div><div class="ben-t">${b[0]}</div><span class="chip chip-tag" style="align-self:flex-start">${t.ongoing}</span><button class="btn btn-primary btn-block" tabindex="-1">${b[1]}</button></div>`).join("")}</div></section>`;
+  }
+  function events() {
+    const t = L();
+    return `<section class="card sec"><div class="sec-head"><h3>${t.exE}</h3><span class="link" style="font-size:14px">${t.seeAll}</span></div>
+      <div class="ben-grid">${[["Bitget", "150,000", ["6", "11", "46", "23"]], ["Bybit", "3,200,000", ["20", "06", "47", "23"]]].map(e => `<div class="ben"><div class="ev-img"><span>${e[0]}</span></div><div class="ev-row"><span>🏆 ${t.prize}</span><b>Up to ${e[1]} USDT</b></div><div class="cd">🕒 <i>${e[2][0]}</i>D <i>${e[2][1]}</i>H <i>${e[2][2]}</i>M <i>${e[2][3]}</i>S</div><button class="btn btn-primary btn-block" tabindex="-1">${t.join}</button></div>`).join("")}</div></section>`;
+  }
+
+  function findUid(uid) { for (const a of ACCTS) for (const u of a.uids) if (u.uid === uid) return { a, u }; return null; }
+
+  function uidDetail(c, mobile) {
+    const t = L(), { a, u } = findUid(c.uid);
+    const pct = u.acc ? Math.min(100, u.claim / Math.max(u.exCb + u.evt, .01) * 100) : 0;
+    const warn = u.claim < 10 ? `<div class="warn">⚠ ${t.min} <b>10 USDT</b></div>` : "";
+    const head = `<section class="card ud-head"><span class="back" id="back">←</span><span class="ex" style="background:${a.color}">${a.logo}</span><div class="ud-name"><b>${a.ex}</b><small>UID ${u.uid}${I.copy}</small></div><span class="chip chip-ok">${t.active}</span></section>`;
+    const det = `<section class="card ud">
+      <div class="kv big"><span>${t.avail}</span><span class="num">${fmt(u.amt)} USDT</span></div>
+      <div class="kv mid"><span>${t.accum}</span><span class="num">${fmt(u.acc)} USDT</span></div>
+      <div class="hr"></div>
+      <div class="kv small"><span>${t.exCb}</span><span class="num">${fmt(u.exCb)} USDT</span></div>
+      <div class="kv small"><span>${t.evt}</span><span class="num">${fmt(u.evt)} USDT</span></div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="cl num">${t.claimable(fmt(u.claim), fmt(u.exCb + u.evt))}</div>
+      ${warn}
+      ${mobile ? "" : `<button class="btn btn-off btn-block" tabindex="-1" style="margin-top:6px">${t.auto}</button>`}
+      ${ebBlock(c, true)}
+    </section>`;
+    const tl = `<section class="card tl"><b>${t.tl}</b><div class="tl-row">${t.tlI.map((x, i) => `<div class="tl-it"><i></i>${x}<strong>${["Nov 11 09:00", "Nov 12 09:00", "Nov 12 20:00"][i]}</strong></div>`).join("")}</div><small>${t.tlN}</small></section>`;
+    return { head, det, tl };
+  }
+  const weekly = () => `<section class="card wk"><div class="wk-head"><b>${L().wk}</b><span class="link" style="font-size:14px">${L().viewAll}</span></div><div class="wk-days">${[6, 7, 8, 9, 10, 11, 12].map(d => `<span class="${d === 12 ? "on" : ""}">${d}</span>`).join("")}</div></section>`;
+
+  function claimDialog(c, mobile) {
+    const t = L(), rows = snapRows(c), act = rows.filter(r => !r.ing);
+    const nowSum = act.reduce((a, r) => a + r.now, 0), laterSum = act.reduce((a, r) => a + r.later, 0);
+    let first = true;
+    const cards = rows.map(r => {
+      const head = `<div class="uc-head"><span class="ex" style="background:${r.color}">${r.logo}</span><div>${r.ex}<small>UID ${r.uid}</small></div><span class="chip ${r.ing ? "chip-grey" : "chip-ok"}">${r.ing ? t.ing : t.ok}</span></div>`;
+      if (r.ing) return `<div class="uc off" data-n="5">${head}<div class="uc-strong"><span>${t.now}</span><span class="num">${fmt(r.now)} USDT</span></div><div class="uc-note">${t.ingNote}</div></div>`;
+      const n2 = first ? 'data-n="2"' : "", n3 = first && r.later ? 'data-n="3"' : "";
+      first = false;
+      return `<div class="uc" ${n2}>${head}<div class="uc-strong"><span>${t.now}</span><span class="num">${fmt(r.now)} USDT</span></div>
+        <div class="uc-rows"><div><span>${t.exCb}</span><span class="num">${fmt(r.c)} USDT</span></div><div><span>${t.evt}</span><span class="num">${fmt(r.e)} USDT</span></div>
+        ${r.later ? `<div class="sub-row"><span>└ ${t.evtNow}</span><span class="num">${fmt(r.en)} USDT</span></div><div class="sub-row carry-sub" ${n3}><span>└ ${t.later}</span><span class="num">${fmt(r.later)} USDT</span></div>` : ""}</div></div>`;
+    }).join("");
+    const body = `<div class="modal-head"><h2 id="mt">${t.mt}</h2><button class="x" id="close" aria-label="닫기">×</button></div>
+      <div class="modal-body">
+        <div class="total" data-n="1"><small>${t.now}</small><div class="amt num">${fmt(nowSum)}<span>USDT</span></div>${laterSum ? carryBox(t.later, laterSum, t.carryNote(fmt(laterSum))) : ""}</div>
+        ${cards}<div style="height:2px"></div></div>
+      <div class="modal-foot">
+        <p class="fine" data-n="4">${t.fine}</p>
+        <button class="btn btn-primary btn-block" style="height:42px;font-size:15px" id="confirm" data-n="${rows.some(r => r.ing) ? 6 : 5}" ${nowSum >= 10 ? "" : "disabled"}>${t.confirm}</button>
+      </div>`;
+    return `<div class="scrim" id="scrim"></div>` + (mobile
+      ? `<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="grab"></div>${body}</div>`
+      : `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt" style="width:560px;top:80px;max-height:820px">${body}</div>`);
+  }
+  function resultDialog(c, mobile) {
+    const t = L(), rows = snapRows(c);
+    const nowSum = rows.reduce((a, r) => a + r.now, 0), laterSum = rows.reduce((a, r) => a + r.later, 0);
+    const pos = mobile ? "width:327px;top:200px" : "width:420px;top:240px";
+    let body;
+    if (c.result === "done") {
+      body = `<h2 data-n="1">${t.resDoneT}</h2><p class="res-p">${t.resDoneP}</p>
+        <div class="total" data-n="2"><small>${t.resPaid}</small><div class="amt num">${fmt(nowSum)}<span>USDT</span></div></div>
+        ${laterSum ? carryBox(t.resCarryLbl, laterSum, t.resCarryNote(fmt(laterSum)), 'data-n="3"') : ""}
+        <button class="btn btn-primary btn-block" id="res-ok" data-n="4">${t.resOk}</button>`;
+    } else {
+      body = `<h2 data-n="1">${t.resFailT}</h2><p class="res-p" data-n="2">${t.resFailP(fmt(nowSum))}</p>
+        <div class="sel-btns" data-n="3"><button class="btn btn-cancel" id="res-close">${t.resClose}</button><button class="btn btn-primary" id="res-retry">${t.resRetry}</button></div>`;
+    }
+    return `<div class="scrim"></div><div class="res" role="dialog" aria-modal="true" style="${pos}">${body}</div>`;
+  }
+  const toast = mobile => S.toast ? `<div class="toast" style="${mobile ? "bottom:100px" : "top:80px"}">${S.toast}</div>` : "";
+
+  /* ---------- invitation reward (general user) ---------- */
+  const IV_UIDS = [
+    { ex: "OKX", color: "#000", logo: "OKX", uid: "850358337912128386" },
+    { ex: "OKX", color: "#000", logo: "OKX", uid: "617755618866586639" },
+    { ex: "Bitget", color: "#00b7c7", logo: "BG", uid: "7605865687", ing: true },
+    { ex: "WOO X Pro", color: "#111", logo: "WOO", uid: "99939529" } ];
+  const IV_TABLE = [["Bitget", "#00b7c7", "BG", 3, "18.40"], ["OKX", "#000", "OKX", 2, "6.20"], ["Bybit", "#17181e", "BYB", 1, "0.00"]];
+  function ivBlock(c) {
+    if (c.inv === "none") return "";
+    if (c.inv === "cs" || c.inv === "cs-chat") {
+      const t = L(), mk = n => c.inv === "cs" ? `data-n="${n}"` : "";
+      return `<div class="eb eb-in" ${mk(1)}><div class="eb-row"><div><div class="eb-label">${t.eb}</div><div class="eb-sub">${t.ivCsSub}</div></div>
+        <div class="eb-amt num" ${mk(2)}>18.00 USDT</div></div><button class="btn btn-ol btn-block" id="iv-cs" ${mk(3)}>${t.ivCsBtn}</button></div>`;
+    }
+    const t = L(), done = c.inv === "done";
+    const failed = c.inv === "failed";
+    const mk = n => (c.inv === "main" || done || failed) ? `data-n="${n}"` : "";
+    const tip = `<span class="info" tabindex="0" aria-label="설명">i<span class="tip">${t.ebTip}</span></span>`;
+    const btn = done ? `<button class="btn btn-block" disabled ${mk(3)}>${t.ebIngBtn}</button>`
+      : `<button class="btn btn-primary btn-block" id="iv-claim" ${mk(3)}>${t.ebBtn}</button>`;
+    const st = done ? `<div class="eb-status" ${mk(4)}>${t.ebIng}</div>` : "";
+    const fl = failed ? `<div class="warn" ${mk(4)}>⚠ <span>${t.failNote}</span></div>` : "";
+    return `<div class="eb eb-in" ${mk(1)}><div class="eb-row"><div><div class="eb-label">${t.eb} ${tip}</div><div class="eb-sub">${t.ivEbSub}</div></div>
+      <div class="eb-amt num" ${mk(2)}>18.00 USDT</div></div>${fl}${btn}${st}</div>`;
+  }
+  function inviteBody(c, mobile) {
+    const t = L();
+    const wd = `<button class="btn btn-wd ${mobile ? "btn-block" : ""}" disabled>${t.ivWd}</button>`;
+    const sub = `<button class="btn btn-ol" tabindex="-1">${t.ivHist}</button><button class="btn btn-ol" tabindex="-1">${t.ivRef}</button>`;
+    const top = mobile
+      ? `<div><div class="lbl2">${t.ivAvail}</div><div class="amt2 num">20.00 USDT</div></div>${wd}<div class="iv-btn2">${sub}</div>`
+      : `<div style="display:flex;align-items:center;gap:12px"><div class="grow"><div class="lbl2">${t.ivAvail}</div><div class="amt2 num">20.00 USDT</div></div>${wd}${sub}</div>`;
+    const card = `<section class="card iv-card" style="flex-direction:column;align-items:stretch;gap:${mobile ? 8 : 0}px">${top}${ivBlock(c)}</section>`;
+    const table = `<div class="iv-h">${t.ivUidH} <i>6</i></div>
+      <table class="iv-table"><thead><tr><th>${t.ivTh[0]}</th><th class="r">${t.ivTh[1]}</th><th class="r">${t.ivTh[2]}</th></tr></thead>
+      <tbody>${IV_TABLE.map(r => `<tr><td><span class="iv-ex"><span class="ex" style="background:${r[1]}">${r[2]}</span>${r[0]}</span></td><td class="r">${r[3]}</td><td class="r">${r[4]}</td></tr>`).join("")}</tbody></table>`;
+    return `<div class="iv-tabs">${t.ivTabs.map((x, i) => `<span class="${i === 1 ? "on" : ""}">${x}</span>`).join("")}</div>
+      <div class="iv-seg">${t.ivSeg.map((x, i) => `<span class="${i === 1 ? "on" : ""}">${x}</span>`).join("")}</div>
+      ${card}${table}
+      <section class="card iv-terms"><b>${t.ivTerms}</b>${t.ivTermsT}</section>`;
+  }
+  function inviteModal(c, mobile) {
+    const t = L();
+    if (c.inv === "cs-chat") return `<div class="chat ${mobile ? "chat-m" : ""}"><div class="chat-h" data-n="1">${t.chatT}<button class="x" id="chat-close" aria-label="닫기" style="color:#fff">×</button></div>
+      <div class="chat-b"></div><div class="chat-in" data-n="2">${t.chatPh}</div></div>`;
+    if (c.inv === "nolink") return `<div class="scrim" id="iv-scrim"></div><div class="sel-modal" role="dialog" aria-modal="true" style="${mobile ? "" : "width:400px;top:300px"}">
+      <h2>${t.linkT}</h2><p>${t.linkP}</p>
+      <div class="sel-btns"><button class="btn btn-cancel" id="iv-cancel">${t.cancel}</button><button class="btn btn-primary" id="iv-link" data-n="1">${t.link}</button></div></div>`;
+    if (c.inv !== "select" && c.inv !== "selected") return "";
+    const sel = c.inv === "selected" ? (S.ivSel || IV_UIDS[0].uid) : null;
+    return `<div class="scrim" id="iv-scrim"></div><div class="sel-modal" role="dialog" aria-modal="true" aria-labelledby="ivt" style="${mobile ? "" : "width:400px;top:220px"}">
+      <h2 id="ivt" data-n="1">${t.selT}</h2><p>${t.selP}</p>
+      <div data-n="2"><div class="sel-list">${IV_UIDS.map(u => `<button class="sel-it ${sel === u.uid ? "on" : ""}" data-sel="${u.uid}" ${u.ing ? "disabled" : ""}><span class="ex" style="background:${u.color}">${u.logo}</span><span class="u">UID ${u.uid}</span>${u.ing ? `<span class="chip chip-grey" ${c.inv === "select" ? 'data-n="3"' : ""}>${t.inProg}</span>` : ""}</button>`).join("")}</div></div>
+      <div class="sel-btns"><button class="btn btn-cancel" id="iv-cancel">${t.cancel}</button><button class="btn btn-primary" id="iv-confirm" data-n="${c.inv === "select" ? 4 : 3}" ${sel ? "" : "disabled"}>${t.conf2}</button></div></div>`;
+  }
+
+  /* ---------- whole screens ---------- */
+  function webScreen(c) {
+    const t = L(), v = cur().view;
+    let rail, main;
+    const head = `<header class="tm-header">${logo}<nav class="tm-nav">${t.nav.map(n => `<span>${n}</span>`).join("")}</nav><div class="tm-icons">${I.bell}${I.user}${I.sun}${I.globe}</div></header>`;
+    if (v === "invite") return `<div class="tm" style="width:1440px;min-height:1000px">${head}<div class="iv-wrap">${inviteBody(c, false)}</div>${inviteModal(c, false)}${toast(false)}</div>`;
+    if (v === "uid") { const d = uidDetail(c, false); rail = d.head + d.det + d.tl; main = weekly() + benefits(); }
+    else { rail = balCard(c) + linked(); main = benefits() + events(); }
+    return `<div class="tm" style="width:1440px;min-height:1000px">
+      <header class="tm-header">${logo}<nav class="tm-nav">${t.nav.map(n => `<span>${n}</span>`).join("")}</nav><div class="tm-icons">${I.bell}${I.user}${I.sun}${I.globe}</div></header>
+      <div class="web-wrap"><div class="rail">${rail}</div><div class="main-col">${main}</div></div>
+      ${c.modal ? claimDialog(c, false) : ""}${c.result ? resultDialog(c, false) : ""}${toast(false)}</div>`;
+  }
+  function mobileScreen(c) {
+    const t = L(), v = cur().view;
+    let body, sticky = "";
+    if (v === "invite") return `<div class="phone"><div class="screen tm"><header class="m-head">${logo}${I.bell}${I.user}${I.menu}</header><div class="m-scroll m-iv">${inviteBody(c, true)}</div><span class="fab"></span>${inviteModal(c, true)}${toast(true)}</div></div>`;
+    if (v === "uid") { const d = uidDetail(c, true); body = d.head + d.det + d.tl + weekly(); sticky = `<div class="m-sticky"><button class="btn btn-off btn-block" tabindex="-1">${t.auto}</button></div>`; }
+    else body = balCard(c) + linked() + `<section class="sec"><div class="sec-head"><h3>${t.exB}</h3><span class="link">${t.seeAll}</span></div><div class="m-ben">${t.ben.map((b, i) => `<div><div class="ben-img" style="background-image:url('${BEN[i]}')"></div><b>${b[0]}</b><small>${b[1]}</small></div>`).join("")}</div></section>`;
+    return `<div class="phone"><div class="screen tm ${sticky ? "has-sticky" : ""}">
+      <header class="m-head">${logo}${I.bell}${I.user}${I.menu}</header>
+      <div class="m-scroll">${body}</div>${sticky}<span class="fab"></span>
+      ${c.modal ? claimDialog(c, true) : ""}${c.result ? resultDialog(c, true) : ""}${toast(true)}</div></div>`;
+  }
+  function adminScreen(c) {
+    const side = `<div class="adm-side"><div class="logo">TetherMax</div><div class="grp">자동 출금</div><div class="it ${c.admin === "snap" ? "on" : ""}">스냅샷 출금 (일반)</div><div class="it">스냅샷 출금 (친구초대)</div><div class="it">출금 정지 관리</div><div class="grp">페이백</div><div class="it">내역 현황</div><div class="it">회원 수동 페이백</div><div class="it">전체 내역</div></div>`;
+    let m;
+    if (c.admin === "snap") {
+      const rows = [["9900734711", "a***@gmail.com", "OKX", "850358337912128386", "6,397.92", "3,330.48", "30.00", "45.00", "30.00", "30.00", '<span class="pill ing">출금 진행중</span>', "2026-11-12 11:42"],
+        ["9900734711", "a***@gmail.com", "Bitget", "7605865687", "6,120.40", "2,028.77", "12.00", "5.00", "12.00", "5.00", '<span class="pill ing">출금 진행중</span>', "2026-11-12 10:05"],
+        ["9900734875", "k***@naver.com", "HTX", "455372840", "8.10", "20.00", "15.00", "20.00", "15.00", "15.00", '<span class="pill go">출금 신청</span>', "-"]];
+      m = `<h2>자동 출금 - 스냅샷 출금 (일반)</h2><div class="adm-search"><div>검색 구분 ▾</div><div style="min-width:220px">내용을 입력해주세요.</div><div class="b">검색</div></div>
+        <div class="adm-tw"><table><thead><tr><th>회원번호</th><th>이메일</th><th>거래소명</th><th>거래소 UID</th><th class="r">현재 커미션 잔액</th><th class="r">현재 이벤트 리워드 잔액</th><th class="r">남은 스냅샷 커미션</th><th class="r">남은 스냅샷 이벤트 리워드</th><th class="r">출금 신청 가능 커미션</th><th class="r">출금 신청 가능 이벤트 리워드</th><th>출금 신청</th><th class="nc" data-n="1">신청 일시</th></tr></thead>
+        <tbody>${rows.map(r => `<tr>${r.map((v, i) => `<td class="${i >= 4 && i <= 9 ? "r" : ""} ${i >= 11 ? "nc" : ""}">${v}</td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="note">파란 배경 = 추가 컬럼. 회원 버튼 신청도 이 화면에서 '출금 진행중'으로 보입니다. 기존 컬럼, 출금 신청 모달, 동작은 변경 없음.</div>`;
+    }
+    return `<div class="adm">${side}<div class="adm-main">${m}</div></div>`;
+  }
+
+  /* ---------- description panel ---------- */
+  const NEW = '<span class="new">신규</span>';
+  const DESC = {
+    "W01": {
+      a: ["대상 회원 · 버튼 활성", "현재 Auto Claim 버튼은 비활성이라 회원이 직접 할 수 있는 출금 동작이 없습니다. 총 캐시백 잔액 카드 하단에 자동 출금 전 잔액 영역과 출금 버튼을 추가합니다.", [
+        `${NEW}자동 출금 전 잔액 영역. 연동 UID 중 남은 스냅샷 커미션 > 0인 UID가 1개 이상인 회원에게만 표시. 상시 운영`,
+        "금액 = 남은 스냅샷 커미션 + 남은 스냅샷 이벤트 리워드 합계 (UID 합산)",
+        `${NEW}[자동 출금 전 잔액 출금] 버튼. 노출 대상이면 활성 (스냅샷은 배포 시점 10 USDT 이상인 UID에만 있어 별도 금액 조건 없음). 누르면 출금 확인 모달(EB-W02)`]],
+      b: ["신청 완료 · 처리 중", "신청한 UID는 출금 진행중 상태가 되고 버튼은 비활성으로 바뀝니다.", [
+        `${NEW}자동 출금 전 잔액 영역`, "금액: 출금이 끝나기 전까지 남은 스냅샷 금액 표시", "버튼 비활성, 문구 '출금 처리 중'",
+        "안내 한 줄. 출금이 끝나 남은 스냅샷 커미션이 0이 되면 영역 미노출(EB-W01-c)"]],
+      c: ["대상 아님 · 현재 화면과 동일", "배포 시점 10 USDT 미만이라 스냅샷이 없는 회원, CS로 이미 출금한 회원, 신청을 마친 회원은 영역을 표시하지 않습니다. 현재 메인 페이지와 같습니다.", []],
+      d: ["예외 · 신청 반려/실패", "출금 신청이 반려되거나 처리에 실패한 경우입니다. 신청 금액이 남은 스냅샷 잔액으로 돌아가고 락도 유지된다는 전제로, 영역을 다시 활성 상태로 보여주고 재신청할 수 있게 합니다. (반려·실패 발생 여부와 잔액 처리 방식은 개발 확인 필요)", [
+        `${NEW}자동 출금 전 잔액 영역 (대상 회원과 같은 구성)`, "금액 = 복구된 남은 스냅샷 금액 합계",
+        "버튼 다시 활성. 누르면 같은 출금 확인 모달(EB-W02)",
+        `${NEW}반려/실패 안내: 처리되지 않았다는 사실 + 다시 신청 가능 + 반복 시 고객센터 문의. 사유는 표시하지 않음 (사유 데이터 제공 여부 미확인). 다음 신청이 접수되면 미노출`]]
+    },
+    "W02": {
+      a: ["출금 확인 모달 · 전체 출금 가능", "조건에 맞는 UID 전체를 한 번에 신청합니다. 각 UID에 기존 스냅샷 출금 신청 로직(어드민 [출금 신청]과 동일)을 적용합니다.", [
+        "출금 신청 금액 합계 + 자동 출금 이월 박스 (이월 금액 + 이월 후 지급 방식 설명)",
+        "UID 카드: 출금 신청 금액 = 거래소 캐시백 + 이번에 출금되는 이벤트 리워드(커미션 한도까지). 이벤트 리워드는 전체 금액을 보여주고 하위에 이번에 출금 / 자동 출금으로 이월로 나눠 표시",
+        "자동 출금으로 이월: 커미션 한도를 넘는 이벤트 리워드. 신청 완료 후 락 해제, 새 커미션이 쌓이면 그만큼 함께 자동 출금",
+        "안내: 이벤트 리워드 상한, 취소 불가",
+        "[출금 신청하기] → 토스트 → EB-W01-b"]]
+    },
+    "W03": {
+      a: ["UID 상세 · 대상 회원", "UID 상세에서도 메인 페이지와 같은 영역을 Auto Claim 버튼 하단에 표시합니다. 출금은 회원 단위로 처리되므로 어느 UID 상세에서 눌러도 조건에 맞는 전체 계정이 함께 신청됩니다.", [
+        `${NEW}자동 출금 전 잔액 영역 (메인 페이지와 동일 구성). 웹은 Auto Claim 하단, 모바일은 상세 카드 하단 (Auto Claim은 하단 고정 유지)`,
+        "금액 = 회원 전체 계정의 남은 스냅샷 금액 합계. 이 UID 금액이 아니므로 '연동된 전체 계정 합계' 안내 표시",
+        `${NEW}[자동 출금 전 잔액 출금] → 같은 출금 확인 모달 (현재 화면 위에 표시). 신청 완료 후 같은 UID 상세의 신청 완료 상태(EB-W03-b)`]],
+      b: ["UID 상세 · 신청 완료", "메인 페이지와 같이 버튼 비활성 + 처리 중 안내로 바뀝니다.", [
+        `${NEW}자동 출금 전 잔액 영역`, "금액", "버튼 비활성 '출금 처리 중'", "안내 한 줄. 출금 완료 후 영역 미노출"]],
+      c: ["UID 상세 · 대상 아님", "남은 스냅샷 금액이 있는 계정이 없으면 현재 UID 상세와 같습니다.", []],
+      d: ["UID 상세 · 예외 · 신청 반려/실패", "메인 페이지의 반려/실패 상태(EB-W01-d)와 같습니다.", [
+        `${NEW}자동 출금 전 잔액 영역`, "금액 = 복구된 남은 스냅샷 금액 합계 (전체 계정)", "버튼 다시 활성 → 출금 확인 모달", `${NEW}반려/실패 안내`]]
+    },
+    "W06": {
+      a: ["결과 팝업 · 출금 완료", "출금 처리가 끝나면 자동 출금 전 잔액 영역이 사라지므로, 결과와 이월 내용을 팝업으로 알립니다. 출금 완료 후 메인 페이지에 처음 들어올 때 1회 노출합니다.", [
+        `${NEW}제목 '자동 출금 전 잔액 출금이 완료됐어요' + 안내 한 줄`,
+        "출금 금액: 이번 신청으로 지급된 금액 합계 (거래소 캐시백 + 이번에 출금된 이벤트 리워드)",
+        "자동 출금으로 이월됨: 커미션 한도를 넘어 이월된 이벤트 리워드 + 이후 지급 방식 안내. 이월 금액이 0이면 미노출",
+        "[확인] → 팝업 닫힘. 메인 페이지는 영역 미노출 상태(EB-W01-c)"]],
+      b: ["결과 팝업 · 반려·실패", "신청이 반려되거나 처리에 실패하면 팝업으로 알리고 바로 다시 신청할 수 있게 합니다. 반려·실패 후 메인 페이지에 처음 들어올 때 1회 노출합니다. 팝업을 닫아도 영역 안 반려 안내(EB-W01-d)는 유지됩니다.", [
+        `${NEW}제목 '출금 신청이 처리되지 않았어요'`,
+        "안내: 신청 금액이 자동 출금 전 잔액으로 다시 반영됐다는 사실 + 재신청 + 반복 시 고객센터 문의. 사유 미표시",
+        "[닫기] → 메인 페이지 반려 상태(EB-W01-d) / [다시 신청] → 출금 확인 모달(EB-W02)"]]
+    },
+    "W05": {
+      a: ["초대 리워드 B안 · 셀프 출금 (제안) · 대상 회원", "일반 친구초대 유저는 시스템이 지급 UID를 알 수 없어 [Withdraw]가 비활성이고 CS로만 출금합니다. [Withdraw]는 그대로 두고, 메인 페이지와 같은 자동 출금 전 잔액 영역을 초대 리워드 카드 하단에 추가합니다. 제휴사는 등록 UID로 지급되므로 대상이 아닙니다.", [
+        `${NEW}자동 출금 전 잔액 영역 (메인 페이지와 같은 구성). 남은 스냅샷 초대 리워드가 있는 일반·서브 회원에게만 표시`,
+        "금액 = 남은 스냅샷 초대 리워드 (어드민 스냅샷 출금(친구초대)의 '남은 스냅샷 리워드')",
+        `${NEW}[자동 출금 전 잔액 출금] → 받을 UID 선택 모달(EB-W05-b). 연동 UID가 없으면 UID 연동 안내(EB-W05-e)`]],
+      b: ["초대 리워드 · UID 선택 모달", "기존 MAX-587 UID 선택 모달을 사용합니다. 어드민 스냅샷 출금(친구초대)에서 관리자가 연동 UID를 골라 신청하는 것과 같은 로직(회원번호 + UID + 거래소)입니다.", [
+        "모달 제목 + 안내 '선택한 UID로 리워드가 지급돼요'", "연동 UID 목록 (거래소 로고 + UID). 목록이 길면 스크롤",
+        "출금 진행중 UID는 선택 불가 + '처리 중' 칩 (어드민과 같은 paybackInProgress 값)", "[Confirm] 비활성 (UID 미선택)"]],
+      c: ["초대 리워드 · UID 선택됨", "UID를 하나 고르면 [Confirm]이 활성화됩니다.", [
+        "모달 제목", "선택한 UID 강조 (파란 테두리)", "[Confirm] → 출금 신청 → 토스트 → EB-W05-d"]],
+      d: ["초대 리워드 · 신청 완료", "메인 페이지와 같이 버튼이 비활성 '출금 처리 중'으로 바뀝니다. 처리가 끝나 남은 스냅샷 리워드가 0이 되면 영역이 사라집니다(EB-W05-f).", [
+        `${NEW}자동 출금 전 잔액 영역`, "금액", "버튼 비활성 '출금 처리 중'", "처리 중 안내 한 줄"]],
+      e: ["초대 리워드 · 연동 UID 없음", "받을 UID가 없으면 기존 MAX-587 'UID Link Required' 안내를 띄웁니다.", [
+        "[Link] → 메인 페이지 UID 연동 (Link more UIDs와 같은 흐름)"]],
+      f: ["초대 리워드 · 대상 아님 (현재 화면)", "남은 스냅샷 초대 리워드가 없으면 현재 화면과 같습니다. [Withdraw]는 비활성 그대로입니다.", []],
+      g: ["초대 리워드 · 예외 · 신청 반려/실패", "B안에서 출금 신청이 반려되거나 실패한 경우입니다. 메인 페이지(EB-W01-d)와 같이 금액이 복구되고 다시 UID를 골라 신청할 수 있다는 전제입니다.", [
+        `${NEW}자동 출금 전 잔액 영역`, "금액 = 복구된 남은 스냅샷 초대 리워드", "버튼 다시 활성 → UID 선택 모달(EB-W05-b)", `${NEW}반려/실패 안내`]]
+    },
+    "W04": {
+      a: ["초대 리워드 A안 · CS 문의 유지 · 대상 회원", "현재 정책(일반 친구초대 리워드는 CS 수동 출금)을 유지하는 안입니다. [Withdraw]는 비활성 그대로 두고, 남은 스냅샷 초대 리워드가 있다는 것과 고객센터로 문의해야 한다는 것을 카드 하단에 안내합니다. 지금은 이 금액을 받으려면 CS에 문의해야 한다는 사실을 회원이 화면에서 알 수 없습니다.", [
+        `${NEW}자동 출금 전 잔액 안내 영역. 남은 스냅샷 초대 리워드가 있는 일반·서브 회원에게만 표시`,
+        "금액 = 남은 스냅샷 초대 리워드 (어드민 스냅샷 출금(친구초대)의 '남은 스냅샷 리워드')",
+        `${NEW}[고객센터 문의] → 기존 Live Chat 창 열기 (EB-W04-b)`]],
+      b: ["초대 리워드 A안 · 고객센터 문의 연결", "기존 Live Chat 창만 엽니다. 문의 내용은 회원이 직접 입력합니다. 이후 처리는 현재와 같이 관리자가 어드민 스냅샷 출금(친구초대)에서 UID를 골라 신청합니다.", [
+        "기존 Live Chat 창 (변경 없음)", "입력창: 회원이 직접 문의 입력"]],
+      c: ["초대 리워드 A안 · 대상 아님 (현재 화면)", "남은 스냅샷 초대 리워드가 없으면 현재 화면과 같습니다.", []]
+    },
+    "A01": {
+      a: ["백오피스 · 스냅샷 출금 (일반)", "기존 화면과 출금 신청 동작은 그대로입니다. 회원이 버튼으로 신청한 건도 같은 로직으로 처리되어 '출금 진행중'으로 표시됩니다. 처리 시점 확인용으로 신청 일시 컬럼만 추가합니다.", [
+        `${NEW}신청 일시 컬럼: 출금 진행중 행에 표시`]]
+    }
+  };
+
+  function panelHtml() {
+    const key = cur().id.slice(3).replace("M", "W"), d = DESC[key][cc().k], c = cc().c;
+    return `<div class="p-ids"><span>${cid()}</span></div>
+      <h3 class="p-title">${d[0]}</h3><p class="p-lead">${d[1]}</p>
+      ${d[2].length ? `<ol class="p-list">${d[2].map((x, i) => `<li data-go="${i + 1}"><span class="n">${i + 1}</span><span>${x}</span></li>`).join("")}</ol>` : ""}
+      <div class="p-foot">번호를 누르면 화면에서 위치를 표시해요. 화면 안 버튼으로 모달·완료 상태, UID 상세로 이어서 볼 수 있어요.</div>`;
+  }
+
+  /* ---------- render & nav ---------- */
+  const scaler = document.getElementById("scaler"), stagebox = document.getElementById("stagebox"), canvas = document.getElementById("canvas");
+  function bars() {
+    const sel = document.getElementById("screen-sel");
+    sel.innerHTML = SCREENS.map((s, i) => `<option value="${i}">${s.name} (${s.id})</option>`).join(""); sel.value = S.si;
+    document.getElementById("cases").innerHTML = cur().cases.map((x, i) => `<button class="case" data-i="${i}" aria-pressed="${i === S.ci}"><code>${cur().id}-${x.k}</code>${x.name}</button>`).join("");
+    document.querySelectorAll(".case").forEach(b => b.onclick = () => go(S.si, +b.dataset.i));
+    ["en", "ko"].forEach(l => document.getElementById("lang-" + l).setAttribute("aria-pressed", S.lang === l));
+    document.getElementById("fit-on").setAttribute("aria-pressed", S.fit); document.getElementById("fit-off").setAttribute("aria-pressed", !S.fit);
+  }
+  function render() {
+    const c = S.inModal ? { ...cc().c, modal: true } : cc().c, dev = cur().dev;
+    scaler.innerHTML = dev === "web" ? webScreen(c) : dev === "mobile" ? mobileScreen(c) : adminScreen(c);
+    document.body.classList.toggle("show-mk", S.mk);
+    bars();
+    const ns = [...scaler.querySelectorAll("[data-n]")].map(e => +e.dataset.n);
+    document.getElementById("mk-count").textContent = ns.length ? Math.max(...ns) : 0;
+    document.getElementById("panel").hidden = !S.panel;
+    document.getElementById("panel-body").innerHTML = panelHtml();
+    document.querySelectorAll(".p-list li").forEach(li => li.onclick = () => flash(li.dataset.go));
+    bind();
+    requestAnimationFrame(fit);
+    try { if (location.protocol !== "about:" && location.hash !== "#" + cid()) history.replaceState(null, "", "#" + cid()); } catch (e) { /* preview iframe: URL update not allowed */ }
+  }
+  function fit() {
+    const el = scaler.firstElementChild; if (!el) return;
+    const w = el.offsetWidth, h = el.offsetHeight, aw = canvas.clientWidth - 48, ah = canvas.clientHeight - 48;
+    let s = 1; if (S.fit) s = isMob() ? Math.min(1, ah / h, aw / w) : Math.min(1, aw / w);
+    scaler.style.transform = `scale(${s})`; stagebox.style.width = w * s + "px"; stagebox.style.height = h * s + "px";
+    const d = isMob() ? "고정 폭 375px · 모바일 웹" : cur().dev === "admin" ? "고정 폭 1440px · 백오피스" : "고정 폭 1440px · 웹";
+    document.getElementById("status").textContent = `${d} · ${S.fit ? "창에 맞춤" : "100%"} ${Math.round(s * 100)}%`;
+  }
+  function flash(n) {
+    const el = scaler.querySelector(`[data-n="${n}"]`); if (!el) return;
+    if (!S.mk) { S.mk = true; document.getElementById("mk-toggle").checked = true; document.body.classList.add("show-mk"); }
+    el.scrollIntoView({ block: "center", behavior: "smooth" }); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+  }
+  function bind() {
+    const m = isMob(), c = cc().c, hasIng = (c.ing || []).length > 0 && !c.claimed;
+    const dash = m ? idx("EB-M01") : idx("EB-W01"), dlg = m ? idx("EB-M02") : idx("EB-W02"), uidS = m ? idx("EB-M03") : idx("EB-W03");
+    const onUid = cur().view === "uid";
+    const open = document.getElementById("open-claim");
+    if (open) open.onclick = () => { if (onUid) { S.inModal = true; render(); } else go(dlg, 0); };
+    const close = () => { if (onUid) { S.inModal = false; render(); } else go(dash, 0); };
+    document.getElementById("close")?.addEventListener("click", close);
+    document.getElementById("scrim")?.addEventListener("click", close);
+    const conf = document.getElementById("confirm");
+    if (conf) conf.onclick = () => { S.toast = L().toast; if (onUid) { S.inModal = false; go(S.si, 1, cc().c.uid); } else go(dash, 1); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); };
+    // linked uid → uid detail
+    scaler.querySelectorAll("[data-uid]").forEach(el => el.onclick = e => {
+      e.stopPropagation(); lastDash = S.ci; go(uidS, S.ci, el.dataset.uid);
+    });
+    document.getElementById("back")?.addEventListener("click", () => go(dash, S.ci));
+    document.getElementById("res-ok")?.addEventListener("click", () => go(dash, 2));
+    document.getElementById("res-close")?.addEventListener("click", () => go(dash, 3));
+    document.getElementById("res-retry")?.addEventListener("click", () => go(dlg, 0));
+    if (cur().view === "invite") {
+      const iv = m ? idx("EB-M05") : idx("EB-W05"), ivcs = m ? idx("EB-M04") : idx("EB-W04");
+      document.getElementById("iv-cs")?.addEventListener("click", () => go(ivcs, 1));
+      document.getElementById("chat-close")?.addEventListener("click", () => go(ivcs, 0));
+      document.getElementById("iv-claim")?.addEventListener("click", () => go(iv, 1));
+      scaler.querySelectorAll("[data-sel]").forEach(b => b.onclick = () => { S.ivSel = b.dataset.sel; go(iv, 2); });
+      document.getElementById("iv-cancel")?.addEventListener("click", () => go(iv, 0));
+      document.getElementById("iv-scrim")?.addEventListener("click", () => go(iv, 0));
+      document.getElementById("iv-link")?.addEventListener("click", () => go(dash, 0));
+      document.getElementById("iv-confirm")?.addEventListener("click", () => { S.toast = L().ivToast; go(iv, 3); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); });
+    }
+  }
+  let uidOverride = null, lastDash = 0;
+  function go(si, ci, uid) {
+    S.si = si; S.ci = ci; S.inModal = false;
+    // allow viewing any linked UID within the matching case
+    if (SCREENS[si].view === "uid") {
+      if (uid) S.uid = uid;
+      SCREENS[si].cases.forEach(x => { x.c.uid = S.uid || "850358337912128386"; });
+    }
+    render();
+  }
+  function fromHash() {
+    let h = ""; try { h = location.hash; } catch (e) { return false; }
+    const m = h.slice(1).match(/^(EB-[WMA]\d\d)-([a-z])$/); if (!m) return false;
+    const si = idx(m[1]); if (si < 0) return false; const ci = SCREENS[si].cases.findIndex(x => x.k === m[2]); if (ci < 0) return false;
+    S.si = si; S.ci = ci; return true;
+  }
+  document.getElementById("screen-sel").onchange = e => { S.toast = ""; go(+e.target.value, 0); };
+  document.getElementById("prev").onclick = () => { S.toast = ""; go((S.si - 1 + SCREENS.length) % SCREENS.length, 0); };
+  document.getElementById("next").onclick = () => { S.toast = ""; go((S.si + 1) % SCREENS.length, 0); };
+  document.getElementById("lang-en").onclick = () => { S.lang = "en"; render(); };
+  document.getElementById("lang-ko").onclick = () => { S.lang = "ko"; render(); };
+  document.getElementById("mk-toggle").onchange = e => { S.mk = e.target.checked; render(); };
+  document.getElementById("panel-toggle").onclick = () => { S.panel = !S.panel; render(); };
+  document.getElementById("panel-close").onclick = () => { S.panel = false; render(); };
+  document.getElementById("fit-on").onclick = () => { S.fit = true; render(); };
+  document.getElementById("fit-off").onclick = () => { S.fit = false; render(); };
+  document.getElementById("restart").onclick = () => { S.toast = ""; go(0, 0); };
+  document.addEventListener("keydown", e => {
+    if (e.target.tagName === "SELECT") return;
+    if (e.key === "Escape" && cc().c.modal) document.getElementById("close")?.click();
+    if (e.key === "d" || e.key === "D") { S.panel = !S.panel; render(); }
+  });
+  window.addEventListener("resize", fit);
+  window.addEventListener("hashchange", () => { if (fromHash()) render(); });
+  fromHash(); render();
+})();
+</script>
+</body>
+</html>
