@@ -348,11 +348,6 @@ button, select { font: inherit; cursor: pointer; }
 .msg.bot { align-self: flex-start; background: #fff; border: 1px solid var(--tm-divider); border-bottom-left-radius: 3px; }
 .chat-in { border-radius: 0 0 12px 12px; border-top: 1px solid var(--tm-divider); padding: 12px 14px; font-size: 13px; color: var(--tm-text-3); }
 /* 11/13 change marks (temporary) */
-.show-chg [data-chg] { outline: 2px dashed #f59e0b; outline-offset: 4px; }
-.p-chg { background: #fff7e6; border: 1px solid #f5b041; border-radius: 8px; padding: 10px 12px; margin: 0 0 14px; font-size: 12.5px; line-height: 1.6; color: #5c3b00; }
-.p-chg b { display: block; margin-bottom: 4px; }
-.p-chg ul { margin: 0; padding-left: 18px; }
-.case.chg-dot::after { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #f59e0b; margin-left: 6px; vertical-align: 1px; }
 @media (prefers-reduced-motion: reduce) { .show-mk [data-n].flash { animation: none; } }
 </style>
 </head>
@@ -362,7 +357,6 @@ button, select { font: inherit; cursor: pointer; }
   <h1>기존 잔액 출금 · 프로토타입</h1>
   <span class="sp"></span>
   <div class="seg" role="group" aria-label="서비스 문구 언어"><button id="lang-en" aria-pressed="true">EN</button><button id="lang-ko" aria-pressed="false">KO</button></div>
-  <label class="chk"><input type="checkbox" id="chg-toggle" checked> 11/13 변경 표시</label>
   <label class="chk"><input type="checkbox" id="mk-toggle" checked> 설명 번호</label>
   <button class="btn-bar" id="panel-toggle">화면 설명 <span class="badge" id="mk-count">0</span></button>
 </div>
@@ -484,7 +478,7 @@ button, select { font: inherit; cursor: pointer; }
   SCREENS.splice(8, 0,
     { id: "EB-M04", name: "모바일 · 04 초대 리워드 고객센터 안내", dev: "mobile", view: "invite", cases: IV_CS_CASES });
 
-  const S = { chg: true, inModal: false, si: 0, ci: 0, lang: "en", mk: true, panel: true, fit: true, toast: "" };
+  const S = { inModal: false, si: 0, ci: 0, lang: "en", mk: true, panel: true, fit: true, toast: "" };
   let toastTimer;
   ["pointerover", "focusin"].forEach(ev => document.addEventListener(ev, e => {
     const tip = e.target.closest && e.target.closest(".eb-tip"); if (!tip) return;
@@ -522,15 +516,14 @@ button, select { font: inherit; cursor: pointer; }
     const t = L(), rows = snapRows(c), act = rows;
     const remain = rows.reduce((a, r) => a + r.remain, 0);
     const mk = n => (c.modal || c.noMk) ? "" : `data-n="${n}"`;
-    let btn, fail = "", chg = "";
+    let btn, fail = "";
     if (c.failed) fail = `<div class="warn" ${mk(4)}>⚠ <span>${t.failNote}</span></div>`;
     if (c.claimed) {
       btn = `<button class="btn btn-block" disabled ${mk(3)}>${t.ebIngBtn}</button>`;
-      chg = "data-chg";
     } else {
       btn = `<button class="btn btn-primary btn-block" id="open-claim" ${mk(3)}>${t.ebBtn}</button>`;
     }
-    return `<div class="eb ${inUid ? "eb-in" : ""}" ${mk(1)} ${chg}>
+    return `<div class="eb ${inUid ? "eb-in" : ""}" ${mk(1)}>
       <div class="eb-row"><div><div class="eb-label">${t.eb}<span class="eb-tip"><button type="button" aria-label="${t.eb}">${I.info}</button><span>${inUid ? t.ebAll : t.ebSub}</span></span></div></div>
         <div class="eb-amt num" ${mk(2)}>${fmt(remain)} USDT</div></div>
       ${fail}${btn}</div>`;
@@ -607,10 +600,10 @@ button, select { font: inherit; cursor: pointer; }
     }).join("");
     const body = `<div class="modal-head"><h2 id="mt">${t.mt}</h2><button class="x" id="close" aria-label="닫기">×</button></div>
       <div class="modal-body">
-        <div class="total" data-n="1" data-chg><small>${t.now}</small><div class="amt num">${fmt(nowSum)}<span>USDT</span></div>${laterSum ? carryBox(t.later, laterSum, t.carryNote(fmt(laterSum))) : ""}</div>
+        <div class="total" data-n="1"><small>${t.now}</small><div class="amt num">${fmt(nowSum)}<span>USDT</span></div>${laterSum ? carryBox(t.later, laterSum, t.carryNote(fmt(laterSum))) : ""}</div>
         ${cards}<div style="height:2px"></div></div>
       <div class="modal-foot">
-        ${c.err ? `<div class="err-toast" data-n="6">${t.errT}</div>` : ""}<p class="fine" data-n="4" data-chg>${t.fine}</p>
+        ${c.err ? `<div class="err-toast" data-n="6">${t.errT}</div>` : ""}<p class="fine" data-n="4">${t.fine}</p>
         <button class="btn btn-primary btn-block" style="height:42px;font-size:15px" id="confirm" data-n="5">${t.confirm}</button>
       </div>`;
     return `<div class="scrim" id="scrim"></div>` + (mobile
@@ -628,7 +621,7 @@ button, select { font: inherit; cursor: pointer; }
         ${laterSum ? carryBox(t.resCarryLbl, laterSum, t.resCarryNote(fmt(laterSum)), 'data-n="3"') : ""}
         <button class="btn btn-primary btn-block" id="res-ok" data-n="4">${t.resOk}</button>`;
     } else {
-      body = `<h2 data-n="1">${t.resFailT}</h2><p class="res-p" data-n="2" data-chg>${t.resFailP(fmt(nowSum))}</p>
+      body = `<h2 data-n="1">${t.resFailT}</h2><p class="res-p" data-n="2">${t.resFailP(fmt(nowSum))}</p>
         <div class="sel-btns" data-n="3"><button class="btn btn-cancel" id="res-close">${t.resClose}</button><button class="btn btn-primary" id="res-retry">${t.resRetry}</button></div>`;
     }
     return `<div class="scrim"></div><div class="res" role="dialog" aria-modal="true" style="${pos}">${body}</div>`;
@@ -640,14 +633,14 @@ button, select { font: inherit; cursor: pointer; }
   function ivBlock(c) {
     if (c.inv !== "cs") return "";
     const t = L(), mk = n => `data-n="${n}"`;
-    return `<div class="eb eb-in" ${mk(1)} data-chg><div class="eb-sub" style="margin:0 0 10px">${t.ivCsSub}</div>
+    return `<div class="eb eb-in" ${mk(1)}><div class="eb-sub" style="margin:0 0 10px">${t.ivCsSub}</div>
       <button class="btn btn-ol btn-block" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div>`;
   }
   function inviteBody(c, mobile) {
     const t = L();
     const wd = `<button class="btn btn-wd ${mobile ? "btn-block" : ""}" disabled>${t.ivWd}</button>`;
     const sub = `<button class="btn btn-ol" tabindex="-1">${t.ivHist}</button><button class="btn btn-ol" tabindex="-1">${t.ivRef}</button>`;
-    const ivAmt = c.inv === "none" ? `<span data-chg>0.00</span>` : "20.00";
+    const ivAmt = c.inv === "none" ? "0.00" : "20.00";
     const top = mobile
       ? `<div><div class="lbl2">${t.ivAvail}</div><div class="amt2 num">${ivAmt} USDT</div></div>${wd}<div class="iv-btn2">${sub}</div>`
       : `<div style="display:flex;align-items:center;gap:12px"><div class="grow"><div class="lbl2">${t.ivAvail}</div><div class="amt2 num">${ivAmt} USDT</div></div>${wd}${sub}</div>`;
@@ -746,25 +739,9 @@ button, select { font: inherit; cursor: pointer; }
     }
   };
 
-  const CHG = {
-    "W01-a": ["라벨 '자동 출금 전 잔액' → '기존 잔액' (EN: Previous Balance). 설명 문구는 ⓘ 말풍선으로 이동", "버튼 · 제목 명칭: '기존 잔액 출금' (EN: Claim Previous Balance)"],
-    "W01-b": ["버튼 아래 처리 중 안내 한 줄 삭제 ('출금이 처리되고 있어요. 처리가 끝나면 이 영역은 사라져요.')"],
-    "W01-d": ["화면 설명: '개발 확인 필요' 전제 삭제. 신청 건이 실패 상태면 표시, 남은 스냅샷 금액 유지로 정리"],
-    "W02-a": ["모달 제목: '기존 잔액 출금' (EN: Claim Previous Balance)", "이월 박스 문구: 이벤트 리워드 상한 문장을 앞에 추가 (버튼 위 안내에서 이동)", "버튼 위 안내: '신청 후에는 취소할 수 없어요.'", "화면 설명: 신청 대상에서 이슈 UID · 출금 정지 UID 제외 명시 (기존 정책)"],
-    "W02-b": ["이월 박스 · 버튼 위 안내 문구 변경 (EB-W02-a와 같음)"],
-    "W03-a": ["라벨 '자동 출금 전 잔액' → '기존 잔액' (EN: Previous Balance). 설명 문구는 ⓘ 말풍선으로 이동. UID 상세 말풍선에는 '연동된 전체 계정 합계' 안내 포함"],
-    "W03-b": ["버튼 아래 처리 중 안내 한 줄 삭제"],
-    "W03-d": ["화면 설명: 반려·실패 전제 문구 정리 (EB-W01-d와 같음)"],
-    "W04-a": ["금액 영역 삭제 ('자동 출금 전 잔액 18.00 USDT')", "문구 변경: '초대 리워드는 고객센터를 통해 지급돼요.'", "노출 대상: 출금 가능 초대 리워드가 있는 일반·서브 회원", "화면 이름: A안 → 고객센터 안내", "선택 항목 → 이번 범위에 포함", "초대 리워드 B안(EB-W05 · M05) 화면 삭제 → 별도 과제"],
-    "W06-a": ["제목 · 본문 명칭: '기존 잔액 출금이 완료됐어요', '신청한 기존 잔액이 지급됐어요.' (EN: Previous Balance)"],
-    "W06-b": ["본문 금액 문장 삭제 ('신청한 N USDT는 자동 출금 전 잔액으로 다시 반영됐어요.')"],
-    "W04-b": ["출금 가능 초대 리워드를 0.00으로 표시 (대상 아님)", "고객센터 문의 연결 케이스 삭제 (기존 Live Chat 창이라 변경 없음). 기존 EB-W04-c → EB-W04-b"]
-  };
-  const chgKey = () => `${cur().id.slice(3).replace("M", "W")}-${cc().k}`;
   function panelHtml() {
     const key = cur().id.slice(3).replace("M", "W"), d = DESC[key][cc().k], c = cc().c;
-    const ch = S.chg && CHG[chgKey()] ? `<div class="p-chg"><b>11/13 변경</b><ul>${CHG[chgKey()].map(x => `<li>${x}</li>`).join("")}</ul></div>` : "";
-    return `<div class="p-ids"><span>${cid()}</span></div>${ch}
+    return `<div class="p-ids"><span>${cid()}</span></div>
       <h3 class="p-title">${d[0]}</h3><p class="p-lead">${d[1]}</p>
       ${d[2].length ? `<ol class="p-list">${d[2].map((x, i) => `<li data-go="${i + 1}"><span class="n">${i + 1}</span><span>${x}</span></li>`).join("")}</ol>` : ""}
       <div class="p-foot">번호를 누르면 화면에서 위치를 표시해요. 화면 안 버튼으로 모달·완료 상태, UID 상세로 이어서 볼 수 있어요.</div>`;
@@ -774,10 +751,8 @@ button, select { font: inherit; cursor: pointer; }
   const scaler = document.getElementById("scaler"), stagebox = document.getElementById("stagebox"), canvas = document.getElementById("canvas");
   function bars() {
     const sel = document.getElementById("screen-sel");
-    const hasChg = s => s.cases.some(x => CHG[s.id.slice(3).replace("M", "W") + "-" + x.k]);
-    sel.innerHTML = SCREENS.map((s, i) => `<option value="${i}">${s.name} (${s.id})${S.chg && hasChg(s) ? " · 변경" : ""}</option>`).join(""); sel.value = S.si;
-    const sk = cur().id.slice(3).replace("M", "W");
-    document.getElementById("cases").innerHTML = cur().cases.map((x, i) => `<button class="case ${S.chg && CHG[sk + "-" + x.k] ? "chg-dot" : ""}" data-i="${i}" aria-pressed="${i === S.ci}"><code>${cur().id}-${x.k}</code>${x.name}</button>`).join("");
+    sel.innerHTML = SCREENS.map((s, i) => `<option value="${i}">${s.name} (${s.id})</option>`).join(""); sel.value = S.si;
+    document.getElementById("cases").innerHTML = cur().cases.map((x, i) => `<button class="case" data-i="${i}" aria-pressed="${i === S.ci}"><code>${cur().id}-${x.k}</code>${x.name}</button>`).join("");
     document.querySelectorAll(".case").forEach(b => b.onclick = () => go(S.si, +b.dataset.i));
     ["en", "ko"].forEach(l => document.getElementById("lang-" + l).setAttribute("aria-pressed", S.lang === l));
     document.getElementById("fit-on").setAttribute("aria-pressed", S.fit); document.getElementById("fit-off").setAttribute("aria-pressed", !S.fit);
@@ -786,7 +761,6 @@ button, select { font: inherit; cursor: pointer; }
     const c = S.inModal ? { ...cc().c, modal: true } : cc().c, dev = cur().dev;
     scaler.innerHTML = dev === "web" ? webScreen(c) : mobileScreen(c);
     document.body.classList.toggle("show-mk", S.mk);
-    document.body.classList.toggle("show-chg", S.chg);
     bars();
     const ns = [...scaler.querySelectorAll("[data-n]")].map(e => +e.dataset.n);
     document.getElementById("mk-count").textContent = ns.length ? Math.max(...ns) : 0;
@@ -854,7 +828,6 @@ button, select { font: inherit; cursor: pointer; }
   document.getElementById("next").onclick = () => { S.toast = ""; go((S.si + 1) % SCREENS.length, 0); };
   document.getElementById("lang-en").onclick = () => { S.lang = "en"; render(); };
   document.getElementById("lang-ko").onclick = () => { S.lang = "ko"; render(); };
-  document.getElementById("chg-toggle").onchange = e => { S.chg = e.target.checked; render(); };
   document.getElementById("mk-toggle").onchange = e => { S.mk = e.target.checked; render(); };
   document.getElementById("panel-toggle").onclick = () => { S.panel = !S.panel; render(); };
   document.getElementById("panel-close").onclick = () => { S.panel = false; render(); };
