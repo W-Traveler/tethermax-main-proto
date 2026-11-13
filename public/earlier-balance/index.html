@@ -133,13 +133,13 @@ button, select { font: inherit; cursor: pointer; }
 /* NEW: earlier balance */
 .eb { border-top: 1px solid var(--tm-divider); margin: 0 16px; padding: 14px 0 16px; display: flex; flex-direction: column; gap: 10px; }
 .eb.eb-in { margin: 8px 0 0; padding-bottom: 0; }
-.eb-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.eb-row { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .eb-label { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
-.eb-tip { position: relative; display: inline-flex; }
+.eb-tip { position: static; display: inline-flex; }
 .eb-tip > button { display: grid; place-items: center; width: 20px; height: 20px; border: 0; padding: 0; background: none; border-radius: 9999px; color: #A8A29E; cursor: pointer; }
 .eb-tip > button:hover, .eb-tip > button:focus { color: #57534E; background: #F5F5F4; outline: none; }
-.eb-tip > span { position: absolute; left: -12px; top: calc(100% + 8px); z-index: 20; width: 232px; max-width: calc(100vw - 32px); padding: 10px 12px; border-radius: 12px; border: 1px solid #E7E5E4; background: #fff; color: #0C0A09; font-size: 12.5px; font-weight: 500; line-height: 1.55; word-break: keep-all; box-shadow: 0 16px 36px -12px rgba(12,10,9,.28), 0 2px 8px rgba(12,10,9,.06); opacity: 0; visibility: hidden; transition: opacity .14s, visibility .14s; }
-.eb-tip > span::before { content: ''; position: absolute; left: 16px; top: -6px; width: 10px; height: 10px; rotate: 45deg; background: #fff; border-top: 1px solid #E7E5E4; border-left: 1px solid #E7E5E4; border-top-left-radius: 2px; }
+.eb-tip > span { position: absolute; left: 0; top: 28px; z-index: 20; width: 240px; max-width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 12px; border: 1px solid #E7E5E4; background: #fff; color: #0C0A09; font-size: 12.5px; font-weight: 500; line-height: 1.55; word-break: keep-all; box-shadow: 0 16px 36px -12px rgba(12,10,9,.28), 0 2px 8px rgba(12,10,9,.06); opacity: 0; visibility: hidden; transition: opacity .14s, visibility .14s; }
+.eb-tip > span::before { content: ''; position: absolute; left: var(--ar, 16px); top: -6px; width: 10px; height: 10px; rotate: 45deg; background: #fff; border-top: 1px solid #E7E5E4; border-left: 1px solid #E7E5E4; border-top-left-radius: 2px; }
 .eb-tip:hover > span, .eb-tip:focus-within > span, .show-tip .eb-tip > span { opacity: 1; visibility: visible; }
 .eb-sub { font-size: 12px; color: var(--tm-text-2); margin-top: 2px; line-height: 1.4; }
 .eb-amt { font-size: 16px; font-weight: 600; white-space: nowrap; text-align: right; }
@@ -486,6 +486,12 @@ button, select { font: inherit; cursor: pointer; }
 
   const S = { chg: true, inModal: false, si: 0, ci: 0, lang: "en", mk: true, panel: true, fit: true, toast: "" };
   let toastTimer;
+  ["pointerover", "focusin"].forEach(ev => document.addEventListener(ev, e => {
+    const tip = e.target.closest && e.target.closest(".eb-tip"); if (!tip) return;
+    const row = tip.closest(".eb-row"), btn = tip.querySelector("button"), bub = tip.querySelector("span");
+    const r = row.getBoundingClientRect(), b = btn.getBoundingClientRect(), k = r.width / row.offsetWidth || 1;
+    bub.style.setProperty("--ar", ((b.left + b.width / 2 - r.left) / k - 5) + "px");
+  }, true));
   const cur = () => SCREENS[S.si], cc = () => cur().cases[S.ci], cid = () => `${cur().id}-${cc().k}`, L = () => T[S.lang];
   const isMob = () => cur().dev === "mobile";
   const idx = id => SCREENS.findIndex(s => s.id === id);
