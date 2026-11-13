@@ -419,8 +419,7 @@ button, select { font: inherit; cursor: pointer; }
     en: {
       nav: ["Cashback", "Rewards Hub", "Discover"], total: "Total Cashback Balance", auto: "Auto Claim",
       eb: "Before Auto Claim", ebSub: "Balance earned before Auto Claim started. Claim it once to receive it.",
-      ebTip: "Cashback and event rewards earned before Auto Claim started are not paid automatically. Claim once to receive them. Leftover event rewards are then paid with your new cashback.",
-      ebAll: "Total for all linked accounts. Eligible accounts are claimed together.", ebBtn: "Claim Earlier Balance", ebIngBtn: "Claim in progress", ebIng: "Your claim is being processed. This section closes when it's done.", carryIng: n => `When it's done, ${n} USDT of event rewards moves to Auto Claim and is paid with your new cashback.`, carryLbl: "Moves to Auto Claim", resDoneT: "Earlier balance claim completed", resDoneP: "Your claim for the balance earned before Auto Claim is complete.", resPaid: "Paid amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: n => `The remaining ${n} USDT of event rewards has moved to Auto Claim. As new exchange cashback comes in, the same amount is paid with it automatically.`, resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `${n} USDT is back in your Before Auto Claim balance. Please claim again. If your claim keeps failing, please contact Support.`, resClose: "Close", resRetry: "Claim Again", errT: "Couldn't submit your claim. Please try again.", ivResDoneT: "Invitation rewards claim completed", ivResDoneP: "Your rewards have been paid to the selected UID.", failNote: "Your last claim couldn't be processed. Please claim again. If your claim keeps failing, please contact Support.",
+      ebAll: "Total for all linked accounts. Eligible accounts are claimed together.", ebBtn: "Claim Earlier Balance", ebIngBtn: "Claim in progress", ebIng: "Your claim is being processed. This section closes when it's done.", carryIng: n => `When it's done, ${n} USDT of event rewards moves to Auto Claim and is paid with your new cashback.`, carryLbl: "Moves to Auto Claim", resDoneT: "Earlier balance claim completed", resDoneP: "Your claim for the balance earned before Auto Claim is complete.", resPaid: "Paid amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with your new exchange cashback.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `${n} USDT is back in your Before Auto Claim balance. Please claim again. If your claim keeps failing, please contact Support.`, resClose: "Close", resRetry: "Claim Again", errT: "Couldn't submit your claim. Please try again.", ivResDoneT: "Invitation rewards claim completed", ivResDoneP: "Your rewards have been paid to the selected UID.", failNote: "Your last claim couldn't be processed. Please claim again. If your claim keeps failing, please contact Support.",
       lu: "Linked UID", seeAll: "See All", uids: n => `${n} UIDs`, more: "Using multiple exchanges? Link more UIDs",
       exB: "Exclusive Benefits", exE: "Exchange Events", ongoing: "Ongoing", ben: [["TetherMax x Bybit Global League", "Join Global League"], ["Sign up for an exchange", "Get extra Cashback"]],
       prize: "Total Prize Pool", join: "Join Now",
@@ -441,8 +440,7 @@ button, select { font: inherit; cursor: pointer; }
     ko: {
       nav: ["캐시백", "리워드 허브", "탐색"], total: "총 캐시백 잔액", auto: "자동 출금",
       eb: "자동 출금 전 잔액", ebSub: "자동 출금 시작 전에 쌓인 금액이에요. 한 번 출금 신청하면 받을 수 있어요.",
-      ebTip: "자동 출금이 시작되기 전에 쌓인 캐시백과 이벤트 리워드는 자동으로 출금되지 않아요. 한 번 출금 신청하면 받을 수 있고, 남은 이벤트 리워드는 이후 새 캐시백과 함께 지급돼요.",
-      ebAll: "연동된 전체 계정 합계예요. 조건에 맞는 계정이 함께 신청돼요.", ebBtn: "자동 출금 전 잔액 출금", ebIngBtn: "출금 처리 중", ebIng: "출금이 처리되고 있어요. 처리가 끝나면 이 영역은 사라져요.", carryIng: n => `처리가 끝나면 이벤트 리워드 ${n} USDT는 자동 출금으로 이월되고, 새 캐시백과 함께 지급돼요.`, carryLbl: "자동 출금으로 이월", resDoneT: "자동 출금 전 잔액 출금이 완료됐어요", resDoneP: "신청한 자동 출금 전 잔액이 지급됐어요.", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: n => `남은 이벤트 리워드 ${n} USDT는 자동 출금으로 이월됐어요. 새 거래소 캐시백이 쌓이면 그 금액만큼 함께 자동 지급돼요.`, resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `신청한 ${n} USDT는 자동 출금 전 잔액으로 다시 반영됐어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.`, resClose: "닫기", resRetry: "다시 신청", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", ivResDoneT: "초대 리워드 출금이 완료됐어요", ivResDoneP: "선택한 UID로 리워드가 지급됐어요.", failNote: "지난 출금 신청이 처리되지 않았어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.",
+      ebAll: "연동된 전체 계정 합계예요. 조건에 맞는 계정이 함께 신청돼요.", ebBtn: "자동 출금 전 잔액 출금", ebIngBtn: "출금 처리 중", ebIng: "출금이 처리되고 있어요. 처리가 끝나면 이 영역은 사라져요.", carryIng: n => `처리가 끝나면 이벤트 리워드 ${n} USDT는 자동 출금으로 이월되고, 새 캐시백과 함께 지급돼요.`, carryLbl: "자동 출금으로 이월", resDoneT: "자동 출금 전 잔액 출금이 완료됐어요", resDoneP: "신청한 자동 출금 전 잔액이 지급됐어요.", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "잔여 이벤트 리워드는 새 거래소 캐시백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `신청한 ${n} USDT는 자동 출금 전 잔액으로 다시 반영됐어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.`, resClose: "닫기", resRetry: "다시 신청", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", ivResDoneT: "초대 리워드 출금이 완료됐어요", ivResDoneP: "선택한 UID로 리워드가 지급됐어요.", failNote: "지난 출금 신청이 처리되지 않았어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.",
       lu: "연동 UID", seeAll: "전체 보기", uids: n => `UID ${n}개`, more: "여러 거래소를 쓰시나요? UID 더 연동하기",
       exB: "회원 전용 혜택", exE: "거래소 이벤트", ongoing: "진행 중", ben: [["TetherMax x Bybit 글로벌 리그", "글로벌 리그 참여"], ["거래소 가입하기", "추가 캐시백 받기"]],
       prize: "총 상금", join: "참여하기",
@@ -539,7 +537,6 @@ button, select { font: inherit; cursor: pointer; }
     const t = L(), rows = snapRows(c), act = rows;
     const remain = rows.reduce((a, r) => a + r.remain, 0);
     const mk = n => (c.modal || c.noMk) ? "" : `data-n="${n}"`;
-    const tip = `<span class="info" tabindex="0" aria-label="설명">i<span class="tip">${t.ebTip}</span></span>`;
     let btn, status = "", fail = "";
     if (c.failed) fail = `<div class="warn" ${mk(4)}>⚠ <span>${t.failNote}</span></div>`;
     if (c.claimed) {
@@ -549,7 +546,7 @@ button, select { font: inherit; cursor: pointer; }
       btn = `<button class="btn btn-primary btn-block" id="open-claim" ${mk(3)}>${t.ebBtn}</button>`;
     }
     return `<div class="eb ${inUid ? "eb-in" : ""}" ${mk(1)}>
-      <div class="eb-row"><div><div class="eb-label">${t.eb} ${tip}</div><div class="eb-sub">${inUid ? t.ebAll : t.ebSub}</div></div>
+      <div class="eb-row"><div><div class="eb-label">${t.eb}</div><div class="eb-sub">${inUid ? t.ebAll : t.ebSub}</div></div>
         <div class="eb-amt num" ${mk(2)}>${fmt(remain)} USDT</div></div>
       ${fail}${btn}${status}</div>`;
   }
@@ -641,7 +638,7 @@ button, select { font: inherit; cursor: pointer; }
     const pos = mobile ? "width:327px;top:200px" : "width:420px;top:240px";
     let body;
     if (c.result === "done") {
-      body = `<h2 data-n="1">${t.resDoneT}</h2><p class="res-p">${t.resDoneP}</p>
+      body = `<h2 data-n="1">${t.resDoneT}</h2>
         <div class="total" data-n="2"><small>${t.resPaid}</small><div class="amt num">${fmt(nowSum)}<span>USDT</span></div></div>
         ${laterSum ? carryBox(t.resCarryLbl, laterSum, t.resCarryNote(fmt(laterSum)), 'data-n="3"') : ""}
         <button class="btn btn-primary btn-block" id="res-ok" data-n="4">${t.resOk}</button>`;
@@ -680,12 +677,11 @@ button, select { font: inherit; cursor: pointer; }
     const t = L(), done = c.inv === "done";
     const failed = c.inv === "failed";
     const mk = n => (!c.noMk && (c.inv === "main" || done || failed)) ? `data-n="${n}"` : "";
-    const tip = `<span class="info" tabindex="0" aria-label="설명">i<span class="tip">${t.ebTip}</span></span>`;
     const btn = done ? `<button class="btn btn-block" disabled ${mk(3)}>${t.ebIngBtn}</button>`
       : `<button class="btn btn-primary btn-block" id="iv-claim" ${mk(3)}>${t.ebBtn}</button>`;
     const st = done ? `<div class="eb-status" ${mk(4)}>${t.ebIng}</div>` : "";
     const fl = failed ? `<div class="warn" ${mk(4)}>⚠ <span>${t.failNote}</span></div>` : "";
-    return `<div class="eb eb-in" ${mk(1)}><div class="eb-row"><div><div class="eb-label">${t.eb} ${tip}</div><div class="eb-sub">${t.ivEbSub}</div></div>
+    return `<div class="eb eb-in" ${mk(1)}><div class="eb-row"><div><div class="eb-label">${t.eb}</div><div class="eb-sub">${t.ivEbSub}</div></div>
       <div class="eb-amt num" ${mk(2)}>18.00 USDT</div></div>${fl}${btn}${st}</div>`;
   }
   function inviteBody(c, mobile) {
@@ -798,7 +794,7 @@ button, select { font: inherit; cursor: pointer; }
     },
     "W06": {
       a: ["결과 팝업 · 출금 완료", "출금 처리가 끝나면 자동 출금 전 잔액 영역이 사라지므로, 결과와 이월 내용을 팝업으로 알립니다. 출금 완료 후 메인 페이지에 처음 들어올 때 1회 노출합니다.", [
-        `${NEW}제목 '자동 출금 전 잔액 출금이 완료됐어요' + 안내 한 줄`,
+        `${NEW}제목 '자동 출금 전 잔액 출금이 완료됐어요'`,
         "출금 금액: 이번 신청으로 지급된 금액 합계 (거래소 캐시백 + 이번에 출금된 이벤트 리워드)",
         "자동 출금으로 이월됨: 커미션 한도를 넘어 이월된 이벤트 리워드 + 이후 지급 방식 안내. 이월 금액이 0이면 미노출",
         "[확인] → 팝업 닫힘. 메인 페이지는 영역 미노출 상태(EB-W01-c)"]],
