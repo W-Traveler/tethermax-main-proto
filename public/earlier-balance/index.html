@@ -410,24 +410,21 @@ button, select { font: inherit; cursor: pointer; }
     { id: "EB-W01", name: "웹 · 01 메인 페이지", dev: "web", view: "dash", cases: [
       { k: "a", name: "대상 회원", c: { ing: [], claimed: false, eligible: true } },
       { k: "b", name: "신청 완료", c: { ing: SNAP.map(s => s.uid), claimed: true, eligible: true } },
-      { k: "c", name: "대상 아님 (현재 화면)", c: { ing: [], claimed: false, eligible: false } },
-      { k: "d", name: "예외 · 신청 반려/실패", c: { ing: [], claimed: false, eligible: true, failed: true } } ] },
+      { k: "c", name: "예외 · 신청 반려/실패", c: { ing: [], claimed: false, eligible: true, failed: true } } ] },
     { id: "EB-W02", name: "웹 · 02 출금 확인 모달", dev: "web", view: "dash", cases: [
       { k: "a", name: "전체 출금 가능", c: { ing: [], eligible: true, modal: true } },
       { k: "b", name: "예외 · 신청 접수 실패", c: { ing: [], eligible: true, modal: true, err: true } } ] },
     { id: "EB-W03", name: "웹 · 03 UID 상세", dev: "web", view: "uid", cases: [
       { k: "a", name: "대상 회원", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: true } },
       { k: "b", name: "신청 완료", c: { uid: "850358337912128386", ing: SNAP.map(s => s.uid), claimed: true, eligible: true } },
-      { k: "c", name: "대상 아님 (현재 화면)", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: false } },
-      { k: "d", name: "예외 · 신청 반려/실패", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: true, failed: true } } ] },
+      { k: "c", name: "예외 · 신청 반려/실패", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: true, failed: true } } ] },
     { id: "EB-M01", name: "모바일 · 01 메인 페이지", dev: "mobile", view: "dash", cases: null },
     { id: "EB-M02", name: "모바일 · 02 출금 확인 시트", dev: "mobile", view: "dash", cases: null },
     { id: "EB-M03", name: "모바일 · 03 UID 상세", dev: "mobile", view: "uid", cases: null },
   ];
   SCREENS[3].cases = SCREENS[0].cases; SCREENS[4].cases = SCREENS[1].cases; SCREENS[5].cases = SCREENS[2].cases;
   const IV_CS_CASES = [
-    { k: "a", name: "대상 회원", c: { inv: "cs" } },
-    { k: "b", name: "대상 아님 (현재 화면)", c: { inv: "none" } } ];
+    { k: "a", name: "대상 회원", c: { inv: "cs" } } ];
   SCREENS.splice(3, 0,
     { id: "EB-W04", name: "웹 · 04 초대 리워드 고객센터 안내", dev: "web", view: "invite", cases: IV_CS_CASES });
   const RES_CASES = [
@@ -600,7 +597,7 @@ button, select { font: inherit; cursor: pointer; }
     const t = L();
     const wd = `<button class="btn btn-wd ${mobile ? "btn-block" : ""}" disabled>${t.ivWd}</button>`;
     const sub = `<button class="btn btn-ol" tabindex="-1">${t.ivHist}</button><button class="btn btn-ol" tabindex="-1">${t.ivRef}</button>`;
-    const ivAmt = c.inv === "none" ? "0.00" : "20.00";
+    const ivAmt = "20.00";
     const top = mobile
       ? `<div><div class="lbl2">${t.ivAvail}</div><div class="amt2 num">${ivAmt} USDT</div></div>${wd}<div class="iv-btn2">${sub}</div>`
       : `<div style="display:flex;align-items:center;gap:12px"><div class="grow"><div class="lbl2">${t.ivAvail}</div><div class="amt2 num">${ivAmt} USDT</div></div>${wd}${sub}</div>`;
@@ -625,7 +622,7 @@ button, select { font: inherit; cursor: pointer; }
     return `<div class="tm" style="width:1440px;min-height:1000px">
       <header class="tm-header">${logo}<nav class="tm-nav">${t.nav.map(n => `<span>${n}</span>`).join("")}</nav><div class="tm-icons">${I.bell}${I.user}${I.sun}${I.globe}</div></header>
       <div class="web-wrap"><div class="rail">${rail}</div><div class="main-col">${main}</div></div>
-      ${c.modal ? claimDialog(c, false) : ""}${c.result ? resultDialog(c, false) : ""}${toast(false)}</div>`;
+      ${c.modal ? claimDialog(c, false) : ""}${c.result && !S.hideRes ? resultDialog(c, false) : ""}${toast(false)}</div>`;
   }
   function mobileScreen(c) {
     const t = L(), v = cur().view;
@@ -636,7 +633,7 @@ button, select { font: inherit; cursor: pointer; }
     return `<div class="phone"><div class="screen tm ${sticky ? "has-sticky" : ""}">
       <header class="m-head">${logo}${I.bell}${I.user}${I.menu}</header>
       <div class="m-scroll">${body}</div>${sticky}<span class="fab"></span>
-      ${c.modal ? claimDialog(c, true) : ""}${c.result ? resultDialog(c, true) : ""}${toast(true)}</div></div>`;
+      ${c.modal ? claimDialog(c, true) : ""}${c.result && !S.hideRes ? resultDialog(c, true) : ""}${toast(true)}</div></div>`;
   }
   /* ---------- description panel ---------- */
   const DESC = {
@@ -646,9 +643,8 @@ button, select { font: inherit; cursor: pointer; }
         "금액 = 남은 스냅샷 커미션 + 남은 스냅샷 이벤트 리워드 합계 (UID 합산)",
         `[기존 잔액 출금] 버튼. 노출 대상이면 활성 (스냅샷은 배포 시점 10 USDT 이상인 UID에만 있어 별도 금액 조건 없음). 누르면 출금 확인 모달(EB-W02)`]],
       b: ["신청 완료 · 처리 중", "신청한 UID는 출금 진행중 상태가 되고 버튼은 비활성으로 바뀝니다. CS 수동 출금으로 일부 UID만 진행중인 경우도 같은 상태로 보여줍니다 (일부 진행중 상태를 따로 두지 않음).", [
-        `기존 잔액 영역. 출금이 끝나 남은 스냅샷 커미션이 0이 되면 영역 미노출(EB-W01-c)`, "금액: 출금이 끝나기 전까지 남은 스냅샷 금액 표시", "버튼 비활성, 문구 '출금 처리 중'"]],
-      c: ["대상 아님 · 현재 화면과 동일", "배포 시점 10 USDT 미만이라 스냅샷이 없는 회원, CS로 이미 출금한 회원, 출금이 끝난 회원, 이슈·정지 UID만 남은 회원은 영역을 표시하지 않습니다. 현재 메인 페이지와 같습니다.", []],
-      d: ["예외 · 신청 반려/실패", "출금 신청이 처리에 실패한 경우입니다. 신청 건이 실패 상태가 되면 남은 스냅샷 금액은 그대로 유지되고, 영역을 다시 활성 상태로 보여줘 재신청할 수 있게 합니다.", [
+        `기존 잔액 영역. 출금이 끝나 남은 스냅샷 커미션이 0이 되면 영역 미노출`, "금액: 출금이 끝나기 전까지 남은 스냅샷 금액 표시", "버튼 비활성, 문구 '출금 처리 중'"]],
+      c: ["예외 · 신청 반려/실패", "출금 신청이 처리에 실패한 경우입니다. 신청 건이 실패 상태가 되면 남은 스냅샷 금액은 그대로 유지되고, 영역을 다시 활성 상태로 보여줘 재신청할 수 있게 합니다.", [
         `기존 잔액 영역 (대상 회원과 같은 구성)`, "금액 = 남은 스냅샷 금액 합계 (신청 전과 같음)",
         "버튼 다시 활성. 누르면 같은 출금 확인 모달(EB-W02)",
         `반려/실패 안내: 처리되지 않았다는 사실 + 다시 신청 가능 + 반복 시 고객센터 문의. 사유는 표시하지 않음. 다음 신청이 접수되면 미노출`]]
@@ -671,8 +667,7 @@ button, select { font: inherit; cursor: pointer; }
         `[기존 잔액 출금] → 같은 출금 확인 모달 (현재 화면 위에 표시). 신청 완료 후 같은 UID 상세의 신청 완료 상태(EB-W03-b)`]],
       b: ["UID 상세 · 신청 완료", "메인 페이지와 같이 버튼이 비활성으로 바뀝니다. 출금 완료 후 영역은 미노출됩니다.", [
         `기존 잔액 영역`, "금액", "버튼 비활성 '출금 처리 중'"]],
-      c: ["UID 상세 · 대상 아님", "남은 스냅샷 금액이 있는 계정이 없으면 현재 UID 상세와 같습니다.", []],
-      d: ["UID 상세 · 예외 · 신청 반려/실패", "메인 페이지의 반려/실패 상태(EB-W01-d)와 같습니다.", [
+      c: ["UID 상세 · 예외 · 신청 반려/실패", "메인 페이지의 반려/실패 상태(EB-W01-c)와 같습니다.", [
         `기존 잔액 영역`, "금액 = 남은 스냅샷 금액 합계 (전체 계정, 신청 전과 같음)", "버튼 다시 활성 → 출금 확인 모달", `반려/실패 안내`]]
     },
     "W06": {
@@ -680,17 +675,16 @@ button, select { font: inherit; cursor: pointer; }
         `제목 '기존 잔액 출금이 완료됐어요'`,
         "출금 금액: 이번 신청으로 지급된 금액 합계 (거래소 캐시백 + 이번에 출금된 이벤트 리워드)",
         "자동 출금으로 이월됨: 커미션 한도를 넘어 이월된 이벤트 리워드 + 이후 지급 방식 안내. 이월 금액이 0이면 미노출",
-        "[확인] → 팝업 닫힘. 메인 페이지는 영역 미노출 상태(EB-W01-c)"]],
-      b: ["결과 팝업 · 반려·실패", "신청이 반려되거나 처리에 실패하면 팝업으로 알리고 바로 다시 신청할 수 있게 합니다. 반려·실패 후 메인 페이지에 처음 들어올 때 1회 노출합니다. 팝업을 닫아도 영역 안 반려 안내(EB-W01-d)는 유지됩니다.", [
+        "[확인] → 팝업 닫힘. 메인 페이지는 영역 미노출 상태"]],
+      b: ["결과 팝업 · 반려·실패", "신청이 반려되거나 처리에 실패하면 팝업으로 알리고 바로 다시 신청할 수 있게 합니다. 반려·실패 후 메인 페이지에 처음 들어올 때 1회 노출합니다. 팝업을 닫아도 영역 안 반려 안내(EB-W01-c)는 유지됩니다.", [
         `제목 '출금 신청이 처리되지 않았어요'`,
         `안내: 재신청 + 반복 시 고객센터 문의. 금액 문장 없음, 사유 미표시`,
-        "[닫기] → 메인 페이지 반려 상태(EB-W01-d) / [다시 신청] → 출금 확인 모달(EB-W02)"]]
+        "[닫기] → 메인 페이지 반려 상태(EB-W01-c) / [다시 신청] → 출금 확인 모달(EB-W02)"]]
     },
     "W04": {
       a: ["초대 리워드 고객센터 안내 · 대상 회원", "일반 친구초대 회원은 자동 출금 대상이 아니라 초대 리워드 전체가 CS로만 출금됩니다. 스냅샷 여부와 관계없이 출금 방식이 같아 기존 잔액 영역은 두지 않습니다. 출금 가능 초대 리워드가 있는 회원에게 고객센터로 출금해야 한다는 안내를 보여줍니다.", [
         `안내 영역 '초대 리워드는 고객센터를 통해 지급돼요.' 출금 가능 초대 리워드가 있는 일반·서브 회원에게만 표시`,
-        `[고객센터 문의] → 기존 고객센터 창(TetherMax Support Center) 열기 (변경 없음)`]],
-      b: ["초대 리워드 고객센터 안내 · 대상 아님 (현재 화면)", "출금 가능 초대 리워드가 없으면 현재 화면과 같습니다.", []]
+        `[고객센터 문의] → 기존 고객센터 창(TetherMax Support Center) 열기 (변경 없음)`]]
     }
   };
 
@@ -755,8 +749,8 @@ button, select { font: inherit; cursor: pointer; }
       e.stopPropagation(); lastDash = S.ci; go(uidS, S.ci, el.dataset.uid);
     });
     document.getElementById("back")?.addEventListener("click", () => go(dash, S.ci));
-    document.getElementById("res-ok")?.addEventListener("click", () => go(dash, 2));
-    document.getElementById("res-close")?.addEventListener("click", () => go(dash, 3));
+    document.getElementById("res-ok")?.addEventListener("click", () => { S.hideRes = true; render(); });
+    document.getElementById("res-close")?.addEventListener("click", () => go(dash, 2));
     document.getElementById("res-retry")?.addEventListener("click", () => go(dlg, 0));
     if (cur().view === "invite") {
       document.getElementById("iv-cs")?.addEventListener("click", () => { S.toast = L().chatToast; render(); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); });
@@ -764,7 +758,7 @@ button, select { font: inherit; cursor: pointer; }
   }
   let uidOverride = null, lastDash = 0;
   function go(si, ci, uid) {
-    S.si = si; S.ci = ci; S.inModal = false;
+    S.si = si; S.ci = ci; S.inModal = false; S.hideRes = false;
     // allow viewing any linked UID within the matching case
     if (SCREENS[si].view === "uid") {
       if (uid) S.uid = uid;
@@ -776,7 +770,7 @@ button, select { font: inherit; cursor: pointer; }
     let h = ""; try { h = location.hash; } catch (e) { return false; }
     const m = h.slice(1).match(/^(EB-[WMA]\d\d)-([a-z])$/); if (!m) return false;
     const si = idx(m[1]); if (si < 0) return false; const ci = SCREENS[si].cases.findIndex(x => x.k === m[2]); if (ci < 0) return false;
-    S.si = si; S.ci = ci; return true;
+    S.si = si; S.ci = ci; S.hideRes = false; return true;
   }
   document.getElementById("screen-sel").onchange = e => { S.toast = ""; go(+e.target.value, 0); };
   document.getElementById("prev").onclick = () => { S.toast = ""; go((S.si - 1 + SCREENS.length) % SCREENS.length, 0); };
