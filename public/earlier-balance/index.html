@@ -531,7 +531,7 @@ button, select { font: inherit; cursor: pointer; }
   /* ---------- service parts ---------- */
   const ARROW = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12h14M13 6l6 6-6 6"/></svg>`;
   function carryBox(label, amt, note, mk) {
-    return `<div class="carry" ${mk || ""}><div class="carry-h"><span>${ARROW}${label}</span><span class="num">${fmt(amt)} USDT</span></div><p>${note}</p></div>`;
+    return `<div class="carry" ${mk || ""}><div class="carry-h"><span>${label}</span><span class="num">${fmt(amt)} USDT</span></div><p>${note}</p></div>`;
   }
   function ebBlock(c, inUid) {
     if (!c.eligible) return "";
