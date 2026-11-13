@@ -419,7 +419,7 @@ button, select { font: inherit; cursor: pointer; }
       ivTabs: ["TetherMax Points (TP)", "Invite Friends"], ivSeg: ["Invite", "Invitation Reward"], ivAvail: "Available Invitation Rewards", ivWd: "Claim", ivHist: "Reward History", ivRef: "Referral Details",
       ivUidH: "Exchange UID Registration Status", ivTh: ["Exchange", "No. of Registered UIDs", "Cumulative Invitation Rewards (USDT)"], ivTerms: "Terms & Conditions",
       ivTermsT: "If you sign up using this link, you do not need to enter a separate friend invitation code. Members who signed up before being invited by a friend are excluded from the event. The reward ratio may change or be limited due to the operator's circumstances.",
-      ivCsSub: "Invitation rewards are paid through Customer Support.", ivCsBtn: "Contact Support", chatT: "TetherMax Support", chatMsg: "Hi, I'd like to claim my invitation rewards earned before Auto Claim started.", chatBot: "Thanks. Please tell us the exchange UID you want to receive the rewards to.", chatPh: "Type a message", selT: "Select a UID to claim invitation rewards", selP: "Rewards are paid to the selected UID.", cancel: "Cancel", conf2: "Confirm", inProg: "In progress",
+      ivCsSub: "Invitation rewards are paid through Customer Support.", ivCsBtn: "Contact Support", chatToast: "Opens Live Chat (existing)", chatT: "TetherMax Support", chatMsg: "Hi, I'd like to claim my invitation rewards earned before Auto Claim started.", chatBot: "Thanks. Please tell us the exchange UID you want to receive the rewards to.", chatPh: "Type a message", selT: "Select a UID to claim invitation rewards", selP: "Rewards are paid to the selected UID.", cancel: "Cancel", conf2: "Confirm", inProg: "In progress",
       linkT: "UID Link Required", linkP: "Link your UID to claim rewards.", link: "Link", ivToast: "Claim requested. It's being processed."
     },
     ko: {
@@ -440,7 +440,7 @@ button, select { font: inherit; cursor: pointer; }
       ivTabs: ["테더맥스 포인트 (TP)", "친구 초대"], ivSeg: ["초대하기", "초대 리워드"], ivAvail: "출금 가능 초대 리워드", ivWd: "출금", ivHist: "리워드 내역", ivRef: "초대 현황",
       ivUidH: "거래소 UID 등록 현황", ivTh: ["거래소", "등록 UID 수", "누적 초대 리워드 (USDT)"], ivTerms: "유의사항",
       ivTermsT: "해당 링크로 가입하면 별도의 친구 초대 코드를 입력하지 않아도 됩니다. 친구에게 초대받기 이전에 가입한 회원은 이벤트 대상에서 제외됩니다. 리워드 비율은 운영사의 사정상 변경 및 제한될 수 있습니다.",
-      ivCsSub: "초대 리워드는 고객센터를 통해 지급돼요.", ivCsBtn: "고객센터 문의", chatT: "TetherMax 고객센터", chatMsg: "자동 출금 시작 전에 쌓인 초대 리워드를 출금하고 싶어요.", chatBot: "문의 감사합니다. 리워드를 받을 거래소 UID를 알려주세요.", chatPh: "메시지를 입력하세요", selT: "초대 리워드를 받을 UID를 선택하세요", selP: "선택한 UID로 리워드가 지급돼요.", cancel: "취소", conf2: "확인", inProg: "처리 중",
+      ivCsSub: "초대 리워드는 고객센터를 통해 지급돼요.", ivCsBtn: "고객센터 문의", chatToast: "기존 Live Chat 창 호출", chatT: "TetherMax 고객센터", chatMsg: "자동 출금 시작 전에 쌓인 초대 리워드를 출금하고 싶어요.", chatBot: "문의 감사합니다. 리워드를 받을 거래소 UID를 알려주세요.", chatPh: "메시지를 입력하세요", selT: "초대 리워드를 받을 UID를 선택하세요", selP: "선택한 UID로 리워드가 지급돼요.", cancel: "취소", conf2: "확인", inProg: "처리 중",
       linkT: "UID 연동이 필요해요", linkP: "리워드를 출금하려면 UID를 먼저 연동해 주세요.", link: "연동하기", ivToast: "출금을 신청했어요. 처리 중이에요."
     }
   };
@@ -467,8 +467,7 @@ button, select { font: inherit; cursor: pointer; }
   SCREENS[3].cases = SCREENS[0].cases; SCREENS[4].cases = SCREENS[1].cases; SCREENS[5].cases = SCREENS[2].cases;
   const IV_CS_CASES = [
     { k: "a", name: "대상 회원", c: { inv: "cs" } },
-    { k: "b", name: "고객센터 문의 연결", c: { inv: "cs-chat" } },
-    { k: "c", name: "대상 아님 (현재 화면)", c: { inv: "none" } } ];
+    { k: "b", name: "대상 아님 (현재 화면)", c: { inv: "none" } } ];
   SCREENS.splice(3, 0,
     { id: "EB-W04", name: "웹 · 04 초대 리워드 고객센터 안내 (선택 항목)", dev: "web", view: "invite", cases: IV_CS_CASES });
   const RES_CASES = [
@@ -626,8 +625,8 @@ button, select { font: inherit; cursor: pointer; }
   /* ---------- invitation reward (general user) ---------- */
   const IV_TABLE = [["Bitget", "#00b7c7", "BG", 3, "18.40"], ["OKX", "#000", "OKX", 2, "6.20"], ["Bybit", "#17181e", "BYB", 1, "0.00"]];
   function ivBlock(c) {
-    if (c.inv !== "cs" && c.inv !== "cs-chat") return "";
-    const t = L(), mk = n => c.inv === "cs" ? `data-n="${n}"` : "";
+    if (c.inv !== "cs") return "";
+    const t = L(), mk = n => `data-n="${n}"`;
     return `<div class="eb eb-in" ${mk(1)} data-chg><div class="eb-sub" style="margin:0 0 10px">${t.ivCsSub}</div>
       <button class="btn btn-ol btn-block" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div>`;
   }
@@ -650,8 +649,6 @@ button, select { font: inherit; cursor: pointer; }
   }
   function inviteModal(c, mobile) {
     const t = L();
-    if (c.inv === "cs-chat") return `<div class="chat ${mobile ? "chat-m" : ""}"><div class="chat-h" data-n="1">${t.chatT}<button class="x" id="chat-close" aria-label="닫기" style="color:#fff">×</button></div>
-      <div class="chat-b"></div><div class="chat-in" data-n="2">${t.chatPh}</div></div>`;
     return "";
   }
 
@@ -660,7 +657,7 @@ button, select { font: inherit; cursor: pointer; }
     const t = L(), v = cur().view;
     let rail, main;
     const head = `<header class="tm-header">${logo}<nav class="tm-nav">${t.nav.map(n => `<span>${n}</span>`).join("")}</nav><div class="tm-icons">${I.bell}${I.user}${I.sun}${I.globe}</div></header>`;
-    if (v === "invite") return `<div class="tm" style="width:1440px;min-height:1000px">${head}<div class="iv-wrap">${inviteBody(c, false)}</div>${inviteModal(c, false)}${toast(false)}</div>`;
+    if (v === "invite") return `<div class="tm" style="width:1440px;min-height:1000px">${head}<div class="iv-wrap">${inviteBody(c, false)}</div>${inviteModal(c, false)}${toast(false)}${toast(false)}</div>`;
     if (v === "uid") { const d = uidDetail(c, false); rail = d.head + d.det + d.tl; main = weekly() + benefits(); }
     else { rail = balCard(c) + linked(); main = benefits() + events(); }
     return `<div class="tm" style="width:1440px;min-height:1000px">
@@ -731,10 +728,8 @@ button, select { font: inherit; cursor: pointer; }
     "W04": {
       a: ["초대 리워드 고객센터 안내 (선택 항목) · 대상 회원", "일반 친구초대 회원은 자동 출금 대상이 아니라 초대 리워드 전체가 CS로만 출금됩니다. 스냅샷 금액이 없어(운영 어드민: 일반·서브 남은 스냅샷 리워드 전원 0) 이번 과제의 출금 영역은 해당 없습니다. [출금]이 비활성인 이유를 알려주는 안내로, 포함 여부는 운영이 정합니다.", [
         `${NEW}안내 영역 '초대 리워드는 고객센터를 통해 지급돼요.' 출금 가능 초대 리워드가 있는 일반·서브 회원에게만 표시`,
-        `${NEW}[고객센터 문의] → 기존 Live Chat 창 열기 (EB-W04-b)`]],
-      b: ["초대 리워드 고객센터 안내 · 고객센터 문의 연결", "기존 Live Chat 창만 엽니다. 문의 내용은 회원이 직접 입력합니다. 이후 처리는 현재와 같이 관리자가 어드민 스냅샷 출금(친구초대)에서 UID를 골라 신청합니다.", [
-        "기존 Live Chat 창 (변경 없음)", "입력창: 회원이 직접 문의 입력"]],
-      c: ["초대 리워드 고객센터 안내 · 대상 아님 (현재 화면)", "출금 가능 초대 리워드가 없으면 현재 화면과 같습니다.", []]
+        `${NEW}[고객센터 문의] → 기존 Live Chat 창 열기 (변경 없음)`]],
+      b: ["초대 리워드 고객센터 안내 · 대상 아님 (현재 화면)", "출금 가능 초대 리워드가 없으면 현재 화면과 같습니다.", []]
     }
   };
 
@@ -746,8 +741,7 @@ button, select { font: inherit; cursor: pointer; }
     "W03-b": ["버튼 아래 처리 중 안내 한 줄 삭제"],
     "W03-d": ["화면 설명: 반려·실패 전제 문구 정리 (EB-W01-d와 같음)"],
     "W04-a": ["금액 영역 삭제 ('자동 출금 전 잔액 18.00 USDT')", "문구 변경: '초대 리워드는 고객센터를 통해 지급돼요.'", "노출 대상: 출금 가능 초대 리워드가 있는 일반·서브 회원", "화면 이름: A안 → 고객센터 안내 (선택 항목)", "초대 리워드 B안(EB-W05 · M05) 화면 삭제 → 별도 과제"],
-    "W04-b": ["화면 이름 변경 (A안 → 고객센터 안내)"],
-    "W04-c": ["출금 가능 초대 리워드를 0.00으로 표시 (대상 아님)"]
+    "W04-b": ["출금 가능 초대 리워드를 0.00으로 표시 (대상 아님)", "고객센터 문의 연결 케이스 삭제 (기존 Live Chat 창이라 변경 없음). 기존 EB-W04-c → EB-W04-b"]
   };
   const chgKey = () => `${cur().id.slice(3).replace("M", "W")}-${cc().k}`;
   function panelHtml() {
@@ -819,9 +813,7 @@ button, select { font: inherit; cursor: pointer; }
     document.getElementById("res-close")?.addEventListener("click", () => go(dash, 3));
     document.getElementById("res-retry")?.addEventListener("click", () => go(dlg, 0));
     if (cur().view === "invite") {
-      const ivcs = m ? idx("EB-M04") : idx("EB-W04");
-      document.getElementById("iv-cs")?.addEventListener("click", () => go(ivcs, 1));
-      document.getElementById("chat-close")?.addEventListener("click", () => go(ivcs, 0));
+      document.getElementById("iv-cs")?.addEventListener("click", () => { S.toast = L().chatToast; render(); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); });
     }
   }
   let uidOverride = null, lastDash = 0;
