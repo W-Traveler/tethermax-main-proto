@@ -369,8 +369,8 @@ button, select { font: inherit; cursor: pointer; }
   const T = {
     en: {
       nav: ["Cashback", "Rewards Hub", "Discover"], total: "Total Cashback Balance", auto: "Auto Claim",
-      eb: "Previous Balance", ebSub: "Balance earned before Auto Claim started. Claim it once to receive it.",
-      ebAll: "Balance earned before Auto Claim started. This is the total for all linked accounts, and eligible accounts are claimed together.", ebBtn: "Claim Previous Balance", ebIngBtn: "Claim in progress", resDoneT: "Previous Balance claim completed", resPaid: "Paid amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with your new exchange cashback.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `Please claim again. If your claim keeps failing, please contact Support.`, resClose: "Close", resRetry: "Claim Again", errT: "Couldn't submit your claim. Please try again.", failNote: "Your last claim couldn't be processed. Please claim again. If your claim keeps failing, please contact Support.",
+      eb: "Previous Balance", ebSub: "Balance earned before Auto Claim started that hasn't been claimed yet. It isn't claimed automatically, so you need to claim it yourself.",
+      ebAll: "Balance earned before Auto Claim started that hasn't been claimed yet. This is the total for all linked accounts, and eligible accounts are claimed together.", ebBtn: "Claim Previous Balance", ebIngBtn: "Claim in progress", resDoneT: "Previous Balance claim completed", resPaid: "Paid amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with your new exchange cashback.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `Please claim again. If your claim keeps failing, please contact Support.`, resClose: "Close", resRetry: "Claim Again", errT: "Couldn't submit your claim. Please try again.", failNote: "Your last claim couldn't be processed. Please claim again. If your claim keeps failing, please contact Support.",
       lu: "Linked UID", seeAll: "See All", uids: n => `${n} UIDs`, more: "Using multiple exchanges? Link more UIDs",
       exB: "Exclusive Benefits", exE: "Exchange Events", ongoing: "Ongoing", ben: [["TetherMax x Bybit Global League", "Join Global League"], ["Sign up for an exchange", "Get extra Cashback"]],
       prize: "Total Prize Pool", join: "Join Now",
@@ -387,8 +387,8 @@ button, select { font: inherit; cursor: pointer; }
     },
     ko: {
       nav: ["캐시백", "리워드 허브", "탐색"], total: "총 캐시백 잔액", auto: "자동 출금",
-      eb: "기존 잔액", ebSub: "자동 출금 시작 전에 쌓인 금액이에요. 한 번 출금 신청하면 받을 수 있어요.",
-      ebAll: "자동 출금 시작 전에 쌓인 금액이에요. 연동된 전체 계정 합계이며, 조건에 맞는 계정이 함께 신청돼요.", ebBtn: "기존 잔액 출금", ebIngBtn: "출금 처리 중", resDoneT: "기존 잔액 출금이 완료됐어요", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "잔여 이벤트 리워드는 새 거래소 캐시백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.`, resClose: "닫기", resRetry: "다시 신청", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", failNote: "지난 출금 신청이 처리되지 않았어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.",
+      eb: "기존 잔액", ebSub: "자동 출금 시작 전에 쌓였고 아직 출금되지 않은 금액이에요. 자동으로 출금되지 않아 직접 신청해야 해요.",
+      ebAll: "자동 출금 시작 전에 쌓였고 아직 출금되지 않은 금액이에요. 연동된 전체 계정 합계이며, 조건에 맞는 계정이 함께 신청돼요.", ebBtn: "기존 잔액 출금", ebIngBtn: "출금 처리 중", resDoneT: "기존 잔액 출금이 완료됐어요", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "잔여 이벤트 리워드는 새 거래소 캐시백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.`, resClose: "닫기", resRetry: "다시 신청", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", failNote: "지난 출금 신청이 처리되지 않았어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.",
       lu: "연동 UID", seeAll: "전체 보기", uids: n => `UID ${n}개`, more: "여러 거래소를 쓰시나요? UID 더 연동하기",
       exB: "회원 전용 혜택", exE: "거래소 이벤트", ongoing: "진행 중", ben: [["TetherMax x Bybit 글로벌 리그", "글로벌 리그 참여"], ["거래소 가입하기", "추가 캐시백 받기"]],
       prize: "총 상금", join: "참여하기",
@@ -639,7 +639,7 @@ button, select { font: inherit; cursor: pointer; }
   const DESC = {
     "W01": {
       a: ["대상 회원 · 버튼 활성", "현재 Auto Claim 버튼은 비활성이라 회원이 직접 할 수 있는 출금 동작이 없습니다. 총 캐시백 잔액 카드 하단에 기존 잔액 영역과 출금 버튼을 추가합니다.", [
-        `기존 잔액 영역. 연동 UID 중 남은 스냅샷 커미션 > 0인 UID가 1개 이상인 회원에게만 표시. 상시 운영. 라벨 '기존 잔액' + ⓘ 말풍선 '자동 출금 시작 전에 쌓인 금액이에요. 한 번 출금 신청하면 받을 수 있어요.'`,
+        `기존 잔액 영역. 연동 UID 중 남은 스냅샷 커미션 > 0인 UID가 1개 이상인 회원에게만 표시. 상시 운영. 라벨 '기존 잔액' + ⓘ 말풍선 '자동 출금 시작 전에 쌓였고 아직 출금되지 않은 금액이에요. 자동으로 출금되지 않아 직접 신청해야 해요.'`,
         "금액 = 남은 스냅샷 커미션 + 남은 스냅샷 이벤트 리워드 합계 (UID 합산)",
         `[기존 잔액 출금] 버튼. 노출 대상이면 활성 (스냅샷은 배포 시점 10 USDT 이상인 UID에만 있어 별도 금액 조건 없음). 누르면 출금 확인 모달(EB-W02)`]],
       b: ["신청 완료 · 처리 중", "신청한 UID는 출금 진행중 상태가 되고 버튼은 비활성으로 바뀝니다. CS 수동 출금으로 일부 UID만 진행중인 경우도 같은 상태로 보여줍니다 (일부 진행중 상태를 따로 두지 않음).", [
