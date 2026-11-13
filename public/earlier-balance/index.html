@@ -196,6 +196,7 @@ button, select { font: inherit; cursor: pointer; }
 .cl { font-size: 11px; color: var(--tm-text-2); }
 .warn { background: var(--tm-warn-bg); color: #7a3600; font-size: 13px; line-height: 1.5; padding: 10px 12px; border-radius: 4px; display: flex; gap: 8px; align-items: flex-start; }
 .warn b { font-weight: 600; }
+.warn .cs-link { display: block; margin-top: 4px; padding: 0; border: 0; background: none; color: inherit; font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; }
 .tl { padding: 16px; }
 .tl b { font-size: 16px; font-weight: 600; }
 .tl-row { display: flex; justify-content: space-between; margin-top: 16px; position: relative; }
@@ -370,7 +371,7 @@ button, select { font: inherit; cursor: pointer; }
     en: {
       nav: ["Cashback", "Rewards Hub", "Discover"], total: "Total Cashback Balance", auto: "Auto Claim",
       eb: "Previous Balance", ebSub: "Cashback earned before Auto Claim started that hasn't been claimed yet. You need to claim this amount yourself.",
-      ebAll: "Cashback earned before Auto Claim started that hasn't been claimed yet. This is the total for all linked UIDs, and eligible UIDs are claimed together.", ebBtn: "Claim Previous Balance", ebIngBtn: "Claim in progress", resDoneT: "Previous Balance claim completed", resPaid: "Paid amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with exchange cashback you earn later.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `Please claim again. If your claim keeps failing, please contact Support.`, resClose: "Close", resRetry: "Claim Again", errT: "Couldn't submit your claim. Please try again.", failNote: "Your last claim couldn't be processed. Please claim again. If your claim keeps failing, please contact Support.",
+      ebAll: "Cashback earned before Auto Claim started that hasn't been claimed yet. This is the total for all linked UIDs, and eligible UIDs are claimed together.", ebBtn: "Claim Previous Balance", ebIngBtn: "Claim in progress", resDoneT: "Previous Balance claim completed", resPaid: "Paid amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with exchange cashback you earn later.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `Please contact Support.`, resClose: "Close", errT: "Couldn't submit your claim. Please try again.", csNote: "We couldn't claim your Previous Balance. Please contact Support.", someNote: "Some UIDs can't be claimed here. Please contact Support for those UIDs.",
       lu: "Linked UID", seeAll: "See All", uids: n => `${n} UIDs`, more: "Using multiple exchanges? Link more UIDs",
       exB: "Exclusive Benefits", exE: "Exchange Events", ongoing: "Ongoing", ben: [["TetherMax x Bybit Global League", "Join Global League"], ["Sign up for an exchange", "Get extra Cashback"]],
       prize: "Total Prize Pool", join: "Join Now",
@@ -388,7 +389,7 @@ button, select { font: inherit; cursor: pointer; }
     ko: {
       nav: ["페이백", "리워드 허브", "탐색"], total: "총 페이백 잔액", auto: "자동 출금",
       eb: "기존 잔액", ebSub: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요. 이 금액은 직접 출금 신청해야 해요.",
-      ebAll: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요. 연동된 전체 UID 합계예요. 조건에 맞는 UID가 함께 출금 신청돼요.", ebBtn: "기존 잔액 출금", ebIngBtn: "출금 처리 중", resDoneT: "기존 잔액 출금이 완료됐어요", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "남은 이벤트 리워드는 이후 쌓이는 거래소 페이백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.`, resClose: "닫기", resRetry: "다시 신청", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", failNote: "지난 출금 신청이 처리되지 않았어요. 다시 신청해주세요. 출금 신청이 지속적으로 실패할 경우 고객센터로 문의해주세요.",
+      ebAll: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요. 연동된 전체 UID 합계예요. 조건에 맞는 UID가 함께 출금 신청돼요.", ebBtn: "기존 잔액 출금", ebIngBtn: "출금 처리 중", resDoneT: "기존 잔액 출금이 완료됐어요", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "남은 이벤트 리워드는 이후 쌓이는 거래소 페이백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `고객센터로 문의해주세요.`, resClose: "닫기", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", csNote: "기존 잔액을 출금하지 못했어요. 고객센터로 문의해주세요.", someNote: "출금이 제한된 UID가 있어요. 해당 UID는 고객센터로 문의해주세요.",
       lu: "연동 UID", seeAll: "전체 보기", uids: n => `UID ${n}개`, more: "여러 거래소를 쓰시나요? UID 더 연동하기",
       exB: "회원 전용 혜택", exE: "거래소 이벤트", ongoing: "진행 중", ben: [["TetherMax x Bybit 글로벌 리그", "글로벌 리그 참여"], ["거래소 가입하기", "추가 페이백 받기"]],
       prize: "총 상금", join: "참여하기",
@@ -410,14 +411,15 @@ button, select { font: inherit; cursor: pointer; }
     { id: "EB-W01", name: "웹 · 01 메인 페이지", dev: "web", view: "dash", cases: [
       { k: "a", name: "대상 회원", c: { ing: [], claimed: false, eligible: true } },
       { k: "b", name: "신청 완료", c: { ing: SNAP.map(s => s.uid), claimed: true, eligible: true } },
-      { k: "c", name: "예외 · 신청 반려/실패", c: { ing: [], claimed: false, eligible: true, failed: true } } ] },
+      { k: "c", name: "예외 · 고객센터 처리", c: { ing: [], claimed: false, eligible: true, failed: true } },
+      { k: "d", name: "예외 · 일부 UID 고객센터 처리", c: { ing: [], claimed: false, eligible: true, some: true, excl: ["7605865687"] } } ] },
     { id: "EB-W02", name: "웹 · 02 출금 확인 모달", dev: "web", view: "dash", cases: [
       { k: "a", name: "전체 출금 가능", c: { ing: [], eligible: true, modal: true } },
       { k: "b", name: "예외 · 신청 접수 실패", c: { ing: [], eligible: true, modal: true, err: true } } ] },
     { id: "EB-W03", name: "웹 · 03 UID 상세", dev: "web", view: "uid", cases: [
       { k: "a", name: "대상 회원", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: true } },
       { k: "b", name: "신청 완료", c: { uid: "850358337912128386", ing: SNAP.map(s => s.uid), claimed: true, eligible: true } },
-      { k: "c", name: "예외 · 신청 반려/실패", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: true, failed: true } } ] },
+      { k: "c", name: "예외 · 고객센터 처리", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: true, failed: true } } ] },
     { id: "EB-M01", name: "모바일 · 01 메인 페이지", dev: "mobile", view: "dash", cases: null },
     { id: "EB-M02", name: "모바일 · 02 출금 확인 시트", dev: "mobile", view: "dash", cases: null },
     { id: "EB-M03", name: "모바일 · 03 UID 상세", dev: "mobile", view: "uid", cases: null },
@@ -447,7 +449,7 @@ button, select { font: inherit; cursor: pointer; }
   const isMob = () => cur().dev === "mobile";
   const idx = id => SCREENS.findIndex(s => s.id === id);
 
-  function snapRows(c) { return SNAP.map(s => ({ ...s, ...calc(s), ing: (c.ing || []).includes(s.uid) })); }
+  function snapRows(c) { return SNAP.filter(s => !(c.excl || []).includes(s.uid)).map(s => ({ ...s, ...calc(s), ing: (c.ing || []).includes(s.uid) })); }
 
   /* ---------- icons ---------- */
   const logo = `<div class="tm-logo"><svg viewBox="0 0 32 16" aria-hidden="true"><path d="M8 2a6 6 0 1 0 4.2 10.3L16 8.6l3.8 3.7A6 6 0 1 0 19.8 3.7L16 7.4 12.2 3.7A6 6 0 0 0 8 2Zm0 3.4c.7 0 1.3.3 1.8.7L13.6 8l-3.8 3.9A2.6 2.6 0 1 1 8 5.4Zm16 0a2.6 2.6 0 1 1-1.8 4.5L18.4 8l3.8-3.9c.5-.4 1.1-.7 1.8-.7Z" fill="currentColor"/></svg>TetherMax</div>`;
@@ -474,8 +476,11 @@ button, select { font: inherit; cursor: pointer; }
     const remain = rows.reduce((a, r) => a + r.remain, 0);
     const mk = n => (c.modal || c.noMk) ? "" : `data-n="${n}"`;
     let btn, fail = "";
-    if (c.failed) fail = `<div class="warn" ${mk(4)}>⚠ <span>${t.failNote}</span></div>`;
-    if (c.claimed) {
+    if (c.failed) fail = `<div class="warn" ${mk(4)}>⚠ <span>${t.csNote}</span></div>`;
+    if (c.some) fail = `<div class="warn" ${mk(4)}>⚠ <div>${t.someNote}<button type="button" class="cs-link">${t.ivCsBtn}</button></div></div>`;
+    if (c.failed) {
+      btn = `<button class="btn btn-primary btn-block cs-open" ${mk(3)}>${t.ivCsBtn}</button>`;
+    } else if (c.claimed) {
       btn = `<button class="btn btn-block" disabled ${mk(3)}>${t.ebIngBtn}</button>`;
     } else {
       btn = `<button class="btn btn-primary btn-block" id="open-claim" ${mk(3)}>${t.ebBtn}</button>`;
@@ -579,7 +584,7 @@ button, select { font: inherit; cursor: pointer; }
         <button class="btn btn-primary btn-block" id="res-ok" data-n="4">${t.resOk}</button>`;
     } else {
       body = `<h2 data-n="1">${t.resFailT}</h2><p class="res-p" data-n="2">${t.resFailP(fmt(nowSum))}</p>
-        <div class="sel-btns" data-n="3"><button class="btn btn-cancel" id="res-close">${t.resClose}</button><button class="btn btn-primary" id="res-retry">${t.resRetry}</button></div>`;
+        <div class="sel-btns" data-n="3"><button class="btn btn-cancel" id="res-close">${t.resClose}</button><button class="btn btn-primary" id="res-cs">${t.ivCsBtn}</button></div>`;
     }
     return `<div class="scrim"></div><div class="res" role="dialog" aria-modal="true" style="${pos}">${body}</div>`;
   }
@@ -644,10 +649,14 @@ button, select { font: inherit; cursor: pointer; }
         `[기존 잔액 출금] 버튼. 노출 대상이면 활성 (스냅샷은 배포 시점 10 USDT 이상인 UID에만 있어 별도 금액 조건 없음). 누르면 출금 확인 모달(EB-W02)`]],
       b: ["신청 완료 · 처리 중", "신청한 UID는 출금 진행중 상태가 되고 버튼은 비활성으로 바뀝니다. CS 수동 출금으로 일부 UID만 진행중인 경우도 같은 상태로 보여줍니다 (일부 진행중 상태를 따로 두지 않음).", [
         `기존 잔액 영역. 출금이 끝나 남은 스냅샷 커미션이 0이 되면 영역 미노출`, "금액: 출금이 끝나기 전까지 남은 스냅샷 금액 표시", "버튼 비활성, 문구 '출금 처리 중'"]],
-      c: ["예외 · 신청 반려/실패", "출금 신청이 처리에 실패한 경우입니다. 신청 건이 실패 상태가 되면 남은 스냅샷 금액은 그대로 유지되고, 영역을 다시 활성 상태로 보여줘 재신청할 수 있게 합니다.", [
-        `기존 잔액 영역 (대상 회원과 같은 구성)`, "금액 = 남은 스냅샷 금액 합계 (신청 전과 같음)",
-        "버튼 다시 활성. 누르면 같은 출금 확인 모달(EB-W02)",
-        `반려/실패 안내: 처리되지 않았다는 사실 + 다시 신청 가능 + 반복 시 고객센터 문의. 사유는 표시하지 않음. 다음 신청이 접수되면 미노출`]]
+      c: ["예외 · 고객센터 처리", "출금 신청이 처리되지 않았거나, 남은 스냅샷이 출금 정지 UID에만 있는 경우입니다. 회원이 다시 신청하지 않고 고객센터를 통해 처리합니다. 금액은 그대로 보여줍니다.", [
+        `기존 잔액 영역 (대상 회원과 같은 위치)`, "금액 = 남은 스냅샷 금액 합계 (신청 실패 UID · 출금 정지 UID 포함)",
+        "[고객센터 문의]. [기존 잔액 출금] 대신 표시. 누르면 기존 고객센터 창(TetherMax Support Center) 열기",
+        `안내: 출금하지 못했다는 사실 + 고객센터 문의. 사유는 표시하지 않음. 운영자가 어드민에서 출금 신청하면 '출금 처리 중'으로 전환`]],
+      d: ["예외 · 일부 UID 고객센터 처리", "신청 가능한 UID와 고객센터 처리 UID(신청 실패 UID · 출금 정지 UID)가 함께 있는 경우입니다. 신청 가능한 UID는 그대로 신청하고, 고객센터 처리 UID는 고객센터로 안내합니다.", [
+        `기존 잔액 영역`, "금액 = 신청 가능한 UID의 남은 스냅샷 금액 합계 (고객센터 처리 UID 제외)",
+        "[기존 잔액 출금] 활성. 출금 확인 모달에는 신청 가능한 UID만 표시",
+        `안내: 출금이 제한된 UID가 있다는 사실 + [고객센터 문의] 링크 (기존 고객센터 창 열기)`]]
     },
     "W02": {
       a: ["출금 확인 모달 · 전체 출금 가능", "조건 충족 UID 전체를 한 번에 신청합니다. 이슈 UID와 출금 정지 UID는 제외합니다. 각 UID에 기존 스냅샷 출금 신청 로직(어드민 [출금 신청]과 동일)을 적용합니다.", [
@@ -667,8 +676,8 @@ button, select { font: inherit; cursor: pointer; }
         `[기존 잔액 출금] → 같은 출금 확인 모달 (현재 화면 위에 표시). 신청 완료 후 같은 UID 상세의 신청 완료 상태(EB-W03-b)`]],
       b: ["UID 상세 · 신청 완료", "메인 페이지와 같이 버튼이 비활성으로 바뀝니다. 출금 완료 후 영역은 미노출됩니다.", [
         `기존 잔액 영역`, "금액", "버튼 비활성 '출금 처리 중'"]],
-      c: ["UID 상세 · 예외 · 신청 반려/실패", "메인 페이지의 반려/실패 상태(EB-W01-c)와 같습니다.", [
-        `기존 잔액 영역`, "금액 = 남은 스냅샷 금액 합계 (전체 UID, 신청 전과 같음)", "버튼 다시 활성 → 출금 확인 모달", `반려/실패 안내`]]
+      c: ["UID 상세 · 예외 · 고객센터 처리", "메인 페이지의 고객센터 처리 상태(EB-W01-c)와 같습니다.", [
+        `기존 잔액 영역`, "금액 = 남은 스냅샷 금액 합계 (전체 UID, 신청 실패 UID · 출금 정지 UID 포함)", "[고객센터 문의] → 기존 고객센터 창 열기", `안내`]]
     },
     "W06": {
       a: ["결과 팝업 · 출금 완료", "출금 처리가 끝나면 기존 잔액 영역이 사라지므로, 결과와 이월 내용을 팝업으로 알립니다. 출금 완료 후 메인 페이지에 처음 들어올 때 1회 노출합니다.", [
@@ -676,10 +685,10 @@ button, select { font: inherit; cursor: pointer; }
         "출금 금액: 이번 신청으로 지급된 금액 합계 (거래소 페이백 + 이번에 출금된 이벤트 리워드)",
         "자동 출금으로 이월됨: 커미션 한도를 넘어 이월된 이벤트 리워드 + 이후 지급 방식 안내. 이월 금액이 0이면 미노출",
         "[확인] → 팝업 닫힘. 메인 페이지는 영역 미노출 상태"]],
-      b: ["결과 팝업 · 반려·실패", "신청이 반려되거나 처리에 실패하면 팝업으로 알리고 바로 다시 신청할 수 있게 합니다. 반려·실패 후 메인 페이지에 처음 들어올 때 1회 노출합니다. 팝업을 닫아도 영역 안 반려 안내(EB-W01-c)는 유지됩니다.", [
+      b: ["결과 팝업 · 반려·실패", "신청이 반려되거나 처리에 실패하면 팝업으로 알리고 고객센터로 안내합니다. 다시 신청하지 않고 고객센터에서 처리합니다. 실패 후 메인 페이지에 처음 들어올 때 1회 노출합니다.", [
         `제목 '출금 신청이 처리되지 않았어요'`,
-        `안내: 재신청 + 반복 시 고객센터 문의. 금액 문장 없음, 사유 미표시`,
-        "[닫기] → 메인 페이지 반려 상태(EB-W01-c) / [다시 신청] → 출금 확인 모달(EB-W02)"]]
+        `안내: 고객센터 문의. 금액 문장 없음, 사유 미표시`,
+        "[닫기] → 메인 페이지 고객센터 처리 상태(EB-W01-c) / [고객센터 문의] → 기존 고객센터 창 열기"]]
     },
     "W04": {
       a: ["초대 리워드 고객센터 안내 · 대상 회원", "일반 친구초대 회원은 자동 출금 대상이 아니라 초대 리워드 전체가 CS로만 출금됩니다. 스냅샷 여부와 관계없이 출금 방식이 같아 기존 잔액 영역은 두지 않습니다. 출금 가능 초대 리워드가 있는 회원에게 고객센터로 출금해야 한다는 안내를 보여줍니다.", [
@@ -738,8 +747,9 @@ button, select { font: inherit; cursor: pointer; }
     const dash = m ? idx("EB-M01") : idx("EB-W01"), dlg = m ? idx("EB-M02") : idx("EB-W02"), uidS = m ? idx("EB-M03") : idx("EB-W03");
     const onUid = cur().view === "uid";
     const open = document.getElementById("open-claim");
-    if (open) open.onclick = () => { if (onUid) { S.inModal = true; render(); } else go(dlg, 0); };
-    const close = () => { if (onUid) { S.inModal = false; render(); } else go(dash, 0); };
+    const inPlace = onUid || c.some;
+    if (open) open.onclick = () => { if (inPlace) { S.inModal = true; render(); } else go(dlg, 0); };
+    const close = () => { if (inPlace) { S.inModal = false; render(); } else go(dash, 0); };
     document.getElementById("close")?.addEventListener("click", close);
     document.getElementById("scrim")?.addEventListener("click", close);
     const conf = document.getElementById("confirm");
@@ -751,7 +761,8 @@ button, select { font: inherit; cursor: pointer; }
     document.getElementById("back")?.addEventListener("click", () => go(dash, S.ci));
     document.getElementById("res-ok")?.addEventListener("click", () => { S.hideRes = true; render(); });
     document.getElementById("res-close")?.addEventListener("click", () => go(dash, 2));
-    document.getElementById("res-retry")?.addEventListener("click", () => go(dlg, 0));
+    const csToast = () => { S.toast = L().chatToast; render(); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); };
+    scaler.querySelectorAll(".cs-open, .cs-link, #res-cs").forEach(el => el.addEventListener("click", e => { e.stopPropagation(); csToast(); }));
     if (cur().view === "invite") {
       document.getElementById("iv-cs")?.addEventListener("click", () => { S.toast = L().chatToast; render(); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); });
     }
