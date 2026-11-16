@@ -299,6 +299,12 @@ button, select { font: inherit; cursor: pointer; }
 .res p.res-p { margin: -6px 0 0; font-size: 13px; color: var(--tm-text-2); line-height: 1.55; }
 .res .total .amt { font-size: 22px; }
 .res .carry { margin-top: 0; }
+.res-uids { display: flex; flex-direction: column; gap: 8px; max-height: 168px; overflow-y: auto; }
+.res-grp small { display: block; font-size: 12px; color: var(--tm-text-2); margin-bottom: 4px; }
+.res-uid { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 0; }
+.res-uid .ex { width: 22px; height: 22px; font-size: 7px; }
+.res-uid span:nth-child(2) { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.res-uid .num { white-space: nowrap; }
 .res .btn { height: 40px; font-size: 14px; }
 .sel-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .tm .btn-cancel { background: #eceef1; color: var(--tm-text); height: 36px; }
@@ -369,7 +375,7 @@ button, select { font: inherit; cursor: pointer; }
     en: {
       nav: ["Cashback", "Rewards Hub", "Discover"], total: "Total Cashback Balance", auto: "Auto Claim",
       eb: "Previous Balance", ebSub: "Cashback earned before Auto Claim started that hasn't been claimed yet. You need to claim this amount yourself.",
-      ebAll: "Cashback earned before Auto Claim started that hasn't been claimed yet. This is the total for all linked UIDs, and eligible UIDs are claimed together.", ebBtn: "Claim Previous Balance", ebIngBtn: "Claim in progress", resDoneT: "Previous Balance claim completed", resPartT: "Part of your Previous Balance has been claimed", resPartNote: "Some claims couldn't be processed. Please contact Support.", resPaid: "Claimed amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with exchange cashback you earn later.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `Please contact Support.`, resClose: "Close", errT: "Couldn't submit your claim. Please try again.", csNote: "We couldn't claim your Previous Balance. Please contact Support.",
+      ebAll: "Cashback earned before Auto Claim started that hasn't been claimed yet. This is the total for all linked UIDs, and eligible UIDs are claimed together.", ebBtn: "Claim Previous Balance", ebIngBtn: "Claim in progress", resDoneT: "Previous Balance claim completed", resPartT: "Part of your Previous Balance has been claimed", resPartNote: "Some claims couldn't be processed. Please contact Support.", resGrpOk: "Claimed", resGrpFail: "Not processed", resPaid: "Claimed amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with exchange cashback you earn later.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `Please contact Support.`, resClose: "Close", errT: "Couldn't submit your claim. Please try again.", csNote: "We couldn't claim your Previous Balance. Please contact Support.",
       lu: "Linked UID", seeAll: "See All", uids: n => `${n} UIDs`, more: "Using multiple exchanges? Link more UIDs",
       exB: "Exclusive Benefits", exE: "Exchange Events", ongoing: "Ongoing", ben: [["TetherMax x Bybit Global League", "Join Global League"], ["Sign up for an exchange", "Get extra Cashback"]],
       prize: "Total Prize Pool", join: "Join Now",
@@ -386,7 +392,7 @@ button, select { font: inherit; cursor: pointer; }
     ko: {
       nav: ["페이백", "리워드 허브", "탐색"], total: "총 페이백 잔액", auto: "자동 출금",
       eb: "기존 잔액", ebSub: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요. 이 금액은 직접 출금 신청해야 해요.",
-      ebAll: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요. 연동된 전체 UID 합계예요. 조건에 맞는 UID가 함께 출금 신청돼요.", ebBtn: "기존 잔액 출금", ebIngBtn: "출금 처리 중", resDoneT: "기존 잔액 출금이 완료됐어요", resPartT: "기존 잔액 일부가 출금됐어요", resPartNote: "처리되지 않은 출금 신청이 있어요. 고객센터로 문의해주세요.", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "남은 이벤트 리워드는 이후 쌓이는 거래소 페이백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `고객센터로 문의해주세요.`, resClose: "닫기", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", csNote: "기존 잔액을 출금하지 못했어요. 고객센터로 문의해주세요.",
+      ebAll: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요. 연동된 전체 UID 합계예요. 조건에 맞는 UID가 함께 출금 신청돼요.", ebBtn: "기존 잔액 출금", ebIngBtn: "출금 처리 중", resDoneT: "기존 잔액 출금이 완료됐어요", resPartT: "기존 잔액 일부가 출금됐어요", resPartNote: "처리되지 않은 출금 신청이 있어요. 고객센터로 문의해주세요.", resGrpOk: "출금 완료", resGrpFail: "처리되지 않음", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "남은 이벤트 리워드는 이후 쌓이는 거래소 페이백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `고객센터로 문의해주세요.`, resClose: "닫기", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", csNote: "기존 잔액을 출금하지 못했어요. 고객센터로 문의해주세요.",
       lu: "연동 UID", seeAll: "전체 보기", uids: n => `UID ${n}개`, more: "여러 거래소를 쓰시나요? UID 더 연동하기",
       exB: "회원 전용 혜택", exE: "거래소 이벤트", ongoing: "진행 중", ben: [["TetherMax x Bybit 글로벌 리그", "글로벌 리그 참여"], ["거래소 가입하기", "추가 페이백 받기"]],
       prize: "총 상금", join: "참여하기",
@@ -581,8 +587,12 @@ button, select { font: inherit; cursor: pointer; }
       body = `<h2 data-n="1">${t.resPartT}</h2>
         <div class="total" data-n="2"><small>${t.resPaid}</small><div class="amt num">${fmt(nowSum)}<span>USDT</span></div></div>
         ${laterSum ? carryBox(t.resCarryLbl, laterSum, t.resCarryNote(fmt(laterSum)), 'data-n="3"') : ""}
-        <div class="warn" data-n="4">⚠ <span>${t.resPartNote}</span></div>
-        <div class="sel-btns" data-n="5"><button class="btn btn-cancel" id="res-ok">${t.resOk}</button><button class="btn btn-primary" id="res-cs">${t.ivCsBtn}</button></div>`;
+        <div class="res-uids" data-n="4">
+          <div class="res-grp"><small>${t.resGrpOk}</small>${rows.map(r => `<div class="res-uid"><span class="ex" style="background:${r.color}">${r.logo}</span><span>${r.ex} · UID ${r.uid}</span><span class="num">${fmt(r.now)} USDT</span></div>`).join("")}</div>
+          <div class="res-grp"><small>${t.resGrpFail}</small>${snapRows(c).map(r => `<div class="res-uid"><span class="ex" style="background:${r.color}">${r.logo}</span><span>${r.ex} · UID ${r.uid}</span><span class="num">${fmt(r.remain)} USDT</span></div>`).join("")}</div>
+        </div>
+        <div class="warn" data-n="5">⚠ <span>${t.resPartNote}</span></div>
+        <div class="sel-btns" data-n="6"><button class="btn btn-cancel" id="res-ok">${t.resOk}</button><button class="btn btn-primary" id="res-cs">${t.ivCsBtn}</button></div>`;
     } else {
       body = `<h2 data-n="1">${t.resFailT}</h2><p class="res-p" data-n="2">${t.resFailP(fmt(nowSum))}</p>
         <div class="sel-btns" data-n="3"><button class="btn btn-cancel" id="res-close">${t.resClose}</button><button class="btn btn-primary" id="res-cs">${t.ivCsBtn}</button></div>`;
@@ -689,6 +699,7 @@ button, select { font: inherit; cursor: pointer; }
         `제목 '기존 잔액 일부가 출금됐어요'`,
         "출금 금액: 출금된 UID의 지급 금액 합계 (거래소 페이백 + 이번에 출금된 이벤트 리워드)",
         "자동 출금으로 이월됨: 출금된 UID에서 이월된 이벤트 리워드 + 이후 지급 방식 안내. 이월 금액이 0이면 미노출",
+        "UID별 결과: '출금 완료' 묶음(거래소 · UID · 지급 금액) / '처리되지 않음' 묶음(거래소 · UID · 남은 금액). UID가 많으면 목록 안에서 스크롤",
         `안내: 처리되지 않은 출금 신청이 있다는 사실 + 고객센터 문의. 사유 미표시`,
         "[확인] → 팝업 닫힘, 메인 페이지 고객센터 처리 상태(처리되지 않은 UID 금액) / [고객센터 문의] → 기존 고객센터 창 열기"]]
     },
