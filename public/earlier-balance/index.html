@@ -315,6 +315,7 @@ button, select { font: inherit; cursor: pointer; }
 .res .carry { margin-top: 0; }
 .chip-fail { background: var(--tm-warn-bg); color: #7a3600; }
 .res.res-part { top: 50% !important; transform: translate(-50%, -50%); max-height: calc(100% - 48px); }
+.res-cards-wrap { display: flex; flex-direction: column; min-height: 0; flex: 0 1 auto; }
 .res-cards { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; min-height: 0; flex: 0 1 auto; }
 .res-cards .uc { padding: 12px 14px; gap: 8px; flex: none; }
 .res-cards .uc-head div { min-width: 0; overflow-wrap: anywhere; }
@@ -574,19 +575,21 @@ button, select { font: inherit; cursor: pointer; }
     if (c.result === "done") {
       body = `<h2 data-n="1">${t.resDoneT}</h2><p class="res-p" data-n="2">${t.resDoneSub}</p>
         <div class="total" data-n="3"><small>${t.resPaid}</small><div class="amt num">${fmt(nowSum)}<span>USDT</span></div></div>
-        ${laterSum ? carryBox(t.resCarryLbl, laterSum, t.resCarryNote(fmt(laterSum)), 'data-n="4"') : ""}
-        <button class="btn btn-primary btn-block" id="res-ok" data-n="5">${t.resOk}</button>`;
+        <div class="res-cards-wrap" data-n="4"><div class="res-cards">${rows.map(r => ucCard(r, "done")).join("")}</div></div>
+        ${laterSum ? carryBox(t.resCarryLbl, laterSum, t.resCarryNote(fmt(laterSum)), 'data-n="5"') : ""}
+        <button class="btn btn-primary btn-block" id="res-ok" data-n="6">${t.resOk}</button>`;
     } else if (c.result === "partial") {
       body = `<h2 data-n="1">${t.resPartT}</h2><p class="res-p" data-n="2">${t.resPartSub}</p>
-        <div class="res-cards" data-n="3">${rows.map(r => ucCard(r, "done")).join("")}${snapRows(c).map(r => ucCard(r, "fail")).join("")}</div>
-        ${laterSum ? carryBox(t.resCarryLbl, laterSum, t.resCarryNote(fmt(laterSum)), 'data-n="4"') : ""}
-        <p class="res-p" data-n="5" style="margin:0">${t.resDoneSub}</p>
-        <div class="sel-btns" data-n="6"><button class="btn btn-cancel" id="res-ok">${t.resOk}</button><button class="btn btn-primary" id="res-cs">${t.ivCsBtn}</button></div>`;
+        <div class="total" data-n="3"><small>${t.resPaid}</small><div class="amt num">${fmt(nowSum)}<span>USDT</span></div></div>
+        <div class="res-cards-wrap" data-n="4"><div class="res-cards">${rows.map(r => ucCard(r, "done")).join("")}${snapRows(c).map(r => ucCard(r, "fail")).join("")}</div></div>
+        ${laterSum ? carryBox(t.resCarryLbl, laterSum, t.resCarryNote(fmt(laterSum)), 'data-n="5"') : ""}
+        <p class="res-p" data-n="6" style="margin:0">${t.resDoneSub}</p>
+        <div class="sel-btns" data-n="7"><button class="btn btn-cancel" id="res-ok">${t.resOk}</button><button class="btn btn-primary" id="res-cs">${t.ivCsBtn}</button></div>`;
     } else {
       body = `<h2 data-n="1">${t.resFailT}</h2><p class="res-p" data-n="2">${t.resFailP(fmt(nowSum))}</p>
         <div class="sel-btns" data-n="3"><button class="btn btn-cancel" id="res-close">${t.resClose}</button><button class="btn btn-primary" id="res-cs">${t.ivCsBtn}</button></div>`;
     }
-    const part = c.result === "partial", w = part ? (mobile ? "width:343px" : "width:480px") : pos;
+    const part = c.result === "partial" || c.result === "done", w = part ? (mobile ? "width:343px" : "width:480px") : pos;
     return `<div class="scrim"></div><div class="res${part ? " res-part" : ""}" role="dialog" aria-modal="true" style="${w}">${body}</div>`;
   }
   const toast = mobile => S.toast ? `<div class="toast" style="${mobile ? "bottom:100px" : "top:80px"}">${S.toast}</div>` : "";
@@ -699,6 +702,7 @@ button, select { font: inherit; cursor: pointer; }
         `제목 '기존 잔액 출금이 완료됐어요'`,
         ["안내 '이후 쌓이는 페이백은 자동으로 출금돼요.'", ["이월 금액과 관계없이 항상 표시"]],
         ["출금 금액", ["합친 결과의 지급 금액 합계 (거래소 페이백 + 출금된 이벤트 리워드)"]],
+        ["UID 카드 (출금 확인 모달과 같은 모듈)", ["칩 '출금 완료'", "출금 금액 + 거래소 페이백 · 이벤트 리워드(출금됨 / 자동 출금으로 이월됨)", "UID가 많으면 카드 영역 안에서 스크롤"]],
         ["자동 출금으로 이월됨", ["커미션 한도를 넘어 이월된 이벤트 리워드 합계 + 이후 지급 방식 안내", "이월 금액이 0이면 미노출"]],
         ["[확인]", ["팝업 닫힘", "메인 페이지는 영역 미노출 상태"]]], resRules("a", ["회원이 신청한 UID 3개가 모두 완료", "회원 신청이 반려된 뒤 운영자가 같은 UID를 다시 신청해 모두 완료"])],
       b: ["결과 팝업 · 반려·실패", [
@@ -712,6 +716,7 @@ button, select { font: inherit; cursor: pointer; }
         "UID별 결과를 보여주고, 처리되지 않은 UID는 고객센터로 안내합니다."], [
         `제목 '기존 잔액 일부가 출금됐어요'`,
         ["안내 '처리되지 않은 UID는 고객센터로 문의해주세요.'", ["사유 미표시"]],
+        ["출금 금액", ["출금 완료 UID의 지급 금액 합계 (거래소 페이백 + 출금된 이벤트 리워드)"]],
         ["UID 카드 (출금 확인 모달과 같은 모듈)", ["칩으로 결과 표시", "'출금 완료' 카드: 출금 금액 + 거래소 페이백 · 이벤트 리워드(출금됨 / 자동 출금으로 이월됨)", "'처리되지 않음' 카드: 남은 금액 + 거래소 페이백 · 이벤트 리워드", "완료 카드가 먼저", "UID가 많으면 카드 영역 안에서 스크롤"]],
         ["자동 출금으로 이월됨", ["출금된 UID에서 이월된 이벤트 리워드 합계 + 이후 지급 방식 안내", "이월 금액이 0이면 미노출"]],
         `안내 '이후 쌓이는 페이백은 자동으로 출금돼요.' (완료 팝업과 같음)`,
