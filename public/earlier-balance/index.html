@@ -163,14 +163,14 @@ button, select { font: inherit; cursor: pointer; }
 .lu-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 .lu-head b { font-size: 16px; font-weight: 600; }
 .link { color: var(--tm-blue); font-size: 13px; font-weight: 500; }
-.lu-row { display: flex; align-items: center; gap: 10px; padding: 12px 0; cursor: pointer; }
+.lu-row { display: flex; align-items: center; gap: 10px; padding: 12px 0; }
 .ex { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 9px; font-weight: 700; flex: none; font-family: Inter, sans-serif; letter-spacing: -.2px; }
 .lu-name { flex: 1; font-size: 14px; font-weight: 500; }
 .lu-name small { display: block; font-size: 12px; font-weight: 400; color: var(--tm-text-2); }
 .lu-amt { font-size: 14px; font-weight: 500; white-space: nowrap; }
 .caret { width: 0; height: 0; border: 4px solid transparent; border-top-color: rgba(0,0,0,.54); margin-left: 6px; transform: translateY(2px); }
 .lu-uids { padding: 0 0 6px 42px; display: flex; flex-direction: column; gap: 10px; }
-.lu-uid { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--tm-text-2); cursor: pointer; }
+.lu-uid { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--tm-text-2); }
 .lu-uid .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--tm-success-dot); }
 .lu-uid .amt { margin-left: auto; color: var(--tm-text); }
 .lu-foot { border-top: 1px solid var(--tm-divider); margin-top: 8px; padding-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--tm-text-2); }
@@ -388,7 +388,7 @@ button, select { font: inherit; cursor: pointer; }
     en: {
       nav: ["Cashback", "Rewards Hub", "Discover"], total: "Total Cashback Balance", auto: "Auto Claim",
       eb: "Previous Balance", ebSub: "Cashback earned before Auto Claim started that hasn't been claimed yet. You need to claim this amount yourself.",
-      ebAll: "Cashback earned before Auto Claim started that hasn't been claimed yet. This is the total for linked UIDs you can claim, and they're claimed together.", ebCs: "Cashback earned before Auto Claim started that hasn't been claimed yet.", ebBtn: "Claim Previous Balance", ebIngBtn: "Claim in progress", resDoneT: "Previous Balance claim completed", resDoneSub: "Cashback you earn from now on is paid with Auto Claim.", resPartT: "Previous Balance partially claimed", resPartSub: "Please contact Support about the UIDs that weren't processed.", resGrpOk: "Completed", resGrpFail: "Not processed", resRemain: "Remaining amount", resEvtPaid: "Claimed", resPaid: "Claimed amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with exchange cashback you earn later.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `Please contact Support.`, resClose: "Close", errT: "Couldn't submit your claim. Please try again.", csNote: "We couldn't claim your Previous Balance. Please contact Support.",
+      ebCs: "Cashback earned before Auto Claim started that hasn't been claimed yet.", ebBtn: "Claim Previous Balance", ebIngBtn: "Claim in progress", resDoneT: "Previous Balance claim completed", resDoneSub: "Cashback you earn from now on is paid with Auto Claim.", resPartT: "Previous Balance partially claimed", resPartSub: "Please contact Support about the UIDs that weren't processed.", resGrpOk: "Completed", resGrpFail: "Not processed", resRemain: "Remaining amount", resEvtPaid: "Claimed", resPaid: "Claimed amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with exchange cashback you earn later.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `Please contact Support.`, resClose: "Close", errT: "Couldn't submit your claim. Please try again.", csNote: "We couldn't claim your Previous Balance. Please contact Support.",
       lu: "Linked UID", seeAll: "See All", uids: n => `${n} UIDs`, more: "Using multiple exchanges? Link more UIDs",
       exB: "Exclusive Benefits", exE: "Exchange Events", ongoing: "Ongoing", ben: [["TetherMax x Bybit Global League", "Join Global League"], ["Sign up for an exchange", "Get extra Cashback"]],
       prize: "Total Prize Pool", join: "Join Now",
@@ -405,7 +405,7 @@ button, select { font: inherit; cursor: pointer; }
     ko: {
       nav: ["페이백", "리워드 허브", "탐색"], total: "총 페이백 잔액", auto: "자동 출금",
       eb: "기존 잔액", ebSub: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요. 이 금액은 직접 출금 신청해야 해요.",
-      ebAll: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요. 출금 신청할 수 있는 연동 UID의 합계예요. 함께 출금 신청돼요.", ebCs: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요.", ebBtn: "기존 잔액 출금", ebIngBtn: "출금 처리 중", resDoneT: "기존 잔액 출금이 완료됐어요", resDoneSub: "이후 쌓이는 페이백은 자동으로 출금돼요.", resPartT: "기존 잔액 일부가 출금됐어요", resPartSub: "처리되지 않은 UID는 고객센터로 문의해주세요.", resGrpOk: "출금 완료", resGrpFail: "처리되지 않음", resRemain: "남은 금액", resEvtPaid: "출금됨", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "남은 이벤트 리워드는 이후 쌓이는 거래소 페이백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `고객센터로 문의해주세요.`, resClose: "닫기", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", csNote: "기존 잔액을 출금하지 못했어요. 고객센터로 문의해주세요.",
+      ebCs: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요.", ebBtn: "기존 잔액 출금", ebIngBtn: "출금 처리 중", resDoneT: "기존 잔액 출금이 완료됐어요", resDoneSub: "이후 쌓이는 페이백은 자동으로 출금돼요.", resPartT: "기존 잔액 일부가 출금됐어요", resPartSub: "처리되지 않은 UID는 고객센터로 문의해주세요.", resGrpOk: "출금 완료", resGrpFail: "처리되지 않음", resRemain: "남은 금액", resEvtPaid: "출금됨", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "남은 이벤트 리워드는 이후 쌓이는 거래소 페이백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `고객센터로 문의해주세요.`, resClose: "닫기", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", csNote: "기존 잔액을 출금하지 못했어요. 고객센터로 문의해주세요.",
       lu: "연동 UID", seeAll: "전체 보기", uids: n => `UID ${n}개`, more: "여러 거래소를 쓰시나요? UID 더 연동하기",
       exB: "회원 전용 혜택", exE: "거래소 이벤트", ongoing: "진행 중", ben: [["TetherMax x Bybit 글로벌 리그", "글로벌 리그 참여"], ["거래소 가입하기", "추가 페이백 받기"]],
       prize: "총 상금", join: "참여하기",
@@ -430,26 +430,21 @@ button, select { font: inherit; cursor: pointer; }
     { id: "EB-W02", name: "웹 · 02 출금 확인 모달", dev: "web", view: "dash", cases: [
       { k: "a", name: "전체 출금 가능", c: { ing: [], eligible: true, modal: true } },
       { k: "b", name: "예외 · 신청 접수 실패", c: { ing: [], eligible: true, modal: true, err: true } } ] },
-    { id: "EB-W03", name: "웹 · 03 UID 상세", dev: "web", view: "uid", cases: [
-      { k: "a", name: "대상 회원", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: true } },
-      { k: "b", name: "신청 완료", c: { uid: "850358337912128386", ing: SNAP.map(s => s.uid), claimed: true, eligible: true } },
-      { k: "c", name: "예외 · 고객센터 처리", c: { uid: "850358337912128386", ing: [], claimed: false, eligible: true, failed: true } } ] },
     { id: "EB-M01", name: "모바일 · 01 메인 페이지", dev: "mobile", view: "dash", cases: null },
     { id: "EB-M02", name: "모바일 · 02 출금 확인 시트", dev: "mobile", view: "dash", cases: null },
-    { id: "EB-M03", name: "모바일 · 03 UID 상세", dev: "mobile", view: "uid", cases: null },
   ];
-  SCREENS[3].cases = SCREENS[0].cases; SCREENS[4].cases = SCREENS[1].cases; SCREENS[5].cases = SCREENS[2].cases;
+  SCREENS[2].cases = SCREENS[0].cases; SCREENS[3].cases = SCREENS[1].cases;
   const IV_CS_CASES = [
     { k: "a", name: "대상 회원", c: { inv: "cs" } } ];
-  SCREENS.splice(3, 0,
+  SCREENS.splice(2, 0,
     { id: "EB-W04", name: "웹 · 04 초대 리워드 고객센터 안내", dev: "web", view: "invite", cases: IV_CS_CASES });
   const RES_CASES = [
     { k: "a", name: "출금 완료 팝업", c: { ing: [], claimed: false, eligible: false, result: "done", noMk: true } },
     { k: "b", name: "반려·실패 팝업", c: { ing: [], claimed: false, eligible: true, failed: true, result: "failed", noMk: true } },
     { k: "c", name: "일부 완료 팝업", c: { ing: [], claimed: false, eligible: true, failed: true, result: "partial", paid: ["850358337912128386"], noMk: true } } ];
-  SCREENS.splice(4, 0, { id: "EB-W06", name: "웹 · 06 결과 팝업", dev: "web", view: "dash", cases: RES_CASES });
+  SCREENS.splice(3, 0, { id: "EB-W06", name: "웹 · 06 결과 팝업", dev: "web", view: "dash", cases: RES_CASES });
   SCREENS.push({ id: "EB-M06", name: "모바일 · 06 결과 팝업", dev: "mobile", view: "dash", cases: RES_CASES });
-  SCREENS.splice(8, 0,
+  SCREENS.splice(6, 0,
     { id: "EB-M04", name: "모바일 · 04 초대 리워드 고객센터 안내", dev: "mobile", view: "invite", cases: IV_CS_CASES });
 
   const S = { inModal: false, si: 0, ci: 0, lang: "en", mk: true, panel: true, fit: true, toast: "" };
@@ -485,7 +480,7 @@ button, select { font: inherit; cursor: pointer; }
   function carryBox(label, amt, note, mk) {
     return `<div class="carry" ${mk || ""}><div class="carry-h"><span>${label}</span><span class="num">${fmt(amt)} USDT</span></div><p>${note}</p></div>`;
   }
-  function ebBlock(c, inUid) {
+  function ebBlock(c) {
     if (!c.eligible) return "";
     const t = L(), rows = snapRows(c), act = rows;
     const remain = rows.reduce((a, r) => a + r.remain, 0);
@@ -499,8 +494,8 @@ button, select { font: inherit; cursor: pointer; }
     } else {
       btn = `<button class="btn btn-primary btn-block" id="open-claim" ${mk(3)}>${t.ebBtn}</button>`;
     }
-    return `<div class="eb ${inUid ? "eb-in" : ""}" ${mk(1)}>
-      <div class="eb-row"><div><div class="eb-label">${t.eb}<span class="eb-tip"><button type="button" aria-label="${t.eb}">${I.info}</button><span>${c.failed ? t.ebCs : inUid ? t.ebAll : t.ebSub}</span></span></div></div>
+    return `<div class="eb" ${mk(1)}>
+      <div class="eb-row"><div><div class="eb-label">${t.eb}<span class="eb-tip"><button type="button" aria-label="${t.eb}">${I.info}</button><span>${c.failed ? t.ebCs : t.ebSub}</span></span></div></div>
         <div class="eb-amt num" ${mk(2)}>${fmt(remain)} USDT</div></div>
       ${fail}${btn}</div>`;
   }
@@ -518,9 +513,9 @@ button, select { font: inherit; cursor: pointer; }
     const t = L();
     const rows = ACCTS.map(a => {
       const sum = a.uids.reduce((b, u) => b + u.amt, 0);
-      const head = `<div class="lu-row" data-uid="${a.uids[0].uid}"><span class="ex" style="background:${a.color}">${a.logo}</span><div class="lu-name">${a.ex}${a.uids.length > 1 ? `<small>${t.uids(a.uids.length)}</small>` : ""}</div><span class="lu-amt num">${fmt(sum)} USDT</span>${a.uids.length > 1 ? '<span class="caret"></span>' : ""}</div>`;
-      const uidLines = a.uids.length > 1 ? `<div class="lu-uids">${a.uids.map(u => `<div class="lu-uid" data-uid="${u.uid}"><span class="dot"></span>UID ${u.uid}<span class="amt num">${fmt(u.amt)} USDT</span></div>`).join("")}</div>`
-        : `<div class="lu-uids"><div class="lu-uid" data-uid="${a.uids[0].uid}"><span class="dot"></span>UID ${a.uids[0].uid}</div></div>`;
+      const head = `<div class="lu-row"><span class="ex" style="background:${a.color}">${a.logo}</span><div class="lu-name">${a.ex}${a.uids.length > 1 ? `<small>${t.uids(a.uids.length)}</small>` : ""}</div><span class="lu-amt num">${fmt(sum)} USDT</span>${a.uids.length > 1 ? '<span class="caret"></span>' : ""}</div>`;
+      const uidLines = a.uids.length > 1 ? `<div class="lu-uids">${a.uids.map(u => `<div class="lu-uid"><span class="dot"></span>UID ${u.uid}<span class="amt num">${fmt(u.amt)} USDT</span></div>`).join("")}</div>`
+        : `<div class="lu-uids"><div class="lu-uid"><span class="dot"></span>UID ${a.uids[0].uid}</div></div>`;
       return head + uidLines;
     }).join("");
     return `<section class="card lu"><div class="lu-head"><b>${t.lu}</b><span class="link">${t.seeAll}</span></div>${rows}
@@ -538,29 +533,6 @@ button, select { font: inherit; cursor: pointer; }
       <div class="ben-grid">${[["Bitget", "150,000", ["6", "11", "46", "23"]], ["Bybit", "3,200,000", ["20", "06", "47", "23"]]].map(e => `<div class="ben"><div class="ev-img"><span>${e[0]}</span></div><div class="ev-row"><span>🏆 ${t.prize}</span><b>Up to ${e[1]} USDT</b></div><div class="cd">🕒 <i>${e[2][0]}</i>D <i>${e[2][1]}</i>H <i>${e[2][2]}</i>M <i>${e[2][3]}</i>S</div><button class="btn btn-primary btn-block" tabindex="-1">${t.join}</button></div>`).join("")}</div></section>`;
   }
 
-  function findUid(uid) { for (const a of ACCTS) for (const u of a.uids) if (u.uid === uid) return { a, u }; return null; }
-
-  function uidDetail(c, mobile) {
-    const t = L(), { a, u } = findUid(c.uid);
-    const pct = u.acc ? Math.min(100, u.claim / Math.max(u.exCb + u.evt, .01) * 100) : 0;
-    const warn = u.claim < 10 ? `<div class="warn">⚠ ${t.min} <b>10 USDT</b></div>` : "";
-    const head = `<section class="card ud-head"><span class="back" id="back">←</span><span class="ex" style="background:${a.color}">${a.logo}</span><div class="ud-name"><b>${a.ex}</b><small>UID ${u.uid}${I.copy}</small></div><span class="chip chip-ok">${t.active}</span></section>`;
-    const det = `<section class="card ud">
-      <div class="kv big"><span>${t.avail}</span><span class="num">${fmt(u.amt)} USDT</span></div>
-      <div class="kv mid"><span>${t.accum}</span><span class="num">${fmt(u.acc)} USDT</span></div>
-      <div class="hr"></div>
-      <div class="kv small"><span>${t.exCb}</span><span class="num">${fmt(u.exCb)} USDT</span></div>
-      <div class="kv small"><span>${t.evt}</span><span class="num">${fmt(u.evt)} USDT</span></div>
-      <div class="bar"><i style="width:${pct}%"></i></div>
-      <div class="cl num">${t.claimable(fmt(u.claim), fmt(u.exCb + u.evt))}</div>
-      ${warn}
-      ${mobile ? "" : `<button class="btn btn-off btn-block" tabindex="-1" style="margin-top:6px">${t.auto}</button>`}
-      ${ebBlock(c, true)}
-    </section>`;
-    const tl = `<section class="card tl"><b>${t.tl}</b><div class="tl-row">${t.tlI.map((x, i) => `<div class="tl-it"><i></i>${x}<strong>${["Nov 11 09:00", "Nov 12 09:00", "Nov 12 20:00"][i]}</strong></div>`).join("")}</div><small>${t.tlN}</small></section>`;
-    return { head, det, tl };
-  }
-  const weekly = () => `<section class="card wk"><div class="wk-head"><b>${L().wk}</b><span class="link" style="font-size:14px">${L().viewAll}</span></div><div class="wk-days">${[6, 7, 8, 9, 10, 11, 12].map(d => `<span class="${d === 12 ? "on" : ""}">${d}</span>`).join("")}</div></section>`;
 
   function claimDialog(c, mobile) {
     const t = L(), rows = snapRows(c), act = rows;
@@ -651,8 +623,7 @@ button, select { font: inherit; cursor: pointer; }
     let rail, main;
     const head = `<header class="tm-header">${logo}<nav class="tm-nav">${t.nav.map(n => `<span>${n}</span>`).join("")}</nav><div class="tm-icons">${I.bell}${I.user}${I.sun}${I.globe}</div></header>`;
     if (v === "invite") return `<div class="tm" style="width:1440px;min-height:1000px">${head}<div class="iv-wrap">${inviteBody(c, false)}</div>${toast(false)}${toast(false)}</div>`;
-    if (v === "uid") { const d = uidDetail(c, false); rail = d.head + d.det + d.tl; main = weekly() + benefits(); }
-    else { rail = balCard(c) + linked(); main = benefits() + events(); }
+    rail = balCard(c) + linked(); main = benefits() + events();
     return `<div class="tm" style="width:1440px;min-height:1000px">
       <header class="tm-header">${logo}<nav class="tm-nav">${t.nav.map(n => `<span>${n}</span>`).join("")}</nav><div class="tm-icons">${I.bell}${I.user}${I.sun}${I.globe}</div></header>
       <div class="web-wrap"><div class="rail">${rail}</div><div class="main-col">${main}</div></div>
@@ -662,8 +633,7 @@ button, select { font: inherit; cursor: pointer; }
     const t = L(), v = cur().view;
     let body, sticky = "";
     if (v === "invite") return `<div class="phone"><div class="screen tm"><header class="m-head">${logo}${I.bell}${I.user}${I.menu}</header><div class="m-scroll m-iv">${inviteBody(c, true)}</div><span class="fab"></span>${toast(true)}</div></div>`;
-    if (v === "uid") { const d = uidDetail(c, true); body = d.head + d.det + d.tl + weekly(); sticky = `<div class="m-sticky"><button class="btn btn-off btn-block" tabindex="-1">${t.auto}</button></div>`; }
-    else body = balCard(c) + linked() + `<section class="sec"><div class="sec-head"><h3>${t.exB}</h3><span class="link">${t.seeAll}</span></div><div class="m-ben">${t.ben.map((b, i) => `<div><div class="ben-img" style="background-image:url('${BEN[i]}')"></div><b>${b[0]}</b><small>${b[1]}</small></div>`).join("")}</div></section>`;
+    body = balCard(c) + linked() + `<section class="sec"><div class="sec-head"><h3>${t.exB}</h3><span class="link">${t.seeAll}</span></div><div class="m-ben">${t.ben.map((b, i) => `<div><div class="ben-img" style="background-image:url('${BEN[i]}')"></div><b>${b[0]}</b><small>${b[1]}</small></div>`).join("")}</div></section>`;
     return `<div class="phone"><div class="screen tm ${sticky ? "has-sticky" : ""}">
       <header class="m-head">${logo}${I.bell}${I.user}${I.menu}</header>
       <div class="m-scroll">${body}</div>${sticky}<span class="fab"></span>
@@ -723,23 +693,6 @@ button, select { font: inherit; cursor: pointer; }
         ["[출금 신청하기]", ["다시 누르면 재신청", "요청 중에는 비활성으로 중복 신청 방지"]],
         ["오류 안내", ["모달 안, 버튼 위 경고 박스", "다시 신청하거나 모달을 닫을 때까지 유지", "서버 메시지 표시 (예시 문구)"]]]]
     },
-    "W03": {
-      a: ["UID 상세 · 대상 회원", [
-        "UID 상세에서도 메인 페이지와 같은 영역을 Auto Claim 버튼 하단에 표시합니다.",
-        "출금은 회원 단위로 처리되므로 어느 UID 상세에서 눌러도 조건에 맞는 전체 UID가 함께 신청됩니다."], [
-        ["기존 잔액 영역", ["메인 페이지와 동일 구성", "웹: Auto Claim 하단", "모바일: 상세 카드 하단 (Auto Claim은 하단 고정 유지)"]],
-        ["금액", ["회원 전체 UID의 남은 스냅샷 금액 합계", "이 UID 금액이 아니므로 ⓘ 말풍선에 '출금 신청할 수 있는 연동 UID의 합계' 안내 포함"]],
-        ["[기존 잔액 출금]", ["같은 출금 확인 모달 (현재 화면 위에 표시)", "신청 완료 후 같은 UID 상세의 신청 완료 상태(EB-W03-b)"]]]],
-      b: ["UID 상세 · 신청 완료", [
-        "메인 페이지와 같이 버튼이 비활성으로 바뀝니다.",
-        "출금 완료 후 영역은 미노출됩니다."], [
-        `기존 잔액 영역`, "금액", "버튼 비활성 '출금 처리 중'"]],
-      c: ["UID 상세 · 예외 · 고객센터 처리", [
-        "메인 페이지의 고객센터 처리 상태(EB-W01-c)와 같습니다."], [
-        ["기존 잔액 영역", ["ⓘ 말풍선은 첫 문장만 표시 (EB-W01-c와 같음)"]],
-        ["금액", ["남은 스냅샷 금액 합계 (전체 UID, 신청 실패 UID 포함)"]],
-        ["[고객센터 문의]", ["기존 고객센터 창 열기"]], `안내`]]
-    },
     "W06": {
       a: ["결과 팝업 · 출금 완료", [
         "출금 처리가 끝나면 기존 잔액 영역이 사라져 회원이 결과를 확인할 곳이 없으므로 팝업으로 알립니다.",
@@ -781,7 +734,7 @@ button, select { font: inherit; cursor: pointer; }
       <h3 class="p-title">${d[0]}</h3>${Array.isArray(d[1]) ? `<ul class="p-lead p-bul">${d[1].map(x => `<li>${x}</li>`).join("")}</ul>` : `<p class="p-lead">${d[1]}</p>`}
       ${d[2].length ? `<ol class="p-list">${d[2].map((x, i) => { const [m, sub] = Array.isArray(x) ? x : [x, null]; return `<li data-go="${i + 1}"><span class="n">${i + 1}</span><span>${sub ? `<span class="p-m">${m}</span>` : m}${sub ? `<ul class="p-sub">${sub.map(y => `<li>${y}</li>`).join("")}</ul>` : ""}</span></li>`; }).join("")}</ol>` : ""}
       ${d[3] ? `<div class="p-rules"><div class="p-rules-h">노출 규칙</div>${d[3].map(r => `<section class="p-sec"><div class="p-sec-h">${r.h}</div>${r.table ? `<table class="p-tbl"><tr><th>합친 결과</th><th>팝업</th></tr>${r.table.map(([c, n, k]) => `<tr class="${k === r.cur ? "cur" : ""}"><td>${c}</td><td>${n}${k === r.cur ? " · 이 화면" : ""}</td></tr>`).join("")}</table>` : `<${r.ol ? "ol" : "ul"} class="p-ul">${r.items.map(x => `<li>${x}</li>`).join("")}</${r.ol ? "ol" : "ul"}>`}</section>`).join("")}</div>` : ""}
-      <div class="p-foot">번호를 누르면 화면에서 위치를 표시해요. 화면 안 버튼으로 모달·완료 상태, UID 상세로 이어서 볼 수 있어요.</div>`;
+      <div class="p-foot">번호를 누르면 화면에서 위치를 표시해요. 화면 안 버튼으로 모달·완료 상태로 이어서 볼 수 있어요.</div>`;
   }
 
   /* ---------- render & nav ---------- */
@@ -823,21 +776,14 @@ button, select { font: inherit; cursor: pointer; }
   }
   function bind() {
     const m = isMob(), c = cc().c, hasIng = (c.ing || []).length > 0 && !c.claimed;
-    const dash = m ? idx("EB-M01") : idx("EB-W01"), dlg = m ? idx("EB-M02") : idx("EB-W02"), uidS = m ? idx("EB-M03") : idx("EB-W03");
-    const onUid = cur().view === "uid";
+    const dash = m ? idx("EB-M01") : idx("EB-W01"), dlg = m ? idx("EB-M02") : idx("EB-W02");
     const open = document.getElementById("open-claim");
-    const inPlace = onUid;
-    if (open) open.onclick = () => { if (inPlace) { S.inModal = true; render(); } else go(dlg, 0); };
-    const close = () => { if (inPlace) { S.inModal = false; render(); } else go(dash, 0); };
+    if (open) open.onclick = () => go(dlg, 0);
+    const close = () => go(dash, 0);
     document.getElementById("close")?.addEventListener("click", close);
     document.getElementById("scrim")?.addEventListener("click", close);
     const conf = document.getElementById("confirm");
-    if (conf) conf.onclick = () => { S.toast = L().toast; if (onUid) { S.inModal = false; go(S.si, 1, cc().c.uid); } else go(dash, 1); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); };
-    // linked uid → uid detail
-    scaler.querySelectorAll("[data-uid]").forEach(el => el.onclick = e => {
-      e.stopPropagation(); lastDash = S.ci; go(uidS, S.ci, el.dataset.uid);
-    });
-    document.getElementById("back")?.addEventListener("click", () => go(dash, S.ci));
+    if (conf) conf.onclick = () => { S.toast = L().toast; go(dash, 1); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); };
     document.getElementById("res-ok")?.addEventListener("click", () => { S.hideRes = true; render(); });
     document.getElementById("res-close")?.addEventListener("click", () => go(dash, 2));
     const csToast = () => { S.toast = L().chatToast; render(); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); };
@@ -846,14 +792,8 @@ button, select { font: inherit; cursor: pointer; }
       document.getElementById("iv-cs")?.addEventListener("click", () => { S.toast = L().chatToast; render(); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); });
     }
   }
-  let uidOverride = null, lastDash = 0;
-  function go(si, ci, uid) {
+  function go(si, ci) {
     S.si = si; S.ci = ci; S.inModal = false; S.hideRes = false;
-    // allow viewing any linked UID within the matching case
-    if (SCREENS[si].view === "uid") {
-      if (uid) S.uid = uid;
-      SCREENS[si].cases.forEach(x => { x.c.uid = S.uid || "850358337912128386"; });
-    }
     render();
   }
   function fromHash() {
