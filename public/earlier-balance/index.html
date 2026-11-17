@@ -151,6 +151,24 @@ button, select { font: inherit; cursor: pointer; }
 .eb-tip > span { position: absolute; left: 0; top: 28px; z-index: 20; width: 240px; max-width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 12px; border: 1px solid #E7E5E4; background: #fff; color: #0C0A09; font-size: 12.5px; font-weight: 500; line-height: 1.55; word-break: keep-all; box-shadow: 0 16px 36px -12px rgba(12,10,9,.28), 0 2px 8px rgba(12,10,9,.06); opacity: 0; visibility: hidden; transition: opacity .14s, visibility .14s; }
 .eb-tip > span::before { content: ''; position: absolute; left: var(--ar, 16px); top: -6px; width: 10px; height: 10px; rotate: 45deg; background: #fff; border-top: 1px solid #E7E5E4; border-left: 1px solid #E7E5E4; border-top-left-radius: 2px; }
 .eb-tip:hover > span, .eb-tip:focus-within > span { opacity: 1; visibility: visible; }
+/* 버튼 비교안 */
+.eb-right { display: flex; align-items: center; gap: 8px; flex: none; }
+.eb-row.ctr { align-items: center; }
+.eb-row.ctr .eb-label { display: inline-flex; align-items: center; white-space: nowrap; }
+.eb-stack { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.eb-c .eb-stack { align-items: flex-start; }
+.eb-a { cursor: pointer; }
+.eb-a[aria-disabled="true"] { cursor: default; }
+.eb-chev { display: inline-flex; color: #A8A29E; }
+.eb-ing { font-size: 12px; color: var(--tm-text-2); white-space: nowrap; }
+.tm .btn-sm { height: 28px; padding: 0 12px; font-size: 13px; }
+.tm .btn-d { height: 32px; font-size: 13px; }
+.eb-c { margin: 0 16px 16px; padding: 12px 14px; background: #EEF3FF; border-radius: 8px; }
+.eb-c .eb-label { font-size: 12px; font-weight: 500; color: var(--tm-text-2); }
+.eb-c .eb-amt { text-align: left; margin-top: 2px; }
+.eb-link { border: 0; background: none; padding: 0; color: var(--tm-blue); font-weight: 600; font-size: 14px; cursor: pointer; white-space: nowrap; }
+.p-var { margin: 0 0 14px; padding: 10px 12px; border-radius: 8px; background: #EEF3FF; font-size: 12.5px; line-height: 1.55; color: #1E3A8A; }
+.p-var b { display: block; margin-bottom: 2px; }
 .eb-sub { font-size: 12px; color: var(--tm-text-2); margin-top: 2px; line-height: 1.4; }
 .eb-amt { font-size: 16px; font-weight: 600; white-space: nowrap; text-align: right; }
 .eb-amt small { display: block; font-size: 11px; font-weight: 400; color: var(--tm-text-2); }
@@ -352,6 +370,9 @@ button, select { font: inherit; cursor: pointer; }
   <button class="arrow" id="next" aria-label="다음 화면">›</button>
   <div class="cases" id="cases"></div>
   <span class="vsep"></span>
+  <span class="lbl">버튼 안</span>
+  <div class="seg" role="group" aria-label="기존 잔액 버튼 비교안" id="var-seg"><button data-v="cur">현재</button><button data-v="A">A</button><button data-v="B">B</button><button data-v="C">C</button><button data-v="D">D</button></div>
+  <span class="vsep"></span>
   <span class="lbl">보기</span>
   <div class="seg" role="group" aria-label="배율"><button id="fit-on" aria-pressed="true">창에 맞춤</button><button id="fit-off" aria-pressed="false">100%</button></div>
   <button class="btn-bar" id="restart">↻ 처음부터</button>
@@ -389,7 +410,7 @@ button, select { font: inherit; cursor: pointer; }
     en: {
       nav: ["Cashback", "Rewards Hub", "Discover"], total: "Total Cashback Balance", auto: "Auto Claim",
       eb: "Previous Balance", ebSub: "Cashback earned before Auto Claim started that hasn't been claimed yet. You need to claim this amount yourself.",
-      ebBtn: "Claim Previous Balance", ebIngBtn: "Claim in progress", resDoneT: "Previous Balance claim completed", resDoneSub: "Cashback you earn from now on is paid with Auto Claim.", resPartT: "Previous Balance partially claimed", resPartSub: "Please contact Support about the UIDs that weren't processed.", resGrpOk: "Completed", resGrpFail: "Not processed", resRemain: "Remaining amount", resEvtPaid: "Claimed", resPaid: "Claimed amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with exchange cashback you earn later.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `Please contact Support.`, resClose: "Close", errT: "Couldn't submit your claim. Please try again.", chgT: "The amount you can claim has changed. Please review and try again.", resVoidT: "Some Previous Balance can't be claimed", resVoidP: "The UIDs below can no longer be claimed, so their Previous Balance wasn't paid. Please contact Support.", resVoidChip: "Not claimable", resVoidAmt: "Unclaimable amount",
+      ebBtn: "Claim Previous Balance", ebIngBtn: "Claim in progress", ebBtnS: "Claim", ebC1: "Unclaimed Previous Balance", ebCLink: "Claim", resDoneT: "Previous Balance claim completed", resDoneSub: "Cashback you earn from now on is paid with Auto Claim.", resPartT: "Previous Balance partially claimed", resPartSub: "Please contact Support about the UIDs that weren't processed.", resGrpOk: "Completed", resGrpFail: "Not processed", resRemain: "Remaining amount", resEvtPaid: "Claimed", resPaid: "Claimed amount", resCarryLbl: "Moved to Auto Claim", resCarryNote: () => "Remaining event rewards are paid with Auto Claim along with exchange cashback you earn later.", resOk: "OK", resFailT: "Your claim couldn't be processed", resFailP: n => `Please contact Support.`, resClose: "Close", errT: "Couldn't submit your claim. Please try again.", chgT: "The amount you can claim has changed. Please review and try again.", resVoidT: "Some Previous Balance can't be claimed", resVoidP: "The UIDs below can no longer be claimed, so their Previous Balance wasn't paid. Please contact Support.", resVoidChip: "Not claimable", resVoidAmt: "Unclaimable amount",
       lu: "Linked UID", seeAll: "See All", uids: n => `${n} UIDs`, more: "Using multiple exchanges? Link more UIDs",
       exB: "Exclusive Benefits", exE: "Exchange Events", ongoing: "Ongoing", ben: [["TetherMax x Bybit Global League", "Join Global League"], ["Sign up for an exchange", "Get extra Cashback"]],
       prize: "Total Prize Pool", join: "Join Now",
@@ -406,7 +427,7 @@ button, select { font: inherit; cursor: pointer; }
     ko: {
       nav: ["페이백", "리워드 허브", "탐색"], total: "총 페이백 잔액", auto: "자동 출금",
       eb: "기존 잔액", ebSub: "자동 출금 시작 전에 받은 페이백 중 아직 출금되지 않은 금액이에요. 이 금액은 직접 출금 신청해야 해요.",
-      ebBtn: "기존 잔액 출금", ebIngBtn: "출금 처리 중", resDoneT: "기존 잔액 출금이 완료됐어요", resDoneSub: "이후 쌓이는 페이백은 자동으로 출금돼요.", resPartT: "기존 잔액 일부가 출금됐어요", resPartSub: "처리되지 않은 UID는 고객센터로 문의해주세요.", resGrpOk: "출금 완료", resGrpFail: "처리되지 않음", resRemain: "남은 금액", resEvtPaid: "출금됨", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "남은 이벤트 리워드는 이후 쌓이는 거래소 페이백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `고객센터로 문의해주세요.`, resClose: "닫기", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", chgT: "출금할 수 있는 금액이 바뀌었어요. 내용을 확인하고 다시 신청해주세요.", resVoidT: "출금할 수 없는 기존 잔액이 있어요", resVoidP: "아래 UID가 출금할 수 없는 상태로 바뀌어 기존 잔액이 지급되지 않았어요. 고객센터로 문의해주세요.", resVoidChip: "출금 불가", resVoidAmt: "출금 불가 금액",
+      ebBtn: "기존 잔액 출금", ebIngBtn: "출금 처리 중", ebBtnS: "출금", ebC1: "출금하지 않은 기존 잔액", ebCLink: "출금하기", resDoneT: "기존 잔액 출금이 완료됐어요", resDoneSub: "이후 쌓이는 페이백은 자동으로 출금돼요.", resPartT: "기존 잔액 일부가 출금됐어요", resPartSub: "처리되지 않은 UID는 고객센터로 문의해주세요.", resGrpOk: "출금 완료", resGrpFail: "처리되지 않음", resRemain: "남은 금액", resEvtPaid: "출금됨", resPaid: "출금 금액", resCarryLbl: "자동 출금으로 이월됨", resCarryNote: () => "남은 이벤트 리워드는 이후 쌓이는 거래소 페이백과 함께 자동 출금돼요.", resOk: "확인", resFailT: "출금 신청이 처리되지 않았어요", resFailP: n => `고객센터로 문의해주세요.`, resClose: "닫기", errT: "출금 신청을 접수하지 못했어요. 다시 시도해주세요.", chgT: "출금할 수 있는 금액이 바뀌었어요. 내용을 확인하고 다시 신청해주세요.", resVoidT: "출금할 수 없는 기존 잔액이 있어요", resVoidP: "아래 UID가 출금할 수 없는 상태로 바뀌어 기존 잔액이 지급되지 않았어요. 고객센터로 문의해주세요.", resVoidChip: "출금 불가", resVoidAmt: "출금 불가 금액",
       lu: "연동 UID", seeAll: "전체 보기", uids: n => `UID ${n}개`, more: "여러 거래소를 쓰시나요? UID 더 연동하기",
       exB: "회원 전용 혜택", exE: "거래소 이벤트", ongoing: "진행 중", ben: [["TetherMax x Bybit 글로벌 리그", "글로벌 리그 참여"], ["거래소 가입하기", "추가 페이백 받기"]],
       prize: "총 상금", join: "참여하기",
@@ -449,7 +470,14 @@ button, select { font: inherit; cursor: pointer; }
   SCREENS.splice(6, 0,
     { id: "EB-M04", name: "모바일 · 04 초대 리워드 고객센터 안내", dev: "mobile", view: "invite", cases: IV_CS_CASES });
 
-  const S = { inModal: false, si: 0, ci: 0, lang: "en", mk: true, panel: true, fit: true, toast: "" };
+  const S = { inModal: false, si: 0, ci: 0, lang: "en", mk: true, panel: true, fit: true, toast: "", v: "cur" };
+  try { const qv = new URLSearchParams(location.search).get("v"); if (["A", "B", "C", "D"].includes(qv)) S.v = qv; } catch (e) { /* no search */ }
+  const VARS = {
+    A: ["A · 한 줄 리스트 행", "행 전체를 누르면 출금 확인 모달. 처리 중에는 화살표 없이 금액 아래 '출금 처리 중'"],
+    B: ["B · 금액 옆 작은 버튼", "[출금] 버튼을 누르면 출금 확인 모달. 처리 중에는 버튼 없이 금액 아래 '출금 처리 중'"],
+    C: ["C · 카드 하단 안내 박스", "연한 배경 박스. '출금하기'를 누르면 출금 확인 모달. 처리 중에는 '출금하기' 없이 금액 아래 '출금 처리 중'"],
+    D: ["D · 보조 스타일 버튼", "위치는 그대로, 외곽선 + 낮은 높이로 무게를 줄임"]
+  };
   let toastTimer;
   ["pointerover", "focusin"].forEach(ev => document.addEventListener(ev, e => {
     const tip = e.target.closest && e.target.closest(".eb-tip"); if (!tip) return;
@@ -484,18 +512,31 @@ button, select { font: inherit; cursor: pointer; }
   }
   function ebBlock(c) {
     if (!c.eligible) return "";
-    const t = L(), rows = snapRows(c), act = rows;
+    const t = L(), rows = snapRows(c);
     const remain = rows.reduce((a, r) => a + r.remain, 0);
     const mk = n => (c.modal || c.noMk) ? "" : `data-n="${n}"`;
-    let btn;
-    if (c.claimed) {
-      btn = `<button class="btn btn-block" disabled ${mk(3)}>${t.ebIngBtn}</button>`;
-    } else {
-      btn = `<button class="btn btn-primary btn-block" id="open-claim" ${mk(3)}>${t.ebBtn}</button>`;
+    const tip = `<span class="eb-tip"><button type="button" aria-label="${t.eb}">${I.info}</button><span>${t.ebSub}</span></span>`;
+    const amt = `<div class="eb-amt num" ${mk(2)}>${fmt(remain)} USDT</div>`;
+    const ing = `<span class="eb-ing" ${mk(3)}>${t.ebIngBtn}</span>`;
+    if (S.v === "A") {
+      const act = c.claimed ? `aria-disabled="true"` : `id="open-claim" role="button" tabindex="0"`;
+      return `<div class="eb eb-a" ${mk(1)} ${act}><div class="eb-row ctr"><div class="eb-label">${t.eb}${tip}</div>
+        <div class="eb-right">${c.claimed ? `<div class="eb-stack">${amt}${ing}</div>` : amt + `<span class="eb-chev" ${mk(3)}><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`}</div></div></div>`;
     }
+    if (S.v === "B") {
+      const right = c.claimed ? `<div class="eb-stack">${amt}${ing}</div>` : amt + `<button class="btn btn-ol btn-sm" id="open-claim" ${mk(3)}>${t.ebBtnS}</button>`;
+      return `<div class="eb" ${mk(1)}><div class="eb-row ctr"><div class="eb-label">${t.eb}${tip}</div><div class="eb-right">${right}</div></div></div>`;
+    }
+    if (S.v === "C") {
+      const left = `<div class="eb-stack"><div class="eb-label">${t.ebC1}${tip}</div>${amt}${c.claimed ? ing : ""}</div>`;
+      return `<div class="eb-c" ${mk(1)}><div class="eb-row ctr">${left}${c.claimed ? "" : `<button class="eb-link" id="open-claim" ${mk(3)}>${t.ebCLink} ›</button>`}</div></div>`;
+    }
+    const btn = c.claimed
+      ? `<button class="btn btn-block${S.v === "D" ? " btn-d" : ""}" disabled ${mk(3)}>${t.ebIngBtn}</button>`
+      : `<button class="btn ${S.v === "D" ? "btn-ol btn-d" : "btn-primary"} btn-block" id="open-claim" ${mk(3)}>${t.ebBtn}</button>`;
     return `<div class="eb" ${mk(1)}>
-      <div class="eb-row"><div><div class="eb-label">${t.eb}<span class="eb-tip"><button type="button" aria-label="${t.eb}">${I.info}</button><span>${t.ebSub}</span></span></div></div>
-        <div class="eb-amt num" ${mk(2)}>${fmt(remain)} USDT</div></div>
+      <div class="eb-row"><div><div class="eb-label">${t.eb}${tip}</div></div>
+        ${amt}</div>
       ${btn}</div>`;
   }
 
@@ -757,7 +798,8 @@ button, select { font: inherit; cursor: pointer; }
 
   function panelHtml() {
     const key = cur().id.slice(3).replace("M", "W"), d = DESC[key][cc().k], c = cc().c;
-    return `<div class="p-ids"><span>${cid()}</span></div>
+    const vn = S.v !== "cur" && key === "W01" ? `<div class="p-var"><b>비교안 ${VARS[S.v][0]}</b>${VARS[S.v][1]}</div>` : "";
+    return `<div class="p-ids"><span>${cid()}</span></div>${vn}
       <h3 class="p-title">${d[0]}</h3>${Array.isArray(d[1]) ? `<ul class="p-lead p-bul">${d[1].map(x => `<li>${x}</li>`).join("")}</ul>` : `<p class="p-lead">${d[1]}</p>`}
       ${d[2].length ? `<ol class="p-list">${d[2].map((x, i) => { const [m, sub] = Array.isArray(x) ? x : [x, null]; return `<li data-go="${i + 1}"><span class="n">${i + 1}</span><span>${sub ? `<span class="p-m">${m}</span>` : m}${sub ? `<ul class="p-sub">${sub.map(y => `<li>${y}</li>`).join("")}</ul>` : ""}</span></li>`; }).join("")}</ol>` : ""}
       ${d[3] ? `<div class="p-rules"><div class="p-rules-h">노출 규칙</div>${d[3].map(r => `<section class="p-sec"><div class="p-sec-h">${r.h}</div>${r.table ? `<table class="p-tbl"><tr><th>합친 결과</th><th>팝업</th></tr>${r.table.map(([c, n, k]) => `<tr class="${k === r.cur ? "cur" : ""}"><td>${c}</td><td>${n}${k === r.cur ? " · 이 화면" : ""}</td></tr>`).join("")}</table>` : `<${r.ol ? "ol" : "ul"} class="p-ul">${r.items.map(x => `<li>${x}</li>`).join("")}</${r.ol ? "ol" : "ul"}>`}</section>`).join("")}</div>` : ""}
@@ -778,6 +820,7 @@ button, select { font: inherit; cursor: pointer; }
     const c = S.inModal ? { ...cc().c, modal: true } : cc().c, dev = cur().dev;
     scaler.innerHTML = dev === "web" ? webScreen(c) : mobileScreen(c);
     document.body.classList.toggle("show-mk", S.mk);
+    document.querySelectorAll("#var-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === S.v)));
     bars();
     const ns = [...scaler.querySelectorAll("[data-n]")].map(e => +e.dataset.n);
     document.getElementById("mk-count").textContent = ns.length ? Math.max(...ns) : 0;
@@ -805,7 +848,8 @@ button, select { font: inherit; cursor: pointer; }
     const m = isMob(), c = cc().c, hasIng = (c.ing || []).length > 0 && !c.claimed;
     const dash = m ? idx("EB-M01") : idx("EB-W01"), dlg = m ? idx("EB-M02") : idx("EB-W02");
     const open = document.getElementById("open-claim");
-    if (open) open.onclick = () => go(dlg, 0);
+    if (open) { open.onclick = () => go(dlg, 0); open.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(dlg, 0); } }; }
+    scaler.querySelectorAll(".eb-tip > button").forEach(b => b.addEventListener("click", e => e.stopPropagation()));
     const close = () => go(dash, 0);
     document.getElementById("close")?.addEventListener("click", close);
     document.getElementById("scrim")?.addEventListener("click", close);
@@ -837,6 +881,10 @@ button, select { font: inherit; cursor: pointer; }
   document.getElementById("mk-toggle").onchange = e => { S.mk = e.target.checked; render(); };
   document.getElementById("panel-toggle").onclick = () => { S.panel = !S.panel; render(); };
   document.getElementById("panel-close").onclick = () => { S.panel = false; render(); };
+  document.querySelectorAll("#var-seg button").forEach(b => b.onclick = () => {
+    S.v = b.dataset.v; render();
+    try { history.replaceState(null, "", location.pathname + (S.v !== "cur" ? "?v=" + S.v : "") + "#" + cid()); } catch (e) { /* preview iframe */ }
+  });
   document.getElementById("fit-on").onclick = () => { S.fit = true; render(); };
   document.getElementById("fit-off").onclick = () => { S.fit = false; render(); };
   document.getElementById("restart").onclick = () => { S.toast = ""; go(0, 0); };
