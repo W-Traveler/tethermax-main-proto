@@ -402,8 +402,9 @@ body.show-mk .c7 .mk{outline-offset:-2px}
 .c7-title em{font-style:normal;color:#7a99ff}
 .c7-desc{margin-top:12px;font:500 15px/1.55 "Noto Sans KR",var(--font-tm);letter-spacing:-.01em;color:#dbe3f5;word-break:keep-all}
 .c7-foot{padding:24px 20px 26px;flex:none}
-.c7-dots{display:flex;gap:6px;padding:0 8px;margin-bottom:22px}
-.c7-dots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.25);transition:width .25s}.c7-dots i.on{width:20px;background:#fff}
+.c7-dots{display:flex;gap:0;padding:0 2px;margin:-6px 0 2px}
+.c7-dots button{padding:12px 6px;border:0;background:transparent;cursor:pointer;display:flex;align-items:center}
+.c7-dots i{display:block;width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.3);transition:width .25s}.c7-dots .on i{width:24px;background:#fff}
 .c7-cta{display:flex;flex-direction:column;gap:10px}
 .c7-cta button{height:54px;border-radius:12px;border:0;font:700 16px/1 "Noto Sans KR",var(--font-tm)}
 .c7-cta .p{background:#0031c6;color:#fff}.c7-cta .s{background:#fff;color:#111}
@@ -614,7 +615,7 @@ const C = {
 const SCREENS = [
   {id:"OB-M01", name:"모바일 · 01 로그인 전 온보딩 캐러셀 (OB-M01)", cases:[
     {k:"a", label:"1장 · UID 연동", title:"로그인 전 온보딩 캐러셀 · 1장 UID 연동 안내",
-     bullets:["기존 인트로 3장을 대체합니다.","노출: 앱 실행 시 비로그인 상태","좌우 스와이프로 이동합니다. 캐러셀을 끝까지 보지 않아도 하단 버튼으로 바로 가입·로그인할 수 있습니다.",
+     bullets:["기존 인트로 3장을 대체합니다.","노출: 앱 실행 시 비로그인 상태","좌우 스와이프 또는 하단 인디케이터 탭으로 이동합니다. 캐러셀을 끝까지 보지 않아도 하단 버튼으로 바로 가입·로그인할 수 있습니다.",
               "디자인 원본: 피그마 Working file(Andrew) · 08 온보딩 캐러셀 1~3장 세트"],
      items:[{h:"이미지",b:["테더맥스 타일 + 주요 코인 9종 배치 (BTC · ETH · USDT · SOL · XRP · DOGE · LINK · TRX · AVAX)","배경·타일은 AI 생성, 코인 로고는 cryptocurrency-icons(CC0) · 실제 적용 시 원본 로고 에셋으로 교체 필요"]},
             {h:"파트너 배지",b:["Official Partners with Top Exchanges","375px 기준 한 줄, 320px 기기는 축약 문구 또는 11px 필요"]},
@@ -1072,7 +1073,7 @@ function intro(page){
   if(page===3) c3v=0;
   const hero=`<div class="c7-hero">${heroStage(page)}</div>`;
   const text=`<div class="c7-text">${badge}<div class="c7-title">${t('p'+page+'t')}</div><div class="c7-desc">${t('p'+page+'b')}</div></div>`;
-  const dots=`<div class="c7-dots">${[1,2,3].map(i=>`<i class="${i===page?'on':''}"></i>`).join('')}</div>`;
+  const dots=`<div class="c7-dots">${[1,2,3].map(i=>`<button class="${i===page?'on':''}" data-dot="${i}" aria-label="${i}"><i></i></button>`).join('')}</div>`;
   const cta=`<div class="c7-cta"><button class="p" data-go="auth">${t('create')}</button><button class="s" data-go="auth">${t('login')}</button></div>`;
   return `<div class="c7">
     <div class="c7-swipe${anim}" id="swipe">${noMk?`<div class="c7-hw">${hero}</div>`:`<div class="mk c7-hw" data-n="1"><span class="n">1</span>${hero}</div>`}${mk(2,text)}</div>
@@ -1156,7 +1157,7 @@ function goId(id){
 function carouselStep(delta){
   const order=["OB-M01-a","OB-M01-b","OB-M01-c"];
   const i=order.indexOf(curId()); if(i<0) return;
-  const j=i+delta; if(j<0||j>=order.length) return;
+  const j=i+delta; if(!delta||j<0||j>=order.length) return;
   dir=delta>0?"in-l":"in-r"; goId(order[j]);
 }
 
@@ -1164,6 +1165,8 @@ function carouselStep(delta){
 let ttTimer;
 function ttoast(msg){ let el=$('#scr .ttoast'); if(!el){el=document.createElement('div');el.className='ttoast';$('#scr').appendChild(el);} el.textContent=msg; el.classList.add('on'); clearTimeout(ttTimer); ttTimer=setTimeout(()=>el.classList.remove('on'),2400); }
 $('#scr').addEventListener('click',e=>{
+  const d=e.target.closest('[data-dot]');
+  if(d){ const order=["OB-M01-a","OB-M01-b","OB-M01-c"], i=order.indexOf(curId()); return carouselStep(+d.dataset.dot-1-i); }
   const b=e.target.closest('[data-go]'); if(!b) return;
   const g=b.dataset.go;
   if(g==="auth"){ goId("OB-M02-a"); return ttoast("[프로토타입] 회원가입·로그인 완료 후 홈 진입"); }
