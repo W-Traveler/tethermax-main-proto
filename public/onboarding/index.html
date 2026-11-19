@@ -380,8 +380,9 @@ body.show-mk .mk>.n{display:block}
 .mcw{animation:drop 5s ease-in-out infinite}@keyframes drop{50%{transform:translateY(7px)}}
 .pvis{margin:0 -24px;height:400px;position:relative;overflow:hidden;background:#eef2fc;border-radius:0 0 28px 28px}
 .pvis .pm{position:absolute;left:50%;top:54px;width:240px;height:470px;margin-left:-120px;box-sizing:border-box;border-radius:40px;padding:7px;background:#10141c;box-shadow:0 34px 60px -24px rgba(16,32,90,.45)}
-.pvis .pm>div{width:100%;height:100%;border-radius:33px;overflow:hidden;background:#f8fafc;position:relative}
+.pvis .pm>div{width:100%;height:100%;border-radius:33px;overflow:hidden;background:#fff;position:relative}
 .pvis .isl{position:absolute;left:50%;top:9px;width:68px;height:20px;margin-left:-34px;border-radius:12px;background:#10141c}
+.pvis .pshot{position:absolute;left:0;top:28px;width:100%;display:block}
 .pvis .pb{padding:44px 12px 0;display:flex;flex-direction:column;gap:8px;font-size:8.5px}
 .pvis .lg{display:flex;align-items:center;gap:5px;color:#0031c6;font-size:12px;font-weight:700}
 .pvis .cc{background:#fff;border-radius:10px;padding:10px;box-shadow:0 1px 3px rgba(15,23,42,.06)}
@@ -1091,11 +1092,7 @@ function intro(page){
 function notiPreview(){
   const ko=lang==='ko';
   const rw=(d,a)=>`<div class="rw"><span>${t('s3done')} <i>11.${d}</i></span><b>+${a} USDT</b></div>`;
-  return `<div class="pvis"><div class="pm"><div><div class="isl"></div><div class="pb">
-      <div class="lg"><svg width="18" height="10" viewBox="0 0 26 14"><path d="${LOGO_PATH}" fill="none" stroke="#0031c6" stroke-width="2.6"/></svg>TetherMax</div>
-      <div class="cc" style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:8px;color:rgba(0,0,0,.55)">${t('bal')}</div><div style="font-size:16px;font-weight:700;letter-spacing:-.02em">1,296.92 <span style="font-size:9px">USDT</span></div></div><span style="display:flex;align-items:center;gap:4px;background:#eef2ff;color:#0031c6;border-radius:6px;padding:4px 6px;font-size:8px;font-weight:600"><span style="width:5px;height:5px;border-radius:50%;background:#22c55e"></span>${t('acOn')}</span></div>
-      <div class="cc"><b style="font-size:9px">${t('ph')}</b>${rw('18','12.40')}${rw('17','8.15')}${rw('16','15.02')}</div>
-    </div></div></div>
+  return `<div class="pvis"><div class="pm"><div><div class="isl"></div><img class="pshot" src="mock_home_en.webp" alt=""></div></div>
     <div class="push"><div class="npv-ic"><svg width="24" height="13" viewBox="0 0 26 14"><path d="${LOGO_PATH}" fill="none" stroke="#fff" stroke-width="2.2"/></svg></div>
       <div class="npv-tx"><div class="npv-hd"><span>${t('npApp')}</span><span>${t('npNow')}</span></div><div class="npv-tt">${t('npT')}</div><div class="npv-bd">${t('npB')}</div></div></div></div>`;
 }
