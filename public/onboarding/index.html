@@ -1068,7 +1068,7 @@ document.addEventListener('animationiteration',e=>{ if(!e.target.classList||!e.t
   el.textContent='+'+c3v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' USDT'; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); },true);
 function intro(page){
   const anim=dir?` ${dir}`:"", first=page===1;
-  const badge=page===1?`<div class="c7-badge"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l2.4 1.8 3-.2 1 2.8 2.6 1.6-.8 2.9 1 2.9-2.6 1.6-1 2.8-3-.2L12 22l-2.4-1.8-3 .2-1-2.8-2.6-1.6.8-2.9-1-2.9 2.6-1.6 1-2.8 3 .2z" fill="#6e96ff"/><path d="M8 12.3l2.7 2.7L16.2 9.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>${t('badge')}</div>`:'';
+  const badge=page===1?`<div class="c7-badge"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2l2.4 1.8 3-.2 1 2.8 2.6 1.6-.8 2.9 1 2.9-2.6 1.6-1 2.8-3-.2L12 22l-2.4-1.8-3 .2-1-2.8-2.6-1.6.8-2.9-1-2.9 2.6-1.6 1-2.8 3 .2z" fill="#6e96ff"/><path d="M8 12.3l2.7 2.7L16.2 9.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>${t('badge')}</div>`:`<div class="c7-badge" aria-hidden="true" style="visibility:hidden">&nbsp;</div>`;
   if(page===3) c3v=0;
   const hero=`<div class="c7-hero">${heroStage(page)}</div>`;
   const text=`<div class="c7-text">${badge}<div class="c7-title">${t('p'+page+'t')}</div><div class="c7-desc">${t('p'+page+'b')}</div></div>`;
