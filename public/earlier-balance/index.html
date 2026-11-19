@@ -155,9 +155,11 @@ button, select { font: inherit; cursor: pointer; }
 .eb-tip { position: static; display: inline-flex; }
 .eb-tip > button { display: grid; place-items: center; width: 20px; height: 20px; border: 0; padding: 0; background: none; border-radius: 9999px; color: #A8A29E; cursor: pointer; }
 .eb-tip > button:hover, .eb-tip > button:focus { color: #57534E; background: #F5F5F4; outline: none; }
-.eb-tip > span { position: absolute; left: 0; top: 28px; z-index: 20; width: 240px; max-width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 12px; border: 1px solid #E7E5E4; background: #fff; color: #0C0A09; font-size: 12.5px; font-weight: 500; line-height: 1.55; word-break: keep-all; box-shadow: 0 16px 36px -12px rgba(12,10,9,.28), 0 2px 8px rgba(12,10,9,.06); opacity: 0; visibility: hidden; transition: opacity .14s, visibility .14s; }
-.eb-tip > span::before { content: ''; position: absolute; left: var(--ar, 16px); top: -6px; width: 10px; height: 10px; rotate: 45deg; background: #fff; border-top: 1px solid #E7E5E4; border-left: 1px solid #E7E5E4; border-top-left-radius: 2px; }
-.eb-tip:hover > span, .eb-tip:focus-within > span { opacity: 1; visibility: visible; }
+.eb-tip > span { display: none; }
+/* 툴팁: 화면(웹 페이지 · 모바일 기기) 기준으로 띄우고 좌우 끝에 맞춰 위치 보정 */
+.tipf { position: absolute; z-index: 60; box-sizing: border-box; padding: 10px 12px; border-radius: 12px; border: 1px solid #E7E5E4; background: #fff; color: #0C0A09; font-size: 12.5px; font-weight: 500; line-height: 1.55; white-space: normal; word-break: keep-all; overflow-wrap: break-word; text-align: left; box-shadow: 0 16px 36px -12px rgba(12,10,9,.28), 0 2px 8px rgba(12,10,9,.06); pointer-events: none; }
+.tipf::before { content: ''; position: absolute; left: var(--ar, 16px); top: -6px; width: 10px; height: 10px; rotate: 45deg; background: #fff; border-top: 1px solid #E7E5E4; border-left: 1px solid #E7E5E4; border-top-left-radius: 2px; }
+.tipf.up::before { top: auto; bottom: -6px; rotate: 225deg; }
 /* 버튼 비교안 */
 .eb-right { display: flex; align-items: center; gap: 8px; flex: none; }
 .eb-row.ctr { align-items: center; }
@@ -176,7 +178,6 @@ button, select { font: inherit; cursor: pointer; }
 .eb-pill .eb-link { margin-left: auto; font-size: 13px; }
 .eb-pill.is-ing { flex-wrap: wrap; row-gap: 2px; border-radius: 12px; }
 .eb-pill.is-ing .eb-ing { flex-basis: 100%; }
-.eb-pill .eb-tip > span { top: 30px; }
 .iv-inl .eb-link { font-size: 12px; margin-left: 6px; }
 .eb-c { margin: 0 16px 16px; padding: 12px 14px; background: #EEF3FF; border-radius: 8px; }
 .eb-c .eb-label { font-size: 12px; font-weight: 500; color: var(--tm-text-2); }
@@ -500,12 +501,30 @@ button, select { font: inherit; cursor: pointer; }
     D: ["D · 문장 끝 링크", "안내 문장 끝에 '고객센터 문의 ›' 링크. 누르면 고객센터 창"]
   };
   let toastTimer;
+  function hideTip() { document.querySelectorAll(".tipf").forEach(x => x.remove()); }
+  function showTip(tip) {
+    hideTip();
+    const btn = tip.querySelector("button"), src = tip.querySelector("span");
+    const root = tip.closest(".screen") || tip.closest(".tm") || document.getElementById("scaler");
+    const rr = root.getBoundingClientRect(), b = btn.getBoundingClientRect(), k = rr.width / root.offsetWidth || 1;
+    const W = root.clientWidth, H = root.clientHeight, M = 12;
+    const f = document.createElement("div"); f.className = "tipf"; f.setAttribute("role", "tooltip"); f.textContent = src.textContent;
+    f.style.width = Math.min(280, W - M * 2) + "px"; root.appendChild(f);
+    const cx = (b.left + b.width / 2 - rr.left) / k, bt = (b.top - rr.top) / k, bb = (b.bottom - rr.top) / k;
+    const left = Math.max(M, Math.min(cx - 21, W - f.offsetWidth - M));
+    let top = bb + 8; const up = top + f.offsetHeight > H - M && bt - 8 - f.offsetHeight >= M;
+    if (up) { top = bt - 8 - f.offsetHeight; f.classList.add("up"); }
+    f.style.left = left + "px"; f.style.top = top + "px";
+    f.style.setProperty("--ar", Math.max(10, Math.min(cx - left - 5, f.offsetWidth - 20)) + "px");
+  }
   ["pointerover", "focusin"].forEach(ev => document.addEventListener(ev, e => {
-    const tip = e.target.closest && e.target.closest(".eb-tip"); if (!tip) return;
-    const row = tip.closest(".eb-row"), btn = tip.querySelector("button"), bub = tip.querySelector("span");
-    const r = row.getBoundingClientRect(), b = btn.getBoundingClientRect(), k = r.width / row.offsetWidth || 1;
-    bub.style.setProperty("--ar", ((b.left + b.width / 2 - r.left) / k - 5) + "px");
+    const tip = e.target.closest && e.target.closest(".eb-tip"); if (tip) showTip(tip);
   }, true));
+  ["pointerout", "focusout"].forEach(ev => document.addEventListener(ev, e => {
+    const tip = e.target.closest && e.target.closest(".eb-tip"); if (!tip) return;
+    if (e.relatedTarget && tip.contains(e.relatedTarget)) return; hideTip();
+  }, true));
+  document.addEventListener("scroll", hideTip, true);
   const cur = () => SCREENS[S.si], cc = () => cur().cases[S.ci], cid = () => `${cur().id}-${cc().k}`, L = () => T[S.lang];
   const isMob = () => cur().dev === "mobile";
   const idx = id => SCREENS.findIndex(s => s.id === id);
@@ -881,7 +900,7 @@ button, select { font: inherit; cursor: pointer; }
     const dash = m ? idx("EB-M01") : idx("EB-W01"), dlg = m ? idx("EB-M02") : idx("EB-W02");
     const open = document.getElementById("open-claim");
     if (open) { open.onclick = () => go(dlg, 0); open.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(dlg, 0); } }; }
-    scaler.querySelectorAll(".eb-tip > button").forEach(b => b.addEventListener("click", e => e.stopPropagation()));
+    scaler.querySelectorAll(".eb-tip > button").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); showTip(b.parentElement); }));
     const close = () => go(dash, 0);
     document.getElementById("close")?.addEventListener("click", close);
     document.getElementById("scrim")?.addEventListener("click", close);
