@@ -170,6 +170,14 @@ button, select { font: inherit; cursor: pointer; }
 .eb-ing { font-size: 12px; color: var(--tm-text-2); white-space: nowrap; }
 .tm .btn-sm { height: 28px; padding: 0 12px; font-size: 13px; }
 .tm .btn-d { height: 32px; font-size: 13px; }
+.eb-pill { margin: 0 16px 16px; display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 9999px; background: #EEF3FF; font-size: 13px; position: relative; }
+.eb-pill .eb-label { font-size: 13px; font-weight: 500; color: var(--tm-text-2); display: inline-flex; align-items: center; white-space: nowrap; }
+.eb-pill .eb-amt { font-size: 13px; font-weight: 600; white-space: nowrap; }
+.eb-pill .eb-link { margin-left: auto; font-size: 13px; }
+.eb-pill.is-ing { flex-wrap: wrap; row-gap: 2px; border-radius: 12px; }
+.eb-pill.is-ing .eb-ing { flex-basis: 100%; }
+.eb-pill .eb-tip > span { top: 30px; }
+.iv-inl .eb-link { font-size: 12px; margin-left: 6px; }
 .eb-c { margin: 0 16px 16px; padding: 12px 14px; background: #EEF3FF; border-radius: 8px; }
 .eb-c .eb-label { font-size: 12px; font-weight: 500; color: var(--tm-text-2); }
 .eb-c .eb-amt { text-align: left; margin-top: 2px; }
@@ -483,13 +491,13 @@ button, select { font: inherit; cursor: pointer; }
     A: ["A · 한 줄 리스트 행", "행 전체를 누르면 출금 확인 모달. 처리 중에는 화살표 없이 금액 아래 '출금 처리 중'"],
     B: ["B · 금액 옆 작은 버튼", "[출금] 버튼을 누르면 출금 확인 모달. 처리 중에는 버튼 없이 금액 아래 '출금 처리 중'"],
     C: ["C · 카드 하단 안내 박스", "연한 배경 박스. '출금하기'를 누르면 출금 확인 모달. 처리 중에는 '출금하기' 없이 금액 아래 '출금 처리 중'"],
-    D: ["D · 보조 스타일 버튼", "위치는 그대로, 외곽선 + 낮은 높이로 무게를 줄임"]
+    D: ["D · 한 줄 칩", "영역 대신 연한 배경의 한 줄 칩. '출금하기 ›'를 누르면 출금 확인 모달. 처리 중에는 '출금하기' 없이 칩 안 아래 줄에 '출금 처리 중'"]
   };
   const VARS_IV = {
     A: ["A · 한 줄 리스트 행", "안내 문구 줄 전체를 누르면 고객센터 창. 오른쪽 화살표"],
     B: ["B · 문구 옆 작은 버튼", "안내 문구 오른쪽 작은 [고객센터 문의] 버튼"],
     C: ["C · 안내 박스", "연한 배경 박스. '고객센터 문의 ›'를 누르면 고객센터 창. 웹은 문구 오른쪽, 모바일은 문구 아래"],
-    D: ["D · 보조 스타일 버튼", "위치는 그대로, 버튼 높이만 낮춤"]
+    D: ["D · 문장 끝 링크", "안내 문장 끝에 '고객센터 문의 ›' 링크. 누르면 고객센터 창"]
   };
   let toastTimer;
   ["pointerover", "focusin"].forEach(ev => document.addEventListener(ev, e => {
@@ -544,9 +552,13 @@ button, select { font: inherit; cursor: pointer; }
       const left = `<div class="eb-stack"><div class="eb-label">${t.ebC1}${tip}</div>${amt}${c.claimed ? ing : ""}</div>`;
       return `<div class="eb-c" ${mk(1)}><div class="eb-row ctr">${left}${c.claimed ? "" : `<button class="eb-link" id="open-claim" ${mk(3)}>${t.ebCLink} ›</button>`}</div></div>`;
     }
+    if (S.v === "D") {
+      const right = c.claimed ? ing : `<button class="eb-link" id="open-claim" ${mk(3)}>${t.ebCLink} ›</button>`;
+      return `<div class="eb-pill eb-row${c.claimed ? " is-ing" : ""}" ${mk(1)}><span class="eb-label">${t.eb}${tip}</span><span class="eb-amt num" ${mk(2)}>${fmt(remain)} USDT</span>${right}</div>`;
+    }
     const btn = c.claimed
-      ? `<button class="btn btn-block${S.v === "D" ? " btn-d" : ""}" disabled ${mk(3)}>${t.ebIngBtn}</button>`
-      : `<button class="btn ${S.v === "D" ? "btn-ol btn-d" : "btn-primary"} btn-block" id="open-claim" ${mk(3)}>${t.ebBtn}</button>`;
+      ? `<button class="btn btn-block" disabled ${mk(3)}>${t.ebIngBtn}</button>`
+      : `<button class="btn btn-primary btn-block" id="open-claim" ${mk(3)}>${t.ebBtn}</button>`;
     return `<div class="eb" ${mk(1)}>
       <div class="eb-row"><div><div class="eb-label">${t.eb}${tip}</div></div>
         ${amt}</div>
@@ -660,8 +672,7 @@ button, select { font: inherit; cursor: pointer; }
     if (S.v === "A") return `<div class="iv-v eb-a" id="iv-cs" role="button" tabindex="0" ${mk(1)}><div class="eb-row">${sub}${chev}</div></div>`;
     if (S.v === "B") return `<div class="iv-v" ${mk(1)}><div class="eb-row">${sub}<button class="btn btn-ol btn-sm" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div></div>`;
     if (S.v === "C") return `<div class="iv-v eb-c" ${mk(1)}><div class="eb-row${isMob() ? " iv-col" : ""}">${sub}<button class="eb-link" id="iv-cs" ${mk(2)}>${t.ivCsBtn} ›</button></div></div>`;
-    if (S.v === "D") return `<div class="eb eb-in" ${mk(1)}><div class="eb-sub" style="margin:0 0 10px">${t.ivCsSub}</div>
-      <button class="btn btn-ol btn-block btn-d" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div>`;
+    if (S.v === "D") return `<div class="iv-v iv-inl" ${mk(1)}><div class="eb-sub">${t.ivCsSub}<button class="eb-link" id="iv-cs" ${mk(2)}>${t.ivCsBtn} ›</button></div></div>`;
     return `<div class="eb eb-in" ${mk(1)}><div class="eb-sub" style="margin:0 0 10px">${t.ivCsSub}</div>
       <button class="btn btn-ol btn-block" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div>`;
   }
