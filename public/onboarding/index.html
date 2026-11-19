@@ -1167,7 +1167,7 @@ $('#scr').addEventListener('click',e=>{
   const b=e.target.closest('[data-go]'); if(!b) return;
   const g=b.dataset.go;
   if(g==="auth"){ goId("OB-M02-a"); return ttoast("[프로토타입] 회원가입·로그인 완료 후 홈 진입"); }
-  if(g==="settings"){ goId("OB-M04-d"); return ttoast("[프로토타입] 설정 앱에서 알림을 켜고 복귀한 상태 (꺼진 채 복귀: OB-M04-e)"); }
+  if(g==="settings"){ return ttoast("[프로토타입] 앱 설정 페이지로 이동"); }
   if(g==="os"){ return goId(osPlat==="android"?"OB-M03-b":"OB-M03-a"); }
   goId(g);
 });
