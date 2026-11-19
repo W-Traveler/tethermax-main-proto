@@ -143,6 +143,12 @@ button, select { font: inherit; cursor: pointer; }
 /* previous balance */
 .eb { border-top: 1px solid var(--tm-divider); margin: 0 16px; padding: 14px 0 16px; display: flex; flex-direction: column; gap: 10px; }
 .eb.eb-in { margin: 8px 0 0; padding-bottom: 0; }
+.iv-v { margin-top: 8px; border-top: 1px solid var(--tm-divider); padding-top: 14px; }
+.iv-v .eb-row { align-items: center; }
+.iv-v .eb-sub { margin: 0; flex: 1; min-width: 0; }
+.iv-v .btn-sm { flex: none; white-space: nowrap; }
+.iv-v.eb-c { margin: 8px 0 0; border-top: 0; padding: 12px 14px; }
+.iv-v.eb-c .eb-sub { color: var(--tm-text-2); }
 .eb-row { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .eb-label { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
 .eb-tip { position: static; display: inline-flex; }
@@ -478,6 +484,12 @@ button, select { font: inherit; cursor: pointer; }
     C: ["C · 카드 하단 안내 박스", "연한 배경 박스. '출금하기'를 누르면 출금 확인 모달. 처리 중에는 '출금하기' 없이 금액 아래 '출금 처리 중'"],
     D: ["D · 보조 스타일 버튼", "위치는 그대로, 외곽선 + 낮은 높이로 무게를 줄임"]
   };
+  const VARS_IV = {
+    A: ["A · 한 줄 리스트 행", "안내 문구 줄 전체를 누르면 고객센터 창. 오른쪽 화살표"],
+    B: ["B · 문구 옆 작은 버튼", "안내 문구 오른쪽 작은 [고객센터 문의] 버튼"],
+    C: ["C · 안내 박스", "연한 배경 박스. 오른쪽 '고객센터 문의 ›'를 누르면 고객센터 창"],
+    D: ["D · 보조 스타일 버튼", "위치는 그대로, 버튼 높이만 낮춤"]
+  };
   let toastTimer;
   ["pointerover", "focusin"].forEach(ev => document.addEventListener(ev, e => {
     const tip = e.target.closest && e.target.closest(".eb-tip"); if (!tip) return;
@@ -642,6 +654,13 @@ button, select { font: inherit; cursor: pointer; }
   function ivBlock(c) {
     if (c.inv !== "cs") return "";
     const t = L(), mk = n => `data-n="${n}"`;
+    const sub = `<div class="eb-sub">${t.ivCsSub}</div>`;
+    const chev = `<span class="eb-chev" ${mk(2)}><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+    if (S.v === "A") return `<div class="iv-v eb-a" id="iv-cs" role="button" tabindex="0" ${mk(1)}><div class="eb-row">${sub}${chev}</div></div>`;
+    if (S.v === "B") return `<div class="iv-v" ${mk(1)}><div class="eb-row">${sub}<button class="btn btn-ol btn-sm" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div></div>`;
+    if (S.v === "C") return `<div class="iv-v eb-c" ${mk(1)}><div class="eb-row">${sub}<button class="eb-link" id="iv-cs" ${mk(2)}>${t.ivCsBtn} ›</button></div></div>`;
+    if (S.v === "D") return `<div class="eb eb-in" ${mk(1)}><div class="eb-sub" style="margin:0 0 10px">${t.ivCsSub}</div>
+      <button class="btn btn-ol btn-block btn-d" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div>`;
     return `<div class="eb eb-in" ${mk(1)}><div class="eb-sub" style="margin:0 0 10px">${t.ivCsSub}</div>
       <button class="btn btn-ol btn-block" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div>`;
   }
@@ -798,7 +817,8 @@ button, select { font: inherit; cursor: pointer; }
 
   function panelHtml() {
     const key = cur().id.slice(3).replace("M", "W"), d = DESC[key][cc().k], c = cc().c;
-    const vn = S.v !== "cur" && key === "W01" ? `<div class="p-var"><b>비교안 ${VARS[S.v][0]}</b>${VARS[S.v][1]}</div>` : "";
+    const VV = key === "W01" ? VARS : key === "W04" ? VARS_IV : null;
+    const vn = S.v !== "cur" && VV ? `<div class="p-var"><b>비교안 ${VV[S.v][0]}</b>${VV[S.v][1]}</div>` : "";
     return `<div class="p-ids"><span>${cid()}</span></div>${vn}
       <h3 class="p-title">${d[0]}</h3>${Array.isArray(d[1]) ? `<ul class="p-lead p-bul">${d[1].map(x => `<li>${x}</li>`).join("")}</ul>` : `<p class="p-lead">${d[1]}</p>`}
       ${d[2].length ? `<ol class="p-list">${d[2].map((x, i) => { const [m, sub] = Array.isArray(x) ? x : [x, null]; return `<li data-go="${i + 1}"><span class="n">${i + 1}</span><span>${sub ? `<span class="p-m">${m}</span>` : m}${sub ? `<ul class="p-sub">${sub.map(y => `<li>${y}</li>`).join("")}</ul>` : ""}</span></li>`; }).join("")}</ol>` : ""}
@@ -860,6 +880,7 @@ button, select { font: inherit; cursor: pointer; }
     const csToast = () => { S.toast = L().chatToast; render(); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); };
     scaler.querySelectorAll("#res-cs").forEach(el => el.addEventListener("click", e => { e.stopPropagation(); S.hideRes = true; csToast(); }));
     if (cur().view === "invite") {
+      document.getElementById("iv-cs")?.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } });
       document.getElementById("iv-cs")?.addEventListener("click", () => { S.toast = L().chatToast; render(); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; render(); }, 2600); });
     }
   }
