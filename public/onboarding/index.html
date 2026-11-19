@@ -594,7 +594,7 @@ const C = {
     on:"Turn On Notifications", later:"Not Now", settings:"Open Settings",
     n1:"Cashback credited", n1s:"Bitget · 12.40 USDT", n2:"Payback Boost is live", n2s:"Higher cashback rate today",
     iosT:"“TetherMax” Would Like to Send You Notifications", iosD:"Notifications may include alerts, sounds, and icon badges. These can be configured in Settings.", iosNo:"Don’t Allow", iosYes:"Allow",
-    tOn:"Notifications are on.", tOff:"Notifications are off. You won’t receive alerts.",
+    tOn:"Notifications are on.", tOff:"To get alerts, turn on notifications in Settings.",
     anT:"Allow <b>TetherMax</b> to send you notifications?", anYes:"Allow", anNo:"Don’t allow"
   },
   ko:{
@@ -611,7 +611,7 @@ const C = {
     on:"알림 받기", later:"나중에", settings:"설정에서 알림 켜기",
     n1:"페이백이 입금되었습니다", n1s:"Bitget · 12.40 USDT", n2:"페이백 부스트 시작", n2s:"오늘 하루 적립률 상향",
     iosT:"'TetherMax'에서 알림을 보내고자 합니다.", iosD:"경고, 사운드 및 아이콘 배지가 알림에 포함될 수 있습니다. 설정에서 이를 구성할 수 있습니다.", iosNo:"허용 안 함", iosYes:"허용",
-    tOn:"알림이 켜졌습니다.", tOff:"알림이 꺼져 있어 알림을 받을 수 없습니다.",
+    tOn:"알림이 켜졌습니다.", tOff:"알림을 받으려면 설정에서 기기 알림을 켜 주세요.",
     anT:"<b>TetherMax</b>에서 알림을 보내도록 허용하시겠습니까?", anYes:"허용", anNo:"허용 안함"
   }
 };
@@ -670,7 +670,7 @@ const SCREENS = [
      items:[{h:"토스트 NP-T01",b:["문구: 알림이 켜졌습니다","2~3초 후 자동으로 사라짐"]}]},
     {k:"b", label:"허용 안 함", perm:"denied", title:"풀팝업 종료 · 알림 허용 안 함 후 홈",
      bullets:["OS 팝업에서 [허용 안 함]을 누른 직후 상태입니다."],
-     items:[{h:"토스트 NP-T02",b:["토스트 NP-T02 노출 (E07)","문구: 알림이 꺼져 있어 알림을 받을 수 없습니다 · 문구 확정 필요"]},
+     items:[{h:"토스트 NP-T02",b:["토스트 NP-T02 노출 (E07)","문구: 알림을 받으려면 설정에서 기기 알림을 켜 주세요. · 문구 확정 필요"]},
             {h:"재노출",b:["이후 재노출은 판정 결과에 따름 (iOS는 b형 · Android 13 이상은 1회 거부 후 a형 1번 더), 14일 경과 후 다음 앱 실행 시 재판정, 노출 횟수 공유"]}]},
     {k:"c", label:"나중에", title:"풀팝업 종료 · 나중에 선택 후 홈",
      bullets:["[나중에] 또는 Android 뒤로가기로 풀팝업을 닫은 상태입니다. (a형·b형 공통)"],
@@ -681,7 +681,7 @@ const SCREENS = [
      items:[{h:"토스트 NP-T01",b:["문구: 알림이 켜졌습니다","설정 이동 플래그 해제"]}]},
     {k:"e", label:"설정 복귀 · 꺼짐", perm:"denied", title:"설정 앱 복귀 후 알림 꺼짐",
      bullets:["b형 [설정에서 알림 켜기] → 설정 앱에서 켜지 않고 앱 복귀 직후 상태입니다."],
-     items:[{h:"토스트 NP-T02",b:["1회 노출 · 문구: 알림이 꺼져 있어 알림을 받을 수 없습니다","문구 확정 필요"]},
+     items:[{h:"토스트 NP-T02",b:["1회 노출 · 문구: 알림을 받으려면 설정에서 기기 알림을 켜 주세요.","문구 확정 필요"]},
             {h:"이후 처리",b:["설정 이동 플래그 해제","풀팝업 재노출 없음 (앱 새로 실행이 아님)"]}]}
   ]}
 ];
