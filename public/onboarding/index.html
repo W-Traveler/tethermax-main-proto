@@ -643,9 +643,9 @@ const SCREENS = [
             {h:"[나중에]",b:["풀팝업 닫기 → OB-M04-c","14일 경과 후 다음 앱 실행 시 재판정, 최대 3회","Android 뒤로가기 동일"]}]},
     {k:"c", label:"b형 · 설정 이동", perm:"denied", title:"알림 안내 풀팝업 · b형 설정 이동형",
      bullets:["노출 조건: 앱 새로 실행 후 메인 화면 표시 시 판정 · 기기 알림 Off + OS 허용 창 띄울 수 없음 (이미 거부 · Android 12 이하) + 노출 3회 미만 + 마지막 노출 후 14일 경과. 노출 횟수는 a형과 공유",
-              "OS 팝업을 다시 띄울 수 없어 설정 이동으로 안내합니다."],
-     items:[{h:"알림 예시",b:["a형과 같은 출금 완료 푸시 알림 예시"]},
-            {h:"제목·본문",b:["제목: 알림이 꺼져 있습니다","본문: 페이백 입금 소식을 받으려면 설정에서 테더맥스 알림을 켜 주세요. (기존 문구 유지)"]},
+              "OS 팝업을 다시 띄울 수 없어 설정 이동으로 안내합니다.","제목 · 본문 · 수신 항목은 a형과 같고 CTA만 다릅니다."],
+     items:[{h:"알림 예시",b:["a형과 동일 (출금 완료 푸시 알림 예시)"]},
+            {h:"수신 항목",b:["a형과 동일"]},
             {h:"[설정에서 알림 켜기]",b:["설정 앱 TetherMax 알림 화면으로 이동 + 설정 이동 플래그 저장","iOS: 알림 설정 화면 직행 가능 여부 개발 확인 / Android: 앱 알림 설정 화면 / 미지원 시 앱 정보 화면 (E13)","복귀 결과 → OB-M04-d (켜짐) / OB-M04-e (꺼짐)"]},
             {h:"[나중에]",b:["풀팝업 닫기 → OB-M04-c","Android 뒤로가기 동일"]}]}
   ]},
@@ -1092,15 +1092,11 @@ function notiPreview(){
       <div class="npv-tx"><div class="npv-hd"><span>${t('npApp')}</span><span>${t('npNow')}</span></div><div class="npv-tt">${t('npT')}</div><div class="npv-bd">${t('npB')}</div></div></div></div>`;
 }
 /* OB-M02: post-login notification soft-ask modal */
-function notiModal(kind){ // a: a형 OS 허용 창형, c: b형 설정 이동형
-  let body, acts;
-  if(kind==="c"){
-    body=`${mk(1,notiPreview())}${mk(2,`<div class="mtitle">${t('ntD')}</div><div class="mdesc">${t('nbD')}</div>`)}`;
-    acts=mk(3,`<button class="btnp" data-go="settings">${t('settings')}</button>`)+mk(4,`<button class="btng" data-go="OB-M04-c">${t('later')}</button>`);
-  } else {
-    body=`${mk(1,notiPreview())}<div class="mtitle">${t('nt')}</div><div class="mdesc">${t('nb')}</div>${mk(2,`<ul class="mlist"><li>${t('l1')}</li><li>${t('l2')}</li></ul>`)}`;
-    acts=mk(3,`<button class="btnp" data-go="os">${t('on')}</button>`)+mk(4,`<button class="btng" data-go="OB-M04-c">${t('later')}</button>`);
-  }
+function notiModal(kind){ // a: a형 OS 허용 창형, c: b형 설정 이동형 (본문 동일, CTA만 다름)
+  const body=`${mk(1,notiPreview())}<div class="mtitle">${t('nt')}</div><div class="mdesc">${t('nb')}</div>${mk(2,`<ul class="mlist"><li>${t('l1')}</li><li>${t('l2')}</li></ul>`)}`;
+  const acts=kind==="c"
+    ? mk(3,`<button class="btnp" data-go="settings">${t('settings')}</button>`)+mk(4,`<button class="btng" data-go="OB-M04-c">${t('later')}</button>`)
+    : mk(3,`<button class="btnp" data-go="os">${t('on')}</button>`)+mk(4,`<button class="btng" data-go="OB-M04-c">${t('later')}</button>`);
   return `<div class="fullp"><div class="fp-body">${body}</div><div class="fp-act">${acts}</div></div>`;
 }
 function iosAlert(){
