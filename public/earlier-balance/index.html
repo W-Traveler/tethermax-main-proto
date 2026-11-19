@@ -149,6 +149,7 @@ button, select { font: inherit; cursor: pointer; }
 .iv-v .btn-sm { flex: none; white-space: nowrap; }
 .iv-v.eb-c { margin: 8px 0 0; border-top: 0; padding: 12px 14px; }
 .iv-v.eb-c .eb-sub { color: var(--tm-text-2); }
+.iv-v .eb-row.iv-col { flex-direction: column; align-items: flex-start; gap: 8px; }
 .eb-row { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .eb-label { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
 .eb-tip { position: static; display: inline-flex; }
@@ -487,7 +488,7 @@ button, select { font: inherit; cursor: pointer; }
   const VARS_IV = {
     A: ["A · 한 줄 리스트 행", "안내 문구 줄 전체를 누르면 고객센터 창. 오른쪽 화살표"],
     B: ["B · 문구 옆 작은 버튼", "안내 문구 오른쪽 작은 [고객센터 문의] 버튼"],
-    C: ["C · 안내 박스", "연한 배경 박스. 오른쪽 '고객센터 문의 ›'를 누르면 고객센터 창"],
+    C: ["C · 안내 박스", "연한 배경 박스. '고객센터 문의 ›'를 누르면 고객센터 창. 웹은 문구 오른쪽, 모바일은 문구 아래"],
     D: ["D · 보조 스타일 버튼", "위치는 그대로, 버튼 높이만 낮춤"]
   };
   let toastTimer;
@@ -658,7 +659,7 @@ button, select { font: inherit; cursor: pointer; }
     const chev = `<span class="eb-chev" ${mk(2)}><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
     if (S.v === "A") return `<div class="iv-v eb-a" id="iv-cs" role="button" tabindex="0" ${mk(1)}><div class="eb-row">${sub}${chev}</div></div>`;
     if (S.v === "B") return `<div class="iv-v" ${mk(1)}><div class="eb-row">${sub}<button class="btn btn-ol btn-sm" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div></div>`;
-    if (S.v === "C") return `<div class="iv-v eb-c" ${mk(1)}><div class="eb-row">${sub}<button class="eb-link" id="iv-cs" ${mk(2)}>${t.ivCsBtn} ›</button></div></div>`;
+    if (S.v === "C") return `<div class="iv-v eb-c" ${mk(1)}><div class="eb-row${isMob() ? " iv-col" : ""}">${sub}<button class="eb-link" id="iv-cs" ${mk(2)}>${t.ivCsBtn} ›</button></div></div>`;
     if (S.v === "D") return `<div class="eb eb-in" ${mk(1)}><div class="eb-sub" style="margin:0 0 10px">${t.ivCsSub}</div>
       <button class="btn btn-ol btn-block btn-d" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div>`;
     return `<div class="eb eb-in" ${mk(1)}><div class="eb-sub" style="margin:0 0 10px">${t.ivCsSub}</div>
