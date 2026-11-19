@@ -396,7 +396,7 @@ body.show-mk .mk>.n{display:block}
 .c7-foot>.mk:first-child>.n{left:auto;right:6px;top:-6px}
 body.show-mk .c7 .mk{outline-offset:-2px}
 .c7-swipe.in-l .c7-hero,.c7-swipe.in-l .c7-text{animation:inl .35s ease}.c7-swipe.in-r .c7-hero,.c7-swipe.in-r .c7-text{animation:inr .35s ease}
-.c7-text{padding:8px 28px 0;position:relative}
+.c7-text{padding:8px 28px 0;position:relative;min-height:174px;box-sizing:border-box}
 .c7-badge{display:inline-flex;align-items:center;gap:6px;height:30px;box-sizing:border-box;padding:0 12px 0 10px;border-radius:15px;background:#102a8a;border:1px solid rgba(90,130,255,.7);font:700 13px/1 "Noto Sans KR",var(--font-tm);letter-spacing:-.005em;margin-bottom:12px;white-space:nowrap}
 .c7-title{font:700 24px/1.35 "Noto Sans KR",var(--font-tm);letter-spacing:-.02em;word-break:keep-all}
 .c7-title em{font-style:normal;color:#7a99ff}
@@ -415,7 +415,7 @@ body.show-mk .c7 .mk{outline-offset:-2px}
 /* carousel v8 — interactions */
 .c7-hero{flex:1 1 0;min-height:0;position:relative;overflow:hidden;background:#060918}
 .c7-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:56px;background:linear-gradient(rgba(6,9,24,0),#060918);pointer-events:none}
-.hstage{position:absolute;left:50%;top:50%;width:390px;height:470px;transform:translate(-50%,-52%) scale(.9615);transform-origin:50% 50%}
+.hstage{position:absolute;left:50%;top:50%;width:390px;height:470px;transform:translate(-50%,calc(-52% + 22px)) scale(.9615);transform-origin:50% 50%}
 .hstage>*{position:absolute}
 .hstage .full{left:0;top:0;width:390px;height:470px}
 /* 1: orbit */
