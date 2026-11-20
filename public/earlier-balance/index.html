@@ -147,7 +147,7 @@ button, select { font: inherit; cursor: pointer; }
 .iv-v .eb-row { align-items: center; }
 .iv-v .eb-sub { margin: 0; flex: 1; min-width: 0; }
 .iv-v .btn-sm { flex: none; white-space: nowrap; }
-.iv-v.eb-c { margin: 8px 0 0; border-top: 0; padding: 12px 14px; }
+.iv-v.eb-c { margin: 8px -16px -16px; border-top: 0; padding: 12px 16px 14px; border-radius: 0; }
 .iv-v.eb-c .eb-sub { color: var(--tm-text-2); }
 .iv-v .eb-row.iv-col { flex-direction: column; align-items: flex-start; gap: 8px; }
 .eb-row { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
@@ -163,6 +163,7 @@ button, select { font: inherit; cursor: pointer; }
 /* 버튼 비교안 */
 .eb-right { display: flex; align-items: center; gap: 8px; flex: none; }
 .eb-row.ctr { align-items: center; }
+.bal .eb-row:not(.ctr) { align-items: baseline; }
 .eb-row.ctr .eb-label { display: inline-flex; align-items: center; white-space: nowrap; }
 .eb-stack { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
 .eb-c .eb-stack { align-items: flex-start; }
@@ -172,14 +173,12 @@ button, select { font: inherit; cursor: pointer; }
 .eb-ing { font-size: 12px; color: var(--tm-text-2); white-space: nowrap; }
 .tm .btn-sm { height: 28px; padding: 0 12px; font-size: 13px; }
 .tm .btn-d { height: 32px; font-size: 13px; }
-.eb-pill { margin: 0 16px 16px; display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 9999px; background: #EEF3FF; font-size: 13px; position: relative; }
+.eb-pill { margin: 0; display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; background: #EEF3FF; font-size: 13px; position: relative; }
 .eb-pill .eb-label { font-size: 13px; font-weight: 500; color: var(--tm-text-2); display: inline-flex; align-items: center; white-space: nowrap; }
 .eb-pill .eb-amt { font-size: 13px; font-weight: 600; white-space: nowrap; }
-.eb-pill .eb-link { margin-left: auto; font-size: 13px; }
-.eb-pill.is-ing { flex-wrap: wrap; row-gap: 2px; border-radius: 12px; }
-.eb-pill.is-ing .eb-ing { flex-basis: 100%; }
+.eb-pill .eb-link { font-size: 13px; }
 .iv-inl .eb-link { font-size: 12px; margin-left: 6px; }
-.eb-c { margin: 0 16px 16px; padding: 12px 14px; background: #EEF3FF; border-radius: 8px; }
+.eb-c { margin: 0; padding: 12px 16px 14px; background: #EEF3FF; }
 .eb-c .eb-label { font-size: 12px; font-weight: 500; color: var(--tm-text-2); }
 .eb-c .eb-amt { text-align: left; margin-top: 2px; }
 .eb-link { border: 0; background: none; padding: 0; color: var(--tm-blue); font-weight: 600; font-size: 14px; cursor: pointer; white-space: nowrap; }
@@ -326,7 +325,7 @@ button, select { font: inherit; cursor: pointer; }
 .iv-seg { display: inline-flex; background: #eceff3; border-radius: 4px; padding: 3px; align-self: flex-start; margin-bottom: 24px; }
 .iv-seg span { padding: 4px 8px; font-size: 12px; color: var(--tm-text-2); border-radius: 3px; }
 .iv-seg span.on { background: #fff; color: var(--tm-text); }
-.iv-card { padding: 16px; display: flex; align-items: center; gap: 12px; }
+.iv-card { padding: 16px; overflow: hidden; display: flex; align-items: center; gap: 12px; }
 .iv-card .lbl2 { font-size: 11px; color: var(--tm-text-2); }
 .iv-card .amt2 { font-size: 16px; font-weight: 600; margin-top: 2px; }
 .iv-card .grow { flex: 1; }
@@ -560,20 +559,20 @@ button, select { font: inherit; cursor: pointer; }
     const ing = `<span class="eb-ing" ${mk(3)}>${t.ebIngBtn}</span>`;
     if (S.v === "A") {
       const act = c.claimed ? `aria-disabled="true"` : `id="open-claim" role="button" tabindex="0"`;
-      return `<div class="eb eb-a" ${mk(1)} ${act}><div class="eb-row ctr"><div class="eb-label">${t.eb}${tip}</div>
+      return `<div class="eb eb-a" ${mk(1)} ${act}><div class="eb-row${c.claimed ? "" : " ctr"}"><div class="eb-label">${t.eb}${tip}</div>
         <div class="eb-right">${c.claimed ? `<div class="eb-stack">${amt}${ing}</div>` : amt + `<span class="eb-chev" ${mk(3)}><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`}</div></div></div>`;
     }
     if (S.v === "B") {
       const right = c.claimed ? `<div class="eb-stack">${amt}${ing}</div>` : amt + `<button class="btn btn-ol btn-sm" id="open-claim" ${mk(3)}>${t.ebBtnS}</button>`;
-      return `<div class="eb" ${mk(1)}><div class="eb-row ctr"><div class="eb-label">${t.eb}${tip}</div><div class="eb-right">${right}</div></div></div>`;
+      return `<div class="eb" ${mk(1)}><div class="eb-row${c.claimed ? "" : " ctr"}"><div class="eb-label">${t.eb}${tip}</div><div class="eb-right">${right}</div></div></div>`;
     }
     if (S.v === "C") {
       const left = `<div class="eb-stack"><div class="eb-label">${t.ebC1}${tip}</div>${amt}${c.claimed ? ing : ""}</div>`;
       return `<div class="eb-c" ${mk(1)}><div class="eb-row ctr">${left}${c.claimed ? "" : `<button class="eb-link" id="open-claim" ${mk(3)}>${t.ebCLink} ›</button>`}</div></div>`;
     }
     if (S.v === "D") {
-      const right = c.claimed ? ing : `<button class="eb-link" id="open-claim" ${mk(3)}>${t.ebCLink} ›</button>`;
-      return `<div class="eb-pill eb-row${c.claimed ? " is-ing" : ""}" ${mk(1)}><span class="eb-label">${t.eb}${tip}</span><span class="eb-amt num" ${mk(2)}>${fmt(remain)} USDT</span>${right}</div>`;
+      const right = c.claimed ? `<div class="eb-stack">${amt}${ing}</div>` : amt + `<button class="eb-link" id="open-claim" ${mk(3)}>${t.ebCLink} ›</button>`;
+      return `<div class="eb-pill eb-row${c.claimed ? "" : " ctr"}" ${mk(1)}><span class="eb-label">${t.eb}${tip}</span><div class="eb-right">${right}</div></div>`;
     }
     const btn = c.claimed
       ? `<button class="btn btn-block" disabled ${mk(3)}>${t.ebIngBtn}</button>`
