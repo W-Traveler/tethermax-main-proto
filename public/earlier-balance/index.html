@@ -178,6 +178,7 @@ button, select { font: inherit; cursor: pointer; }
 .eb-pill .eb-amt { font-size: 13px; font-weight: 600; white-space: nowrap; }
 .eb-pill .eb-link { font-size: 13px; }
 .iv-inl .eb-link { font-size: 12px; margin-left: 6px; }
+.iv-inl .eb-row .eb-link { margin-left: 0; flex: none; }
 .eb-c { margin: 0; padding: 12px 16px 14px; background: #EEF3FF; }
 .eb-c .eb-label { font-size: 12px; font-weight: 500; color: var(--tm-text-2); }
 .eb-c .eb-amt { text-align: left; margin-top: 2px; }
@@ -690,7 +691,9 @@ button, select { font: inherit; cursor: pointer; }
     if (S.v === "A") return `<div class="iv-v eb-a" id="iv-cs" role="button" tabindex="0" ${mk(1)}><div class="eb-row">${sub}${chev}</div></div>`;
     if (S.v === "B") return `<div class="iv-v" ${mk(1)}><div class="eb-row">${sub}<button class="btn btn-ol btn-sm" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div></div>`;
     if (S.v === "C") return `<div class="iv-v eb-c" ${mk(1)}><div class="eb-row${isMob() ? " iv-col" : ""}">${sub}<button class="eb-link" id="iv-cs" ${mk(2)}>${t.ivCsBtn} ›</button></div></div>`;
-    if (S.v === "D") return `<div class="iv-v iv-inl" ${mk(1)}><div class="eb-sub">${t.ivCsSub}<button class="eb-link" id="iv-cs" ${mk(2)}>${t.ivCsBtn} ›</button></div></div>`;
+    if (S.v === "D") return isMob()
+      ? `<div class="iv-v iv-inl" ${mk(1)}><div class="eb-sub">${t.ivCsSub}<button class="eb-link" id="iv-cs" ${mk(2)}>${t.ivCsBtn} ›</button></div></div>`
+      : `<div class="iv-v iv-inl" ${mk(1)}><div class="eb-row" style="align-items:baseline">${sub}<button class="eb-link" id="iv-cs" ${mk(2)}>${t.ivCsBtn} ›</button></div></div>`;
     return `<div class="eb eb-in" ${mk(1)}><div class="eb-sub" style="margin:0 0 10px">${t.ivCsSub}</div>
       <button class="btn btn-ol btn-block" id="iv-cs" ${mk(2)}>${t.ivCsBtn}</button></div>`;
   }
