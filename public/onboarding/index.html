@@ -45,6 +45,8 @@ button{font-family:inherit;cursor:pointer}
 .case.on{background:var(--case);border-color:var(--case);color:#fff}
 .case.on code{background:rgba(255,255,255,.2)}
 .vsep{width:1px;height:20px;background:var(--bar-line);margin:0 2px}
+.reset.auto{background:#1f2937;color:#e5e7eb;border:1px solid #374151}.reset.auto.off{background:#fde68a;color:#111;border-color:#fde68a}
+#scr.autoPaused .c7-dots .on i>b{animation-play-state:paused}
 .reset{height:30px;border:0;border-radius:8px;background:#fff;color:#111;font-size:13px;font-weight:600;padding:0 10px}
 
 /* ---------- main ---------- */
@@ -561,6 +563,7 @@ body.show-mk .c7 .mk{outline-offset:-2px}
     <span class="lbl">보기</span>
     <div class="seg" id="zoomSeg"><button data-v="fit" class="on">창에 맞춤</button><button data-v="100">100%</button></div>
     <button class="reset" id="resetBtn">↻ 처음부터</button>
+    <button class="reset auto" id="autoBtn" title="캐러셀 자동 넘김">⏸ 자동 넘김 정지</button>
   </div>
 </div>
 
@@ -625,7 +628,7 @@ const SCREENS = [
               "노출: 앱 실행 시 비로그인 상태",
               "이동: 5초마다 다음 장으로 자동 이동 · 3장 다음은 1장으로 돌아가 반복 · 좌우 스와이프 또는 상단 인디케이터 탭으로 직접 이동",
               "가입 · 로그인: 캐러셀을 끝까지 보지 않아도 하단 버튼으로 바로 진행",
-              "디자인 원본: 피그마 Working file(Andrew) · 08 온보딩 캐러셀 1~3장 세트"],
+],
      items:[{h:"파트너 배지",b:["문구: Official Partners with Top Exchanges","길이: 375px 기준 한 줄 · 320px 기기는 축약 문구 또는 11px 필요"]},
             {h:"제목·본문",b:["제목: 거래소 UID만 연동하면 / 거래 수수료를 페이백해드려요","본문: 신규 계정 생성부터 UID 연동까지 3분이면 모두 마칠 수 있습니다.","확인 필요: '3분' 실제 소요 시간 근거"]},
             {h:"인디케이터",b:["위치: 상태바 아래 3등분 바 · 모든 장 공통","진행: 현재 장 바가 5초 동안 흰색으로 차오른 뒤 다음 장으로 이동 · 지난 장은 흰색, 다음 장은 회색 · 3장이 다 차면 1장으로 돌아가고 바 3개 모두 초기화","탭: 해당 장으로 이동 · 이동한 장부터 다시 5초 시작","개발 확인: 자동 이동 시간"]},
@@ -1167,7 +1170,7 @@ function render(){
   const dark=id.startsWith("OB-M01");
   $('#scr').classList.toggle('darkscr',dark);
   $('#scr').innerHTML=sbar(dark)+screenHTML(id);
-  clearTimeout(autoT); if(/^OB-M01-[abc]$/.test(id)) autoT=setTimeout(()=>{ if(curId()!==id) return; if(id==="OB-M01-c"){ dir="in-l"; goId("OB-M01-a"); } else carouselStep(1); },IND_DUR);
+  clearTimeout(autoT); $('#scr').classList.toggle('autoPaused',autoPaused); if(!autoPaused && /^OB-M01-[abc]$/.test(id)) autoT=setTimeout(()=>{ if(curId()!==id) return; if(id==="OB-M01-c"){ dir="in-l"; goId("OB-M01-a"); } else carouselStep(1); },IND_DUR);
   dir="";
   $('#sel').value=sIdx;
   $('#cases').innerHTML=sc.cases.map((c,i)=>`<button class="case${i===cIdx?' on':''}" data-i="${i}"><code>${sc.id}-${c.k}</code>${c.label}</button>`).join("");
@@ -1184,7 +1187,7 @@ function goId(id){
   const c=SCREENS[s].cases.findIndex(x=>x.k===m[2]); if(c<0) return false;
   sIdx=s; cIdx=c; render(); return true;
 }
-const IND_DUR=5000; let autoT; // 캐러셀 자동 넘김, 3장 다음은 1장으로 반복
+const IND_DUR=5000; let autoT, autoPaused=false; // 캐러셀 자동 넘김, 3장 다음은 1장으로 반복
 function carouselStep(delta){
   const order=["OB-M01-a","OB-M01-b","OB-M01-c"];
   const i=order.indexOf(curId()); if(i<0) return;
@@ -1228,6 +1231,7 @@ $('#mkChk').addEventListener('change',e=>document.body.classList.toggle('show-mk
 $('#panelBtn').addEventListener('click',()=>{$('#panel').classList.toggle('off');fit();});
 $('#pClose').addEventListener('click',()=>{$('#panel').classList.add('off');fit();});
 $('#resetBtn').addEventListener('click',()=>{goId("OB-M01-a");});
+$('#autoBtn').addEventListener('click',()=>{ autoPaused=!autoPaused; const b=$('#autoBtn'); b.classList.toggle('off',autoPaused); b.textContent=autoPaused?'▶ 자동 넘김 재생':'⏸ 자동 넘김 정지'; if(autoPaused){ clearTimeout(autoT); $('#scr').classList.add('autoPaused'); } else { dir=''; goId(curId()); } });
 window.addEventListener('hashchange',()=>{const h=location.hash.slice(1); if(h && h!==curId()) goId(h);});
 window.addEventListener('resize',fit);
 document.addEventListener('keydown',e=>{ if(e.target.tagName==='SELECT') return; if(e.key==='ArrowRight') carouselStep(1); if(e.key==='ArrowLeft') carouselStep(-1); });
