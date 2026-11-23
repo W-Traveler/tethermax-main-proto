@@ -417,8 +417,8 @@ body.show-mk .c7 .mk{outline-offset:-2px}
 .c7-cta button{height:54px;border-radius:12px;border:0;font:700 16px/1 "Noto Sans KR",var(--font-tm)}
 .c7-cta .p{background:#0031c6;color:#fff}.c7-cta .s{background:#fff;color:#111}
 /* carousel v8 — interactions */
-.c7-hero{flex:1 1 0;min-height:0;position:relative;overflow:hidden;background:#060918}
-.c7-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:56px;background:linear-gradient(rgba(6,9,24,0),#060918);pointer-events:none}
+.c7-hero{flex:1 1 0;min-height:0;position:relative;overflow:hidden;background:#060918;-webkit-mask-image:linear-gradient(#000 calc(100% - 6px),transparent);mask-image:linear-gradient(#000 calc(100% - 6px),transparent)}
+.c7-hero::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:58px;background:linear-gradient(rgba(6,9,24,0),#060918);pointer-events:none}
 .hstage{position:absolute;left:50%;top:50%;width:390px;height:470px;transform:translate(-50%,calc(-52% + 22px)) scale(.9615);transform-origin:50% 50%}
 .hstage>*{position:absolute}
 .hstage .full{left:0;top:0;width:390px;height:470px}
@@ -578,9 +578,9 @@ body.show-mk .c7 .mk{outline-offset:-2px}
     <button class="nav" id="nextS">›</button>
     <div class="cases" id="cases"></div>
     <span class="vsep"></span>
-    <span class="lbl">서비스</span>
+    <span id="brandWrap" style="display:contents"><span class="lbl">서비스</span>
     <div class="seg" id="brandSeg"><button data-v="tm">TetherMax</button><button data-v="pb">Paybacks</button></div>
-    <span class="vsep"></span>
+    <span class="vsep"></span></span>
     <span class="lbl">보기</span>
     <div class="seg" id="zoomSeg"><button data-v="fit" class="on">창에 맞춤</button><button data-v="100">100%</button></div>
     <button class="reset" id="resetBtn">↻ 처음부터</button>
@@ -1203,6 +1203,7 @@ function render(){
   const sc=SCREENS[sIdx], cs=sc.cases[cIdx], id=curId();
   if(id==='OB-M03-a') osPlat='ios'; if(id==='OB-M03-b') osPlat='android';
   const dark=id.startsWith("OB-M01") && brand!=="pb";
+  const bw=document.getElementById("brandWrap"); if(bw) bw.style.display=id.startsWith("OB-M01")?"contents":"none";
   $('#scr').classList.toggle('darkscr',dark);
   $('#scr').innerHTML=sbar(dark)+screenHTML(id);
   clearTimeout(autoT); $('#scr').classList.toggle('autoPaused',autoPaused); if(!autoPaused && /^OB-M01-[abc]$/.test(id)) autoT=setTimeout(()=>{ if(curId()!==id) return; if(id==="OB-M01-c"){ dir="in-l"; goId("OB-M01-a"); } else carouselStep(1); },IND_DUR);
