@@ -735,7 +735,7 @@ const SCREENS = [
   ]}
 ];
 
-const plab=x=>x.replace(/^([^:<]{1,14}):\s*/,'<b class="plb">$1</b> ');
+const plab=x=>{ if(brand==="pb" && SCREENS[sIdx] && SCREENS[sIdx].id==="OB-M01" && !x.startsWith("서비스")) x=x.replace(/테더맥스/g,"페이백스").replace(/TetherMax/g,"Paybacks"); return x.replace(/^([^:<]{1,14}):\s*/,'<b class="plb">$1</b> '); };
 /* ================= state ================= */
 let lang="en", sIdx=0, cIdx=0, zoom="fit", dir="";
 const $=s=>document.querySelector(s);
