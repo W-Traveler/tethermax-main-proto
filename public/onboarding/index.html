@@ -424,6 +424,14 @@ body.show-mk .c7 .mk{outline-offset:-2px}
 .hstage .full{left:0;top:0;width:390px;height:470px}
 
 /* Paybacks light */
+#scr.brand-pb .btnp{background:#6d4aff}
+#scr.brand-pb .mlist li::before{background:#6d4aff}
+#scr.brand-pb .pvis{background:#f1edff}
+#scr.brand-pb .npv-ic{background:#fff}
+.pbhome{position:relative;height:765px;background:#f8f8fa;overflow:hidden}
+.pbhome>img{display:block;width:375px}
+.pbhome .pbtab{position:absolute;left:0;right:0;bottom:0;height:96px;background:#fff;border-top:1px solid #f1edff}
+.pbhome .pbtab img{display:block;width:375px}
 .c7.pb{background:#f6f3ff;color:#1b1724}
 .c7.pb .c7-hero{background:#f6f3ff}
 .c7.pb .c7-hero::after{background:linear-gradient(rgba(246,243,255,0),#f6f3ff)}
@@ -679,7 +687,7 @@ const SCREENS = [
   {id:"OB-M01", name:"모바일 · 01 로그인 전 온보딩 캐러셀 (OB-M01)", cases:[
     {k:"a", label:"1장 · UID 연동", title:"로그인 전 온보딩 캐러셀 · 1장 UID 연동 안내",
      bullets:["변경: 기존 인트로 3장 대체",
-              "서비스: 상단 [TetherMax · Paybacks] 토글로 전환 · Paybacks는 리브랜딩 라이트 테마 (Figma Paybacks Light 기준)",
+              "서비스: 상단 [TetherMax · Paybacks] 토글로 전환 · 기본값 Paybacks (리브랜딩 라이트 테마, Figma Paybacks Light 기준) · OB-M01~M04 공통 적용",
               "노출: 앱 실행 시 비로그인 상태",
               "이동: 5초마다 다음 장으로 자동 이동 · 3장 다음은 1장으로 돌아가 반복 · 좌우 스와이프 또는 상단 인디케이터 탭으로 직접 이동",
               "가입 · 로그인: 캐러셀을 끝까지 보지 않아도 하단 버튼으로 바로 진행",
@@ -768,11 +776,12 @@ const SCREENS = [
   ]}
 ];
 
-const plab=x=>{ if(brand==="pb" && SCREENS[sIdx] && SCREENS[sIdx].id==="OB-M01" && !x.startsWith("서비스")) x=x.replace(/테더맥스/g,"페이백스").replace(/TetherMax/g,"Paybacks"); return x.replace(/^([^:<]{1,14}):\s*/,'<b class="plb">$1</b> '); };
+const plab=x=>{ if(brand==="pb" && !x.startsWith("서비스")) x=x.replace(/테더맥스/g,"페이백스").replace(/TetherMax/g,"Paybacks"); return x.replace(/^([^:<]{1,14}):\s*/,'<b class="plb">$1</b> '); };
 /* ================= state ================= */
 let lang="en", sIdx=0, cIdx=0, zoom="fit", dir="";
 const $=s=>document.querySelector(s);
-const t=k=>C[lang][k];
+let brand=(new URLSearchParams(location.search).get("brand")==="tm")?"tm":"pb"; // 기본값 Paybacks
+const t=k=>{ const v=C[lang][k]; return (brand==="pb"&&typeof v==="string")?v.replace(/TetherMax/g,"Paybacks").replace(/테더맥스/g,"페이백스"):v; };
 const LOGO_PATH='M7 1a6 6 0 1 0 0 12c2.4 0 4-1.6 6-6s3.6-6 6-6a6 6 0 1 1 0 12c-2.4 0-4-1.6-6-6S9.4 1 7 1z';
 const logoSvg=(c)=>`<svg viewBox="0 0 26 14"><path d="${LOGO_PATH}" fill="none" stroke="${c}" stroke-width="2.4"/></svg>`;
 let noMk=false;
@@ -785,6 +794,7 @@ const BELL='<path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 
 const ahead=()=>`<div class="ahead"><div class="logo">${logoSvg('currentColor')}TetherMax</div><div class="aicons"><span class="bellw">${icon(BELL)}<i></i></span>${icon('<circle cx="12" cy="12" r="9" fill="#333" stroke="none"/><circle cx="12" cy="10" r="3.2" fill="#fff" stroke="none"/><path d="M6.8 18.2a6.2 6.2 0 0 1 10.4 0" stroke="#fff" stroke-width="2"/>')}${icon('<path d="M4 7h16M4 12h16M4 17h16"/>')}</div></div>`;
 const CHEV='<svg viewBox="0 0 24 24" class="chev"><path d="M9 6l6 6-6 6" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function home(opt={}){
+  if(brand==="pb") return pbHome();
   if(opt.linked) return `${ahead()}<div class="abody">
     <div class="card balrow"><div><b>0.00 USDT</b><small>${t('bal')}</small></div><button class="acbtn">Auto Claim</button></div>
     <div class="card"><div class="sech"><span>Linked UID</span><a>See All</a></div><div class="uidrow"><div class="ex">BG</div><div style="flex:1"><b>Bitget</b><small><i class="dot"></i>UID 685432171</small></div><b>0.00 USDT</b></div></div>
@@ -951,6 +961,7 @@ function heroStagePB(page){
   if(PB3MODE==='float') return `<div class="hstage"><div class="pb3wrap"><img src="pb3_bg.webp" alt="" style="position:absolute;left:0;top:62px;width:390px;height:532px"><div class="pbsweep"><i></i></div><img class="pbfl u" src="pb3_cu.webp" alt="" style="position:absolute;left:149px;top:162px;width:98px;height:96px"><img class="pbfl l" src="pb3_cl.webp" alt="" style="position:absolute;left:139px;top:251px;width:97px;height:89px"></div>${pbFades(262)}</div>`;
   return `<div class="hstage"><div class="pb3wrap"><div class="pb3anim"><img src="pb3_ring.webp" alt=""><div class="pbsweep"><i></i></div><img src="pb3_stack.webp" alt=""><img class="s s0" src="pb3_coin.webp" alt="" style="top:-14px"><img class="s s1" src="pb3_coin.webp" alt="" style="top:-28px"><img class="s s2" src="pb3_coin.webp" alt="" style="top:-42px"><div class="fc fc0"><div class="fd"><i style="transform:translateZ(-3px)"></i><i style="transform:translateZ(-2px)"></i><i style="transform:translateZ(-1px)"></i><i style="transform:translateZ(0px)"></i><i style="transform:translateZ(1px)"></i><i style="transform:translateZ(2px)"></i><i style="transform:translateZ(3px)"></i><b class="bk"><svg viewBox="0 0 32 32"><path fill="#fff" fill-opacity=".95" fill-rule="evenodd" d="M17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.658 0-.809 2.902-1.486 6.79-1.66v2.644c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.643c3.88.173 6.775.85 6.775 1.658 0 .81-2.895 1.485-6.775 1.657m0-3.59v-2.366h5.414V7.819H8.595v3.608h5.414v2.365c-4.4.202-7.709 1.074-7.709 2.118 0 1.044 3.309 1.915 7.709 2.118v7.582h3.913v-7.584c4.393-.202 7.694-1.073 7.694-2.116 0-1.043-3.301-1.914-7.694-2.117"/></svg></b><b class="ft"><svg viewBox="0 0 32 32"><path fill="#fff" fill-opacity=".95" fill-rule="evenodd" d="M17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.658 0-.809 2.902-1.486 6.79-1.66v2.644c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.643c3.88.173 6.775.85 6.775 1.658 0 .81-2.895 1.485-6.775 1.657m0-3.59v-2.366h5.414V7.819H8.595v3.608h5.414v2.365c-4.4.202-7.709 1.074-7.709 2.118 0 1.044 3.309 1.915 7.709 2.118v7.582h3.913v-7.584c4.393-.202 7.694-1.073 7.694-2.116 0-1.043-3.301-1.914-7.694-2.117"/></svg></b></div></div><div class="fc fc1"><div class="fd"><i style="transform:translateZ(-3px)"></i><i style="transform:translateZ(-2px)"></i><i style="transform:translateZ(-1px)"></i><i style="transform:translateZ(0px)"></i><i style="transform:translateZ(1px)"></i><i style="transform:translateZ(2px)"></i><i style="transform:translateZ(3px)"></i><b class="bk"><svg viewBox="0 0 32 32"><path fill="#fff" fill-opacity=".95" fill-rule="evenodd" d="M17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.658 0-.809 2.902-1.486 6.79-1.66v2.644c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.643c3.88.173 6.775.85 6.775 1.658 0 .81-2.895 1.485-6.775 1.657m0-3.59v-2.366h5.414V7.819H8.595v3.608h5.414v2.365c-4.4.202-7.709 1.074-7.709 2.118 0 1.044 3.309 1.915 7.709 2.118v7.582h3.913v-7.584c4.393-.202 7.694-1.073 7.694-2.116 0-1.043-3.301-1.914-7.694-2.117"/></svg></b><b class="ft"><svg viewBox="0 0 32 32"><path fill="#fff" fill-opacity=".95" fill-rule="evenodd" d="M17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.658 0-.809 2.902-1.486 6.79-1.66v2.644c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.643c3.88.173 6.775.85 6.775 1.658 0 .81-2.895 1.485-6.775 1.657m0-3.59v-2.366h5.414V7.819H8.595v3.608h5.414v2.365c-4.4.202-7.709 1.074-7.709 2.118 0 1.044 3.309 1.915 7.709 2.118v7.582h3.913v-7.584c4.393-.202 7.694-1.073 7.694-2.116 0-1.043-3.301-1.914-7.694-2.117"/></svg></b></div></div><div class="fc fc2"><div class="fd"><i style="transform:translateZ(-3px)"></i><i style="transform:translateZ(-2px)"></i><i style="transform:translateZ(-1px)"></i><i style="transform:translateZ(0px)"></i><i style="transform:translateZ(1px)"></i><i style="transform:translateZ(2px)"></i><i style="transform:translateZ(3px)"></i><b class="bk"><svg viewBox="0 0 32 32"><path fill="#fff" fill-opacity=".95" fill-rule="evenodd" d="M17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.658 0-.809 2.902-1.486 6.79-1.66v2.644c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.643c3.88.173 6.775.85 6.775 1.658 0 .81-2.895 1.485-6.775 1.657m0-3.59v-2.366h5.414V7.819H8.595v3.608h5.414v2.365c-4.4.202-7.709 1.074-7.709 2.118 0 1.044 3.309 1.915 7.709 2.118v7.582h3.913v-7.584c4.393-.202 7.694-1.073 7.694-2.116 0-1.043-3.301-1.914-7.694-2.117"/></svg></b><b class="ft"><svg viewBox="0 0 32 32"><path fill="#fff" fill-opacity=".95" fill-rule="evenodd" d="M17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.658 0-.809 2.902-1.486 6.79-1.66v2.644c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.643c3.88.173 6.775.85 6.775 1.658 0 .81-2.895 1.485-6.775 1.657m0-3.59v-2.366h5.414V7.819H8.595v3.608h5.414v2.365c-4.4.202-7.709 1.074-7.709 2.118 0 1.044 3.309 1.915 7.709 2.118v7.582h3.913v-7.584c4.393-.202 7.694-1.073 7.694-2.116 0-1.043-3.301-1.914-7.694-2.117"/></svg></b></div></div></div><div class="pb3static">${pb3Static}</div></div>${pbFades(262)}</div>`;
 }
+function pbHome(){ return `<div class="pbhome"><img src="pb_home.webp" alt=""><div class="pbtab"><img src="pb_tab.webp" alt=""></div></div>`; }
 function heroStage(page){
   if(page===1) return `<div class="hstage"><img class="full" src="base1.webp" alt=""><div class="orb">${orbHTML()}</div></div>`;
   if(page===2) return `<div class="hstage"><img class="full" src="base2.webp" alt="">${REFL_HTML}${BARS_HTML}<img class="full b2full" src="hero2.webp" alt=""></div>`;
@@ -1192,8 +1203,8 @@ function intro(page){
 function notiPreview(){
   const ko=lang==='ko';
   const rw=(d,a)=>`<div class="rw"><span>${t('s3done')} <i>11.${d}</i></span><b>+${a} USDT</b></div>`;
-  return `<div class="pvis"><div class="pm"><div><div class="isl"></div><img class="pshot" src="mock_home_en.webp" alt=""></div></div>
-    <div class="push"><div class="npv-ic"><svg width="24" height="13" viewBox="0 0 26 14"><path d="${LOGO_PATH}" fill="none" stroke="#fff" stroke-width="2.2"/></svg></div>
+  return `<div class="pvis"><div class="pm"><div><div class="isl"></div><img class="pshot" src="${brand==='pb'?'pb_mock_home.webp':'mock_home_en.webp'}" alt=""></div></div>
+    <div class="push"><div class="npv-ic">${brand==='pb'?'<img src="pb_appicon.png" alt="" style="width:100%;height:100%;border-radius:9px">':`<svg width="24" height="13" viewBox="0 0 26 14"><path d="${LOGO_PATH}" fill="none" stroke="#fff" stroke-width="2.2"/></svg>`}</div>
       <div class="npv-tx"><div class="npv-hd"><span>${t('npApp')}</span><span>${t('npNow')}</span></div><div class="npv-tt">${t('npT')}</div><div class="npv-bd">${t('npB')}</div></div></div></div>`;
 }
 /* OB-M02: post-login notification soft-ask modal */
@@ -1240,8 +1251,9 @@ function render(){
   const sc=SCREENS[sIdx], cs=sc.cases[cIdx], id=curId();
   if(id==='OB-M03-a') osPlat='ios'; if(id==='OB-M03-b') osPlat='android';
   const dark=id.startsWith("OB-M01") && brand!=="pb";
-  const bw=document.getElementById("brandWrap"); if(bw) bw.style.display=id.startsWith("OB-M01")?"contents":"none";
+  const bw=document.getElementById("brandWrap"); if(bw) bw.style.display="contents";
   $('#scr').classList.toggle('darkscr',dark);
+  $('#scr').classList.toggle('brand-pb',brand==="pb");
   $('#scr').innerHTML=sbar(dark)+screenHTML(id);
   clearTimeout(autoT); $('#scr').classList.toggle('autoPaused',autoPaused); if(!autoPaused && /^OB-M01-[abc]$/.test(id)) autoT=setTimeout(()=>{ if(curId()!==id) return; if(id==="OB-M01-c"){ dir="in-l"; goId("OB-M01-a"); } else carouselStep(1); },IND_DUR);
   dir="";
@@ -1261,8 +1273,7 @@ function goId(id){
   sIdx=s; cIdx=c; render(); return true;
 }
 const IND_DUR=5000; let autoT, autoPaused=false;
-let brand=(new URLSearchParams(location.search).get("brand")==="tm")?"tm":"pb"; // 기본값 Paybacks
-const tb=k=>{ const v=t(k); return brand==="pb"?v.replace(/TetherMax/g,"Paybacks").replace(/테더맥스/g,"페이백스"):v; }; // 캐러셀 자동 넘김, 3장 다음은 1장으로 반복
+const tb=t; // 캐러셀 자동 넘김, 3장 다음은 1장으로 반복
 function carouselStep(delta){
   const order=["OB-M01-a","OB-M01-b","OB-M01-c"];
   const i=order.indexOf(curId()); if(i<0) return;
