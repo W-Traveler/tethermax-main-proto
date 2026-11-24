@@ -200,6 +200,29 @@ body.show-mk .mk>.n{display:block}
 .push .ph span{font-size:13px;font-weight:400;color:rgba(60,60,67,.6)}
 .push .pb{font-size:15px;line-height:20px}
 
+/* 알림 설정 (네이티브 · 디자인 파일 02 My Page 앱 Notification Settings 기준) */
+.shead{height:50px;flex:none;display:flex;align-items:center;padding:16px 16px 0}
+.shead .ibtn{width:34px;height:34px;margin-left:-5px}
+.stitle{font:600 14px/20px var(--font-pb);color:var(--t1);padding:16px 16px 16px}
+.sgrp{margin:0 16px 16px;background:#fff;border-radius:8px;box-shadow:0 1px 5px rgba(0,0,0,.05);padding:8px 16px}
+.srow{display:flex;align-items:center;gap:24px;min-height:40px;padding:8px 0}
+.srow span{flex:1;font:500 14px/20px var(--font-pb);color:var(--t1)}
+.srow small{display:block;font:400 12px/18px var(--font-pb);color:var(--t2);margin-top:2px}
+.tg{width:40px;height:24px;border-radius:12px;background:#c9cbd1;border:0;position:relative;flex:none;cursor:pointer;transition:background .15s}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:left .15s}
+.tg.on{background:var(--pb)}.tg.on::after{left:19px}
+.sbanner{margin:0 16px 16px}
+.sbanner .banner{margin:0}
+.dlgdim{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:60;display:flex;align-items:center;justify-content:center;padding:0 16px}
+.dlg{width:100%;background:#fff;border-radius:4px;box-shadow:0 8px 10px rgba(0,0,0,.2),0 16px 24px rgba(0,0,0,.14),0 6px 30px rgba(0,0,0,.12)}
+.dlg h3{font:500 20px/32px var(--font-pb);color:var(--t1);padding:24px 24px 0}
+.dlg p{font:500 14px/20px var(--font-pb);color:var(--t2);padding:8px 24px 0}
+.dlg ul{padding:8px 24px 0 42px;font:400 14px/22px var(--font-pb);color:var(--t2)}
+.dlg ul a{color:var(--t2);text-decoration:underline}
+.dlg .act{display:flex;gap:8px;padding:24px}
+.dlg .act button{flex:1;height:42px;border:0;border-radius:4px;font:500 15px/1 var(--font-pb)}
+.dlg .act .c{background:#f2f2f5;color:var(--t1)}.dlg .act .p{background:var(--pb);color:#fff}
+
 /* 이동 대상 (웹뷰 · 범위 밖) */
 .wv .wbody{flex:1;padding:8px 16px}
 .wv .note{background:#fff7d6;border:1px dashed #d4b23f;color:#6b5300;border-radius:8px;padding:10px 12px;font:500 12.5px/1.5 var(--font-ko);margin-bottom:12px}
@@ -284,7 +307,13 @@ const C={
     anT:"Allow <b>Paybacks</b> to send you notifications?", anYes:"Allow", anNo:"Don’t allow",
     tabs:["Home","Exchange","Events","Benefits"],
     sumT:"Cashback Summary", sumD:"Nov 23", sumTot:"Total cashback", sumN:"범위 밖 · 기존 웹뷰 화면. 알림의 지급일(11월 23일)이 선택된 상태로 열립니다.",
-    pushApp:"Paybacks", now:"now"},
+    pushApp:"Paybacks", now:"now",
+    sTitle:"Notification Settings", sEss:"Essential Notifications", sEssD:"Cashback payouts, UID linking", sMkt:"Marketing Notifications", sMktD:"Events, promotions", sEmail:"Consent to receive email marketing communications",
+    sbB:"Turn them on to get push alerts.",
+    dEssT:"Turn off essential notifications?", dEssB:"You won\u2019t get push alerts for cashback payouts or UID linking. They\u2019ll still appear in Notifications.",
+    dMktT:"Turn Off Notifications?", dMktB:"You won\u2019t receive updates about promotions, rewards, and special events.",
+    cancel:"Cancel", confirm:"Confirm",
+    cdT:"Marketing Consent Details", cdS:"Sender: Paybacks", cdR:"Received On: 2026.11.24 17:15:59", cdD:"Details: Consent to receive marketing notifications", cdTerms:"Terms for Receiving Marketing Information"},
   ko:{title:"알림", tAll:"전체", tCb:"캐시백", tBn:"혜택",
     gToday:"오늘", gYday:"어제", gD21:"11월 21일",
     bnT:"기기 알림이 꺼져 있어요", bnB:"켜면 캐시백 지급 알림을 받을 수 있어요.", bnOn:"켜기",
@@ -295,7 +324,13 @@ const C={
     anT:"<b>Paybacks</b>에서 알림을 보내도록 허용하시겠습니까?", anYes:"허용", anNo:"허용 안함",
     tabs:["홈","거래소","이벤트","혜택"],
     sumT:"캐시백 요약", sumD:"11월 23일", sumTot:"캐시백 합계", sumN:"범위 밖 · 기존 웹뷰 화면. 알림의 지급일(11월 23일)이 선택된 상태로 열립니다.",
-    pushApp:"Paybacks", now:"지금"}
+    pushApp:"Paybacks", now:"지금",
+    sTitle:"알림 설정", sEss:"필수 알림", sEssD:"캐시백 지급, UID 연동", sMkt:"마케팅 알림", sMktD:"이벤트, 프로모션", sEmail:"이메일 마케팅 정보 수신 동의",
+    sbB:"켜면 푸시 알림을 받을 수 있어요.",
+    dEssT:"필수 알림을 끌까요?", dEssB:"캐시백 지급, UID 연동 알림을 푸시로 받지 못해요. 알림함에서는 계속 볼 수 있어요.",
+    dMktT:"알림을 끌까요?", dMktB:"프로모션, 리워드, 이벤트 소식을 받지 못해요.",
+    cancel:"취소", confirm:"확인",
+    cdT:"마케팅 수신 동의 내역", cdS:"발신자: Paybacks", cdR:"수신 일시: 2026.11.24 17:15:59", cdD:"내용: 마케팅 알림 수신 동의", cdTerms:"마케팅 정보 수신 약관"}
 };
 /* 알림 목록 예시 (cat: cb 캐시백 · bn 혜택 / go: 이동 대상) */
 const ITEMS=[
@@ -391,11 +426,32 @@ const SCREENS=[
     {k:"b", label:"종료된 이벤트", title:"푸시 누름 · 종료된 이벤트",
      bullets:["홈으로 이동 + 토스트"],
      items:[{h:"토스트",b:["문구: 종료된 이벤트예요"]}]}
+  ]},
+  {id:"NI-M06", name:"06 알림 설정", cases:[
+    {k:"a", label:"기본", title:"알림 설정 · 기본",
+     bullets:["구현: 네이티브","진입: 알림함 우측 상단 설정 아이콘 · 마이페이지 Notification Settings","구성: 디자인 파일 02 My Page 앱 Notification Settings 화면 기준","토글 값은 계정 단위로 서버 저장 · 같은 계정의 다른 기기에도 적용"],
+     items:[{h:"필수 알림",b:["대상: 캐시백 지급 · UID 연동 등 서비스 알림 (FCM 시트 Essential)","끌 때: 확인 팝업 (NI-M06-c)","꺼도 알림함 저장은 계속"]},
+            {h:"마케팅 알림",b:["대상: 이벤트 · 프로모션 (FCM 시트 Marketing)","끌 때: 확인 팝업 (NI-M06-d)","켤 때: 동의 내역 팝업 (NI-M06-e)","꺼져 있으면 마케팅 알림은 알림함에도 저장 안 함"]},
+            {h:"이메일 마케팅 수신 동의",b:["기존 화면 그대로 유지 · 켜고 끌 때 처리는 마케팅 알림과 같음"]}]},
+    {k:"b", label:"기기 알림 꺼짐", title:"알림 설정 · 기기 알림 꺼짐",
+     bullets:["노출: OS 알림 권한 거부 · 미요청일 때 항상 (닫기 없음)","앱 안 토글은 그대로 바꿀 수 있음 · 기기 알림이 꺼져 있으면 푸시는 오지 않음","포그라운드 복귀 때 권한 다시 확인 · 켜져 있으면 배너 숨김"],
+     items:[{h:"기기 알림 배너",b:["[켜기]: NI-M03과 같은 흐름 (OS 창 또는 기기 설정 앱)","결과 토스트는 알림 설정 화면 위에 노출","알림함 미니배너와 달리 닫기(X) 없음 · 7일 숨김 없음"]}]},
+    {k:"c", label:"필수 알림 끄기", title:"필수 알림 끄기 확인",
+     bullets:["[확인]: 필수 알림 Off 저장 · 푸시 발송 중단","[취소]: 토글 유지"],
+     items:[{h:"확인 팝업",b:["문구: 필수 알림을 끌까요? / 캐시백 지급, UID 연동 알림을 푸시로 받지 못해요. 알림함에서는 계속 볼 수 있어요.","확인 필요: 문구 확정"]}]},
+    {k:"d", label:"마케팅 알림 끄기", title:"마케팅 알림 끄기 확인",
+     bullets:["문구: 디자인 파일 기존 팝업 그대로","[확인]: 마케팅 수신 철회 저장 · 이후 마케팅 알림 발송 · 저장 중단","확인 필요: 철회 처리 결과(일시) 안내 필요 여부 (법무)"],
+     items:[{h:"확인 팝업",b:["Turn Off Notifications? / You won’t receive updates about promotions, rewards, and special events.","확인 필요: 철회 전 저장된 혜택 알림 유지 여부"]}]},
+    {k:"e", label:"마케팅 알림 켜기", title:"마케팅 알림 켜기 · 동의 내역",
+     bullets:["켜는 순간 동의 저장 · 동의 내역 팝업 노출","내용: 발신자 · 수신 일시 · 동의 내용 · 마케팅 정보 수신 약관 링크","디자인 파일 기존 팝업 그대로"],
+     items:[{h:"동의 내역 팝업",b:["수신 일시: 서버 저장 시각","약관 링크: Terms for Receiving Marketing Information 팝업"]}]}
   ]}
 ];
 
 /* ================= 상태 ================= */
 let lang="en", sIdx=0, cIdx=0, zoom="fit", osMode="ios";
+let bgCtx="inbox"; // 미니배너 [켜기]를 누른 화면 (inbox · settings)
+let sst={ess:1,mkt:1,email:1}; // 알림 설정 토글 값
 const $=s=>document.querySelector(s);
 const t=k=>C[lang][k];
 let noMk=false;
@@ -442,7 +498,23 @@ function iosAlert(){ const no=`<button data-go="NI-M03-e">${t('iosNo')}</button>
   return `<div class="ios"><div class="t">${t('iosT')}</div><div class="d">${t('iosD')}</div><div class="b"><div>${mk(2,no,'flex:1;display:flex')}</div><div>${mk(1,yes,'flex:1;display:flex')}</div></div></div>`; }
 function androidAlert(){ const bell=`<svg width="24" height="24" viewBox="0 0 24 24" fill="#3a5f9e"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>`;
   return `<div class="adlg"><div class="ic">${bell}</div><div class="t">${t('anT')}</div><div class="b">${mk(1,`<button data-go="NI-M03-d">${t('anYes')}</button>`,'display:flex')}${mk(2,`<button data-go="NI-M03-e">${t('anNo')}</button>`,'display:flex')}</div></div>`; }
-function bgInbox(){ noMk=true; const h=inbox({banner:true}); noMk=false; return h; }
+function bgInbox(){ noMk=true; const h=bgCtx==="settings"?settings({off:true}):inbox({banner:true}); noMk=false; return h; }
+function tg(k,on,m){ const b=`<button class="tg${on?' on':''}" data-tg="${k}" aria-label="${k}"></button>`; return m?mk(m,b,'display:flex'):b; }
+function settings(o={}){ // o.off 기기 알림 꺼짐, o.dlg 'ess'|'mkt'|'consent', o.toast, o.m 설명 번호
+  const m=o.m||{};
+  const bn=o.off?`<div class="sbanner">${(()=>{ const b=`<div class="banner"><div class="bi">${I.belloff}</div><div class="bt"><b>${t('bnT')}</b><span>${t('sbB')}</span></div><button class="bon" data-go="turnon">${t('bnOn')}</button></div>`; return m.bn?mk(m.bn,b):b; })()}</div>`:'';
+  const row=(k,l,d)=>`<div class="srow"><span>${t(l)}${d?`<small>${t(d)}</small>`:''}</span>${tg(k,sst[k],m[k])}</div>`;
+  let dlg='';
+  if(o.dlg==='ess'||o.dlg==='mkt'){ const T=o.dlg==='ess'?['dEssT','dEssB']:['dMktT','dMktB'];
+    const d=`<div class="dlg"><h3>${t(T[0])}</h3><p>${t(T[1])}</p><div class="act"><button class="c" data-dlg="cancel">${t('cancel')}</button><button class="p" data-dlg="off-${o.dlg}">${t('confirm')}</button></div></div>`;
+    dlg=`<div class="dlgdim">${mk(1,d,'width:100%')}</div>`; }
+  if(o.dlg==='consent'){ const d=`<div class="dlg"><h3>${t('cdT')}</h3><ul><li>${t('cdS')}</li><li>${t('cdR')}</li><li>${t('cdD')}</li><li><a data-dlg="terms">${t('cdTerms')}</a></li></ul><div class="act"><button class="p" data-dlg="cancel">${t('confirm')}</button></div></div>`;
+    dlg=`<div class="dlgdim">${mk(1,d,'width:100%')}</div>`; }
+  return `<div class="view"><div class="shead"><button class="ibtn" data-go="NI-M02-a">${I.back}</button></div><div class="stitle">${t('sTitle')}</div>${bn}
+    <div class="sgrp">${row('ess','sEss','sEssD')}${row('mkt','sMkt','sMktD')}</div>
+    <div class="sgrp">${row('email','sEmail')}</div></div>${dlg}${o.toast?toast(o.toast[0],o.toast[1],o.toast[2]):''}`;
+}
+const inS=()=>bgCtx==="settings";
 function summary(){ const L=lang==='ko';
   return `<div class="view wv"><div class="ihead"><div class="l">${mk(1,`<button class="ibtn" data-go="NI-M02-a">${I.back}</button>`)}<h2>${t('sumT')}</h2></div></div>
     <div class="wbody"><div class="note">${t('sumN')}</div><div class="card"><span class="dpill">${t('sumD')}</span>
@@ -464,15 +536,20 @@ function screenHTML(id){
     case "NI-M03-a": return inbox({banner:true,bm:1});
     case "NI-M03-b": return bgInbox()+`<div class="osdim">${iosAlert()}</div>`;
     case "NI-M03-c": return bgInbox()+`<div class="osdim">${androidAlert()}</div>`;
-    case "NI-M03-d": return inbox({toast:['tOn',true,1]});
-    case "NI-M03-e": return inbox({banner:true,toast:['tOff',false,1]});
-    case "NI-M03-f": return inbox({toast:['tOn',true,1]});
-    case "NI-M03-g": return inbox({banner:true,toast:['tOff',false,1]});
+    case "NI-M03-d": return inS()?settings({toast:['tOn',true,1]}):inbox({toast:['tOn',true,1]});
+    case "NI-M03-e": return inS()?settings({off:true,toast:['tOff',false,1]}):inbox({banner:true,toast:['tOff',false,1]});
+    case "NI-M03-f": return inS()?settings({toast:['tOn',true,1]}):inbox({toast:['tOn',true,1]});
+    case "NI-M03-g": return inS()?settings({off:true,toast:['tOff',false,1]}):inbox({banner:true,toast:['tOff',false,1]});
     case "NI-M03-h": return inbox({mark:{n1:1}});
     case "NI-M04-a": return summary();
     case "NI-M04-b": return inbox({toast:['tEnded',false,1]});
     case "NI-M04-c": return inbox({mark:{n8:1}});
     case "NI-M05-a": return home(false)+push(1);
+    case "NI-M06-a": return settings({m:{ess:1,mkt:2,email:3}});
+    case "NI-M06-b": return settings({off:true,m:{bn:1}});
+    case "NI-M06-c": return settings({dlg:'ess'});
+    case "NI-M06-d": return settings({dlg:'mkt'});
+    case "NI-M06-e": return settings({dlg:'consent'});
     case "NI-M05-b": return home(false)+toast('tEnded',false,1).replace('style="position:absolute;left:0;right:0;bottom:0;z-index:70"','style="position:absolute;left:0;right:0;bottom:62px;z-index:70"');
   }
   return "";
@@ -482,6 +559,8 @@ function screenHTML(id){
 const curId=()=>`${SCREENS[sIdx].id}-${SCREENS[sIdx].cases[cIdx].k}`;
 function render(){
   const sc=SCREENS[sIdx], cs=sc.cases[cIdx], id=curId();
+  if(!keepState){ if(!/^NI-M03-[b-g]$/.test(id)) bgCtx="inbox"; if(id.startsWith("NI-M06")) sst={ess:1,mkt:1,email:1}; if(id==="NI-M06-e") sst.mkt=1; }
+  keepState=false;
   if(id==="NI-M04-c") readSet.add("n8");
   if(id==="NI-M04-b") readSet.add("n6");
   $('#scr').innerHTML=sbar()+screenHTML(id);
@@ -495,6 +574,8 @@ function render(){
   if(id==="NI-M02-g"){ const l=$('#ilist'); if(l) l.scrollTop=l.scrollHeight; }
   fit();
 }
+let keepState=false;
+const goKeep=id=>{ keepState=true; goId(id); };
 const plab=x=>x.replace(/^([^:<]{1,16}):\s*/,'<b class="plb">$1</b> ');
 function goId(id){ const m=id.match(/^(NI-M\d\d)-([a-z])$/); if(!m) return false;
   const s=SCREENS.findIndex(x=>x.id===m[1]); if(s<0) return false;
@@ -516,6 +597,15 @@ function settingsApp(){ // 시스템 화면 예시: 기기 설정 앱 > Paybacks
   el.querySelector('#swBack').addEventListener('click',()=>goId(el.querySelector('#swA').classList.contains('on')?"NI-M03-f":"NI-M03-g"));
 }
 $('#scr').addEventListener('click',e=>{
+  const tgEl=e.target.closest('[data-tg]');
+  if(tgEl){ const k=tgEl.dataset.tg;
+    if(sst[k]){ if(k==='ess') return goKeep("NI-M06-c"); if(k==='mkt') return goKeep("NI-M06-d"); sst.email=0; return render(); }
+    sst[k]=1; if(k==='mkt'||k==='email') return goKeep("NI-M06-e"); return render(); }
+  const dEl=e.target.closest('[data-dlg]');
+  if(dEl){ const v=dEl.dataset.dlg;
+    if(v==='terms') return ttoast("[프로토타입] 마케팅 정보 수신 약관 팝업 (기존 화면)");
+    if(v==='off-ess') sst.ess=0; if(v==='off-mkt') sst.mkt=0;
+    return goKeep(curId()==="NI-M06-b"?"NI-M06-b":"NI-M06-a"); }
   const itEl=e.target.closest('[data-item]');
   if(itEl){ const it=ITEMS.find(x=>x.id===itEl.dataset.item); readSet.add(it.id);
     if(it.go==='summary') return goId("NI-M04-a");
@@ -525,17 +615,17 @@ $('#scr').addEventListener('click',e=>{
   const b=e.target.closest('[data-go]'); if(!b) return;
   const g=b.dataset.go;
   if(g==="back") return goId("NI-M01-a");
-  if(g==="settingsPage") return ttoast("[프로토타입] 알림 설정 화면 (별도 PRD)");
-  if(g==="turnon"){ if(osMode==="ios") return goId("NI-M03-b"); if(osMode==="android") return goId("NI-M03-c"); return settingsApp(); }
+  if(g==="settingsPage") return goId("NI-M06-a");
+  if(g==="turnon"){ bgCtx=curId().startsWith("NI-M06")?"settings":"inbox"; keepState=true; if(osMode==="ios") return goId("NI-M03-b"); if(osMode==="android") return goId("NI-M03-c"); return settingsApp(); }
   goId(g);
 });
 $('#pBody').addEventListener('click',e=>{ const it=e.target.closest('.p-item'); if(!it) return;
   const m=$(`#scr .mk[data-n="${it.dataset.n}"]`); if(!m) return; m.classList.remove('flash'); void m.offsetWidth; m.classList.add('flash'); });
 $('#sel').innerHTML=SCREENS.map((s,i)=>`<option value="${i}">${s.name}</option>`).join("");
-$('#sel').addEventListener('change',e=>{sIdx=+e.target.value;cIdx=0;render();});
+$('#sel').addEventListener('change',e=>{bgCtx='inbox';sIdx=+e.target.value;cIdx=0;render();});
 $('#prevS').addEventListener('click',()=>{sIdx=(sIdx-1+SCREENS.length)%SCREENS.length;cIdx=0;render();});
 $('#nextS').addEventListener('click',()=>{sIdx=(sIdx+1)%SCREENS.length;cIdx=0;render();});
-$('#cases').addEventListener('click',e=>{const b=e.target.closest('.case'); if(!b) return; cIdx=+b.dataset.i; render();});
+$('#cases').addEventListener('click',e=>{const b=e.target.closest('.case'); if(!b) return; bgCtx='inbox'; cIdx=+b.dataset.i; render();});
 function seg(id,cb){$(id).addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; [...$(id).children].forEach(x=>x.classList.toggle('on',x===b)); cb(b.dataset.v);});}
 seg('#langSeg',v=>{lang=v;render();});
 seg('#zoomSeg',v=>{zoom=v;fit();});
