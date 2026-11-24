@@ -661,7 +661,7 @@ const C = {
     p3t:"Just trade.<br><em>Cashback is automatic.</em>", p3b:"Your cashback is paid out automatically. No withdrawal request needed.", badge:"Official Partners with Top Exchanges", c3lab:"Cashback",
     uidChip:"UID linked", ucOk:"Linked", uLink:"Link UID", uH:"Enter your exchange UID", uP:"Choose an exchange and enter your UID.", uEx:"Exchange", uHint:"You can find your UID in the Bitget app under Profile.", uBtn:"Link", uDone:"Bitget UID linked", uDoneS:"Cashback will be credited from now on", rc:"Recent Cashback", fee:"Fee", co2:"80% of a 12.50 USDT fee", ph:"Payout History", pv2:"<b>133,262</b> users · <b>330,648,881 USDT</b> paid in total", cdLb:"EXCHANGE ACCOUNT", tmLb:"CASHBACK", calcFee:"Fee", calcPb:"Cashback", pv3:"<b>76,894 USDT</b> paid in the last 24 hours", acOn:"Auto Claim on", s2a:"Up to", s2fee:"Trading fee", s2pb:"Cashback", s3on:"On", s3done:"Paid", ill2a:"Up to", ill2b:"back in USDT", stU:"Registered users", stC:"Cumulative cashback", stD:"Cashback paid in the last 24h",
     create:"Create Account", login:"Log In", exL:"Exchange", upto:"Up to 80%",
-    nt:"Get notified when your withdrawal is complete", nb:"Turn on notifications and you\u2019ll receive an alert like this.", l1:"Cashback withdrawal complete", l2:"Event launches",
+    nt:"Get notified when your withdrawal is complete", nb:"Turn on notifications and we\u2019ll send an alert like this each time your cashback is withdrawn.", l1:"Cashback withdrawal complete", l2:"Event launches",
     npApp:"TetherMax", npNow:"now", npT:"\ud83d\udca1 Withdrawal Success", npB:"Your 12.40 USDT cashback withdrawal for UID ****5678 is complete.", npTime:"Lock screen preview", npDate:"Wednesday, November 18",
     ntD:"Notifications are off", nbD:"To receive cashback updates, turn on TetherMax notifications in Settings.", offTag:"Notifications off",
     linkedTag:"UID linked",
@@ -678,7 +678,7 @@ const C = {
     p3t:"거래만 하면<br><em>페이백은 자동으로</em> 들어와요", p3b:"쌓인 페이백은<br>출금 신청 없이 자동으로 지급됩니다.", badge:"Official Partners with Top Exchanges", c3lab:"페이백",
     uidChip:"UID 연동 완료", ucOk:"연동 완료", uLink:"UID 연동", uH:"거래소 UID를 입력하세요", uP:"연동할 거래소를 선택하고 UID를 입력해 주세요.", uEx:"거래소", uHint:"Bitget 앱 > 프로필에서 UID를 확인할 수 있습니다.", uBtn:"연동하기", uDone:"Bitget UID 연동 완료", uDoneS:"이제부터 페이백이 적립됩니다", rc:"최근 페이백", fee:"수수료", co2:"수수료 12.50 USDT의 80%", ph:"지급 내역", pv2:"<b>133,262명</b> 이용 중 · 누적 <b>330,648,881 USDT</b> 지급", cdLb:"EXCHANGE ACCOUNT", tmLb:"CASHBACK", calcFee:"수수료", calcPb:"페이백", pv3:"최근 24시간 동안 <b>76,894 USDT</b> 지급", acOn:"Auto Claim 켜짐", s2a:"최대", s2fee:"거래 수수료", s2pb:"페이백", s3on:"켜짐", s3done:"지급 완료", ill2a:"최대", ill2b:"USDT 페이백", stU:"가입자", stC:"누적 페이백", stD:"최근 24시간 지급 페이백",
     create:"계정 만들기", login:"로그인", exL:"거래소", upto:"최대 80%",
-    nt:"페이백 출금 완료 알림을 받으세요", nb:"알림을 켜면 출금이 완료될 때 이렇게 알려드립니다.", l1:"페이백 출금 완료", l2:"이벤트 시작",
+    nt:"페이백 출금 완료 알림을 받으세요", nb:"알림을 켜면 페이백이 출금될 때마다 이렇게 알려드립니다.", l1:"페이백 출금 완료", l2:"이벤트 시작",
     npApp:"TetherMax", npNow:"지금", npT:"\ud83d\udca1 출금 완료 알림", npB:"UID ****5678 계정의 페이백 12.40 USDT 출금이 완료되었습니다.", npTime:"잠금화면 알림 예시", npDate:"11월 18일 수요일",
     ntD:"알림이 꺼져 있습니다", nbD:"페이백 입금 소식을 받으려면 설정에서 테더맥스 알림을 켜 주세요.", offTag:"알림 꺼짐",
     linkedTag:"UID 연동 완료",
@@ -722,16 +722,14 @@ const SCREENS = [
               "권한 요청: 앱 실행 · 로그인 · 회원가입 단계에서는 요청하지 않음",
               "화면 형태: 전체 화면 풀팝업 · 홈 화면을 가리고 상태바만 유지"],
      items:[{h:"알림 예시",b:["비주얼: 실제 앱 홈 화면 캡처 위로 출금 완료 푸시 알림이 내려오는 장면","기준 알림: 'Cashback withdrawal successful' (Personalize · Essential · FCM · 즉시 발송)","푸시 제목: 💡 출금 완료 알림 / 💡 Withdrawal Success","발송 조건: 수동 출금은 관리자 승인 시 · 자동(Auto Claim)은 내역 상태가 '완료'가 될 때","마스킹: UID 끝 4자리 외 마스킹 (****5678) · 캡처 속 UID도 같은 예시값으로 마스킹","확인 필요: 푸시 본문은 케이스 표에 없어 임시 문구 · 금액 12.40 USDT, UID 끝자리는 예시값"]},
-            {h:"수신 항목",b:["1행 페이백 출금 완료: 알림 케이스 확인됨"]},
             {h:"[알림 받기]",b:["서버 처리: 필수 알림 Off면 서버에 On 저장 (BE-801-1) · 동의 화면 없음 · 저장 실패해도 다음 단계 진행 (E12)","이동: OS 알림 권한 팝업 호출 → OB-M03-a (iOS) · OB-M03-b (Android 13 이상)","예외: OS 팝업 호출 실패 (OS가 팝업 없이 거부 결과만 돌려줌 · 호출 오류) 시 풀팝업을 닫고 설정 앱 TetherMax 알림 화면으로 바로 이동 · 설정 이동 플래그 저장 · 노출 횟수 추가 안 셈","복귀: 설정 앱에서 돌아오면 OB-M04-d (켜짐) / OB-M04-e (꺼짐)","개발 확인: 웹뷰 풀팝업인 경우 네이티브 권한 요청 브리지 필요"]},
             {h:"[나중에]",b:["결과: 풀팝업 닫힘 · 홈 화면 노출 · 별도 토스트 없음 → OB-M04-c","Android 뒤로가기: [나중에]와 동일","재노출: 기기 알림 Off가 유지되면 14일 경과 후 다음 앱 실행 시 재판정 · 최대 3회"]}]},
     {k:"c", label:"b형 · 설정 이동", perm:"denied", title:"알림 안내 풀팝업 · b형 설정 이동형",
      bullets:["판정 시점: 앱 새로 실행 후 메인 화면 표시(홈 탭 첫 로딩 완료) 시 1회 (a형과 동일)",
               "노출 조건: 기기 알림 Off + OS 허용 창 호출 불가 (이미 거부 · Android 12 이하) + 노출 3회 미만 + 마지막 노출 후 14일 경과 · 노출 횟수는 a형과 공유",
               "안내 방식: OS 팝업을 띄울 수 없어 설정 앱 이동으로 안내",
-              "화면: 제목 · 본문 · 수신 항목은 a형과 동일, CTA만 다름"],
+              "화면: 제목 · 본문은 a형과 동일, CTA만 다름"],
      items:[{h:"알림 예시",b:["a형과 동일 (출금 완료 푸시 알림 예시)"]},
-            {h:"수신 항목",b:["a형과 동일"]},
             {h:"[설정에서 알림 켜기]",b:["서버 처리: 필수 알림 Off면 서버에 On 저장 (BE-801-1) · 동의 화면 없음 · 저장 실패해도 다음 단계 진행 (E12)","이동: 설정 앱 알림 화면 + 설정 이동 플래그 저장","랜딩: iOS 알림 설정 화면 · Android 앱 알림 설정 화면","예외: 알림 화면 열기 미지원 시 앱 정보 화면 랜딩 (E13)","복귀: 앱 복귀 시 기기 알림 상태 확인 → OB-M04-d (켜짐) / OB-M04-e (꺼짐)","개발 확인: iOS 알림 설정 화면 직행 가능 여부","프로토타입: 화면 이동 없이 '앱 설정 페이지로 이동' 토스트로 대체"]},
             {h:"[나중에]",b:["결과: 풀팝업 닫힘 · 홈 화면 노출 · 별도 토스트 없음 → OB-M04-c","Android 뒤로가기: [나중에]와 동일"]}]}
   ]},
@@ -1217,10 +1215,10 @@ function notiPreview(){
 }
 /* OB-M02: post-login notification soft-ask modal */
 function notiModal(kind){ // a: a형 OS 허용 창형, c: b형 설정 이동형 (본문 동일, CTA만 다름)
-  const body=`${mk(1,notiPreview())}<div class="mtitle">${t('nt')}</div><div class="mdesc">${t('nb')}</div>${mk(2,`<ul class="mlist"><li>${t('l1')}</li></ul>`)}`;
+  const body=`${mk(1,notiPreview())}<div class="mtitle">${t('nt')}</div><div class="mdesc">${t('nb')}</div>`;
   const acts=kind==="c"
-    ? mk(3,`<button class="btnp" data-go="settings">${t('settings')}</button>`)+mk(4,`<button class="btng" data-go="OB-M04-c">${t('later')}</button>`)
-    : mk(3,`<button class="btnp" data-go="os">${t('on')}</button>`)+mk(4,`<button class="btng" data-go="OB-M04-c">${t('later')}</button>`);
+    ? mk(2,`<button class="btnp" data-go="settings">${t('settings')}</button>`)+mk(3,`<button class="btng" data-go="OB-M04-c">${t('later')}</button>`)
+    : mk(2,`<button class="btnp" data-go="os">${t('on')}</button>`)+mk(3,`<button class="btng" data-go="OB-M04-c">${t('later')}</button>`);
   return `<div class="fullp"><div class="fp-body">${body}</div><div class="fp-act">${acts}</div></div>`;
 }
 function iosAlert(){
