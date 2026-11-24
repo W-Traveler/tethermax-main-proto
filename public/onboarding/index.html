@@ -433,6 +433,8 @@ body.show-mk .c7 .mk{outline-offset:-2px}
 .c7.pb .c7-cta .p{background:#6d4aff}.c7.pb .c7-cta .s{background:#fff;color:#121212;box-shadow:inset 0 0 0 1px #e4dfff}
 .c7.pb .c7-dots i{background:rgba(109,74,255,.25)}.c7.pb .c7-dots i>b{background:#6d4aff}
 .c7.pb .orb .ci img{filter:drop-shadow(0 7px 8px rgba(0,0,0,.35))}
+.hstage .pb3wrap{left:0;top:0;width:390px;height:594px;transform:translateY(-30px) scale(.86);transform-origin:195px 62px}
+.hstage .pb3wrap>img{-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(transparent,#000 10%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(transparent,#000 10%);mask-composite:intersect}
 .hstage .pbglow{left:66px;top:137px;width:260px;height:260px;border-radius:50%;background:rgba(158,135,255,.45);filter:blur(35px)}
 .hstage .pbf-t{left:0;top:0;width:390px;height:110px;background:linear-gradient(#f6f3ff,#f6f3ff 40%,rgba(246,243,255,0));pointer-events:none}
 .hstage .pbf-b{left:0;top:340px;width:390px;background:linear-gradient(rgba(246,243,255,0),#f6f3ff 85%,#f6f3ff);pointer-events:none}
@@ -912,7 +914,7 @@ function pbFades(h){ return `<div class="pbf-t"></div><div class="pbf-b" style="
 function heroStagePB(page){
   if(page===1) return `<div class="hstage"><div class="pbglow"></div><img src="pb_icon.webp" alt="" style="left:81px;top:170px;width:230px;height:230px"><div class="pbf-t"></div><div class="orb" style="left:196px;top:267px">${orbHTML()}</div><div class="pbf-b" style="height:236px"></div></div>`;
   if(page===2) return `<div class="hstage"><img src="pb_hero2base.webp" alt="" style="left:0;top:62px;width:390px;height:532px">${PB_BARS}<img class="b2full" src="pb_hero2.webp" alt="" style="left:0;top:62px;width:390px;height:532px"><img class="b2full" src="pb_mark.png" alt="" style="left:170px;top:206px;width:36px;height:36px">${pbFades(262)}</div>`;
-  return `<div class="hstage"><img src="pb_hero3.webp" alt="" style="left:0;top:62px;width:390px;height:532px"><div class="pbsweep"><i></i></div><div style="left:0;top:40px;width:390px;height:532px">${PB_GLYPH}</div>${pbFades(262)}</div>`;
+  return `<div class="hstage"><div class="pb3wrap"><img src="pb_hero3.webp" alt="" style="position:absolute;left:0;top:62px;width:390px;height:532px"><div class="pbsweep"><i></i></div><div style="position:absolute;left:0;top:40px;width:390px;height:532px">${PB_GLYPH}</div></div>${pbFades(262)}</div>`;
 }
 function heroStage(page){
   if(page===1) return `<div class="hstage"><img class="full" src="base1.webp" alt=""><div class="orb">${orbHTML()}</div></div>`;
@@ -1224,7 +1226,7 @@ function goId(id){
   sIdx=s; cIdx=c; render(); return true;
 }
 const IND_DUR=5000; let autoT, autoPaused=false;
-let brand=(new URLSearchParams(location.search).get("brand")==="pb")?"pb":"tm";
+let brand=(new URLSearchParams(location.search).get("brand")==="tm")?"tm":"pb"; // 기본값 Paybacks
 const tb=k=>{ const v=t(k); return brand==="pb"?v.replace(/TetherMax/g,"Paybacks").replace(/테더맥스/g,"페이백스"):v; }; // 캐러셀 자동 넘김, 3장 다음은 1장으로 반복
 function carouselStep(delta){
   const order=["OB-M01-a","OB-M01-b","OB-M01-c"];
@@ -1271,7 +1273,7 @@ $('#pClose').addEventListener('click',()=>{$('#panel').classList.add('off');fit(
 $('#resetBtn').addEventListener('click',()=>{goId("OB-M01-a");});
 const syncBrand=()=>{ document.querySelectorAll('#brandSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===brand)); };
 syncBrand();
-$('#brandSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b||b.dataset.v===brand) return; brand=b.dataset.v; syncBrand(); const u=new URL(location.href); if(brand==='pb') u.searchParams.set('brand','pb'); else u.searchParams.delete('brand'); history.replaceState(null,'',u); dir=''; goId(curId()); });
+$('#brandSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b||b.dataset.v===brand) return; brand=b.dataset.v; syncBrand(); const u=new URL(location.href); if(brand==='tm') u.searchParams.set('brand','tm'); else u.searchParams.delete('brand'); history.replaceState(null,'',u); dir=''; goId(curId()); });
 $('#autoBtn').addEventListener('click',()=>{ autoPaused=!autoPaused; const b=$('#autoBtn'); b.classList.toggle('off',autoPaused); b.textContent=autoPaused?'▶ 자동 넘김 재생':'⏸ 자동 넘김 정지'; if(autoPaused){ clearTimeout(autoT); $('#scr').classList.add('autoPaused'); } else { dir=''; goId(curId()); } });
 window.addEventListener('hashchange',()=>{const h=location.hash.slice(1); if(h && h!==curId()) goId(h);});
 window.addEventListener('resize',fit);
