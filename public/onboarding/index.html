@@ -782,12 +782,17 @@ const SCREENS = [
   ]}
 ];
 
-const plab=x=>{ if(brand==="pb" && !x.startsWith("서비스")) x=x.replace(/테더맥스/g,"페이백스").replace(/TetherMax/g,"Paybacks"); return x.replace(/^([^:<]{1,14}):\s*/,'<b class="plb">$1</b> '); };
+const plab=x=>{ if(brand==="pb" && !x.startsWith("서비스")) x=x.replace(/테더맥스/g,"페이백스").replace(/TetherMax/g,"Paybacks").replace("출금 완료 푸시 알림","Auto Claim 지급 완료 푸시 알림").replace("💡 출금 완료 알림 / 💡 Withdrawal Success","💡 Auto Claim 지급 완료 / 💡 Auto Claim Complete"); return x.replace(/^([^:<]{1,14}):\s*/,'<b class="plb">$1</b> '); };
 /* ================= state ================= */
 let lang="en", sIdx=0, cIdx=0, zoom="fit", dir="";
 const $=s=>document.querySelector(s);
 let brand=(new URLSearchParams(location.search).get("brand")==="tm")?"tm":"pb"; // 기본값 Paybacks
-const t=k=>{ const v=C[lang][k]; return (brand==="pb"&&typeof v==="string")?v.replace(/TetherMax/g,"Paybacks").replace(/테더맥스/g,"페이백스"):v; };
+/* Paybacks 전용 문구: Auto Claim(자동 지급) 기준 */
+const PBC={
+  en:{nt:"Get notified when your cashback is auto-claimed", nb:"Turn on notifications and we\u2019ll send an alert like this each time your cashback is auto-claimed.", l1:"Cashback auto-claimed", npT:"\ud83d\udca1 Auto Claim Complete", npB:"Your 12.40 USDT cashback for UID ****5678 has been auto-claimed."},
+  ko:{nt:"Auto Claim 지급 알림을 받으세요", nb:"알림을 켜면 Auto Claim으로 페이백이 지급될 때마다 이렇게 알려드립니다.", l1:"Auto Claim 지급 완료", npT:"\ud83d\udca1 Auto Claim 지급 완료", npB:"UID ****5678 계정의 페이백 12.40 USDT가 Auto Claim으로 지급되었습니다."}
+};
+const t=k=>{ if(brand==="pb"&&PBC[lang]&&PBC[lang][k]!==undefined) return PBC[lang][k]; const v=C[lang][k]; return (brand==="pb"&&typeof v==="string")?v.replace(/TetherMax/g,"Paybacks").replace(/테더맥스/g,"페이백스"):v; };
 const LOGO_PATH='M7 1a6 6 0 1 0 0 12c2.4 0 4-1.6 6-6s3.6-6 6-6a6 6 0 1 1 0 12c-2.4 0-4-1.6-6-6S9.4 1 7 1z';
 const logoSvg=(c)=>`<svg viewBox="0 0 26 14"><path d="${LOGO_PATH}" fill="none" stroke="${c}" stroke-width="2.4"/></svg>`;
 let noMk=false;
