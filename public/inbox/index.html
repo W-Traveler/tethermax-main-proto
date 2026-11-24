@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paybacks 앱 알림함 · 프로토타입</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"Wanted Sans";src:url("/fonts/WantedSansVariable.woff2") format("woff2");font-weight:400 900;font-display:swap}
+:root{
+  --bar:#151a24; --bar-2:#1d2330; --bar-line:#2c3443; --bar-text:#e8ebf1; --bar-dim:#8f98a8;
+  --canvas:#e6e8ec; --mk:#e2367a; --case:#6d4aff;
+  --pb:#6d4aff; --pb-soft:#f1edff; --pb-page:#f8f8fa;
+  --t1:rgba(0,0,0,.87); --t2:rgba(0,0,0,.6); --t3:rgba(0,0,0,.38); --line:rgba(0,0,0,.08);
+  --font-ko:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --font-pb:"Wanted Sans","Noto Sans KR",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font-ko);font-size:14px;color:#111;background:var(--canvas);overflow:hidden}
+button{font-family:inherit;cursor:pointer}
+
+/* ---------- 상단 컨트롤 패널 ---------- */
+.top{background:var(--bar);color:var(--bar-text)}
+.row1{height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 14px}
+.row1 h1{font-size:15px;font-weight:700}
+.r1-right{display:flex;align-items:center;gap:10px}
+.seg{display:flex;background:var(--bar-2);border:1px solid var(--bar-line);border-radius:8px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--bar-dim);font-size:12px;font-weight:600;padding:5px 9px;border-radius:5px;white-space:nowrap}
+.seg button.on{background:#fff;color:#111}
+.chk{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--bar-text);cursor:pointer;user-select:none}
+.chk input{width:15px;height:15px;accent-color:var(--case)}
+.pbtn{display:flex;align-items:center;gap:6px;background:#fff;color:#111;border:0;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600}
+.pbtn .cnt{min-width:18px;height:18px;border-radius:9px;background:var(--mk);color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;padding:0 5px}
+.row2{min-height:42px;display:flex;align-items:center;gap:8px;padding:6px 14px;border-top:1px solid var(--bar-line);background:var(--bar-2);flex-wrap:wrap}
+.lbl{font-size:12px;color:var(--bar-dim);margin:0 2px 0 4px}
+.nav{width:28px;height:30px;border-radius:7px;border:1px solid var(--bar-line);background:#0e121a;color:var(--bar-text);font-size:15px}
+.sel{height:32px;background:#0e121a;color:var(--bar-text);border:1px solid var(--bar-line);border-radius:8px;padding:0 10px;font-size:13px;min-width:230px;font-family:inherit}
+.cases{display:flex;gap:6px;flex-wrap:wrap}
+.case{display:flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:8px;border:1px solid var(--bar-line);background:transparent;color:var(--bar-dim);font-size:13px;white-space:nowrap}
+.case code{font-family:var(--font-mono);font-size:10.5px;background:rgba(255,255,255,.08);padding:2px 5px;border-radius:4px}
+.case.on{background:var(--case);border-color:var(--case);color:#fff}
+.case.on code{background:rgba(255,255,255,.2)}
+.vsep{width:1px;height:20px;background:var(--bar-line);margin:0 2px}
+.reset{height:30px;border:0;border-radius:8px;background:#fff;color:#111;font-size:13px;font-weight:600;padding:0 10px}
+
+/* ---------- 본문 · 설명 패널 ---------- */
+.main{display:flex;height:calc(100vh - var(--toph,88px))}
+.canvas{flex:1;overflow:auto;position:relative;display:flex;justify-content:center;align-items:flex-start;padding:20px}
+.stage{transform-origin:top center}
+.status{position:fixed;left:10px;bottom:10px;background:#2b313d;color:#fff;font-size:12px;padding:5px 9px;border-radius:6px;z-index:5}
+.panel{width:350px;flex:none;background:#fff;border-left:1px solid #d9dce3;overflow:auto;display:flex;flex-direction:column}
+.panel.off{display:none}
+.p-head{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px}
+.p-head b{font-size:14px}
+.p-head small{font-size:12px;color:#888;margin-left:6px;font-weight:400}
+.p-x{border:0;background:transparent;font-size:18px;color:#666}
+.p-body{padding:0 14px 14px;flex:1}
+.p-id{display:inline-block;font-family:var(--font-mono);font-size:11px;background:#eef0f4;color:#444;padding:3px 6px;border-radius:4px;margin:6px 0 10px}
+.p-title{font-size:15px;font-weight:700;margin-bottom:10px;line-height:1.4}
+.plb{font-weight:600;color:#111827;margin-right:2px}
+.p-list{padding-left:16px;margin-bottom:12px}
+.p-list li{font-size:13px;line-height:1.55;margin-bottom:4px;color:#222}
+.p-item{margin-bottom:10px;cursor:pointer;border-radius:8px;padding:4px 4px 2px;margin-left:-4px}
+.p-item:hover{background:#f6f7f9}
+.p-item h4{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;margin-bottom:4px}
+.p-item h4 .n{position:static}
+.p-item ul{padding-left:30px}
+.p-item li{font-size:12.5px;line-height:1.55;color:#333;margin-bottom:2px}
+.p-foot{border-top:1px solid #eee;padding:12px 14px;font-size:12px;color:#777;line-height:1.55}
+.p-foot a{color:#5b3fe0}
+
+/* 설명 번호 */
+.n{width:22px;height:22px;border-radius:50%;background:var(--mk);color:#fff;font:700 11px/22px var(--font-ko);text-align:center;flex:none}
+.mk{position:relative}
+.mk>.n{position:absolute;left:-9px;top:-9px;z-index:30;width:18px;height:18px;font-size:10px;line-height:18px;display:none}
+body.show-mk .mk{outline:1px dashed var(--mk);outline-offset:2px}
+body.show-mk .mk>.n{display:block}
+.mk.flash{animation:flash 1.2s ease 2}
+@keyframes flash{0%,100%{box-shadow:0 0 0 0 rgba(226,54,122,0)}50%{box-shadow:0 0 0 6px rgba(226,54,122,.35)}}
+
+/* ---------- 폰 ---------- */
+.phone{width:391px;height:828px;border:8px solid #111;border-radius:48px;background:#111;position:relative;box-shadow:0 10px 30px rgba(15,23,42,.18)}
+.scr{position:absolute;inset:0;border-radius:40px;overflow:hidden;background:var(--pb-page);font-family:var(--font-pb);color:var(--t1)}
+.sbar{position:absolute;left:0;right:0;top:0;height:47px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 34px;font:600 15px/1 -apple-system,"Inter",sans-serif;color:#000;z-index:80;pointer-events:none}
+.sbar .ic{display:flex;gap:5px;align-items:center}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#000;z-index:81}
+.homeind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:#111;z-index:81}
+.view{position:absolute;inset:47px 0 0 0;display:flex;flex-direction:column}
+
+/* 홈 (웹뷰) */
+.pbhome{position:relative;height:100%;background:#f8f8fa;overflow:hidden}
+.pbhome>img{display:block;width:375px}
+.bellhit{position:absolute;left:248px;top:12px;width:30px;height:32px;border-radius:8px;z-index:5;cursor:pointer}
+.reddot{position:absolute;left:265px;top:16px;width:8px;height:8px;border-radius:50%;background:#ff3b30;box-shadow:0 0 0 1.5px #fff;z-index:6}
+/* 하단 탭바 (Figma 탭바 02 · 상단 라운드, 상단 패딩 조정본) */
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:84px;background:#fff;border:1px solid rgba(0,0,0,.118);border-bottom:0;border-radius:16px 16px 0 0;z-index:10}
+.tabbar .row{display:flex;height:60px}
+.tabbar .tb{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;padding-top:14px;gap:4px;font:500 12px/18px var(--font-pb);color:rgba(0,0,0,.6)}
+.tabbar .tb.on{color:var(--pb)}
+.tabbar .tb.on::before{content:"";position:absolute;left:50%;top:11px;transform:translateX(-50%);width:72px;height:52px;border-radius:16px;background:var(--pb-soft);z-index:-1}
+.tabbar svg{width:24px;height:24px;display:block}
+
+/* 알림함 (네이티브) */
+.ihead{height:56px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 16px;background:var(--pb-page)}
+.ihead .l{display:flex;align-items:center;gap:8px}
+.ibtn{width:40px;height:40px;border:0;background:transparent;border-radius:20px;display:flex;align-items:center;justify-content:center;color:var(--t1)}
+.ibtn svg{width:24px;height:24px}
+.ihead .l .ibtn{margin-left:-8px}
+.ihead h2{font:500 20px/32px var(--font-pb);color:var(--t1)}
+.banner{margin:4px 16px 12px;background:var(--pb-soft);border-radius:8px;padding:12px 12px 12px 14px;display:flex;gap:10px;align-items:center}
+.banner .bi{width:36px;height:36px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--pb);flex:none}
+.banner .bi svg{width:20px;height:20px}
+.banner .bt{flex:1;min-width:0}
+.banner .bt b{display:block;font:600 14px/20px var(--font-pb);color:var(--t1)}
+.banner .bt span{display:block;font:400 13px/18px var(--font-pb);color:var(--t2)}
+.banner .bon{height:32px;padding:0 12px;border:0;border-radius:4px;background:var(--pb);color:#fff;font:600 13px/1 var(--font-pb);flex:none}
+.banner .bx{width:28px;height:28px;border:0;background:transparent;color:var(--t3);display:flex;align-items:center;justify-content:center;flex:none;margin-right:-4px}
+.banner .bx svg{width:18px;height:18px}
+.tabs{display:flex;padding:0 16px;border-bottom:1px solid var(--line);flex:none}
+.tabs button{border:0;background:transparent;height:42px;padding:0 16px;font:500 14px/24px var(--font-pb);color:var(--t2);position:relative}
+.tabs button.on{color:var(--pb)}
+.tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--pb)}
+.list{flex:1;overflow:auto;padding:4px 16px 24px}
+.list::-webkit-scrollbar{display:none}
+.gh{font:500 13px/20px var(--font-pb);color:var(--t2);padding:16px 0 8px}
+.grp{background:#fff;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.06);overflow:hidden}
+.it{display:flex;gap:12px;padding:14px 14px 14px 12px;cursor:pointer;position:relative}
+.it+.it{border-top:1px solid var(--line)}
+.it:active{background:#fafafa}
+.it.un{background:#faf8ff}
+.cic{width:36px;height:36px;border-radius:18px;display:flex;align-items:center;justify-content:center;flex:none}
+.cic svg{width:20px;height:20px}
+.cic.cb{background:var(--pb-soft);color:var(--pb)}
+.cic.bn{background:#fff3e6;color:#e5760b}
+.ib{flex:1;min-width:0}
+.it .tt{display:flex;align-items:center;gap:8px}
+.it .tt b{flex:1;min-width:0;font:500 15px/22px var(--font-pb);color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it.un .tt b{font-weight:600;color:var(--t1)}
+.it .tm{font:400 12px/18px var(--font-pb);color:var(--t3);flex:none}
+.it .ud{width:6px;height:6px;border-radius:3px;background:var(--pb);flex:none}
+.it .bd{font:400 14px/20px var(--font-pb);color:var(--t2);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.it.un .bd{color:rgba(0,0,0,.72)}
+/* 로딩 */
+.sk{background:linear-gradient(90deg,#eceef2 25%,#f6f7f9 50%,#eceef2 75%);background-size:300% 100%;animation:sk 1.4s ease infinite;border-radius:6px}
+@keyframes sk{from{background-position:100% 0}to{background-position:0 0}}
+/* 빈 상태 · 오류 */
+.blank{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding-bottom:80px;color:var(--t2);font:400 15px/22px var(--font-pb);text-align:center}
+.blank .bic{width:56px;height:56px;border-radius:28px;background:#eef0f3;display:flex;align-items:center;justify-content:center;color:var(--t3)}
+.blank .bic svg{width:28px;height:28px}
+.obtn{height:36px;padding:0 16px;border:1px solid rgba(109,74,255,.5);border-radius:4px;background:#fff;color:var(--pb);font:500 14px/1 var(--font-pb)}
+.more{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 0 6px;font:400 13px/18px var(--font-pb);color:var(--t2)}
+
+/* 토스트 (Paybacks 앱 Toast) */
+.toast{position:absolute;left:16px;right:16px;bottom:34px;background:#1c1c1e;color:#fff;border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:16px;font:400 13px/23.4px var(--font-pb);letter-spacing:-.01em;z-index:70;overflow:hidden;
+  box-shadow:0 8px 10px rgba(0,0,0,.2),0 6px 30px rgba(0,0,0,.12),0 16px 24px rgba(0,0,0,.14)}
+.toast .ti{width:32px;height:32px;border-radius:43px;background:#303746;display:flex;align-items:center;justify-content:center;flex:none;position:relative;z-index:1}
+.toast .glow{position:absolute;left:-74px;top:-65px;width:212px;height:212px;border-radius:50%;background:radial-gradient(circle,rgba(0,237,82,.12) 0%,rgba(0,237,122,0) 70%);pointer-events:none}
+.toast span{position:relative;z-index:1}
+.ttoast{position:absolute;left:50%;top:60px;transform:translateX(-50%);background:#2b313d;color:#fff;font:500 12px/1.4 var(--font-ko);padding:8px 12px;border-radius:8px;z-index:90;opacity:0;transition:opacity .2s;pointer-events:none;width:max-content;max-width:330px;text-align:center}
+.ttoast.on{opacity:1}
+
+/* OS 알림 허용 창 */
+.osdim{position:absolute;inset:0;background:rgba(0,0,0,.28);z-index:60;display:flex;align-items:center;justify-content:center}
+.ios{width:272px;background:rgba(242,242,247,.98);border-radius:14px;text-align:center;font-family:-apple-system,"Inter","Noto Sans KR",sans-serif;color:#000}
+.ios .t{padding:18px 16px 4px;font-weight:600;font-size:16px;line-height:1.3}
+.ios .d{padding:0 16px 16px;font-size:13px;line-height:1.4}
+.ios .b{display:flex;border-top:1px solid #c8c8cc}
+.ios .b>div{flex:1;display:flex}
+.ios .b>div+div{border-left:1px solid #c8c8cc}
+.ios .b button{flex:1;height:44px;border:0;background:transparent;font-size:16px;color:#0a7aff}
+.ios .b>div+div button{font-weight:600}
+.adlg{width:300px;background:#eef1f8;border-radius:28px;padding:24px 24px 16px;font-family:Roboto,"Noto Sans KR",sans-serif;color:#1a1c1e;text-align:center}
+.adlg .ic{display:flex;justify-content:center;margin-bottom:16px}
+.adlg .t{font-size:20px;line-height:1.35;margin-bottom:20px}
+.adlg .b{display:flex;flex-direction:column;gap:8px}
+.adlg .b button{width:100%;height:44px;border:0;border-radius:22px;background:#d8e2ff;color:#001a41;font-size:15px;font-weight:500}
+
+/* 기기 설정 앱 (시스템 화면 예시) */
+.setapp{position:absolute;inset:0;background:#f2f2f7;z-index:65;font-family:-apple-system,"Inter","Noto Sans KR",sans-serif;color:#000;padding-top:47px}
+.setapp .nb{height:44px;display:flex;align-items:center;padding:0 8px;color:#0a7aff;font-size:17px}
+.setapp h3{font-size:30px;font-weight:700;padding:4px 16px 18px}
+.setapp .grp2{margin:0 16px;background:#fff;border-radius:10px}
+.setapp .rw{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:17px}
+.sw{width:51px;height:31px;border-radius:16px;background:#e9e9eb;position:relative;cursor:pointer;border:0;transition:background .2s}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:left .2s}
+.sw.on{background:#34c759}.sw.on::after{left:22px}
+.setapp .cap{font-size:13px;color:#6d6d72;padding:8px 32px}
+.setapp .back{position:absolute;left:16px;right:16px;bottom:40px;height:48px;border:0;border-radius:12px;background:#111;color:#fff;font:600 15px/1 var(--font-ko)}
+.syslbl{position:absolute;left:50%;top:56px;transform:translateX(-50%);background:#ffe8a3;color:#5a4300;font:600 11px/1 var(--font-ko);padding:5px 8px;border-radius:5px;z-index:66;white-space:nowrap}
+
+/* 푸시 배너 (홈 위) */
+.push{position:absolute;left:12px;right:12px;top:52px;background:rgba(246,246,248,.86);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:24px;padding:13px 14px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 12px 32px -12px rgba(15,23,60,.28);z-index:50;cursor:pointer;font-family:-apple-system,"Inter","Noto Sans KR",sans-serif}
+.push img{width:38px;height:38px;border-radius:9px;flex:none;margin-top:2px}
+.push .px{flex:1;min-width:0}
+.push .ph{display:flex;justify-content:space-between;font-size:15px;font-weight:600;line-height:19.5px}
+.push .ph span{font-size:13px;font-weight:400;color:rgba(60,60,67,.6)}
+.push .pb{font-size:15px;line-height:20px}
+
+/* 이동 대상 (웹뷰 · 범위 밖) */
+.wv .wbody{flex:1;padding:8px 16px}
+.wv .note{background:#fff7d6;border:1px dashed #d4b23f;color:#6b5300;border-radius:8px;padding:10px 12px;font:500 12.5px/1.5 var(--font-ko);margin-bottom:12px}
+.wv .card{background:#fff;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.06);padding:14px}
+.wv .dpill{display:inline-block;background:var(--pb-soft);color:var(--pb);font:600 13px/1 var(--font-pb);padding:7px 10px;border-radius:16px;margin-bottom:12px}
+.wv .r{display:flex;justify-content:space-between;font:400 14px/22px var(--font-pb);color:var(--t2);padding:6px 0}
+.wv .r b{font-weight:500;color:var(--t1)}
+</style>
+</head>
+<body>
+
+<div class="top" id="top">
+  <div class="row1">
+    <h1>Paybacks 앱 알림함 · 프로토타입</h1>
+    <div class="r1-right">
+      <div class="seg" id="langSeg"><button data-v="en" class="on">EN</button><button data-v="ko">KO</button></div>
+      <label class="chk"><input type="checkbox" id="mkChk"> 설명 번호</label>
+      <button class="pbtn" id="panelBtn">화면 설명 <span class="cnt" id="cnt">0</span></button>
+    </div>
+  </div>
+  <div class="row2">
+    <span class="lbl">화면</span>
+    <button class="nav" id="prevS">‹</button>
+    <select class="sel" id="sel"></select>
+    <button class="nav" id="nextS">›</button>
+    <div class="cases" id="cases"></div>
+    <span class="vsep"></span>
+    <span class="lbl">[켜기] 결과</span>
+    <div class="seg" id="osSeg"><button data-v="ios" class="on">iOS OS 창</button><button data-v="android">Android OS 창</button><button data-v="settings">설정 앱 (OS 창 불가)</button></div>
+    <span class="vsep"></span>
+    <span class="lbl">보기</span>
+    <div class="seg" id="zoomSeg"><button data-v="fit" class="on">창에 맞춤</button><button data-v="100">100%</button></div>
+    <button class="reset" id="resetBtn">↻ 처음부터</button>
+  </div>
+</div>
+
+<div class="main" id="main">
+  <div class="canvas" id="canvas">
+    <div class="stage" id="stage">
+      <div class="phone"><div class="scr" id="scr"></div></div>
+    </div>
+  </div>
+  <aside class="panel" id="panel">
+    <div class="p-head"><div><b>화면 설명</b><small>번호 = 화면 위 번호</small></div><button class="p-x" id="pClose">✕</button></div>
+    <div class="p-body" id="pBody"></div>
+    <div class="p-foot">화면 안 버튼을 눌러 다음 상태로 이어서 볼 수 있어요. 미니배너 [켜기] 결과는 상단 "[켜기] 결과"에서 고릅니다.<br>기준 문서: <a href="https://claude.ai/artifact/BMbvhyBzAEJkr3nuJYrwaC" target="_blank" rel="noopener">알림함 PRD</a> · Figma 미니배너 플로우 1210:101913</div>
+  </aside>
+</div>
+<div class="status" id="status"></div>
+
+<script>
+/* ================= 아이콘 ================= */
+const ic=(paths,sw=2)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+const I={
+  back:ic('<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>'),
+  gear:ic('<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',1.8),
+  belloff:ic('<path d="M8.7 3A6 6 0 0 1 18 8a21.3 21.3 0 0 0 .6 5"/><path d="M17 17H3s3-2 3-9a4.67 4.67 0 0 1 .3-1.7"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="m2 2 20 20"/>'),
+  bell:ic('<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',1.8),
+  coins:ic('<circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/>'),
+  gift:ic('<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>'),
+  x:ic('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>'),
+  alert:ic('<circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>',1.8),
+  check:`<svg width="20" height="20" viewBox="0 0 20 20"><path d="M8.6 14.6L15.65 7.55L14.25 6.15L8.6 11.8L5.75 8.95L4.35 10.35L8.6 14.6ZM10 20C4.48 20 0 15.52 0 10S4.48 0 10 0s10 4.48 10 10-4.48 10-10 10Z" fill="#00DF80"/></svg>`
+};
+const TABI={
+  home:'<svg viewBox="0 0 24 24" fill="none"><path d="M3 11L12 3L21 11V21H15V14H9V21H3V11Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  ex:'<svg viewBox="0 0 24 24" fill="none"><path d="M3 7H19L15 3M21 17H5L9 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  ev:'<svg viewBox="0 0 24 24" fill="none"><path d="M9.12 8H3V13H5M9.12 8H12M9.12 8C9.93 8.14 10.89 8.16 12 8M9.12 8C4.78 7.25 4.48 3 7 3C10 3 12 8 12 8M12 8H14.88M12 8V13M12 8C12 8 14 3 17 3C19.52 3 19.22 7.25 14.88 8M12 8C13.11 8.16 14.07 8.14 14.88 8M14.88 8H21V13H19M19 13H12M19 13V21H12M12 13H5M12 13V21M5 13V21H12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  bn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>'
+};
+const SB_IC=`<svg width="17" height="11" viewBox="0 0 17 11"><rect y="7" width="3" height="4" rx="1"/><rect x="4.67" y="5" width="3" height="6" rx="1"/><rect x="9.33" y="2.5" width="3" height="8.5" rx="1"/><rect x="14" width="3" height="11" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11"><path d="M7.5 2.3c2.1 0 4 .8 5.5 2.2l1.1-1.1A9.3 9.3 0 0 0 7.5.7 9.3 9.3 0 0 0 .9 3.4L2 4.5a7.8 7.8 0 0 1 5.5-2.2zm0 3.2c1.2 0 2.3.5 3.2 1.3l1.1-1.1a6.2 6.2 0 0 0-8.6 0l1.1 1.1c.9-.8 2-1.3 3.2-1.3zm0 3.1c-.5 0-1 .2-1.3.5l1.3 1.4 1.3-1.4c-.3-.3-.8-.5-1.3-.5z"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="20" height="9" rx="2"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill-opacity=".4"/></svg>`;
+
+/* ================= 앱 문구 ================= */
+const C={
+  en:{title:"Notifications", tAll:"All", tCb:"Cashback", tBn:"Benefits",
+    gToday:"Today", gYday:"Yesterday", gD21:"Nov 21",
+    bnT:"Notifications are off", bnB:"Turn them on to get cashback alerts.", bnOn:"Turn on",
+    eAll:"No notifications yet", eCb:"No cashback notifications", eBn:"No benefit notifications",
+    err:"Couldn't load notifications.", moreErr:"Couldn't load more.", retry:"Try again",
+    tOn:"Notifications are on.", tOff:"To get alerts, turn on notifications in Settings.", tEnded:"This event has ended.",
+    iosT:"“Paybacks” Would Like to Send You Notifications", iosD:"Notifications may include alerts, sounds, and icon badges. These can be configured in Settings.", iosNo:"Don’t Allow", iosYes:"Allow",
+    anT:"Allow <b>Paybacks</b> to send you notifications?", anYes:"Allow", anNo:"Don’t allow",
+    tabs:["Home","Exchange","Events","Benefits"],
+    sumT:"Cashback Summary", sumD:"Nov 23", sumTot:"Total cashback", sumN:"범위 밖 · 기존 웹뷰 화면. 알림의 지급일(11월 23일)이 선택된 상태로 열립니다.",
+    pushApp:"Paybacks", now:"now"},
+  ko:{title:"알림", tAll:"전체", tCb:"캐시백", tBn:"혜택",
+    gToday:"오늘", gYday:"어제", gD21:"11월 21일",
+    bnT:"기기 알림이 꺼져 있어요", bnB:"켜면 캐시백 지급 알림을 받을 수 있어요.", bnOn:"켜기",
+    eAll:"받은 알림이 없어요", eCb:"캐시백 알림이 없어요", eBn:"혜택 알림이 없어요",
+    err:"알림을 불러오지 못했어요", moreErr:"더 불러오지 못했어요", retry:"다시 시도",
+    tOn:"알림이 켜졌어요", tOff:"알림을 받으려면 설정에서 기기 알림을 켜 주세요", tEnded:"종료된 이벤트예요",
+    iosT:"‘Paybacks’에서 알림을 보내고자 합니다", iosD:"경고, 사운드 및 아이콘 배지가 알림에 포함될 수 있습니다. 설정에서 이를 구성할 수 있습니다.", iosNo:"허용 안 함", iosYes:"허용",
+    anT:"<b>Paybacks</b>에서 알림을 보내도록 허용하시겠습니까?", anYes:"허용", anNo:"허용 안함",
+    tabs:["홈","거래소","이벤트","혜택"],
+    sumT:"캐시백 요약", sumD:"11월 23일", sumTot:"캐시백 합계", sumN:"범위 밖 · 기존 웹뷰 화면. 알림의 지급일(11월 23일)이 선택된 상태로 열립니다.",
+    pushApp:"Paybacks", now:"지금"}
+};
+/* 알림 목록 예시 (cat: cb 캐시백 · bn 혜택 / go: 이동 대상) */
+const ITEMS=[
+  {id:"n1",cat:"cb",g:"gToday",un:1,go:"summary",en:["Cashback paid","12.40 USDT from yesterday’s trades has been paid.","2h ago"],ko:["캐시백이 지급됐어요","어제 거래분 캐시백 12.40 USDT가 지급됐어요.","2시간 전"]},
+  {id:"n2",cat:"bn",g:"gToday",un:1,go:"event",en:["(Ad) Bitget trading competition","Trade to win from a 100,000 USDT prize pool.","5h ago"],ko:["(광고) Bitget 트레이딩 대회","100,000 USDT 상금 대회에 참여해 보세요.","5시간 전"]},
+  {id:"n3",cat:"cb",g:"gYday",un:0,go:"uid",en:["UID linked","Bitget UID ****5678 is linked.","3:20 PM"],ko:["UID 연동 완료","Bitget UID ****5678 연동이 완료됐어요.","오후 3:20"]},
+  {id:"n4",cat:"bn",g:"gYday",un:1,go:"event",en:["(Ad) Bitcoin price prediction","Predict today’s price and win up to 1,000 USDT.","11:05 AM"],ko:["(광고) 비트코인 가격 예측","오늘 가격을 맞히면 최대 1,000 USDT를 드려요.","오전 11:05"]},
+  {id:"n5",cat:"cb",g:"gYday",un:0,go:"summary",en:["Cashback paid","8.75 USDT from yesterday’s trades has been paid.","9:02 AM"],ko:["캐시백이 지급됐어요","어제 거래분 캐시백 8.75 USDT가 지급됐어요.","오전 9:02"]},
+  {id:"n6",cat:"bn",g:"gD21",un:0,go:"ended",en:["(Ad) Weekly cashback goal","Reach your weekly goal to get a bonus.","6:40 PM"],ko:["(광고) 주간 캐시백 목표","주간 목표를 달성하면 보너스를 드려요.","오후 6:40"]},
+  {id:"n7",cat:"cb",g:"gD21",un:0,go:"uid",en:["UID link failed","Check Bitget UID ****1234 and try again.","2:15 PM"],ko:["UID 연동 실패","Bitget UID ****1234를 확인하고 다시 시도해 주세요.","오후 2:15"]},
+  {id:"n8",cat:"cb",g:"gD21",un:0,go:"none",en:["UID unlinked","Bitget UID ****9012 has been unlinked.","10:30 AM"],ko:["UID 연동 해제","Bitget UID ****9012 연동이 해제됐어요.","오전 10:30"]}
+];
+let readSet=new Set(); // 프로토타입에서 누른 항목 (읽음 처리)
+
+/* ================= 화면 · 케이스 정의 ================= */
+const SCREENS=[
+  {id:"NI-M01", name:"01 홈 헤더 벨 (진입점)", cases:[
+    {k:"a", label:"새 알림 없음", title:"홈 · 헤더 벨 (새 알림 없음)",
+     bullets:["위치: 웹뷰 헤더 우측 벨. 웹이 그리고, 누르면 앱 브릿지로 네이티브 알림함을 엶","레드닷: 마지막 알림함 진입 이후 새로 저장된 알림이 없으면 표시 안 함"],
+     items:[{h:"헤더 벨",b:["누름: 알림함 (NI-M02-a)","숫자 배지 없음"]}]},
+    {k:"b", label:"새 알림 있음", title:"홈 · 헤더 벨 (레드닷)",
+     bullets:["레드닷: 마지막 알림함 진입 이후 새 알림이 1건 이상 저장되면 표시","앱 사용 중 새 알림이 저장되면 화면을 다시 불러오지 않아도 표시","알림함에 들어가면 지움. 항목별 안 읽음 표시는 유지"],
+     items:[{h:"레드닷",b:["숫자 표시 안 함","확인 필요: 웹 헤더가 안 읽은 알림 여부를 받는 방식 (앱 브릿지 또는 API)"]}]}
+  ]},
+  {id:"NI-M02", name:"02 알림함", cases:[
+    {k:"a", label:"전체", title:"알림함 · 전체 탭",
+     bullets:["진입: 헤더 벨 · 기기 알림 켜짐 상태 (꺼짐이면 NI-M03 미니배너)","목록: 수신 시각 최신순 · 날짜 구분 오늘 / 어제 / 월 일","저장: 서비스 알림은 OS 권한과 무관하게 저장 · 마케팅 알림은 수신 동의자만","더 보기: 끝까지 내리면 다음 묶음 · 위로 당기면 새로고침"],
+     items:[{h:"상단 바",b:["뒤로가기: 이전 웹 화면","알림 설정 아이콘: 알림 설정 화면 (별도 PRD)"]},
+            {h:"탭",b:["전체 / 캐시백 / 혜택 · 기본 전체","탭 분류: FCM 시트 \"알림함 탭\" 컬럼 값"]},
+            {h:"항목",b:["분류 아이콘 · 제목 1줄 · 본문 최대 2줄 · 수신 시각","안 읽음: 점 + 진한 제목 · 누르면 그 항목만 읽음 처리","시각: 오늘은 N분 · N시간 전, 이전은 오후 3:20 형식","(광고): 푸시에 붙었으면 그대로 표시 · 확인 필요: 법무"]},
+            {h:"항목 누름",b:["이동 경로 있음: 이동 대상 화면 (NI-M04-a)","종료된 이벤트: 토스트 (NI-M04-b)","이동 경로 없음: 읽음 처리만 (NI-M04-c)"]}]},
+    {k:"b", label:"캐시백", title:"알림함 · 캐시백 탭",
+     bullets:["표시: 알림함 탭 값이 캐시백인 알림","포함: 캐시백 지급 · UID 연동 완료 · 실패 · 해제 · 소유권 인정"],
+     items:[{h:"캐시백 지급 알림",b:["하루 1회 · 그날 지급분 합산 (거래소 · UID 구분 없음)","지급액 0 USDT인 날은 보내지 않음","문구에 이벤트 홍보 · 행동 유도 넣지 않음","이동: 캐시백 요약, 해당 지급일 선택"]}]},
+    {k:"c", label:"혜택", title:"알림함 · 혜택 탭",
+     bullets:["표시: 알림함 탭 값이 혜택인 알림 (FCM 시트 Marketing)","저장: 마케팅 수신 동의자만 · OS 권한이 꺼져 있으면 푸시 없이 알림함에만 저장"],
+     items:[{h:"혜택 알림",b:["제목 앞 (광고) 표기: 푸시와 같게","마케팅 동의 철회 후 기존 항목 유지 여부: 확인 필요"]}]},
+    {k:"d", label:"로딩", title:"알림함 · 로딩",
+     bullets:["화면: 항목 형태의 스켈레톤","탭은 바로 표시, 목록만 스켈레톤"],
+     items:[{h:"스켈레톤",b:["날짜 구분 1개 + 항목 4개 형태"]}]},
+    {k:"e", label:"빈 상태", title:"알림함 · 빈 상태",
+     bullets:["탭별 문구: 전체 \"받은 알림이 없어요\" · 캐시백 \"캐시백 알림이 없어요\" · 혜택 \"혜택 알림이 없어요\""],
+     items:[{h:"빈 상태",b:["아이콘 + 문구 · 버튼 없음"]}]},
+    {k:"f", label:"오류", title:"알림함 · 목록 불러오기 실패",
+     bullets:["조건: 네트워크 오류 · 서버 오류","다시 시도: 처음부터 다시 요청"],
+     items:[{h:"오류",b:["문구: 알림을 불러오지 못했어요","[다시 시도] → 목록 (NI-M02-a)"]}]},
+    {k:"g", label:"더 보기 실패", title:"알림함 · 다음 묶음 불러오기 실패",
+     bullets:["조건: 목록 끝에서 추가 요청 실패","이미 보이는 항목은 유지"],
+     items:[{h:"목록 하단",b:["문구 + [다시 시도] · 누르면 다음 묶음만 다시 요청"]}]}
+  ]},
+  {id:"NI-M03", name:"03 기기 알림 미니배너", cases:[
+    {k:"a", label:"배너 노출", title:"미니배너 · 기기 알림 꺼짐",
+     bullets:["노출: OS 알림 권한 거부 · 미요청 + (닫은 적 없음 또는 닫은 지 168시간(7일) 경과)","판정: 알림함 진입 때마다 · 포그라운드 복귀 때 권한 다시 확인","배너는 OS 권한만 다룸 · 마케팅 동의 받지 않음","노출 횟수 제한 없음 · 온보딩 풀팝업 횟수에 세지 않음"],
+     items:[{h:"미니배너",b:["위치: 탭 위","[켜기]: OS 창 가능 → OS 창 (b · c) · 불가 → 기기 설정 앱 (f · g)","[켜기] 시 필수 알림 Off면 서버 On 저장 (BE-801-1) · 제안"]},
+            {h:"닫기 X",b:["배너 숨김 · 닫기 시각 기기 저장 (NI-M03-h)"]}]},
+    {k:"b", label:"iOS OS 창", title:"OS 알림 허용 창 · iOS",
+     bullets:["조건: iOS · 권한 미요청 (설치당 1회)","문구 · 버튼은 OS 제공 · 변경 불가","배너로 OS 창을 쓰면 이후 온보딩 풀팝업은 b형 (설정 이동)"],
+     items:[{h:"[허용]",b:["켜짐 토스트 · 배너 숨김 (NI-M03-d)"]},{h:"[허용 안 함]",b:["꺼짐 토스트 · 배너 유지 (NI-M03-e)"]}]},
+    {k:"c", label:"Android OS 창", title:"OS 알림 허용 창 · Android 13 이상",
+     bullets:["조건: Android 13 이상 · 거부 1회 이하 (최대 2회)","Android 12 이하는 OS 창 없음 → 기기 설정 앱"],
+     items:[{h:"[허용]",b:["켜짐 토스트 · 배너 숨김 (NI-M03-d)"]},{h:"[허용 안 함]",b:["꺼짐 토스트 · 배너 유지 (NI-M03-e)"]}]},
+    {k:"d", label:"허용 · 켜짐", title:"OS 창 허용 후",
+     bullets:["배너 숨김 · 마지막 저장값 갱신","토스트는 알림함 위에 노출 · 2~3초 후 사라짐"],
+     items:[{h:"켜짐 토스트",b:["문구: 알림이 켜졌어요 (온보딩 NP-T01과 같음)"]}]},
+    {k:"e", label:"허용 안 함", title:"OS 창 거부 후",
+     bullets:["배너 유지 · 마지막 저장값 갱신","다음 [켜기]는 OS 창 판정 결과에 따름 (iOS는 설정 앱)"],
+     items:[{h:"꺼짐 토스트",b:["문구: 알림을 받으려면 설정에서 기기 알림을 켜 주세요 (온보딩 NP-T02와 같음)","PRD 기존 문구 \"기기 알림이 꺼져 있어 캐시백 지급 알림을 받을 수 없어요\" 대체 제안"]}]},
+    {k:"f", label:"설정 복귀 · 켜짐", title:"기기 설정 앱에서 켜고 복귀",
+     bullets:["진입: OS 창 불가 · OS 창 호출 실패 → 설정 앱 이동 + 설정 이동 플래그 저장","복귀: 기기 알림 상태 조회 · 플래그 해제","OS 창 호출 실패: 창 없이 거부 결과만 옴 · 호출 오류 → 바로 설정 앱"],
+     items:[{h:"켜짐 토스트",b:["배너 숨김 · 문구는 NI-M03-d와 같음"]}]},
+    {k:"g", label:"설정 복귀 · 꺼짐", title:"기기 설정 앱에서 켜지 않고 복귀",
+     bullets:["복귀: 기기 알림 상태 조회 · 플래그 해제","배너 유지"],
+     items:[{h:"꺼짐 토스트 1회",b:["문구는 NI-M03-e와 같음"]}]},
+    {k:"h", label:"닫기", title:"미니배너 닫기 후",
+     bullets:["배너 숨김 · 닫기 시각 기기 저장","재노출: 168시간(7일) 경과 후 알림함 진입 시 · 권한이 계속 꺼져 있을 때"],
+     items:[{h:"목록",b:["배너 자리를 목록이 채움"]}]}
+  ]},
+  {id:"NI-M04", name:"04 항목 누름", cases:[
+    {k:"a", label:"이동 대상", title:"항목 누름 · 이동 대상 화면",
+     bullets:["예: 캐시백 지급 → 캐시백 요약 (해당 지급일 선택)","누르면 그 항목 읽음 처리 · 읽음 저장 실패해도 이동 (다음 진입 때 재전송)","이동 경로: FCM 시트 In-app navigation path를 Paybacks 화면으로 매핑"],
+     items:[{h:"뒤로가기",b:["알림함으로 복귀 · 읽음 상태 반영","확인 필요: 알림함 위에 웹뷰를 새로 띄우는지, 메인 웹뷰를 이동시키는지"]}]},
+    {k:"b", label:"종료된 이벤트", title:"항목 누름 · 종료된 이벤트",
+     bullets:["조건: 이벤트 종료 · 페이지 삭제 후 항목 누름","화면 이동 없음 · 읽음 처리"],
+     items:[{h:"토스트",b:["문구: 종료된 이벤트예요 · 알림함 유지"]}]},
+    {k:"c", label:"이동 경로 없음", title:"항목 누름 · 이동 경로 없음",
+     bullets:["화면 이동 없음 · 읽음 처리만","예: UID 연동 해제 알림"],
+     items:[{h:"항목",b:["안 읽음 표시가 사라짐"]}]}
+  ]},
+  {id:"NI-M05", name:"05 푸시로 진입", cases:[
+    {k:"a", label:"푸시 누름", title:"푸시 알림 누름",
+     bullets:["푸시를 누르면 이동 대상 화면 진입 · 알림함의 같은 항목도 읽음 처리","뒤로가기: 이전 웹 화면 · 없으면 홈","확인 필요: 웹 헤더 버튼과 Android 뒤로가기에 같은 규칙 적용 가능 여부"],
+     items:[{h:"푸시 알림",b:["누름 → 이동 대상 (NI-M04-a)"]}]},
+    {k:"b", label:"종료된 이벤트", title:"푸시 누름 · 종료된 이벤트",
+     bullets:["홈으로 이동 + 토스트"],
+     items:[{h:"토스트",b:["문구: 종료된 이벤트예요"]}]}
+  ]}
+];
+
+/* ================= 상태 ================= */
+let lang="en", sIdx=0, cIdx=0, zoom="fit", osMode="ios";
+const $=s=>document.querySelector(s);
+const t=k=>C[lang][k];
+let noMk=false;
+const mk=(n,html,style="")=>noMk?(style?`<div style="${style}">${html}</div>`:html):`<div class="mk" data-n="${n}" style="${style}"><span class="n">${n}</span>${html}</div>`;
+const sbar=()=>`<div class="island"></div><div class="sbar"><span>10:28</span><span class="ic">${SB_IC}</span></div><div class="homeind"></div>`;
+
+/* ================= 화면 조각 ================= */
+function tabbar(){ const k=["home","ex","ev","bn"]; return `<div class="tabbar"><div class="row">${k.map((x,i)=>`<div class="tb${i===0?' on':''}">${TABI[x]}<span>${t('tabs')[i]}</span></div>`).join('')}</div></div>`; }
+function home(dot,mn){ // mn: 설명 번호
+  const inner=`<div class="bellhit" data-go="NI-M02-a" style="left:0;top:0" title="알림함"></div>${dot?'<div class="reddot" style="left:17px;top:4px"></div>':''}`;
+  const st='position:absolute;left:248px;top:12px;width:30px;height:32px;z-index:6';
+  return `<div class="view"><div class="pbhome"><img src="../onboarding/pb_home.webp" alt="">${mn?mk(mn,inner,st):`<div style="${st}">${inner}</div>`}${tabbar()}</div></div>`;
+}
+function header(m){ const bk=`<button class="ibtn" data-go="back">${I.back}</button>`, st=`<button class="ibtn" data-go="settingsPage">${I.gear}</button>`;
+  return `<div class="ihead"><div class="l">${m?mk(m[0],bk):bk}<h2>${t('title')}</h2></div>${m?mk(m[1],st):st}</div>`; }
+function banner(m){ const xb=`<button class="bx" data-go="NI-M03-h" aria-label="close">${I.x}</button>`;
+  const b=`<div class="banner"><div class="bi">${I.belloff}</div><div class="bt"><b>${t('bnT')}</b><span>${t('bnB')}</span></div><button class="bon" data-go="turnon">${t('bnOn')}</button>${m?mk(m+1,xb,'display:flex'):xb}</div>`;
+  return m?mk(m,b):b; }
+function tabs(cur,m){ const tb=[["all","tAll","NI-M02-a"],["cb","tCb","NI-M02-b"],["bn","tBn","NI-M02-c"]];
+  const h=`<div class="tabs">${tb.map(([k,l,go])=>`<button class="${k===cur?'on':''}" data-go="${go}">${t(l)}</button>`).join('')}</div>`; return m?mk(m,h):h; }
+function row(it,mn){ const un=it.un&&!readSet.has(it.id); const L=it[lang];
+  const h=`<div class="it${un?' un':''}" data-item="${it.id}"><div class="cic ${it.cat}">${it.cat==='cb'?I.coins:I.gift}</div><div class="ib"><div class="tt"><b>${L[0]}</b>${un?'<i class="ud"></i>':''}<span class="tm">${L[2]}</span></div><div class="bd">${L[1]}</div></div></div>`;
+  return mn?mk(mn,h,'display:block'):h; }
+function list(cur,opt={}){ // opt.mark {itemId:n}, opt.moreErr
+  const its=ITEMS.filter(x=>cur==='all'||x.cat===cur); const groups=["gToday","gYday","gD21"];
+  let h=groups.map(g=>{ const r=its.filter(x=>x.g===g); if(!r.length) return ""; return `<div class="gh">${t(g)}</div><div class="grp">${r.map(x=>row(x,opt.mark&&opt.mark[x.id])).join('')}</div>`; }).join('');
+  if(opt.moreErr){ const m=`<div class="more"><span>${t('moreErr')}</span><button class="obtn" data-go="NI-M02-a">${t('retry')}</button></div>`; h+=opt.moreMk?mk(opt.moreMk,m):m; }
+  return `<div class="list" id="ilist">${h}</div>`; }
+function skeleton(){ const r=()=>`<div style="display:flex;gap:12px;padding:14px 14px 14px 12px;border-top:1px solid var(--line)"><div class="sk" style="width:36px;height:36px;border-radius:18px"></div><div style="flex:1"><div class="sk" style="height:14px;width:60%;margin:4px 0 10px"></div><div class="sk" style="height:12px;width:92%;margin-bottom:6px"></div><div class="sk" style="height:12px;width:70%"></div></div></div>`;
+  return `<div class="list"><div class="sk" style="height:12px;width:48px;margin:20px 0 12px"></div><div class="grp">${[1,2,3,4].map(r).join('').replace('border-top:1px solid var(--line)','')}</div></div>`; }
+function blank(icon,msg,btn){ return `<div class="blank"><div class="bic">${icon}</div><div>${msg}</div>${btn||''}</div>`; }
+function toast(key,ok,mn){ const h=`<div class="toast">${ok?`<div class="glow"></div><div class="ti">${I.check}</div>`:''}<span>${t(key)}</span></div>`;
+  return mn?mk(mn,h,'position:absolute;left:0;right:0;bottom:0;z-index:70'):h; }
+function inbox(o={}){ // o: tab, banner, body('list'|'loading'|'empty'|'error'|'moreErr'), mark, toast, hm(header marks), tm(tab mark), bm(banner mark)
+  const cur=o.tab||'all';
+  let body;
+  if(o.body==='loading') body=mk(o.lm||1,skeleton(),'flex:1;display:flex;flex-direction:column');
+  else if(o.body==='empty') body=mk(1,blank(I.bell,t(cur==='cb'?'eCb':cur==='bn'?'eBn':'eAll')),'flex:1;display:flex;flex-direction:column');
+  else if(o.body==='error') body=mk(1,blank(I.alert,t('err'),`<button class="obtn" data-go="NI-M02-a">${t('retry')}</button>`),'flex:1;display:flex;flex-direction:column');
+  else body=list(cur,{mark:o.mark,moreErr:o.body==='moreErr',moreMk:1});
+  return `<div class="view">${header(o.hm)}${o.banner?banner(o.bm):''}${tabs(cur,o.tm)}${body}</div>${o.toast?toast(o.toast[0],o.toast[1],o.toast[2]):''}`;
+}
+function iosAlert(){ const no=`<button data-go="NI-M03-e">${t('iosNo')}</button>`, yes=`<button data-go="NI-M03-d">${t('iosYes')}</button>`;
+  return `<div class="ios"><div class="t">${t('iosT')}</div><div class="d">${t('iosD')}</div><div class="b"><div>${mk(2,no,'flex:1;display:flex')}</div><div>${mk(1,yes,'flex:1;display:flex')}</div></div></div>`; }
+function androidAlert(){ const bell=`<svg width="24" height="24" viewBox="0 0 24 24" fill="#3a5f9e"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>`;
+  return `<div class="adlg"><div class="ic">${bell}</div><div class="t">${t('anT')}</div><div class="b">${mk(1,`<button data-go="NI-M03-d">${t('anYes')}</button>`,'display:flex')}${mk(2,`<button data-go="NI-M03-e">${t('anNo')}</button>`,'display:flex')}</div></div>`; }
+function bgInbox(){ noMk=true; const h=inbox({banner:true}); noMk=false; return h; }
+function summary(){ const L=lang==='ko';
+  return `<div class="view wv"><div class="ihead"><div class="l">${mk(1,`<button class="ibtn" data-go="NI-M02-a">${I.back}</button>`)}<h2>${t('sumT')}</h2></div></div>
+    <div class="wbody"><div class="note">${t('sumN')}</div><div class="card"><span class="dpill">${t('sumD')}</span>
+    <div class="r"><span>Bitget</span><b>9.10 USDT</b></div><div class="r"><span>Bybit</span><b>3.30 USDT</b></div><div class="r" style="border-top:1px solid var(--line);margin-top:4px;padding-top:10px"><span>${t('sumTot')}</span><b>12.40 USDT</b></div></div></div></div>`; }
+function push(mn){ const it=ITEMS[0][lang]; const h=`<div class="push" data-go="NI-M04-a"><img src="../onboarding/pb_appicon.png" alt=""><div class="px"><div class="ph">${t('pushApp')}<span>${t('now')}</span></div><div class="pb"><b style="font-weight:600">${it[0]}</b><br>${it[1]}</div></div></div>`;
+  return mk(mn,h,'position:absolute;left:0;right:0;top:0;z-index:50'); }
+
+function screenHTML(id){
+  switch(id){
+    case "NI-M01-a": return home(false,1);
+    case "NI-M01-b": return home(true,1);
+    case "NI-M02-a": return inbox({hm:[1,1],tm:2,mark:{n1:3,n2:4}});
+    case "NI-M02-b": return inbox({tab:'cb',mark:{n1:1}});
+    case "NI-M02-c": return inbox({tab:'bn',mark:{n2:1}});
+    case "NI-M02-d": return inbox({body:'loading'});
+    case "NI-M02-e": return inbox({body:'empty'});
+    case "NI-M02-f": return inbox({body:'error'});
+    case "NI-M02-g": return inbox({body:'moreErr'});
+    case "NI-M03-a": return inbox({banner:true,bm:1});
+    case "NI-M03-b": return bgInbox()+`<div class="osdim">${iosAlert()}</div>`;
+    case "NI-M03-c": return bgInbox()+`<div class="osdim">${androidAlert()}</div>`;
+    case "NI-M03-d": return inbox({toast:['tOn',true,1]});
+    case "NI-M03-e": return inbox({banner:true,toast:['tOff',false,1]});
+    case "NI-M03-f": return inbox({toast:['tOn',true,1]});
+    case "NI-M03-g": return inbox({banner:true,toast:['tOff',false,1]});
+    case "NI-M03-h": return inbox({mark:{n1:1}});
+    case "NI-M04-a": return summary();
+    case "NI-M04-b": return inbox({toast:['tEnded',false,1]});
+    case "NI-M04-c": return inbox({mark:{n8:1}});
+    case "NI-M05-a": return home(false)+push(1);
+    case "NI-M05-b": return home(false)+toast('tEnded',false,1).replace('style="position:absolute;left:0;right:0;bottom:0;z-index:70"','style="position:absolute;left:0;right:0;bottom:62px;z-index:70"');
+  }
+  return "";
+}
+
+/* ================= 렌더 ================= */
+const curId=()=>`${SCREENS[sIdx].id}-${SCREENS[sIdx].cases[cIdx].k}`;
+function render(){
+  const sc=SCREENS[sIdx], cs=sc.cases[cIdx], id=curId();
+  if(id==="NI-M04-c") readSet.add("n8");
+  if(id==="NI-M04-b") readSet.add("n6");
+  $('#scr').innerHTML=sbar()+screenHTML(id);
+  $('#sel').value=sIdx;
+  $('#cases').innerHTML=sc.cases.map((c,i)=>`<button class="case${i===cIdx?' on':''}" data-i="${i}"><code>${sc.id}-${c.k}</code>${c.label}</button>`).join("");
+  $('#pBody').innerHTML=`<span class="p-id">${id}</span><div class="p-title">${cs.title}</div>
+    <ul class="p-list">${cs.bullets.map(b=>`<li>${plab(b)}</li>`).join("")}</ul>
+    ${cs.items.map((it,i)=>`<div class="p-item" data-n="${i+1}"><h4><span class="n">${i+1}</span>${it.h}</h4><ul>${it.b.map(x=>`<li>${plab(x)}</li>`).join("")}</ul></div>`).join("")}`;
+  $('#cnt').textContent=cs.items.length;
+  if(location.hash!=="#"+id) history.replaceState(null,"","#"+id);
+  if(id==="NI-M02-g"){ const l=$('#ilist'); if(l) l.scrollTop=l.scrollHeight; }
+  fit();
+}
+const plab=x=>x.replace(/^([^:<]{1,16}):\s*/,'<b class="plb">$1</b> ');
+function goId(id){ const m=id.match(/^(NI-M\d\d)-([a-z])$/); if(!m) return false;
+  const s=SCREENS.findIndex(x=>x.id===m[1]); if(s<0) return false;
+  const c=SCREENS[s].cases.findIndex(x=>x.k===m[2]); if(c<0) return false;
+  sIdx=s; cIdx=c; render(); return true; }
+
+/* ================= 인터랙션 ================= */
+let ttTimer;
+function ttoast(msg){ let el=$('#scr .ttoast'); if(!el){el=document.createElement('div');el.className='ttoast';$('#scr').appendChild(el);} el.textContent=msg; el.classList.add('on'); clearTimeout(ttTimer); ttTimer=setTimeout(()=>el.classList.remove('on'),2400); }
+function settingsApp(){ // 시스템 화면 예시: 기기 설정 앱 > Paybacks > 알림
+  const ko=lang==='ko';
+  const el=document.createElement('div'); el.className='setapp';
+  el.innerHTML=`<div class="syslbl">시스템 화면 · 기기 설정 앱 (예시)</div><div class="nb">‹ Paybacks</div><h3>${ko?'알림':'Notifications'}</h3>
+    <div class="grp2"><div class="rw"><span>${ko?'알림 허용':'Allow Notifications'}</span><button class="sw" id="swA"></button></div></div>
+    <div class="cap">스위치를 켜거나 그대로 두고 아래 버튼으로 앱에 돌아가 보세요.</div>
+    <button class="back" id="swBack">Paybacks 앱으로 돌아가기</button>`;
+  $('#scr').appendChild(el);
+  el.querySelector('#swA').addEventListener('click',e=>e.currentTarget.classList.toggle('on'));
+  el.querySelector('#swBack').addEventListener('click',()=>goId(el.querySelector('#swA').classList.contains('on')?"NI-M03-f":"NI-M03-g"));
+}
+$('#scr').addEventListener('click',e=>{
+  const itEl=e.target.closest('[data-item]');
+  if(itEl){ const it=ITEMS.find(x=>x.id===itEl.dataset.item); readSet.add(it.id);
+    if(it.go==='summary') return goId("NI-M04-a");
+    if(it.go==='ended') return goId("NI-M04-b");
+    if(it.go==='none') return goId("NI-M04-c");
+    render(); return ttoast(it.go==='uid'?"[프로토타입] UID 연동 상세 화면으로 이동 (웹뷰)":"[프로토타입] 이벤트 상세 화면으로 이동 (웹뷰)"); }
+  const b=e.target.closest('[data-go]'); if(!b) return;
+  const g=b.dataset.go;
+  if(g==="back") return goId("NI-M01-a");
+  if(g==="settingsPage") return ttoast("[프로토타입] 알림 설정 화면 (별도 PRD)");
+  if(g==="turnon"){ if(osMode==="ios") return goId("NI-M03-b"); if(osMode==="android") return goId("NI-M03-c"); return settingsApp(); }
+  goId(g);
+});
+$('#pBody').addEventListener('click',e=>{ const it=e.target.closest('.p-item'); if(!it) return;
+  const m=$(`#scr .mk[data-n="${it.dataset.n}"]`); if(!m) return; m.classList.remove('flash'); void m.offsetWidth; m.classList.add('flash'); });
+$('#sel').innerHTML=SCREENS.map((s,i)=>`<option value="${i}">${s.name}</option>`).join("");
+$('#sel').addEventListener('change',e=>{sIdx=+e.target.value;cIdx=0;render();});
+$('#prevS').addEventListener('click',()=>{sIdx=(sIdx-1+SCREENS.length)%SCREENS.length;cIdx=0;render();});
+$('#nextS').addEventListener('click',()=>{sIdx=(sIdx+1)%SCREENS.length;cIdx=0;render();});
+$('#cases').addEventListener('click',e=>{const b=e.target.closest('.case'); if(!b) return; cIdx=+b.dataset.i; render();});
+function seg(id,cb){$(id).addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; [...$(id).children].forEach(x=>x.classList.toggle('on',x===b)); cb(b.dataset.v);});}
+seg('#langSeg',v=>{lang=v;render();});
+seg('#zoomSeg',v=>{zoom=v;fit();});
+seg('#osSeg',v=>{osMode=v;});
+$('#mkChk').addEventListener('change',e=>document.body.classList.toggle('show-mk',e.target.checked));
+$('#panelBtn').addEventListener('click',()=>{$('#panel').classList.toggle('off');fit();});
+$('#pClose').addEventListener('click',()=>{$('#panel').classList.add('off');fit();});
+$('#resetBtn').addEventListener('click',()=>{readSet=new Set(); goId("NI-M01-b");});
+window.addEventListener('hashchange',()=>{const h=location.hash.slice(1); if(h && h!==curId()) goId(h);});
+window.addEventListener('resize',fit);
+function fit(){
+  document.documentElement.style.setProperty('--toph',$('#top').offsetHeight+'px');
+  const cv=$('#canvas'), H=828, W=391; let s=1;
+  if(zoom==="fit") s=Math.min(1,(cv.clientHeight-40)/H,(cv.clientWidth-40)/W);
+  s=Math.max(.4,s);
+  $('#stage').style.transform=`scale(${s})`; $('#stage').style.height=(H*s)+'px'; $('#stage').style.width=W+'px';
+  $('#status').textContent=`고정 폭 375px · iOS · Android 앱 · ${zoom==="fit"?'창에 맞춤 ':''}${Math.round(s*100)}%`;
+}
+const h0=location.hash.slice(1);
+if(!h0 || !goId(h0)) goId("NI-M01-b");
+</script>
+</body>
+</html>
