@@ -126,21 +126,16 @@ body.show-mk .mk>.n{display:block}
 .tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--pb)}
 .list{flex:1;overflow:auto;padding:4px 16px 24px}
 .list::-webkit-scrollbar{display:none}
-.gh{font:500 13px/20px var(--font-pb);color:var(--t2);padding:16px 0 8px}
-.grp{background:#fff;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.06);overflow:hidden}
-.it{display:flex;gap:12px;padding:14px 14px 14px 12px;cursor:pointer;position:relative}
+.grp{margin-top:12px;background:#fff;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.06);overflow:hidden}
+.it{display:flex;gap:12px;padding:14px 16px;cursor:pointer;position:relative}
 .it+.it{border-top:1px solid var(--line)}
 .it:active{background:#fafafa}
 .it.un{background:#faf8ff}
-.cic{width:36px;height:36px;border-radius:18px;display:flex;align-items:center;justify-content:center;flex:none}
-.cic svg{width:20px;height:20px}
-.cic.cb{background:var(--pb-soft);color:var(--pb)}
-.cic.bn{background:#fff3e6;color:#e5760b}
 .ib{flex:1;min-width:0}
 .it .tt{display:flex;align-items:center;gap:8px}
 .it .tt b{flex:1;min-width:0;font:500 15px/22px var(--font-pb);color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .it.un .tt b{font-weight:600;color:var(--t1)}
-.it .tm{font:400 12px/18px var(--font-pb);color:var(--t3);flex:none}
+.it .tm{font:400 12px/18px var(--font-pb);color:var(--t3);margin-top:6px}
 .it .ud{width:6px;height:6px;border-radius:3px;background:var(--pb);flex:none}
 .it .bd{font:400 14px/20px var(--font-pb);color:var(--t2);margin-top:2px;white-space:pre-line}
 .it.un .bd{color:rgba(0,0,0,.72)}
@@ -291,7 +286,6 @@ const SB_IC=`<svg width="17" height="11" viewBox="0 0 17 11"><rect y="7" width="
 /* ================= 앱 문구 ================= */
 const C={
   en:{title:"Notifications", tAll:"All", tCb:"Cashback", tBn:"Benefits",
-    gToday:"Today", gYday:"Yesterday", gD21:"Nov 21",
     bnT:"Notifications are off", bnB:"Turn them on to get alerts when cashback is paid.", bnOn:"Turn on",
     eAll:"No notifications yet", eCb:"No cashback notifications", eBn:"No benefit notifications",
     err:"Couldn't load notifications.", moreErr:"Couldn't load more.", retry:"Try again",
@@ -308,7 +302,6 @@ const C={
     cdT:"Marketing Consent Details", cdS:"Sender: Paybacks", cdR:"Received On: 2026.11.24 17:15:59", cdD:"Details: Consent to receive marketing notifications", cdTerms:"Terms for Receiving Marketing Information",
     wdT:"Marketing Consent Withdrawn", wdS:"Sender: Paybacks", wdR:"Processed On: 2026.11.24 18:20:11", wdD:"Details: Withdrawal of consent to receive marketing notifications", wdDE:"Details: Withdrawal of consent to receive email marketing communications", cdDE:"Details: Consent to receive email marketing communications"},
   ko:{title:"알림", tAll:"전체", tCb:"캐시백", tBn:"혜택",
-    gToday:"오늘", gYday:"어제", gD21:"11월 21일",
     bnT:"기기 알림이 꺼져 있어요", bnB:"알림을 켜면 캐시백이 지급됐을 때 바로 알려드려요", bnOn:"켜기",
     eAll:"받은 알림이 없어요", eCb:"캐시백 알림이 없어요", eBn:"혜택 알림이 없어요",
     err:"알림을 불러오지 못했어요", moreErr:"더 불러오지 못했어요", retry:"다시 시도",
@@ -327,14 +320,14 @@ const C={
 };
 /* 알림 목록 예시 (cat: cb 캐시백 · bn 혜택) · 항목을 눌러도 이동 없음 */
 const ITEMS=[
-  {id:"n1",cat:"cb",g:"gToday",un:1,en:["Cashback paid","12.40 USDT from yesterday’s trades has been paid.","2h ago"],ko:["캐시백이 지급됐어요","어제 거래분 캐시백 12.40 USDT가 지급됐어요.","2시간 전"]},
-  {id:"n2",cat:"bn",g:"gToday",un:1,en:["(Ad) Bitget trading competition","Trade to win from a 100,000 USDT prize pool.","5h ago"],ko:["(광고) Bitget 트레이딩 대회","100,000 USDT 상금 대회에 참여해 보세요.","5시간 전"]},
-  {id:"n3",cat:"cb",g:"gYday",un:0,en:["UID linked","Bitget UID ****5678 is linked.","3:20 PM"],ko:["UID 연동 완료","Bitget UID ****5678 연동이 완료됐어요.","오후 3:20"]},
-  {id:"n4",cat:"bn",g:"gYday",un:1,en:["(Ad) Bitcoin price prediction","Predict today’s price and win up to 1,000 USDT.","11:05 AM"],ko:["(광고) 비트코인 가격 예측","오늘 가격을 맞히면 최대 1,000 USDT를 드려요.","오전 11:05"]},
-  {id:"n5",cat:"cb",g:"gYday",un:0,en:["Cashback paid","8.75 USDT from yesterday’s trades has been paid.","9:02 AM"],ko:["캐시백이 지급됐어요","어제 거래분 캐시백 8.75 USDT가 지급됐어요.","오전 9:02"]},
-  {id:"n6",cat:"bn",g:"gD21",un:0,en:["(Ad) Weekly cashback goal","Reach your weekly goal to get a bonus.","6:40 PM"],ko:["(광고) 주간 캐시백 목표","주간 목표를 달성하면 보너스를 드려요.","오후 6:40"]},
-  {id:"n7",cat:"cb",g:"gD21",un:0,en:["UID link failed","Check Bitget UID ****1234 and try again.","2:15 PM"],ko:["UID 연동 실패","Bitget UID ****1234를 확인하고 다시 시도해 주세요.","오후 2:15"]},
-  {id:"n8",cat:"cb",g:"gD21",un:0,en:["UID unlinked","Bitget UID ****9012 has been unlinked.","10:30 AM"],ko:["UID 연동 해제","Bitget UID ****9012 연동이 해제됐어요.","오전 10:30"]}
+  {id:"n1",cat:"cb",at:"2026.11.25 08:30",un:1,en:["Cashback paid","12.40 USDT from yesterday’s trades has been paid."],ko:["캐시백이 지급됐어요","어제 거래분 캐시백 12.40 USDT가 지급됐어요."]},
+  {id:"n2",cat:"bn",at:"2026.11.25 05:12",un:1,en:["(Ad) Bitget trading competition","Trade to win from a 100,000 USDT prize pool."],ko:["(광고) Bitget 트레이딩 대회","100,000 USDT 상금 대회에 참여해 보세요."]},
+  {id:"n3",cat:"cb",at:"2026.11.24 15:20",un:0,en:["UID linked","Bitget UID ****5678 is linked."],ko:["UID 연동 완료","Bitget UID ****5678 연동이 완료됐어요."]},
+  {id:"n4",cat:"bn",at:"2026.11.24 11:05",un:1,en:["(Ad) Bitcoin price prediction","Predict today’s price and win up to 1,000 USDT."],ko:["(광고) 비트코인 가격 예측","오늘 가격을 맞히면 최대 1,000 USDT를 드려요."]},
+  {id:"n5",cat:"cb",at:"2026.11.24 09:02",un:0,en:["Cashback paid","8.75 USDT from yesterday’s trades has been paid."],ko:["캐시백이 지급됐어요","어제 거래분 캐시백 8.75 USDT가 지급됐어요."]},
+  {id:"n6",cat:"bn",at:"2026.11.21 18:40",un:0,en:["(Ad) Weekly cashback goal","Reach your weekly goal to get a bonus."],ko:["(광고) 주간 캐시백 목표","주간 목표를 달성하면 보너스를 드려요."]},
+  {id:"n7",cat:"cb",at:"2026.11.21 14:15",un:0,en:["UID link failed","Check Bitget UID ****1234 and try again."],ko:["UID 연동 실패","Bitget UID ****1234를 확인하고 다시 시도해 주세요."]},
+  {id:"n8",cat:"cb",at:"2026.11.21 10:30",un:0,en:["UID unlinked","Bitget UID ****9012 has been unlinked."],ko:["UID 연동 해제","Bitget UID ****9012 연동이 해제됐어요."]}
 ];
 let readSet=new Set(); // 프로토타입에서 누른 항목 (읽음 처리)
 
@@ -350,10 +343,10 @@ const SCREENS=[
   ]},
   {id:"NI-M02", name:"02 알림함", cases:[
     {k:"a", label:"전체", title:"알림함 · 전체 탭",
-     bullets:["진입: 헤더 벨 · 기기 알림 켜짐 상태 (꺼짐이면 NI-M03 미니배너)","목록: 수신 시각 최신순 · 날짜 구분 오늘 / 어제 / 월 일","저장: 서비스 알림은 OS 권한과 무관하게 저장 · 마케팅 알림은 수신 동의자만","더 보기: 끝까지 내리면 다음 묶음 · 위로 당기면 새로고침"],
+     bullets:["진입: 헤더 벨 · 기기 알림 켜짐 상태 (꺼짐이면 NI-M03 미니배너)","목록: 수신 시각 최신순 · 날짜 구분 없이 한 목록","저장: 서비스 알림은 OS 권한과 무관하게 저장 · 마케팅 알림은 수신 동의자만","더 보기: 끝까지 내리면 다음 묶음 · 위로 당기면 새로고침"],
      items:[{h:"상단 바",b:["뒤로가기: 이전 웹 화면","알림 설정 아이콘: 알림 설정 화면 (NI-M06)"]},
             {h:"탭",b:["전체 / 캐시백 / 혜택 · 기본 전체","탭 분류: FCM 시트 \"알림함 탭\" 컬럼 값"]},
-            {h:"항목",b:["분류 아이콘 · 제목 1줄 · 본문 전체 · 수신 시각","본문: 줄 수 제한 없이 전체 표시 (항목을 눌러 다른 화면으로 이동하지 않음)","안 읽음: 점 + 진한 제목","시각: 오늘은 N분 · N시간 전, 이전은 오후 3:20 형식","(광고): 푸시에 붙었으면 그대로 표시 · 확인 필요: 법무"]},
+            {h:"항목",b:["제목 1줄 · 본문 전체 · 수신 일시 · 분류 아이콘 없음","본문: 줄 수 제한 없이 전체 표시 (항목을 눌러 다른 화면으로 이동하지 않음)","안 읽음: 점 + 진한 제목","수신 일시: 2026.11.25 14:32 형식 (YYYY.MM.DD HH:mm, 24시간) · 오늘 · 어제 · N시간 전 같은 상대 표기 안 함","확인 필요: 표시 시간대 (기기 시간대 기준인지)","(광고): 푸시에 붙었으면 그대로 표시 · 확인 필요: 법무"]},
             {h:"항목 누름",b:["화면 이동 없음 · 그 항목만 읽음 처리 (NI-M04-a)"]}]},
     {k:"b", label:"캐시백", title:"알림함 · 캐시백 탭",
      bullets:["표시: 알림함 탭 값이 캐시백인 알림","포함: 캐시백 지급 · UID 연동 완료 · 실패 · 해제 · 소유권 인정"],
@@ -363,7 +356,7 @@ const SCREENS=[
      items:[{h:"혜택 알림",b:["제목 앞 (광고) 표기: 푸시와 같게","마케팅 동의 철회 후 기존 항목 유지 여부: 확인 필요"]}]},
     {k:"d", label:"로딩", title:"알림함 · 로딩",
      bullets:["화면: 항목 형태의 스켈레톤","탭은 바로 표시, 목록만 스켈레톤"],
-     items:[{h:"스켈레톤",b:["날짜 구분 1개 + 항목 4개 형태"]}]},
+     items:[{h:"스켈레톤",b:["항목 4개 형태 (제목 · 본문 2줄 · 일시)"]}]},
     {k:"e", label:"빈 상태", title:"알림함 · 빈 상태",
      bullets:["탭별 문구: 전체 \"받은 알림이 없어요\" · 캐시백 \"캐시백 알림이 없어요\" · 혜택 \"혜택 알림이 없어요\""],
      items:[{h:"빈 상태",b:["아이콘 + 문구 · 버튼 없음"]}]},
@@ -464,15 +457,15 @@ function banner(m){ const xb=`<button class="bx" data-go="NI-M03-h" aria-label="
 function tabs(cur,m){ const tb=[["all","tAll","NI-M02-a"],["cb","tCb","NI-M02-b"],["bn","tBn","NI-M02-c"]];
   const h=`<div class="tabs">${tb.map(([k,l,go])=>`<button class="${k===cur?'on':''}" data-go="${go}">${t(l)}</button>`).join('')}</div>`; return m?mk(m,h):h; }
 function row(it,mn){ const un=it.un&&!readSet.has(it.id); const L=it[lang];
-  const h=`<div class="it${un?' un':''}" data-item="${it.id}"><div class="cic ${it.cat}">${it.cat==='cb'?I.coins:I.gift}</div><div class="ib"><div class="tt"><b>${L[0]}</b>${un?'<i class="ud"></i>':''}<span class="tm">${L[2]}</span></div><div class="bd">${L[1]}</div></div></div>`;
+  const h=`<div class="it${un?' un':''}" data-item="${it.id}"><div class="ib"><div class="tt"><b>${L[0]}</b>${un?'<i class="ud"></i>':''}</div><div class="bd">${L[1]}</div><div class="tm">${it.at}</div></div></div>`;
   return mn?mk(mn,h,'display:block'):h; }
 function list(cur,opt={}){ // opt.mark {itemId:n}, opt.moreErr
-  const its=ITEMS.filter(x=>cur==='all'||x.cat===cur); const groups=["gToday","gYday","gD21"];
-  let h=groups.map(g=>{ const r=its.filter(x=>x.g===g); if(!r.length) return ""; return `<div class="gh">${t(g)}</div><div class="grp">${r.map(x=>row(x,opt.mark&&opt.mark[x.id])).join('')}</div>`; }).join('');
+  const its=ITEMS.filter(x=>cur==='all'||x.cat===cur);
+  let h=`<div class="grp">${its.map(x=>row(x,opt.mark&&opt.mark[x.id])).join('')}</div>`;
   if(opt.moreErr){ const m=`<div class="more"><span>${t('moreErr')}</span><button class="obtn" data-go="NI-M02-a">${t('retry')}</button></div>`; h+=opt.moreMk?mk(opt.moreMk,m):m; }
   return `<div class="list" id="ilist">${h}</div>`; }
-function skeleton(){ const r=()=>`<div style="display:flex;gap:12px;padding:14px 14px 14px 12px;border-top:1px solid var(--line)"><div class="sk" style="width:36px;height:36px;border-radius:18px"></div><div style="flex:1"><div class="sk" style="height:14px;width:60%;margin:4px 0 10px"></div><div class="sk" style="height:12px;width:92%;margin-bottom:6px"></div><div class="sk" style="height:12px;width:70%"></div></div></div>`;
-  return `<div class="list"><div class="sk" style="height:12px;width:48px;margin:20px 0 12px"></div><div class="grp">${[1,2,3,4].map(r).join('').replace('border-top:1px solid var(--line)','')}</div></div>`; }
+function skeleton(){ const r=()=>`<div style="display:flex;gap:12px;padding:14px 16px;border-top:1px solid var(--line)"><div style="flex:1"><div class="sk" style="height:14px;width:60%;margin:4px 0 10px"></div><div class="sk" style="height:12px;width:92%;margin-bottom:6px"></div><div class="sk" style="height:12px;width:70%;margin-bottom:10px"></div><div class="sk" style="height:10px;width:30%"></div></div></div>`;
+  return `<div class="list"><div class="grp">${[1,2,3,4].map(r).join('').replace('border-top:1px solid var(--line)','')}</div></div>`; }
 function blank(icon,msg,btn){ return `<div class="blank"><div class="bic">${icon}</div><div>${msg}</div>${btn||''}</div>`; }
 function toast(key,ok,mn){ const h=`<div class="toast">${ok?`<div class="glow"></div><div class="ti">${I.check}</div>`:''}<span>${t(key)}</span></div>`;
   return mn?mk(mn,h,'position:absolute;left:0;right:0;bottom:0;z-index:70'):h; }
