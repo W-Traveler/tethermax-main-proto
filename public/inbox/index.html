@@ -169,6 +169,14 @@ body.show-mk .mk>.n{display:block}
 .ios .b>div+div{border-left:1px solid #c8c8cc}
 .ios .b button{flex:1;height:44px;border:0;background:transparent;font-size:16px;color:#0a7aff}
 .ios .b>div+div button{font-weight:600}
+.gp{width:312px;background:#fff;border-radius:24px;padding:28px 20px 12px;text-align:center;color:#14171c;box-shadow:0 12px 40px -12px rgba(15,23,60,.35)}
+.gp .t{font-size:18px;font-weight:700;line-height:1.35;margin-bottom:8px}
+.gp .d{font-size:14px;line-height:1.45;color:#6b7280;margin-bottom:16px}
+.gp .pv{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#f4f4f7;border-radius:16px;padding:11px 12px;margin-bottom:18px;font-family:-apple-system,"Inter","Noto Sans KR",sans-serif;font-size:13px;line-height:1.35}
+.gp .pv img{width:30px;height:30px;border-radius:8px}
+.gp .pv .ph{display:flex;justify-content:space-between;font-weight:600}.gp .pv .ph span{font-weight:400;color:#8a8f98;font-size:12px}
+.gp .bp{width:100%;height:48px;border:0;border-radius:14px;background:#6c47ff;color:#fff;font-size:16px;font-weight:600}
+.gp .bl{width:100%;height:44px;border:0;background:none;color:#6b7280;font-size:15px;margin-top:4px}
 .adlg{width:300px;background:#eef1f8;border-radius:28px;padding:24px 24px 16px;font-family:Roboto,"Noto Sans KR",sans-serif;color:#1a1c1e;text-align:center}
 .adlg .ic{display:flex;justify-content:center;margin-bottom:16px}
 .adlg .t{font-size:20px;line-height:1.35;margin-bottom:20px}
@@ -240,7 +248,7 @@ body.show-mk .mk>.n{display:block}
     <div class="cases" id="cases"></div>
     <span class="vsep"></span>
     <span class="lbl">[켜기] 결과</span>
-    <div class="seg" id="osSeg"><button data-v="ios" class="on">iOS OS 창</button><button data-v="android">Android OS 창</button><button data-v="settings">설정 앱 (OS 창 불가)</button></div>
+    <div class="seg" id="osSeg"><button data-v="ios" class="on">iOS OS 창</button><button data-v="android">Android OS 창</button><button data-v="settings">OS 창 불가 (안내 팝업)</button></div>
     <span class="vsep"></span>
     <span class="lbl">보기</span>
     <div class="seg" id="zoomSeg"><button data-v="fit" class="on">창에 맞춤</button><button data-v="100">100%</button></div>
@@ -293,6 +301,7 @@ const C={
     err:"Couldn't load notifications.", moreErr:"Couldn't load more.", retry:"Try again",
     tOn:"Notifications are on.", tOff:"To get alerts, turn on notifications in Settings.",
     iosT:"“Paybacks” Would Like to Send You Notifications", iosD:"Notifications may include alerts, sounds, and icon badges. These can be configured in Settings.", iosNo:"Don’t Allow", iosYes:"Allow",
+    gpT:"Device notifications are off", gpB:"Turn on notifications in your device settings to get cashback payment alerts.", gpOpen:"Open Settings", gpLater:"Not now",
     anT:"Allow <b>Paybacks</b> to send you notifications?", anYes:"Allow", anNo:"Don’t allow",
     tabs:["Home","Exchange","Events","Benefits"],
     pushApp:"Paybacks", now:"now",
@@ -310,6 +319,7 @@ const C={
     err:"알림을 불러오지 못했어요", moreErr:"더 불러오지 못했어요", retry:"다시 시도",
     tOn:"알림이 켜졌어요", tOff:"알림을 받으려면 설정에서 기기 알림을 켜 주세요",
     iosT:"‘Paybacks’에서 알림을 보내고자 합니다", iosD:"경고, 사운드 및 아이콘 배지가 알림에 포함될 수 있습니다. 설정에서 이를 구성할 수 있습니다.", iosNo:"허용 안 함", iosYes:"허용",
+    gpT:"기기 알림이 꺼져 있어요", gpB:"캐시백 지급 알림을 받으려면 기기 설정에서 알림을 켜 주세요.", gpOpen:"설정 열기", gpLater:"나중에",
     anT:"<b>Paybacks</b>에서 알림을 보내도록 허용하시겠습니까?", anYes:"허용", anNo:"허용 안함",
     tabs:["홈","거래소","이벤트","혜택"],
     pushApp:"Paybacks", now:"지금",
@@ -385,11 +395,11 @@ const SCREENS=[
   ]},
   {id:"NI-M03", name:"03 기기 알림 미니배너", cases:[
     {k:"a", label:"배너 노출", title:"미니배너 · 기기 알림 꺼짐",
-     bullets:["노출: OS 알림 권한 거부 · 미요청 + (닫은 적 없음 또는 닫은 지 168시간(7일) 경과)","판정: 알림함 진입 때마다 · 포그라운드 복귀 때 권한 다시 확인","배너는 OS 권한만 다룸 · 마케팅 동의 받지 않음","노출 횟수 제한 없음 · 온보딩 풀팝업 횟수에 세지 않음"],
-     items:[{h:"미니배너",b:["위치: 목록 위","[켜기]: OS 창 가능 → OS 창 (b · c) · 불가 → 기기 설정 앱 (f · g)","필수 알림 저장: [켜기]를 누르면 필수 알림을 서버에 항상 On으로 저장 (BE-801-1, 온보딩과 같음) · 알림 설정에서 직접 껐어도 On · 동의 화면 없음 · 저장 실패해도 다음 단계 진행"]},
+     bullets:["노출: OS 알림 권한 거부 · 미요청 + (닫은 적 없음 또는 닫은 지 168시간(7일) 경과)","판정: 알림함 진입 때마다 · 포그라운드 복귀 때 권한 다시 확인","배너는 OS 권한만 다룸 · 마케팅 동의 받지 않음","노출 횟수 제한 없음"],
+     items:[{h:"미니배너",b:["위치: 목록 위","[켜기]: OS 창 가능 → OS 창 (b · c) · 불가 → 설정 안내 팝업 (i) → 기기 설정 앱 (f · g)","필수 알림 저장: [켜기]를 누르면 필수 알림을 서버에 항상 On으로 저장 (BE-801-1, 온보딩과 같음) · 알림 설정에서 직접 껐어도 On · 동의 화면 없음 · 저장 실패해도 다음 단계 진행"]},
             {h:"닫기 X",b:["배너 숨김 · 닫기 시각 기기 저장 (NI-M03-h)"]}]},
     {k:"b", label:"iOS OS 창", title:"OS 알림 허용 창 · iOS",
-     bullets:["조건: iOS · 권한 미요청 (설치당 1회)","문구 · 버튼은 OS 제공 · 변경 불가","배너로 OS 창을 쓰면 이후 온보딩 풀팝업은 b형 (설정 이동)"],
+     bullets:["조건: iOS · 권한 미요청 (설치당 1회)","문구 · 버튼은 OS 제공","배너로 OS 창을 쓰면 이후 온보딩 풀팝업은 b형 (설정 이동)"],
      items:[{h:"[허용]",b:["켜짐 토스트 · 배너 숨김 (NI-M03-d)"]},{h:"[허용 안 함]",b:["꺼짐 토스트 · 배너 유지 (NI-M03-e)"]}]},
     {k:"c", label:"Android OS 창", title:"OS 알림 허용 창 · Android 13 이상",
      bullets:["조건: Android 13 이상 · 거부 1회 이하 (최대 2회)","Android 12 이하는 OS 창 없음 → 기기 설정 앱"],
@@ -401,14 +411,17 @@ const SCREENS=[
      bullets:["배너 유지 · 마지막 저장값 갱신","다음 [켜기]는 OS 창 판정 결과에 따름 (iOS는 설정 앱)"],
      items:[{h:"꺼짐 토스트",b:["문구: 알림을 받으려면 설정에서 기기 알림을 켜 주세요 (온보딩 NP-T02와 같음)"]}]},
     {k:"f", label:"설정 복귀 · 켜짐", title:"기기 설정 앱에서 켜고 복귀",
-     bullets:["진입: OS 창 불가 · OS 창 호출 실패 → 설정 앱 이동 + 설정 이동 플래그 저장","복귀: 기기 알림 상태 조회 · 플래그 해제","OS 창 호출 실패: 창 없이 거부 결과만 옴 · 호출 오류 → 바로 설정 앱"],
+     bullets:["진입: 설정 안내 팝업 [Open Settings] · OS 창 호출 실패 → 설정 앱 이동 + 설정 이동 플래그 저장","복귀: 기기 알림 상태 조회 · 플래그 해제","OS 창 호출 실패: 창 없이 거부 결과만 옴 · 호출 오류 → 바로 설정 앱"],
      items:[{h:"켜짐 토스트",b:["배너 숨김 · 문구는 NI-M03-d와 같음"]}]},
     {k:"g", label:"설정 복귀 · 꺼짐", title:"기기 설정 앱에서 켜지 않고 복귀",
      bullets:["복귀: 기기 알림 상태 조회 · 플래그 해제","배너 유지"],
      items:[{h:"꺼짐 토스트 1회",b:["문구는 NI-M03-e와 같음"]}]},
     {k:"h", label:"닫기", title:"미니배너 닫기 후",
      bullets:["배너 숨김 · 닫기 시각 기기 저장","재노출: 168시간(7일) 경과 후 알림함 진입 시 · 권한이 계속 꺼져 있을 때"],
-     items:[{h:"목록",b:["배너 자리를 목록이 채움"]}]}
+     items:[{h:"목록",b:["배너 자리를 목록이 채움"]}]},
+    {k:"i", label:"설정 안내 팝업", title:"OS 창 호출 불가 · 설정 안내 팝업",
+     bullets:["조건: [켜기] 때 OS 창 호출 불가 (iOS 이미 요청함 · Android 13 이상 2회 소진 · Android 12 이하)","위치: 알림함 위 (알림 설정 화면 배너에서 누르면 알림 설정 위)","구성: 기기 알림 꺼짐 안내 팝업 (Figma 1299:124547)"],
+     items:[{h:"[Open Settings]",b:["설정 앱 알림 화면 이동 + 설정 이동 플래그 저장","복귀: 켜짐 → NI-M03-f · 꺼짐 → NI-M03-g"]},{h:"[Not now]",b:["팝업 닫힘 · 배너 유지 · Android 뒤로가기도 같음"]}]}
   ]},
   {id:"NI-M04", name:"04 항목 누름", cases:[
     {k:"a", label:"읽음 처리", title:"항목 누름 · 읽음 처리",
@@ -431,7 +444,7 @@ const SCREENS=[
             {h:"이메일 마케팅 수신 동의",b:["기존 화면 그대로 유지","켤 때: 동의 내역 팝업 (NI-M06-e) · 끌 때: 확인 없이 거부 처리 내역 팝업 (NI-M06-f)"]}]},
     {k:"b", label:"기기 알림 꺼짐", title:"알림 설정 · 기기 알림 꺼짐",
      bullets:["노출: OS 알림 권한 거부 · 미요청일 때 항상 (닫기 없음)","앱 안 토글은 그대로 바꿀 수 있음 · 기기 알림이 꺼져 있으면 푸시는 오지 않음","포그라운드 복귀 때 권한 다시 확인 · 켜져 있으면 배너 숨김"],
-     items:[{h:"기기 알림 배너",b:["[켜기]: NI-M03과 같은 흐름 (OS 창 또는 기기 설정 앱) · 필수 알림 항상 On 저장","결과 토스트는 알림 설정 화면 위에 노출","알림함 미니배너와 달리 닫기(X) 없음 · 7일 숨김 없음"]}]},
+     items:[{h:"기기 알림 배너",b:["[켜기]: NI-M03과 같은 흐름 (OS 창 또는 설정 안내 팝업 → 기기 설정 앱) · 필수 알림 항상 On 저장","결과 토스트는 알림 설정 화면 위에 노출","알림함 미니배너와 달리 닫기(X) 없음 · 7일 숨김 없음"]}]},
     {k:"c", label:"필수 알림 끄기", title:"필수 알림 끄기 확인",
      bullets:["[확인]: 필수 알림 Off 저장 · 푸시 발송 중단","[취소]: 토글 유지"],
      items:[{h:"확인 팝업",b:["문구: 필수 알림을 끌까요? / 캐시백 지급, UID 연동 알림을 푸시로 받지 못해요. 알림함에서는 계속 볼 수 있어요.","확인 필요: 문구 확정"]}]},
@@ -502,6 +515,8 @@ function iosAlert(){ const no=`<button data-go="NI-M03-e">${t('iosNo')}</button>
   return `<div class="ios"><div class="t">${t('iosT')}</div><div class="d">${t('iosD')}</div><div class="b"><div>${mk(2,no,'flex:1;display:flex')}</div><div>${mk(1,yes,'flex:1;display:flex')}</div></div></div>`; }
 function androidAlert(){ const bell=`<svg width="24" height="24" viewBox="0 0 24 24" fill="#3a5f9e"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>`;
   return `<div class="adlg"><div class="ic">${bell}</div><div class="t">${t('anT')}</div><div class="b">${mk(1,`<button data-go="NI-M03-d">${t('anYes')}</button>`,'display:flex')}${mk(2,`<button data-go="NI-M03-e">${t('anNo')}</button>`,'display:flex')}</div></div>`; }
+function guidePopup(){ const it=ITEMS[0][lang];
+  return `<div class="gp"><div class="t">${t('gpT')}</div><div class="d">${t('gpB')}</div><div class="pv"><img src="../onboarding/pb_appicon.png" alt=""><div style="flex:1"><div class="ph">${it[0]}<span>${t('now')}</span></div>${it[1]}</div></div>${mk(1,`<button class="bp" data-go="openSettings">${t('gpOpen')}</button>`,'display:flex')}${mk(2,`<button class="bl" data-go="guideLater">${t('gpLater')}</button>`,'display:flex')}</div>`; }
 function bgInbox(){ noMk=true; const h=bgCtx==="settings"?settings({off:true}):inbox({banner:true}); noMk=false; return h; }
 function tg(k,on,m){ const b=`<button class="tg${on?' on':''}" data-tg="${k}" aria-label="${k}"></button>`; return m?mk(m,b,'display:flex'):b; }
 function settings(o={}){ // o.off 기기 알림 꺼짐, o.dlg 'ess'|'mkt'|'consent', o.toast, o.m 설명 번호
@@ -547,6 +562,7 @@ function screenHTML(id){
     case "NI-M03-f": return inS()?settings({toast:['tOn',true,1]}):inbox({toast:['tOn',true,1]});
     case "NI-M03-g": return inS()?settings({off:true,toast:['tOff',false,1]}):inbox({banner:true,toast:['tOff',false,1]});
     case "NI-M03-h": return inbox({mark:{n1:1}});
+    case "NI-M03-i": return bgInbox()+`<div class="osdim">${guidePopup()}</div>`;
     case "NI-M04-a": return inbox({mark:{n1:1}});
     case "NI-M05-a": return home(false)+push(1);
     case "NI-M05-b": return inbox({mark:{n1:1}});
@@ -564,7 +580,7 @@ function screenHTML(id){
 const curId=()=>`${SCREENS[sIdx].id}-${SCREENS[sIdx].cases[cIdx].k}`;
 function render(){
   const sc=SCREENS[sIdx], cs=sc.cases[cIdx], id=curId();
-  if(!keepState){ if(!/^NI-M03-[b-g]$/.test(id)) bgCtx="inbox"; if(id.startsWith("NI-M06")){ sst={ess:1,mkt:1,email:1}; dlgKind="mkt"; } if(id==="NI-M06-f") sst.mkt=0; }
+  if(!keepState){ if(!/^NI-M03-[b-gi]$/.test(id)) bgCtx="inbox"; if(id.startsWith("NI-M06")){ sst={ess:1,mkt:1,email:1}; dlgKind="mkt"; } if(id==="NI-M06-f") sst.mkt=0; }
   keepState=false;
   if(id==="NI-M04-a"||id==="NI-M05-b") readSet.add("n1");
   $('#scr').innerHTML=sbar()+screenHTML(id);
@@ -617,7 +633,9 @@ $('#scr').addEventListener('click',e=>{
   if(g==="back") return goId("NI-M01-a");
   if(g==="settingsPage") return goId("NI-M06-a");
   if(g==="mktOn") return goId("NI-M07-e");
-  if(g==="turnon"){ bgCtx=curId().startsWith("NI-M06")?"settings":"inbox"; keepState=true; if(osMode==="ios") return goId("NI-M03-b"); if(osMode==="android") return goId("NI-M03-c"); return settingsApp(); }
+  if(g==="turnon"){ bgCtx=curId().startsWith("NI-M06")?"settings":"inbox"; keepState=true; if(osMode==="ios") return goId("NI-M03-b"); if(osMode==="android") return goId("NI-M03-c"); return goId("NI-M03-i"); }
+  if(g==="openSettings") return settingsApp();
+  if(g==="guideLater") return goId(bgCtx==="settings"?"NI-M06-b":"NI-M03-a");
   goId(g);
 });
 $('#pBody').addEventListener('click',e=>{ const it=e.target.closest('.p-item'); if(!it) return;
