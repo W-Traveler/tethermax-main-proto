@@ -120,6 +120,11 @@ body.show-mk .mk>.n{display:block}
 .banner .bon{height:32px;padding:0 12px;border:0;border-radius:4px;background:var(--pb);color:#fff;font:600 13px/1 var(--font-pb);flex:none}
 .banner .bx{width:28px;height:28px;border:0;background:transparent;color:var(--t3);display:flex;align-items:center;justify-content:center;flex:none;margin-right:-4px}
 .banner .bx svg{width:18px;height:18px}
+.tabs{display:flex;padding:0 16px;border-bottom:1px solid var(--line);flex:none}
+.tabs button{border:0;background:transparent;height:42px;padding:0 16px;font:500 14px/24px var(--font-pb);color:var(--t2);position:relative}
+.tabs button.on{color:var(--pb)}
+.tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--pb)}
+.blank b{display:block;font:600 16px/24px var(--font-pb);color:var(--t1)}
 .list{flex:1;overflow:auto;padding:4px 16px 24px}
 .list::-webkit-scrollbar{display:none}
 .grp{margin-top:12px;background:#fff;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.06);overflow:hidden}
@@ -283,7 +288,8 @@ const SB_IC=`<svg width="17" height="11" viewBox="0 0 17 11"><rect y="7" width="
 const C={
   en:{title:"Notifications",
     bnT:"Notifications are off", bnB:"Turn them on to get alerts when cashback is paid.", bnOn:"Turn on",
-    eAll:"No notifications yet",
+    eAll:"No notifications yet", tAll:"All", tCb:"Cashback", tBn:"Benefits", eCb:"No cashback notifications", eBn:"No benefit notifications",
+    eBnOffT:"Turn on marketing notifications to get benefit alerts", eBnOffD:"We’ll let you know about events and promotions.", eBnOffBtn:"Turn on", tMktOn:"Marketing notifications are on.",
     err:"Couldn't load notifications.", moreErr:"Couldn't load more.", retry:"Try again",
     tOn:"Notifications are on.", tOff:"To get alerts, turn on notifications in Settings.",
     iosT:"“Paybacks” Would Like to Send You Notifications", iosD:"Notifications may include alerts, sounds, and icon badges. These can be configured in Settings.", iosNo:"Don’t Allow", iosYes:"Allow",
@@ -299,7 +305,8 @@ const C={
     wdT:"Marketing Consent Withdrawn", wdS:"Sender: Paybacks", wdR:"Processed On: 2026.11.24 18:20:11", wdD:"Details: Withdrawal of consent to receive marketing notifications", wdDE:"Details: Withdrawal of consent to receive email marketing communications", cdDE:"Details: Consent to receive email marketing communications"},
   ko:{title:"알림",
     bnT:"기기 알림이 꺼져 있어요", bnB:"알림을 켜면 캐시백이 지급됐을 때 바로 알려드려요", bnOn:"켜기",
-    eAll:"받은 알림이 없어요",
+    eAll:"받은 알림이 없어요", tAll:"전체", tCb:"캐시백", tBn:"혜택", eCb:"캐시백 알림이 없어요", eBn:"혜택 알림이 없어요",
+    eBnOffT:"혜택 알림을 받으려면 마케팅 알림을 켜 주세요", eBnOffD:"이벤트, 프로모션 소식을 알려드려요", eBnOffBtn:"켜기", tMktOn:"마케팅 알림을 켰어요",
     err:"알림을 불러오지 못했어요", moreErr:"더 불러오지 못했어요", retry:"다시 시도",
     tOn:"알림이 켜졌어요", tOff:"알림을 받으려면 설정에서 기기 알림을 켜 주세요",
     iosT:"‘Paybacks’에서 알림을 보내고자 합니다", iosD:"경고, 사운드 및 아이콘 배지가 알림에 포함될 수 있습니다. 설정에서 이를 구성할 수 있습니다.", iosNo:"허용 안 함", iosYes:"허용",
@@ -337,7 +344,7 @@ const SCREENS=[
      bullets:["레드닷: 마지막 알림함 진입 이후 새 알림이 1건 이상 저장되면 표시","앱 사용 중 새 알림이 저장되면 화면을 다시 불러오지 않아도 표시","알림함에 들어가면 지움. 항목별 안 읽음 표시는 유지"],
      items:[{h:"레드닷",b:["숫자 표시 안 함","확인 필요: 웹 헤더가 안 읽은 알림 여부를 받는 방식 (앱 브릿지 또는 API)"]}]}
   ]},
-  {id:"NI-M02", name:"02 알림함", cases:[
+  {id:"NI-M02", name:"02 알림함 · A안 (탭 없음)", cases:[
     {k:"a", label:"목록", title:"알림함 · 목록",
      bullets:["진입: 헤더 벨 · 기기 알림 켜짐 상태 (꺼짐이면 NI-M03 미니배너)","목록: 수신 시각 최신순 · 날짜 구분 없이 한 목록","저장: 서비스 알림은 OS 권한과 무관하게 저장 · 마케팅 알림은 수신 동의자만","더 보기: 끝까지 내리면 다음 묶음 · 위로 당기면 새로고침","탭 없음: 캐시백 · 혜택 알림을 한 목록에 표시 (알림 수가 늘면 탭 추가 검토)","캐시백 지급 알림: 하루 1회 · 그날 지급분 합산 · 0 USDT인 날은 보내지 않음","혜택 알림: 마케팅 수신 동의자만 저장 · 제목 앞 (광고) 표기는 푸시와 같게"],
      items:[{h:"상단 바",b:["뒤로가기: 이전 웹 화면","알림 설정 아이콘: 알림 설정 화면 (NI-M06)"]},
@@ -355,6 +362,26 @@ const SCREENS=[
     {k:"e", label:"더 보기 실패", title:"알림함 · 다음 묶음 불러오기 실패",
      bullets:["조건: 목록 끝에서 추가 요청 실패","이미 보이는 항목은 유지"],
      items:[{h:"목록 하단",b:["문구 + [다시 시도] · 누르면 다음 묶음만 다시 요청"]}]}
+  ]},
+  {id:"NI-M07", name:"02B 알림함 · B안 (탭 있음)", cases:[
+    {k:"a", label:"전체 탭", title:"B안 · 알림함 · 전체 탭",
+     bullets:["A안과 같은 목록에 탭(전체 / 캐시백 / 혜택)만 추가 · 기본 전체","탭 분류: 알림마다 알림함 탭 값(캐시백 / 혜택) 필요 · 확인 필요: 서버가 값을 내려줄 수 있는지","항목 구성 · 수신 일시 · 누름(읽음 처리만)은 A안과 같음"],
+     items:[{h:"탭",b:["전체 / 캐시백 / 혜택","전체 = 캐시백 + 혜택"]},{h:"항목",b:["A안과 같음 (NI-M02-a)"]}]},
+    {k:"b", label:"캐시백 탭", title:"B안 · 알림함 · 캐시백 탭",
+     bullets:["표시: 서비스 알림 (캐시백 지급 · UID 연동 완료 · 실패 · 해제)","빈 상태 문구: 캐시백 알림이 없어요"],
+     items:[{h:"탭",b:["캐시백 선택"]}]},
+    {k:"c", label:"혜택 탭", title:"B안 · 알림함 · 혜택 탭 (마케팅 알림 켜짐)",
+     bullets:["표시: 마케팅 알림 (이벤트 · 프로모션) · 제목 앞 (광고)","저장: 마케팅 수신 동의자만","혜택 알림이 없을 때: 혜택 알림이 없어요 (버튼 없음)"],
+     items:[{h:"탭",b:["혜택 선택"]}]},
+    {k:"d", label:"혜택 · 동의 꺼짐", title:"B안 · 혜택 탭 빈 상태 · 마케팅 알림 꺼짐",
+     bullets:["조건: 마케팅 알림(수신 동의) 꺼짐 → 혜택 알림이 저장되지 않아 혜택 탭이 항상 비어 있음","빈 상태에서 마케팅 알림 켜기 안내","기기 알림(OS 권한)과 별개 · 기기 알림 꺼짐은 미니배너(NI-M03)가 담당","확인 필요: 문구 · 법무 (앱 안 동의 유도 방식)"],
+     items:[{h:"빈 상태",b:["제목: 혜택 알림을 받으려면 마케팅 알림을 켜 주세요","설명: 이벤트, 프로모션 소식을 알려드려요 (알림 설정 마케팅 알림 설명과 같음)","[켜기] → 마케팅 수신 동의 저장 + 동의 내역 팝업 (NI-M07-e)"]}]},
+    {k:"e", label:"동의 내역", title:"B안 · [켜기] 후 마케팅 수신 동의 내역 팝업",
+     bullets:["[켜기]를 누르면 바로 동의 저장 (알림 설정 마케팅 알림 켜기와 같은 처리)","동의 내역 팝업: 알림 설정과 같은 팝업 (NI-M06-e)","저장 실패 시 처리: 확인 필요"],
+     items:[{h:"동의 내역 팝업",b:["발신자 · 수신 일시 · 내용 · 약관 링크","[확인] → 혜택 탭 (NI-M07-f)"]}]},
+    {k:"f", label:"동의 후", title:"B안 · 동의 후 혜택 탭",
+     bullets:["토스트: 마케팅 알림을 켰어요","이전 혜택 알림은 저장되지 않았으므로 비어 있음 · 이후 발송분부터 표시","알림 설정 화면 마케팅 알림 토글도 켜짐"],
+     items:[{h:"토스트",b:["마케팅 알림을 켰어요"]}]}
   ]},
   {id:"NI-M03", name:"03 기기 알림 미니배너", cases:[
     {k:"a", label:"배너 노출", title:"미니배너 · 기기 알림 꺼짐",
@@ -443,11 +470,13 @@ function header(m){ const bk=`<button class="ibtn" data-go="back">${I.back}</but
 function banner(m){ const xb=`<button class="bx" data-go="NI-M03-h" aria-label="close">${I.x}</button>`;
   const b=`<div class="banner"><div class="bi">${I.belloff}</div><div class="bt"><b>${t('bnT')}</b><span>${t('bnB')}</span></div><button class="bon" data-go="turnon">${t('bnOn')}</button>${m?mk(m+1,xb,'display:flex'):xb}</div>`;
   return m?mk(m,b):b; }
+function tabs(cur,m){ const tb=[["all","tAll","NI-M07-a"],["cb","tCb","NI-M07-b"],["bn","tBn","NI-M07-c"]];
+  const h=`<div class="tabs">${tb.map(([k,l,go])=>`<button class="${k===cur?'on':''}" data-go="${go}">${t(l)}</button>`).join('')}</div>`; return m?mk(m,h):h; }
 function row(it,mn){ const un=it.un&&!readSet.has(it.id); const L=it[lang];
   const h=`<div class="it${un?' un':''}" data-item="${it.id}"><div class="ib"><div class="tt"><b>${L[0]}</b>${un?'<i class="ud"></i>':''}</div><div class="bd">${L[1]}</div><div class="tm">${it.at}</div></div></div>`;
   return mn?mk(mn,h,'display:block'):h; }
 function list(opt={}){ // opt.mark {itemId:n}, opt.moreErr
-  const its=ITEMS;
+  const its=ITEMS.filter(x=>!opt.tab||opt.tab==='all'||x.cat===opt.tab);
   let h=`<div class="grp">${its.map(x=>row(x,opt.mark&&opt.mark[x.id])).join('')}</div>`;
   if(opt.moreErr){ const m=`<div class="more"><span>${t('moreErr')}</span><button class="obtn" data-go="NI-M02-a">${t('retry')}</button></div>`; h+=opt.moreMk?mk(opt.moreMk,m):m; }
   return `<div class="list" id="ilist">${h}</div>`; }
@@ -461,8 +490,13 @@ function inbox(o={}){ // o: banner, body('list'|'loading'|'empty'|'error'|'moreE
   if(o.body==='loading') body=mk(o.lm||1,skeleton(),'flex:1;display:flex;flex-direction:column');
   else if(o.body==='empty') body=mk(1,blank(I.bell,t('eAll')),'flex:1;display:flex;flex-direction:column');
   else if(o.body==='error') body=mk(1,blank(I.alert,t('err'),`<button class="obtn" data-go="NI-M02-a">${t('retry')}</button>`),'flex:1;display:flex;flex-direction:column');
-  else body=list({mark:o.mark,moreErr:o.body==='moreErr',moreMk:1});
-  return `<div class="view">${header(o.hm)}${o.banner?banner(o.bm):''}${body}</div>${o.toast?toast(o.toast[0],o.toast[1],o.toast[2]):''}`;
+  else if(o.body==='bnOff') body=mk(o.em||1,blank(I.bell,`<b>${t('eBnOffT')}</b>${t('eBnOffD')}`,`<button class="obtn" data-go="mktOn">${t('eBnOffBtn')}</button>`),'flex:1;display:flex;flex-direction:column');
+  else if(o.body==='bnEmpty') body=mk(o.em||1,blank(I.bell,t('eBn')),'flex:1;display:flex;flex-direction:column');
+  else body=list({mark:o.mark,moreErr:o.body==='moreErr',moreMk:1,tab:o.tab});
+  let dlg='';
+  if(o.dlg==='consent'){ const d=`<div class="dlg"><h3>${t('cdT')}</h3><ul><li>${t('cdS')}</li><li>${t('cdR')}</li><li>${t('cdD')}</li><li><a data-dlg="terms">${t('cdTerms')}</a></li></ul><div class="act"><button class="p" data-go="NI-M07-f">${t('confirm')}</button></div></div>`;
+    dlg=`<div class="dlgdim">${mk(1,d,'width:100%')}</div>`; }
+  return `<div class="view">${header(o.hm)}${o.banner?banner(o.bm):''}${o.tab?tabs(o.tab,o.tm):''}${body}</div>${dlg}${o.toast?toast(o.toast[0],o.toast[1],o.toast[2]):''}`;
 }
 function iosAlert(){ const no=`<button data-go="NI-M03-e">${t('iosNo')}</button>`, yes=`<button data-go="NI-M03-d">${t('iosYes')}</button>`;
   return `<div class="ios"><div class="t">${t('iosT')}</div><div class="d">${t('iosD')}</div><div class="b"><div>${mk(2,no,'flex:1;display:flex')}</div><div>${mk(1,yes,'flex:1;display:flex')}</div></div></div>`; }
@@ -499,6 +533,12 @@ function screenHTML(id){
     case "NI-M02-c": return inbox({body:'empty'});
     case "NI-M02-d": return inbox({body:'error'});
     case "NI-M02-e": return inbox({body:'moreErr'});
+    case "NI-M07-a": return inbox({tab:'all',tm:1,mark:{n1:2}});
+    case "NI-M07-b": return inbox({tab:'cb',tm:1});
+    case "NI-M07-c": return inbox({tab:'bn',tm:1});
+    case "NI-M07-d": return inbox({tab:'bn',body:'bnOff',em:1});
+    case "NI-M07-e": return inbox({tab:'bn',body:'bnOff',dlg:'consent'});
+    case "NI-M07-f": return inbox({tab:'bn',body:'bnEmpty',toast:['tMktOn',true,1]});
     case "NI-M03-a": return inbox({banner:true,bm:1});
     case "NI-M03-b": return bgInbox()+`<div class="osdim">${iosAlert()}</div>`;
     case "NI-M03-c": return bgInbox()+`<div class="osdim">${androidAlert()}</div>`;
@@ -576,6 +616,7 @@ $('#scr').addEventListener('click',e=>{
   const g=b.dataset.go;
   if(g==="back") return goId("NI-M01-a");
   if(g==="settingsPage") return goId("NI-M06-a");
+  if(g==="mktOn") return goId("NI-M07-e");
   if(g==="turnon"){ bgCtx=curId().startsWith("NI-M06")?"settings":"inbox"; keepState=true; if(osMode==="ios") return goId("NI-M03-b"); if(osMode==="android") return goId("NI-M03-c"); return settingsApp(); }
   goId(g);
 });
